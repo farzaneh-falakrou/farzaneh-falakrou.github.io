@@ -607,6 +607,15 @@ progress {
   height: auto;
 }
 
+  /* Additional styles for very small screens */
+  @media (max-width: 575.98px) {
+    .img-fluid-very-small {
+      max-width: 60%;
+      height: auto;
+      margin: 0 auto; /* Center the image */
+    }
+  }
+
 .row a:hover img {
   transform: scale(1.1);
   transition: transform 0.3s ease-in-out;
@@ -7780,6 +7789,30 @@ textarea.form-control-lg {
 .px-5 {
   padding-right: 3rem !important;
   padding-left: 3rem !important;
+}
+
+.pr-0 {
+  padding-right: 0 !important;
+}
+
+.pr-1 {
+  padding-right: 0.25rem !important;
+}
+
+.pr-2 {
+  padding-right: 0.5rem !important;
+}
+
+.pr-3 {
+  padding-right: 1rem !important;
+}
+
+.pr-4 {
+  padding-right: 1.5rem !important;
+}
+
+.pr-5 {
+  padding-right: 3rem !important;
 }
 
 .py-0 {
