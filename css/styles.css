@@ -10917,3 +10917,15 @@ html {
 .social-icon:hover {
   transform: scale(1.2); /* You can adjust the scale factor as needed */
 }
+
+h1::before, h2::before, h3::before, h4::before {
+    content: '';
+    display: block;
+    width: 50px; /* Adjust the width of the line */
+    height: 3px; /* Adjust the thickness of the line */
+    background-color: #ccc; /* Set the color of the line */
+    position: relative;
+    top: -8px; /* Adjust the distance of the line from the text */
+    left: 9%; 
+    transform: translateX(-50%); /* Center the line under the text */
+}
