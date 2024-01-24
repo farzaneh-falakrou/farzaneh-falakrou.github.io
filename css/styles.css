@@ -9121,6 +9121,9 @@ textarea.form-control-lg {
   .mt-md-5 {
     margin-top: 3rem !important;
   }
+  .mt-md-n5 {
+    margin-top: -3rem !important;
+  }
   .mt-md-auto {
     margin-top: auto !important;
   }
@@ -10918,22 +10921,88 @@ html {
   transform: scale(1.2); /* You can adjust the scale factor as needed */
 }
 
-h1.barred-heading::before,
-h2.barred-heading::before,
-h3.barred-heading::before,
-h4.barred-heading::before {
+/* Shared properties for both subclasses */
+.barred-heading::before {
   content: '';
   display: block;
   width: 50px;
-  /* Adjust the width of the line */
   height: 3px;
-  /* Adjust the thickness of the line */
-  background-color: #ccc;
-  /* Set the color of the line */
   position: relative;
   top: -8px;
-  /* Adjust the distance of the line from the text */
   left: 9%;
   transform: translateX(-50%);
-  /* Center the line under the text */
+}
+
+/* First subclass with a different color */
+h1.barred-heading.topnotch::before,
+h2.barred-heading.topnotch::before,
+h3.barred-heading.topnotch::before,
+h4.barred-heading.topnotch::before {
+  background-color: #9b7fE4;
+}
+
+/* Second subclass with another color */
+h1.barred-heading.homelon::before,
+h2.barred-heading.homelon::before,
+h3.barred-heading.homelon::before,
+h4.barred-heading.homelon::before {
+  background-color: #3d9970;
+}
+
+
+/* Custom style to limit the maximum width of the container */
+.custom-container {
+  max-width: 1920px;
+  /* Set your desired maximum width */
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Responsive Embed Container */
+.embed-responsive {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Responsive Embed Item (for iframe, video, etc.) */
+.embed-responsive-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  border: 0;
+  /* Optional: remove border for embedded content */
+}
+
+/* Optional: Set specific aspect ratios */
+.embed-responsive-1by1 {
+  padding-bottom: 100%;
+}
+
+.embed-responsive-4by3 {
+  padding-bottom: 75%;
+}
+
+.embed-responsive-16by9 {
+  padding-bottom: 56.25%;
+}
+
+.embed-responsive-21by9 {
+  padding-bottom: 42.8571%;
+}
+
+/* Additional styles for iframe, video, etc. */
+.embed-responsive iframe,
+.embed-responsive embed,
+.embed-responsive object,
+.embed-responsive video {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
