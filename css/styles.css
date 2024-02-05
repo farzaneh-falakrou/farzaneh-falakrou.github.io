@@ -11006,3 +11006,94 @@ h4.barred-heading.homelon::before {
   width: 100%;
   height: 100%;
 }
+
+.hover-zoom {
+  transition: transform 0.3s ease-in-out !important;
+}
+
+.hover-zoom:hover {
+  transform: scale(1.05) !important;
+}
+
+.zoomable-image-container {
+  position: relative;
+}
+
+.zoomable-image {
+  cursor: zoom-in;
+  transition: transform 0.3s ease-in-out;
+}
+
+.zoomable-image:fullscreen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 100%;
+  max-height: 100%;
+  background: #fff; /* Set the background color to white */
+  object-fit: contain;
+  cursor: zoom-out;
+  z-index: 1000;
+  padding: 2em; /* Adjust the padding in em as needed */
+}
+
+/* Media query for adjusting padding on smaller screens */
+@media (max-width: 768px) {
+  .zoomable-image:fullscreen {
+    padding: 1em; /* Adjust the padding in em for smaller screens */
+  }
+}
+
+.zoomable-image:fullscreen:hover {
+  cursor: zoom-out;
+}
+
+.zoomable-image:fullscreen img {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes waveAnimation {
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  20%,
+  60% {
+    transform: rotate(-30deg);
+  }
+
+  40%,
+  80% {
+    transform: rotate(30deg);
+  }
+}
+
+.waving-hand {
+  display: inline-block;
+  animation: waveAnimation 3s 2 ease-in-out;
+}
+
+.hidden-opacity {
+  opacity: 0;
+  transition: all 1s;
+}
+
+.show-opacity {
+  opacity: 1;
+}
+
+.card:nth-child(2) .show-opacity {
+  transition-delay: 200ms;
+}
+
+.card:nth-child(3) .show-opacity {
+  transition-delay: 400ms;
+}
+
+.card:nth-child(4) .show-opacity {
+  transition-delay: 600ms;
+}
