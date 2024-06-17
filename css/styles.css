@@ -8222,6 +8222,14 @@ textarea.form-control-lg {
   background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;
 }
 
+.bg-blue {
+    background-color: rgba(201, 245, 245, 1);
+  }
+
+.bg-gray {
+    background-color: rgba(42, 42, 42, 1);
+    color: #FFF;
+  }
 .bg-dark {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;
@@ -10949,6 +10957,13 @@ h4.barred-heading.homelon::before {
   background-color: #3d9970;
 }
 
+/* Second subclass with another color */
+h1.barred-heading.dinostudio::before,
+h2.barred-heading.dinostudio::before,
+h3.barred-heading.dinostudio::before,
+h4.barred-heading.dinostudio::before {
+  background-color: #008080;
+}
 
 /* Custom style to limit the maximum width of the container */
 .custom-container {
