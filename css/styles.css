@@ -11115,12 +11115,19 @@ h4.barred-heading.dinostudio::before {
 header {
   position: relative;
   overflow: hidden;
+  min-height: 600px;
+  /* Adjust this value to increase the height */
+  padding: 40px 0;
+  /* Add padding to increase vertical space */
 }
 
+/* Container to ensure full height of the header */
 header .container {
   position: relative;
+  height: 100%;
 }
 
+/* Styling for Spline background */
 .spline-background {
   position: absolute;
   top: 0;
@@ -11128,16 +11135,23 @@ header .container {
   width: 100%;
   height: 100%;
   z-index: 0;
+  /* Ensure it stays behind other content */
   pointer-events: auto;
-  /* Ensure the Spline viewer can receive pointer events */
+  /* Make sure it doesn't block interactions */
 }
 
+/* Styling for glassy background */
 .glassy-background {
-  padding: 40px;
-  margin: 20px auto;
   display: flex;
+  flex-direction: column;
+  /* Ensure content layout is vertical */
   align-items: center;
+  /* Center content horizontally */
   justify-content: center;
+  /* Center content vertically */
+  position: relative;
+  z-index: 1;
+  /* Ensure it stays above the spline background */
 }
 
 /* Apply glassy effect only on small screens */
@@ -11149,5 +11163,12 @@ header .container {
     /* Creates the glass effect */
     border-radius: 15px;
     /* Optional: gives rounded corners */
+    padding: 20px;
+    /* Optional: adds padding inside the glassy background */
+    color: #000;
+    /* Ensure text color contrasts with the background */
   }
 }
+
+/* Optional: Ensure good text color visibility */
+.gla
