@@ -11115,7 +11115,7 @@ h4.barred-heading.dinostudio::before {
 header {
   position: relative;
   overflow: hidden;
-  min-height: 600px;
+  min-height: 450px;
   /* Adjust this value to increase the height */
   padding: 40px 0;
   /* Add padding to increase vertical space */
@@ -11153,22 +11153,3 @@ header .container {
   z-index: 1;
   /* Ensure it stays above the spline background */
 }
-
-/* Apply glassy effect only on small screens */
-@media (max-width: 768px) {
-  .glassy-background {
-    background: rgba(255, 255, 255, 0.3);
-    /* Semi-transparent background */
-    backdrop-filter: blur(10px);
-    /* Creates the glass effect */
-    border-radius: 15px;
-    /* Optional: gives rounded corners */
-    padding: 20px;
-    /* Optional: adds padding inside the glassy background */
-    color: #000;
-    /* Ensure text color contrasts with the background */
-  }
-}
-
-/* Optional: Ensure good text color visibility */
-.gla
