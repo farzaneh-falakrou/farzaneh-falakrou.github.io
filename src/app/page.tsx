@@ -13,6 +13,7 @@ import { Projects } from "@/components/work/Projects";
 import { HeroHeadline, RotatingBadge } from "@/components/HeroHeadline";
 import { StatsStrip } from "@/components/StatsStrip";
 import { MarqueeTicker } from "@/components/MarqueeTicker";
+import { ProcessAndTools } from "@/components/ProcessAndTools";
 import { FooterCTA } from "@/components/FooterCTA";
 
 export async function generateMetadata() {
@@ -75,10 +76,10 @@ export default function Home() {
       <RevealFx translateY="12" delay={0.8} fillWidth>
         <StatsStrip />
       </RevealFx>
-      <RevealFx translateY="8" delay={1.1} fillWidth>
-        <MarqueeTicker />
+      <RevealFx translateY="8" delay={1.0} fillWidth>
+        <ProcessAndTools />
       </RevealFx>
-      <RevealFx translateY="16" delay={1.3} fillWidth>
+      <RevealFx translateY="16" delay={1.2} fillWidth>
         <Column fillWidth gap="24">
           <Row fillWidth horizontal="between" vertical="center">
             <Column gap="4">
@@ -96,7 +97,10 @@ export default function Home() {
           <Projects range={[1, 3]} />
         </Column>
       </RevealFx>
-      <RevealFx translateY="16" delay={1.5} fillWidth>
+      <RevealFx translateY="8" delay={1.5} fillWidth>
+        <MarqueeTicker />
+      </RevealFx>
+      <RevealFx translateY="16" delay={1.6} fillWidth>
         <FooterCTA />
       </RevealFx>
     </Column>

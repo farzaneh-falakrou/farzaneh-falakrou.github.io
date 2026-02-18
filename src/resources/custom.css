@@ -23,6 +23,120 @@
   }
 }
 
+/* ─── Process + tools card ──────────────────────────────────────── */
+
+.process-tools-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  border: 1px solid var(--neutral-alpha-medium);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.process-tools-card__flywheel {
+  padding: 36px 40px;
+  border-right: 1px solid var(--neutral-alpha-medium);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.process-tools-card__label {
+  font-size: var(--font-size-label-default-s);
+  color: var(--neutral-on-background-weak);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+  align-self: flex-start;
+}
+
+.flywheel-svg {
+  width: 100%;
+  max-width: 300px;
+}
+
+/* Flowing dashed arc animation — dashes travel clockwise */
+@keyframes arc-flow {
+  from { stroke-dashoffset: 14; }
+  to   { stroke-dashoffset: 0; }
+}
+
+.flywheel-arc {
+  stroke-dasharray: 8 6;
+  animation: arc-flow 2s linear infinite;
+}
+.flywheel-arc-1 { animation-delay: -0.5s; }
+.flywheel-arc-2 { animation-delay: -1s; }
+.flywheel-arc-3 { animation-delay: -1.5s; }
+
+.process-tools-card__tools {
+  padding: 36px 44px;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .process-tools-card {
+    grid-template-columns: 1fr;
+  }
+  .process-tools-card__flywheel {
+    border-right: none;
+    border-bottom: 1px solid var(--neutral-alpha-medium);
+    padding: 32px;
+  }
+  .process-tools-card__tools {
+    padding: 32px;
+  }
+}
+
+/* ─── Tools strip ───────────────────────────────────────────────── */
+
+.tools-strip {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.tools-strip__label {
+  font-size: var(--font-size-label-default-s);
+  color: var(--neutral-on-background-weak);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+
+.tools-strip__row {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: center;
+  gap: 12px;
+}
+
+.tools-strip__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--neutral-alpha-weak);
+  background: var(--neutral-alpha-weak);
+  transition: border-color 0.2s ease, background 0.2s ease;
+  cursor: default;
+}
+
+.tools-strip__item:hover {
+  border-color: var(--neutral-alpha-medium);
+  background: var(--neutral-alpha-medium);
+}
+
+.tools-strip__icon {
+  flex-shrink: 0;
+}
+
 /* Marquee ticker */
 .marquee-outer {
   width: 100%;
@@ -57,6 +171,96 @@
 .marquee-dot {
   color: var(--brand-on-background-weak);
   font-size: 10px;
+}
+
+/* ─── Project cards ─────────────────────────────────────────────── */
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 16px;
+  border: 1px solid var(--neutral-alpha-medium);
+  overflow: hidden;
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+  /* Full height so cards in a grid row stretch to the same height */
+  height: 100%;
+}
+
+.project-card:hover {
+  border-color: var(--brand-alpha-medium);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+}
+
+/* Enforce 16:9 aspect ratio on the featured card image */
+.project-card--featured .project-card__image {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+/* Enforce 4:3 aspect ratio on compact card images */
+.project-card--compact .project-card__image {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+/* Image fills its container */
+.project-card__image,
+.project-card__image > *,
+.project-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Strip Carousel's own border-radius so card clips it cleanly */
+.project-card__image > div,
+.project-card__image [class*="Carousel"] {
+  border-radius: 0 !important;
+  height: 100% !important;
+}
+
+.project-card__body {
+  padding: 24px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* Push links to bottom of card */
+  flex: 1;
+}
+
+.project-card--compact .project-card__body {
+  padding: 20px 24px 28px;
+  gap: 10px;
+}
+
+.project-card__links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.project-card__clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Project bento grid */
+.project-grid {
+  align-items: stretch; /* cards in same row match height */
+}
+
+@media (max-width: 640px) {
+  .project-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 @keyframes marquee {
