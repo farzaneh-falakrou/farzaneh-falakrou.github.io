@@ -99,10 +99,10 @@ const dataStyle: DataStyleConfig = {
 
 const effects: EffectsConfig = {
   mask: {
-    cursor: true,
+    cursor: false,
     x: 50,
     y: 0,
-    radius: 100,
+    radius: 40,
   },
   gradient: {
     display: true,

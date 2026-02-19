@@ -15,11 +15,10 @@ const tools = [
 export function ToolsStrip() {
   return (
     <div className="tools-strip">
-      <span className="tools-strip__label">Tools I work with</span>
       <div className="tools-strip__row">
         {tools.map(({ icon: Icon, name, color }) => (
           <div key={name} className="tools-strip__item">
-            <Icon size={24} color={color} className="tools-strip__icon" />
+            <Icon size={28} color={color} className="tools-strip__icon" />
             <Text variant="label-default-m" onBackground="neutral-weak">
               {name}
             </Text>
