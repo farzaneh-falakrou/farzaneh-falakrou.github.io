@@ -42,17 +42,18 @@ export default function Home() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      <Column fillWidth horizontal="center" gap="m">
-        <Column maxWidth="s" horizontal="center" align="center" gap="32" style={{ position: "relative" }}>
-          <RotatingBadge />
+
+      {/* ── Hero ── */}
+      <Column fillWidth horizontal="center" gap="m" style={{ position: "relative" }}>
+        <RotatingBadge />
+        <Column maxWidth="s" horizontal="center" align="center" gap="32">
           <RevealFx translateY="4" fillWidth horizontal="center">
             <HeroHeadline />
           </RevealFx>
-          <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">
+          <RevealFx paddingTop="12" delay={0.2} horizontal="center" paddingLeft="12">
             <Button
-              id="about"
               data-border="rounded"
-              href={about.path}
+              href="/work"
               variant="secondary"
               size="m"
               weight="default"
@@ -67,26 +68,27 @@ export default function Home() {
                     size="m"
                   />
                 )}
-                {about.title}
+                View my work
               </Row>
             </Button>
           </RevealFx>
         </Column>
       </Column>
-      <RevealFx translateY="12" delay={0.8} fillWidth>
+
+      {/* ── Stats ── */}
+      <RevealFx translateY="4" delay={0.3} fillWidth>
         <StatsStrip />
       </RevealFx>
-      <RevealFx translateY="8" delay={1.0} fillWidth>
-        <ProcessAndTools />
-      </RevealFx>
-      <RevealFx translateY="16" delay={1.2} fillWidth>
+
+      {/* ── Selected Work — leads with evidence ── */}
+      <RevealFx delay={0.4} fillWidth>
         <Column fillWidth gap="24">
           <Row fillWidth horizontal="between" vertical="center">
             <Column gap="4">
               <span style={{ fontSize: "var(--font-size-label-default-s)", color: "var(--neutral-on-background-weak)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 500 }}>
                 Selected Work
               </span>
-              <Heading variant="heading-strong-l">
+              <Heading as="h2" variant="heading-strong-l">
                 A few things I&apos;ve shipped
               </Heading>
             </Column>
@@ -97,12 +99,15 @@ export default function Home() {
           <Projects range={[1, 3]} />
         </Column>
       </RevealFx>
-      <RevealFx translateY="8" delay={1.5} fillWidth>
-        <MarqueeTicker />
-      </RevealFx>
-      <RevealFx translateY="16" delay={1.6} fillWidth>
-        <FooterCTA />
-      </RevealFx>
+
+      {/* ── Process + Tools ── */}
+      <ProcessAndTools />
+
+      {/* ── Disciplines marquee ── */}
+      <MarqueeTicker />
+
+      {/* ── Footer CTA ── */}
+      <FooterCTA />
     </Column>
   );
 }

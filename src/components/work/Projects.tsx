@@ -39,6 +39,7 @@ export function Projects({ range, exclude }: ProjectsProps) {
           content={featured.content}
           avatars={featured.metadata.team?.map((member) => ({ src: member.avatar })) || []}
           link={featured.metadata.link || ""}
+          tags={featured.metadata.tags || []}
         />
       )}
 
@@ -63,6 +64,7 @@ export function Projects({ range, exclude }: ProjectsProps) {
               content={post.content}
               avatars={post.metadata.team?.map((member) => ({ src: member.avatar })) || []}
               link={post.metadata.link || ""}
+              tags={post.metadata.tags || []}
             />
           ))}
         </div>

@@ -1,5 +1,4 @@
 import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
-import { Line, Row, Text } from "@once-ui-system/core";
 
 const person: Person = {
   firstName: "Farzaneh",
@@ -50,8 +49,8 @@ const home: Home = {
   image: "/images/og/home.jpg",
   label: "Home",
   title: `${person.name}'s Portfolio`,
-  description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Hi, I'm Farzaneh!</>,
+  description: `Product Designer with 6+ years experience in UX research, prototyping, and shipping digital products. Based in Berlin, open to new opportunities.`,
+  headline: <>Research-driven design for impactful digital products.</>,
   featured: {
     display: false,
     title: <>Featured work</>,
@@ -59,10 +58,8 @@ const home: Home = {
   },
   subline: (
     <>
-      I'm a Product Designer with +6 years of experience in design and project
-      management, skilled in user-centered solutions and creative thinking. I've led
-      +20 projects, demonstrating strong leadership in both independent projects
-      and cross-functional teams.
+      I&apos;m a Product Designer with 6+ years turning complex problems into interfaces people actually use.
+      Trained as an architect, now designing digital products — based in Berlin.
     </>
   ),
 };

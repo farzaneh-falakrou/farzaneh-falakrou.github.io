@@ -12,6 +12,7 @@ interface ProjectCardProps {
   description: string;
   avatars: { src: string }[];
   link: string;
+  tags?: string[];
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -22,21 +23,15 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   content,
   description,
   link,
+  tags,
 }) => {
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Let inner <a> tags handle their own navigation
-    if ((e.target as HTMLElement).closest("a")) return;
-    window.location.href = href;
-  };
-
   return (
     <div
       className={`project-card${featured ? " project-card--featured" : " project-card--compact"}`}
-      onClick={handleClick}
-      role="link"
-      tabIndex={0}
-      onKeyDown={(e) => { if (e.key === "Enter") window.location.href = href; }}
     >
+      {/* Cover link — makes the whole card Cmd+clickable and right-clickable */}
+      <a href={href} className="project-card__cover-link" aria-label={title} />
+
       <div className="project-card__image">
         <Carousel
           sizes={featured ? "(max-width: 960px) 100vw, 960px" : "(max-width: 640px) 100vw, 480px"}
@@ -60,6 +55,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               {description}
             </span>
           </Text>
+        )}
+        {tags && tags.length > 0 && (
+          <div className="project-card__tags">
+            {tags.slice(0, featured ? 4 : 3).map((tag) => (
+              <span key={tag} className="project-card__tag">{tag}</span>
+            ))}
+          </div>
         )}
         <div className="project-card__links">
           {content?.trim() && (

@@ -93,7 +93,7 @@ export function StatsStrip() {
 
   useEffect(() => {
     // Wait for RevealFx to fully finish before starting
-    const timer = setTimeout(() => setStarted(true), 1800);
+    const timer = setTimeout(() => setStarted(true), 1000);
     return () => clearTimeout(timer);
   }, []);
 

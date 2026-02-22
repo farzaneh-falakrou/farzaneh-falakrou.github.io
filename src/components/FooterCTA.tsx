@@ -17,8 +17,8 @@ export function FooterCTA() {
         <span style={{ fontSize: "var(--font-size-label-default-s)", color: "var(--neutral-on-background-weak)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 500 }}>
           Get in touch
         </span>
-        <Heading variant="display-strong-m" align="center" wrap="balance">
-          Let&apos;s work together
+        <Heading as="h2" variant="display-strong-m" align="center" wrap="balance">
+          Let&apos;s build something great
         </Heading>
         <Text
           variant="body-default-l"
@@ -26,8 +26,8 @@ export function FooterCTA() {
           align="center"
           wrap="balance"
         >
-          I&apos;m currently open to new opportunities. Whether you have a project
-          in mind or just want to say hi — my inbox is always open.
+          I&apos;m open to full-time roles and selected freelance projects.
+          If you&apos;re working on something that needs a strong design partner, I&apos;d love to hear about it.
         </Text>
       </Column>
 
@@ -38,7 +38,7 @@ export function FooterCTA() {
           size="l"
           arrowIcon
         >
-          Say hello
+          Get in touch
         </Button>
         <Button
           href="https://www.linkedin.com/in/farzaneh-falakrou/"
