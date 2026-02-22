@@ -152,7 +152,7 @@
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: marquee 28s linear infinite;
+  animation: marquee 18s linear infinite;
 }
 
 .marquee-track:hover {
@@ -181,15 +181,29 @@
 .project-card {
   display: flex;
   flex-direction: column;
-  text-decoration: none;
   color: inherit;
   border-radius: 16px;
   border: 1px solid var(--neutral-alpha-medium);
   overflow: hidden;
   transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-  cursor: pointer;
   /* Full height so cards in a grid row stretch to the same height */
   height: 100%;
+  /* Required for the overlay cover link */
+  position: relative;
+}
+
+/* Overlay anchor — makes the entire card right-clickable / Cmd+clickable */
+.project-card__cover-link {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+/* Raise inner links above the cover link so they intercept their own clicks */
+.project-card__links {
+  position: relative;
+  z-index: 1;
 }
 
 .project-card:hover {
@@ -255,6 +269,32 @@
   overflow: hidden;
 }
 
+.project-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 4px;
+}
+
+.project-card__tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--neutral-alpha-weak);
+  background: var(--neutral-alpha-weak);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--neutral-on-background-weak);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+
+.project-card--featured .project-card__tag {
+  padding: 4px 12px;
+  font-size: var(--font-size-label-default-s);
+}
+
 /* Project bento grid */
 .project-grid {
   align-items: stretch; /* cards in same row match height */
@@ -269,6 +309,18 @@
 @keyframes marquee {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
+}
+
+/* ─── Accessibility: respect reduced-motion preference ──────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .rotating-badge       { animation: none; }
+  .flywheel-arc,
+  .flywheel-arc-1,
+  .flywheel-arc-2,
+  .flywheel-arc-3       { animation: none; }
+  .marquee-track        { animation: none; }
+  .dot-ping             { animation: none; }
 }
 
 /* :root {

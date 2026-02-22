@@ -77,9 +77,9 @@ const style: StyleConfig = {
   accent: "violet", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan | custom
   solid: "contrast", // color | contrast
   solidStyle: "flat", // flat | plastic
-  border: "playful", // rounded | playful | conservative | sharp
+  border: "rounded", // rounded | playful | conservative | sharp
   surface: "translucent", // filled | translucent
-  transition: "all", // all | micro | macro
+  transition: "micro", // all | micro | macro
   scaling: "100", // 90 | 95 | 100 | 105 | 110
 };
 
@@ -106,7 +106,7 @@ const effects: EffectsConfig = {
   },
   gradient: {
     display: true,
-    opacity: 90,
+    opacity: 65,
     x: 50,
     y: 0,
     width: 80,
@@ -117,7 +117,7 @@ const effects: EffectsConfig = {
   },
   dots: {
     display: true,
-    opacity: 40,
+    opacity: 20,
     size: "2",
     color: "brand-background-strong",
   },
@@ -185,7 +185,7 @@ const mailchimp: MailchimpConfig = {
 // default schema data
 const schema: SchemaConfig = {
   logo: "",
-  type: "Organization",
+  type: "Person",
   name: "Farzaneh Falakrou",
   description: home.description,
   email: "farzaneh.falakrou@gmail.com",

@@ -2,13 +2,13 @@
 
 const disciplines = [
   "UX Research",
-  "Service Design",
-  "Prototyping",
-  "User Testing",
-  "Information Architecture",
+  "Visual Design",
   "Design Systems",
+  "Prototyping",
+  "Product Strategy",
+  "Information Architecture",
+  "Workshop Facilitation",
   "Interaction Design",
-  "Usability Studies",
 ];
 
 // Duplicate so the loop is seamless
