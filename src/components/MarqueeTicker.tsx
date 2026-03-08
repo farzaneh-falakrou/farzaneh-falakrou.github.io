@@ -1,5 +1,3 @@
-"use client";
-
 const disciplines = [
   "UX Research",
   "Visual Design",

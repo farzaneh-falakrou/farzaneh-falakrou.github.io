@@ -20,6 +20,7 @@ type Metadata = {
   team: Team[];
   link?: string;
   impact?: string;
+  timeframe?: string;
   tags?: string[];
 };
 
@@ -52,6 +53,7 @@ function readMDXFile(filePath: string) {
     team: data.team || [],
     link: data.link || "",
     impact: data.impact || "",
+    timeframe: data.timeframe || "",
     tags: data.tags || [],
   };
 

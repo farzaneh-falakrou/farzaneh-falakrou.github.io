@@ -1,0 +1,316 @@
+---
+title: "Beacon"
+publishedAt: "2026-02-22"
+timeframe: "Feb 2026 – Ongoing"
+impact: "Designed an AI-powered knowledge base that surfaces the right context before you search — tackling proactive discovery, source transparency, and trust in a category full of reactive tools"
+summary: "Beacon is an AI knowledge base for distributed teams — built around the insight that knowledge doesn't disappear, it hides. Where every competitor waits for you to search, Beacon finds you first."
+images:
+  - "/images/projects/beacon/cover.png"
+team:
+  - name: "Farzaneh Falakrou"
+    role: "Product Designer"
+    avatar: "/images/avatar.png"
+    linkedIn: "https://www.linkedin.com/in/farzaneh-falakrou/"
+tags:
+  - AI Product Design
+  - Knowledge Management
+  - B2B SaaS
+  - Competitive Audit
+  - Agentic UX
+  - AIX Design
+  - Figma
+---
+
+## The Problem
+
+Every company has a knowledge problem, but it's not what most tools are trying to solve.
+
+The common assumption is that people can't *find* information because it's unstructured. So tools focus on better search. But search only works when you know what to look for. The real breakdown happens earlier — when you don't know a decision was already made, a document already exists, or a conversation already answered your question three months ago.
+
+> *"I spent 40 minutes looking for a doc I knew existed. Eventually I just Slack'd someone and asked."*
+
+**Knowledge doesn't disappear. It hides.**
+
+In distributed teams — where work happens across time zones, async threads, and half-dozen tools — institutional knowledge accumulates invisibly. It lives in meeting recordings nobody rewatches, Notion pages nobody links to, Slack threads that scroll off the screen, and the heads of people who've since left.
+
+The result:
+- Teams re-investigate decisions that have already been made
+- Onboarding stretches from weeks to months because context isn't surfaced, it's hunted
+- Expertise is siloed in individuals rather than encoded in the organization
+- When people leave, they take the knowledge with them
+
+### The design question
+
+**How do you build an AI knowledge base that surfaces the right context at the right moment — without replacing the user's judgment about what actually matters?**
+
+### Who this is for
+
+Three distinct users, each with a different relationship to the knowledge base:
+
+- **Contributors** — the people who know things and occasionally write them down
+- **Seekers** — the people who need things and shouldn't have to hunt
+- **Stewards** — the people responsible for what's accurate and up to date
+
+---
+
+## Competitive Audit
+
+To understand what Beacon needed to be, I first mapped what the category was getting wrong.
+
+**Framing question:** *Where does AI replace user judgment — and where does it support it?*
+
+### Notion AI
+
+Notion's AI answers questions with source citations and captures meeting notes without requiring a bot. In Notion 3.0, agents execute multi-step tasks across the workspace.
+
+**The gap:** Entirely reactive. You must initiate every interaction. The AI doesn't know what you're working on unless you ask it. Confidence and document freshness are never surfaced — if the underlying page is outdated, the answer inherits that silently.
+
+**Design takeaway:** Good at answering known questions. Blind to the questions you haven't thought to ask.
+
+### Confluence (Atlassian Intelligence)
+
+Q&A search, page summaries, and automation rules in plain language. The jargon-definition feature for onboarding is genuinely useful.
+
+**The gap:** Page summaries are generated without indicating what was prioritized or omitted — users trust the summary without reading the source. Search still requires intent. No contextual awareness of what the user is working on.
+
+**Design takeaway:** Powerful for structured enterprise teams. Fails async, distributed teams who need the AI to do more interpretive work with less structured input.
+
+### Guru
+
+The most honest approach to the trust problem: every piece of knowledge has a verified status, an owner, and a review schedule. The Trust Score is a visible human judgment layer on top of AI.
+
+**The gap:** The verification model requires active curation — someone has to maintain it. For teams without a dedicated knowledge manager, quality degrades. No proactive surfacing.
+
+**Design takeaway:** Guru accepts that AI alone can't be trusted to maintain accuracy. The right instinct — but it solves the trust problem by adding manual work rather than designing the AI interaction better.
+
+### Glean
+
+Cross-platform semantic search that pulls from Slack, email, Drive, Notion, Jira, and dozens of other tools. The closest thing to "search everything, everywhere."
+
+**The gap:** A search product, not a knowledge product. It finds — it doesn't help you create, verify, or maintain. No transparency on why a result ranked where it did. Enterprise pricing locks out smaller teams.
+
+**Design takeaway:** Solves the retrieval problem well. Doesn't solve the "I didn't know to look" problem.
+
+### Slite
+
+Lightweight and async-first. AI writing assistance is integrated into the creation flow. Bulk AI actions for knowledge hygiene.
+
+**The gap:** Search is weaker than Glean or Notion. Scales poorly above ~100 people. AI covers creation, not discovery or verification.
+
+**Design takeaway:** Best experience for small async teams. The writing-assistance model is the right instinct — but it only covers one third of the knowledge lifecycle.
+
+### The gap all five share
+
+| | Proactive surfacing | Source transparency | Judgment preserved | Freshness signals |
+|---|:---:|:---:|:---:|:---:|
+| Notion AI | ✗ | Partial | ✗ | ✗ |
+| Confluence AI | ✗ | ✗ | Partial | Partial |
+| Guru | ✗ | ✓ | ✓ | ✓ |
+| Glean | ✗ | ✗ | ✓ | ✗ |
+| Slite | ✗ | Partial | ✓ | ✗ |
+| **Beacon** | **✓** | **✓** | **✓** | **✓** |
+
+Every tool in the category is reactive. None surface relevant knowledge before you ask. None show clearly *why* AI surfaced something or how fresh it is. This is the space Beacon is designed to fill.
+
+---
+
+## Research
+
+### Method: AI-assisted synthetic research
+
+This project used a hybrid research approach that reflects how discovery works in 2026: synthetic user research for rapid signal generation, followed by validation against real conversations.
+
+Three synthetic personas were generated using Claude, grounded in secondary research from the competitive audit and published data on distributed team workflows. Each persona represents a distinct user archetype with documented behaviors, tools, and frustrations. Synthetic respondents were used to pressure-test assumptions quickly — not to replace human insight, but to identify where real validation was most needed.
+
+*Synthetic research surfaces patterns fast. Real conversations surface what you didn't know to look for.*
+
+---
+
+### Synthetic personas
+
+**Maya — the Seeker**
+Product Manager at a 45-person remote SaaS startup. Team split across EU and US timezones. Primary tool: Notion. Maya's default when she can't find something is to Slack a colleague — search has failed her often enough that routing around it feels faster. She re-investigates decisions that have already been made without knowing it.
+
+**Jonas — the Steward**
+Head of Engineering at an 80-person scale-up. Writes thorough documentation — architecture decisions, runbooks, process guides. Has no visibility into whether anyone reads what he writes, or when it becomes outdated. He documents into a void.
+
+**Priya — the Newcomer**
+Four months into a consulting firm. Onboarded using process documentation that turned out to be two years old. Confluence search returns a list of results with no visible dates, no verification status. She reads three versions of the same policy and still doesn't know which one is current.
+
+---
+
+### Key questions and synthetic responses
+
+**How do you find information you need at work?**
+
+> *"Honestly? I Slack someone. Search in Notion rarely gives me what I need on the first try, and I don't know which results are current."* — Maya
+
+> *"I usually know where things are because I wrote most of them. But when I need something outside engineering, I'm completely lost — it could be in Jira, Drive, Notion, or a Slack thread."* — Jonas
+
+> *"I search Confluence and get twelve results. None of them show a date. I open three tabs, read three versions of the same policy, and still don't know which one applies."* — Priya
+
+**Tell me about a time knowledge let you down.**
+
+> *"We spent two sprint planning sessions debating our pricing model. On day three someone found a Notion page from six months ago where we'd already decided this. Two sprints wasted."* — Maya
+
+> *"I wrote a detailed architecture decision record about our database choice. Eighteen months later a new engineer started the same evaluation from scratch. He never found my doc."* — Jonas
+
+> *"I followed a process doc to the letter during onboarding. It was two years out of date. My manager had to spend an afternoon fixing what I'd done."* — Priya
+
+**What would the ideal experience look like?**
+
+> *"Before I start writing a new spec, something just tells me if this has been discussed before. I don't want to search. I want it to already know what I'm working on."* — Maya
+
+> *"I want to know when something I wrote is being read — and when it's becoming outdated. Right now I write into a void."* — Jonas
+
+> *"Any signal about whether something is current. Even 'last verified 3 months ago' would change everything."* — Priya
+
+---
+
+### AI synthesis process
+
+The three personas' responses were synthesized using Claude to identify recurring patterns across users. The AI clustered responses into theme candidates — which I then reviewed, reordered, and named. Two of the four final insights emerged clearly from the AI clustering. Two others required manual reframing: the AI grouped "search failure" and "routing around the tool" as a single theme, but these are distinct design problems with different solutions, and I separated them.
+
+*This is the moment documented in the case study: AI accelerated synthesis but could not replace the interpretive judgment that distinguishes two problems that look similar on the surface.*
+
+---
+
+### Key insights
+
+**1. Search assumes intent you don't always have**
+All three personas described situations where they didn't know the relevant knowledge *existed* — so they couldn't search for it. The failure isn't retrieval. It's discovery.
+
+**2. Freshness is invisible and the consequences are real**
+Every persona experienced harm from outdated content. None of the tools they used surfaced document age or verification status. Users can't assess reliability, so they either overtrust or route around the tool entirely.
+
+**3. Asking a person is faster than using the tool**
+When the tool fails often enough, users route around it. This creates a compounding problem: less use means less maintenance signal, which means the knowledge base degrades further.
+
+**4. Contributors write into a void**
+Stewards who are motivated to document have no feedback loop. They don't know if their content is found, trusted, or becoming stale. Without that signal, maintenance stops — and the knowledge base slowly becomes archaeology.
+
+---
+
+## Design Decisions
+
+Each of the four research insights generated a design challenge with no obvious right answer. What follows is how I worked through the tension in each one — the options considered, the decision made, and why.
+
+---
+
+### Decision 1 — Proactive surfacing
+*From insight: "Search assumes intent you don't always have"*
+
+**The tension**
+
+If Beacon surfaces content unprompted, it risks being intrusive — one more thing interrupting focused work. But if it waits for a search query, it has the same problem as every other tool: it only helps when you already know what to look for.
+
+**Options considered**
+
+- Push notifications — surfacing content via alert. Dismissed immediately. Notification fatigue is already a solved problem (the answer is: don't add to it).
+- Ambient home feed — showing relevant content on the dashboard, ordered by your recent activity. Useful but passive; you have to visit the feed for it to work.
+- Contextual editor panel — a non-blocking sidebar that appears when you open a new document or start typing a title, suggesting related content based on what you're about to write.
+
+**The decision**
+
+Contextual surfacing at the moment of creation. When a user opens a blank document or types a title, Beacon surfaces 3–5 related pieces in a collapsible side panel — not a notification, not a separate screen. The panel appears once and can be dismissed permanently if the user doesn't find it useful.
+
+**Why**
+
+The moment just before writing is the highest-receptivity moment for "this already exists" — you're oriented toward the topic, not yet invested in a direction. The panel doesn't block the writing surface and disappears the moment you start typing body content. It surfaces at the right moment without claiming attention it hasn't earned.
+
+---
+
+### Decision 2 — Freshness signals
+*From insight: "Freshness is invisible and the consequences are real"*
+
+**The tension**
+
+Showing document age alone doesn't tell you whether the content is still accurate — a three-year-old architectural decision record might be perfectly valid. An AI-generated "may be outdated" warning without explanation would be trusted less than no warning at all. Showing *too much* metadata creates the same problem as Priya's twelve Confluence results: more to read, not less to decide.
+
+**Options considered**
+
+- Timestamp only ("Last edited 8 months ago") — shows recency, not reliability.
+- AI-generated staleness prediction — opaque, and risks false positives that erode trust.
+- Full verification workflow (like Guru's) — reliable but shifts work onto humans without reducing total effort.
+- Two-layer signal: document age + human verification status, shown separately.
+
+**The decision**
+
+Two independent signals, not one combined score:
+
+1. **Document age** — always visible, lightweight. Shows when the document was last edited and by whom.
+2. **Verification badge** — shown when a human has explicitly confirmed the document is current. Not AI-generated.
+
+For documents over 6 months old with no verification, a "needs review" prompt appears — but only for the owner, not the reader. Readers see the absence of a verification badge. Owners get the nudge to act.
+
+**Why**
+
+Recency and accuracy are different things and shouldn't be collapsed into a single indicator. Separating them lets old content that's still correct coexist with new content that might already be wrong. Routing the staleness alert to the owner rather than the reader keeps the reading experience clean — readers see what they need to know, owners see what they need to do.
+
+---
+
+### Decision 3 — Source transparency
+*From insight: "Asking a person is faster than using the tool"*
+
+The reason users route around the tool is trust failure. Slack works because when Maya asks a colleague, she knows who answered and can calibrate accordingly. When Beacon surfaces something, there's no equivalent signal — the AI just shows a result.
+
+**The tension**
+
+Full transparency — showing all the sources and reasoning behind every suggestion — is overwhelming in practice. No transparency is a black box that reinforces distrust. The EU AI Act's explainability mandate (XAI) makes this a legal question, not just a UX one: AI outputs that affect decisions must be interpretable.
+
+**Options considered**
+
+- No explanation — AI surfaces content, nothing more. Fast but untrustworthy for users with low AI confidence.
+- Confidence percentage — meaningless without context. "87% confident" tells you nothing actionable.
+- Inline reasoning text ("Because you're writing about pricing and accessed this doc last week") — useful but potentially verbose on every suggestion.
+- Collapsed "Why this?" disclosure — explanation available on demand, hidden by default.
+
+**The decision**
+
+A single "Why this?" element beneath every AI-surfaced item. Collapsed by default. One tap reveals: the sources Beacon used, the number of related queries that led to this result, and when it was last verified by a human.
+
+**Why**
+
+Users who trust the AI won't tap it. Users who are skeptical — Priya, in her first month, with three versions of the same policy — can verify before acting. The disclosure is always available but never in the way. This is also the design answer to XAI compliance: the reasoning isn't buried in a settings panel or a modal, it's one tap away from every AI action.
+
+---
+
+### Decision 4 — Contributor feedback loop
+*From insight: "Contributors write into a void"*
+
+**The tension**
+
+Jonas knows his documentation matters. He doesn't know if it's being found, read, or quietly ignored. Giving him a full analytics dashboard feels like surveillance — measuring his output rather than helping him maintain it. Giving him nothing is the current situation, which isn't working.
+
+**Options considered**
+
+- Full analytics dashboard — page views, read time, unique visitors. Overkill. Shifts the burden from maintenance to reporting.
+- Weekly digest email — async, loses urgency, easy to ignore.
+- Inline usage signal — a small, owner-only indicator on each document ("12 people accessed this last month").
+- AI-triggered review prompt — system detects that a document is receiving high traffic or approaching a staleness threshold, and prompts the owner with a single action.
+
+**The decision**
+
+Both, combined. An inline usage signal visible only to the document owner — not analytics, just a human-readable signal of use. And an AI-triggered review prompt when a document either hits a staleness threshold or sees an unexpected traffic spike. The prompt asks a single question: *"Still accurate? Mark as verified."* One tap. No form, no workflow, no process.
+
+**Why**
+
+The system comes to the steward at the right moment rather than adding another thing to their to-do list. The verification action is deliberately frictionless — one tap — because friction is why Guru's verification model breaks down at scale. High traffic + old document is a signal worth acting on immediately; the AI identifies that moment so the steward doesn't have to monitor for it.
+
+---
+
+## Key Screens
+
+*Coming next — annotated screens from Figma with design rationale.*
+
+---
+
+## Prototype
+
+*Coming next — functional prototype built with Figma → Google Stitch → Next.js.*
+
+---
+
+## Reflection
+
+*Coming next.*

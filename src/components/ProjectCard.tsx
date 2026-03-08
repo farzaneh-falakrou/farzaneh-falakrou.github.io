@@ -1,88 +1,65 @@
-"use client";
-
-import { Carousel, Heading, SmartLink, Text } from "@once-ui-system/core";
+import Image from "next/image";
 
 interface ProjectCardProps {
   href: string;
   priority?: boolean;
-  featured?: boolean;
   images: string[];
   title: string;
-  content: string;
   description: string;
-  avatars: { src: string }[];
-  link: string;
   tags?: string[];
+  timeframe?: string;
+  impact?: string;
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   href,
-  featured = false,
+  priority = false,
   images = [],
   title,
-  content,
   description,
-  link,
   tags,
+  timeframe,
+  impact,
 }) => {
   return (
-    <div
-      className={`project-card${featured ? " project-card--featured" : " project-card--compact"}`}
-    >
-      {/* Cover link — makes the whole card Cmd+clickable and right-clickable */}
+    <div className="project-card">
+      {/* Overlay anchor — makes the entire card right-clickable / Cmd+clickable */}
       <a href={href} className="project-card__cover-link" aria-label={title} />
 
-      <div className="project-card__image">
-        <Carousel
-          sizes={featured ? "(max-width: 960px) 100vw, 960px" : "(max-width: 640px) 100vw, 480px"}
-          items={images.map((image) => ({ slide: image, alt: title }))}
-        />
-      </div>
+      {/* Left: image */}
+      {images[0] && (
+        <div className="project-card__image">
+          <Image
+            src={images[0]}
+            alt={title}
+            fill
+            sizes="(max-width: 720px) 100vw, 44vw"
+            priority={priority}
+            className="project-card__img"
+          />
+        </div>
+      )}
 
+      {/* Right: content */}
       <div className="project-card__body">
-        {title && (
-          <Heading as="h2" wrap="balance" variant={featured ? "heading-strong-xl" : "heading-strong-l"}>
-            {title}
-          </Heading>
-        )}
-        {description?.trim() && (
-          <Text
-            variant="body-default-s"
-            onBackground="neutral-weak"
-            wrap="balance"
-          >
-            <span className={featured ? "" : "project-card__clamp"}>
-              {description}
-            </span>
-          </Text>
-        )}
+        <div className="project-card__body-top">
+          <h3 className="project-card__title">{title}</h3>
+          {impact && <p className="project-card__tagline">{impact}</p>}
+          {timeframe && <p className="project-card__timeframe">{timeframe}</p>}
+          {description?.trim() && (
+            <p className="project-card__description">{description}</p>
+          )}
+        </div>
+
         {tags && tags.length > 0 && (
           <div className="project-card__tags">
-            {tags.slice(0, featured ? 4 : 3).map((tag) => (
-              <span key={tag} className="project-card__tag">{tag}</span>
+            {tags.map((tag) => (
+              <span key={tag} className="project-card__tag">
+                {tag.replace(/ /g, "_")}
+              </span>
             ))}
           </div>
         )}
-        <div className="project-card__links">
-          {content?.trim() && (
-            <SmartLink
-              suffixIcon="arrowRight"
-              style={{ margin: 0, width: "fit-content" }}
-              href={href}
-            >
-              <Text variant="body-default-s">Read case study</Text>
-            </SmartLink>
-          )}
-          {link && (
-            <SmartLink
-              suffixIcon="arrowUpRightFromSquare"
-              style={{ margin: 0, width: "fit-content" }}
-              href={link}
-            >
-              <Text variant="body-default-s">View project</Text>
-            </SmartLink>
-          )}
-        </div>
       </div>
     </div>
   );
