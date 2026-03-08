@@ -7,7 +7,7 @@
     "build": "next build",
     "biome-write": "npx @biomejs/biome format --write .",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint src/"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
@@ -28,11 +28,13 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@eslint/eslintrc": "^3.3.5",
     "@types/cookie": "^0.6.0",
     "@types/node": "^20.17.30",
     "@types/react": "^19.2.4",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.25.0",
+    "eslint-config-next": "^16.1.6",
     "typescript": "^5.8.3",
     "tzdata": "^1.0.44"
   }

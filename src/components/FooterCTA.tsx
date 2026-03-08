@@ -15,7 +15,7 @@ export function FooterCTA() {
     >
       <Column horizontal="center" align="center" gap="16" maxWidth="s">
         <span style={{ fontSize: "var(--font-size-label-default-s)", color: "var(--neutral-on-background-weak)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 500 }}>
-          Get in touch
+          What&apos;s next?
         </span>
         <Heading as="h2" variant="display-strong-m" align="center" wrap="balance">
           Let&apos;s build something great

@@ -1,6 +1,5 @@
 import {
   Button,
-  Avatar,
   RevealFx,
   Column,
   Row,
@@ -15,6 +14,8 @@ import { StatsStrip } from "@/components/StatsStrip";
 import { MarqueeTicker } from "@/components/MarqueeTicker";
 import { ProcessAndTools } from "@/components/ProcessAndTools";
 import { FooterCTA } from "@/components/FooterCTA";
+import { HowIWork } from "@/components/HowIWork";
+import { HomeIntro } from "@/components/HomeIntro";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -46,38 +47,19 @@ export default function Home() {
       {/* ── Hero ── */}
       <Column fillWidth horizontal="center" gap="m" style={{ position: "relative" }}>
         <RotatingBadge />
-        <Column maxWidth="s" horizontal="center" align="center" gap="32">
-          <RevealFx translateY="4" fillWidth horizontal="center">
-            <HeroHeadline />
-          </RevealFx>
-          <RevealFx paddingTop="12" delay={0.2} horizontal="center" paddingLeft="12">
-            <Button
-              data-border="rounded"
-              href="/work"
-              variant="secondary"
-              size="m"
-              weight="default"
-              arrowIcon
-            >
-              <Row gap="8" vertical="center" paddingRight="4">
-                {about.avatar.display && (
-                  <Avatar
-                    marginRight="8"
-                    style={{ marginLeft: "-0.75rem" }}
-                    src={person.avatar}
-                    size="m"
-                  />
-                )}
-                View my work
-              </Row>
-            </Button>
-          </RevealFx>
-        </Column>
+        <RevealFx translateY="4" fillWidth horizontal="center">
+          <HeroHeadline />
+        </RevealFx>
       </Column>
 
       {/* ── Stats ── */}
-      <RevealFx translateY="4" delay={0.3} fillWidth>
+      <RevealFx translateY="4" delay={0.2} fillWidth>
         <StatsStrip />
+      </RevealFx>
+
+      {/* ── About teaser ── */}
+      <RevealFx delay={0.3} fillWidth>
+        <HomeIntro />
       </RevealFx>
 
       {/* ── Selected Work — leads with evidence ── */}
@@ -98,6 +80,11 @@ export default function Home() {
           </Row>
           <Projects range={[1, 3]} />
         </Column>
+      </RevealFx>
+
+      {/* ── How I work ── */}
+      <RevealFx delay={0.45} fillWidth>
+        <HowIWork />
       </RevealFx>
 
       {/* ── Process + Tools ── */}
