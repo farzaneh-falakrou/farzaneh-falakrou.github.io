@@ -1,0 +1,20 @@
+:root {
+  --bg:          #ebe8e2;
+  --bg-2:        #e3dfd6;
+  --bg-3:        #dcd6c9;
+  --ink:         #1a1a1a;
+  --ink-2:       #2a2a2a;
+  --muted:       #5a5a5a;
+  --muted-2:     #8a8a85;
+  --line:        #d5d0c5;
+  --accent:      #ff5a36;
+  --accent-soft: #ffd8c8;
+  --surface:     #ffffff;
+  --dark:        #1a1612;
+
+  /* next/font injects --font-instrument-serif and --font-inter as CSS variables
+     on <html> via className. These overrides pull the optimized font faces in,
+     falling back to the web-safe name if next/font is not loaded yet. */
+  --font-serif: var(--font-instrument-serif), 'Instrument Serif', serif;
+  --font-sans:  var(--font-inter), 'Inter', system-ui, sans-serif;
+}
