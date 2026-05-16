@@ -1,0 +1,39 @@
+/* Section padding lifted from sketch section rules.
+   hero: padding 140px 80px 100px (sketch .hero line 92)
+   work: padding 60px 80px 100px  (sketch .work line 145)
+   about: padding 120px 80px      (sketch .about line 223 area)
+   contact: padding 120px 80px    (sketch .contact line 290 area) */
+
+.section {
+  min-height: 100vh;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 140px 80px 100px;
+}
+
+/* Work section has different top padding */
+.section:nth-child(2) {
+  padding: 60px 80px 100px;
+}
+
+/* About section padding */
+.section:nth-child(3) {
+  padding: 120px 80px;
+}
+
+/* Contact section padding */
+.section:nth-child(4) {
+  padding: 120px 80px;
+}
+
+/* Dark sections: About and Contact carry data-darken.
+   Uses :global() because CSS Modules require at least one local class in the selector;
+   these sections are full-bleed dark regions that override the global background. */
+:global(section[data-darken]) {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+:global(section[data-darken]) h2 {
+  color: var(--bg);
+}
