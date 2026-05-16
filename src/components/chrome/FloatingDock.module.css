@@ -1,0 +1,62 @@
+/* Floating dock — lifted verbatim from sketch 006-full-home/index.html lines 66-87.
+   .hidden class included so PLAN 04 can toggle it without touching CSS.
+   Selector names adapted for CSS Modules: dock-sep → .sep, dock-cta → .cta */
+
+.dock {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  background: rgba(26, 26, 26, 0.92);
+  backdrop-filter: blur(10px);
+  padding: 6px;
+  border-radius: 100px;
+  display: flex;
+  gap: 2px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  transition: transform 0.3s ease;
+}
+
+.dock.hidden {
+  transform: translate(-50%, 120px);
+}
+
+.dock a {
+  padding: 10px 22px;
+  font-size: 13px;
+  color: #e8e5df;
+  border-radius: 100px;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.dock a:hover {
+  background: #2a2a2a;
+  color: var(--accent);
+}
+
+.dock a.active {
+  background: var(--accent);
+  color: var(--ink);
+}
+
+.sep {
+  width: 1px;
+  background: #3a3a3a;
+  margin: 6px 4px;
+}
+
+.cta {
+  background: var(--accent);
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.cta:hover {
+  background: #ffaa8a;
+  color: var(--ink);
+}
