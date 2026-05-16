@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sketch 003 — Navigation & Layout</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       LOCKED VISUAL LANGUAGE (from sketch 002 D)
+       ─────────────────────────────────────────────────────────── */
+    :root {
+      --bg:        #ebe8e2;
+      --bg-2:      #e3dfd6;
+      --ink:       #1a1a1a;
+      --ink-2:     #2a2a2a;
+      --muted:     #5a5a5a;
+      --muted-2:   #8a8a85;
+      --line:      #d5d0c5;
+      --accent:    #ff5a36;
+      --surface:   #ffffff;
+
+      --font-serif: 'Instrument Serif', serif;
+      --font-sans:  'Inter', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; }
+    body { font-family: var(--font-sans); background: var(--bg); color: var(--ink); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    /* ─── Variant nav (sketch chrome) ─── */
+    #variant-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9998;
+      background: #fff; border-bottom: 1px solid #e5e5e5;
+      padding: 10px 20px; display: flex; gap: 8px; align-items: center;
+      font-family: system-ui; font-size: 13px;
+    }
+    #variant-nav .label { color: #999; margin-right: 8px; font-size: 12px; }
+    .vtab {
+      padding: 6px 14px; border-radius: 6px; border: 1px solid #ddd;
+      background: #fff; cursor: pointer; font-size: 12px; font-family: system-ui;
+      transition: all 0.15s; color: #333;
+    }
+    .vtab small { color: #999; margin-left: 6px; font-size: 11px; }
+    .vtab:hover { background: #f5f5f5; }
+    .vtab.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+    .vtab.active small { color: #888; }
+
+    .variant { display: none; min-height: 100vh; padding-top: 56px; }
+    .variant.active { display: block; }
+
+    /* ───── Reference annotation ───── */
+    .ref-bar {
+      position: fixed; bottom: 16px; left: 16px;
+      background: rgba(0,0,0,0.85); color: #fff;
+      padding: 12px 16px; border-radius: 12px;
+      font-family: system-ui; font-size: 12px; line-height: 1.5;
+      max-width: 360px; z-index: 9997; opacity: 0.92;
+    }
+    .ref-bar h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #888; margin-bottom: 4px; }
+    .ref-bar .ref { font-size: 12px; color: #ddd; }
+    .ref-bar .says { color: #aaa; font-style: italic; margin-top: 4px; font-size: 11px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       Shared content tokens (used across variants)
+       ─────────────────────────────────────────────────────────── */
+    .display { font-family: var(--font-serif); font-weight: 400; }
+    .display em { font-style: italic; color: var(--accent); }
+    .underline-accent { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 6px; text-decoration-color: var(--accent); }
+    .eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .pulse-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; display: inline-block; vertical-align: middle; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT A — VERTICAL LEFT RAIL
+       Persistent left column with brand+nav+meta.
+       Content flows on the right. Gallery-like.
+       ─────────────────────────────────────────────────────────── */
+    #va .a-shell {
+      display: grid; grid-template-columns: 280px 1fr;
+      min-height: calc(100vh - 56px);
+    }
+    #va .a-rail {
+      position: sticky; top: 56px; height: calc(100vh - 56px);
+      padding: 48px 32px 32px;
+      display: flex; flex-direction: column;
+      border-right: 1px solid var(--line);
+    }
+    #va .a-brand { margin-bottom: 56px; }
+    #va .a-brand-name {
+      font-family: var(--font-serif); font-size: 32px; line-height: 1.05;
+      font-style: italic;
+    }
+    #va .a-brand-role { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+    #va .a-nav { display: flex; flex-direction: column; gap: 2px; }
+    #va .a-nav-link {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 0;
+      font-size: 16px; color: var(--ink);
+      border-bottom: 1px dashed var(--line);
+      transition: all 0.15s;
+    }
+    #va .a-nav-link:hover { color: var(--accent); padding-left: 6px; }
+    #va .a-nav-link.active { color: var(--accent); }
+    #va .a-nav-link.active::before { content: '●'; position: absolute; margin-left: -16px; }
+    #va .a-nav-count { font-family: var(--font-serif); font-style: italic; font-size: 14px; color: var(--muted-2); }
+
+    #va .a-rail-foot {
+      margin-top: auto; padding-top: 32px;
+      border-top: 1px solid var(--line);
+    }
+    #va .a-rail-status { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+    #va .a-rail-socials { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted-2); }
+    #va .a-rail-socials a { transition: color 0.15s; }
+    #va .a-rail-socials a:hover { color: var(--accent); }
+
+    #va .a-content { padding: 64px 56px 96px; max-width: 920px; }
+    #va .a-eyebrow { margin-bottom: 32px; }
+    #va .a-eyebrow .pulse-dot { margin-right: 8px; }
+    #va .a-headline {
+      font-family: var(--font-serif);
+      font-size: clamp(48px, 6.5vw, 88px);
+      font-weight: 400; line-height: 0.96;
+      letter-spacing: -0.02em;
+      margin-bottom: 40px;
+    }
+    #va .a-intro {
+      font-size: 18px; line-height: 1.55; color: var(--ink-2);
+      max-width: 540px; margin-bottom: 64px;
+    }
+    #va .a-intro em { font-family: var(--font-serif); font-style: italic; font-size: 20px; }
+    #va .a-work-head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      padding-bottom: 16px; border-bottom: 1px solid var(--ink);
+      margin-bottom: 8px;
+    }
+    #va .a-work-title { font-family: var(--font-serif); font-size: 28px; }
+    #va .a-work-meta { font-size: 12px; color: var(--muted); }
+    #va .a-project {
+      display: grid; grid-template-columns: 40px 1fr 1fr 60px 24px;
+      gap: 24px; align-items: baseline; padding: 24px 0;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer; transition: all 0.2s;
+    }
+    #va .a-project:hover { padding-left: 12px; padding-right: 12px; background: var(--bg-2); }
+    #va .a-project-num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 16px; }
+    #va .a-project-name { font-family: var(--font-serif); font-size: 24px; }
+    #va .a-project-name em { font-style: italic; color: var(--accent); }
+    #va .a-project-blurb { font-size: 13px; color: var(--muted); line-height: 1.55; }
+    #va .a-project-year { font-family: var(--font-serif); font-style: italic; color: var(--muted-2); font-size: 14px; text-align: right; }
+    #va .a-project-arr { color: var(--muted-2); transition: all 0.2s; }
+    #va .a-project:hover .a-project-arr { color: var(--accent); transform: translateX(4px); }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT B — FLOATING DOCK
+       Pill nav floats centered bottom. Hides on scroll-down.
+       Content gets full canvas. Contemporary studio feel.
+       ─────────────────────────────────────────────────────────── */
+    #vb .b-mark {
+      position: fixed; top: 80px; left: 40px; z-index: 60;
+      font-family: var(--font-serif); font-style: italic; font-size: 22px;
+    }
+    #vb .b-dock {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      z-index: 60;
+      background: rgba(26,26,26,0.92); backdrop-filter: blur(10px);
+      padding: 6px;
+      border-radius: 100px;
+      display: flex; gap: 2px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      transition: transform 0.3s ease;
+    }
+    #vb .b-dock.hidden { transform: translate(-50%, 120px); }
+    #vb .b-dock a {
+      padding: 10px 22px; font-size: 13px; color: #e8e5df;
+      border-radius: 100px; transition: all 0.15s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    #vb .b-dock a:hover { background: #2a2a2a; color: var(--accent); }
+    #vb .b-dock a.active { background: var(--accent); color: var(--ink); }
+    #vb .b-dock .b-dock-sep { width: 1px; background: #3a3a3a; margin: 6px 4px; }
+    #vb .b-dock .b-dock-cta {
+      background: var(--accent); color: var(--ink); font-weight: 500;
+    }
+    #vb .b-dock .b-dock-cta:hover { background: #ffaa8a; color: var(--ink); }
+
+    #vb .b-hero { padding: 140px 80px 80px; }
+    #vb .b-eyebrow { margin-bottom: 32px; }
+    #vb .b-pulse-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; display: inline-block; margin-right: 10px; vertical-align: middle; animation: pulse 2s infinite; }
+    #vb .b-headline {
+      font-family: var(--font-serif);
+      font-size: clamp(72px, 10vw, 168px);
+      font-weight: 400; line-height: 0.92;
+      letter-spacing: -0.04em;
+      max-width: 1400px;
+    }
+    #vb .b-headline em { font-style: italic; color: var(--accent); }
+    #vb .b-sub {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+      max-width: 1100px; margin-top: 64px;
+      padding-top: 32px; border-top: 1px solid var(--line);
+    }
+    #vb .b-sub-text {
+      font-size: 19px; line-height: 1.55; color: var(--ink-2);
+    }
+    #vb .b-sub-text em { font-family: var(--font-serif); font-style: italic; font-size: 21px; }
+    #vb .b-sub-meta { font-size: 13px; line-height: 1.7; color: var(--muted); }
+    #vb .b-sub-meta strong { color: var(--ink); font-weight: 500; }
+
+    #vb .b-work { padding: 100px 80px 160px; }
+    #vb .b-work-head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 56px;
+    }
+    #vb .b-work-title { font-family: var(--font-serif); font-size: 64px; }
+    #vb .b-work-title em { font-style: italic; color: var(--accent); }
+    #vb .b-work-link { font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--muted); padding-bottom: 2px; }
+    #vb .b-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    #vb .b-card {
+      background: var(--surface); border-radius: 24px;
+      padding: 32px; cursor: pointer;
+      transition: all 0.25s;
+      display: flex; flex-direction: column; gap: 32px;
+      min-height: 380px;
+    }
+    #vb .b-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
+    #vb .b-card-preview {
+      height: 220px; border-radius: 16px;
+      background: linear-gradient(135deg, var(--bg-2) 0%, #d4cfc2 100%);
+      display: grid; place-items: center;
+      font-family: var(--font-serif); font-style: italic; color: var(--muted-2); font-size: 14px;
+      position: relative; overflow: hidden;
+    }
+    #vb .b-card-preview::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255,90,54,0.08), transparent 60%);
+    }
+    #vb .b-card:nth-child(2) .b-card-preview { background: linear-gradient(135deg, #2a2825 0%, #4a4540 100%); color: #888; }
+    #vb .b-card:nth-child(3) .b-card-preview { background: linear-gradient(135deg, #ffd8c8 0%, #ff9e85 100%); color: #aa5a45; }
+    #vb .b-card:nth-child(4) .b-card-preview { background: linear-gradient(135deg, #d5d0c5 0%, #b8b3a8 100%); color: #6b665d; }
+    #vb .b-card-body { display: flex; justify-content: space-between; align-items: flex-end; }
+    #vb .b-card-info { }
+    #vb .b-card-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; }
+    #vb .b-card-name { font-family: var(--font-serif); font-size: 32px; line-height: 1.1; }
+    #vb .b-card-name em { font-style: italic; color: var(--accent); }
+    #vb .b-card-arr {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--ink); color: var(--bg);
+      display: grid; place-items: center; flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    #vb .b-card:hover .b-card-arr { background: var(--accent); transform: rotate(-45deg); }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT C — INLINE MASTHEAD
+       Big magazine-style name banner sticky on top.
+       Secondary nav lives inline beneath. Editorial pacing.
+       ─────────────────────────────────────────────────────────── */
+    #vc .c-masthead {
+      position: sticky; top: 56px;
+      padding: 40px 56px 20px;
+      background: var(--bg);
+      z-index: 50;
+      transition: padding 0.25s ease;
+    }
+    #vc .c-masthead.compact { padding: 14px 56px; border-bottom: 1px solid var(--line); }
+    #vc .c-masthead-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+    }
+    #vc .c-masthead-name {
+      font-family: var(--font-serif);
+      font-size: clamp(40px, 6vw, 88px);
+      line-height: 0.95; letter-spacing: -0.025em;
+      transition: font-size 0.25s ease;
+    }
+    #vc .c-masthead.compact .c-masthead-name { font-size: 22px; }
+    #vc .c-masthead-name em { font-style: italic; color: var(--accent); }
+    #vc .c-masthead-meta { text-align: right; font-size: 12px; color: var(--muted); line-height: 1.5; }
+    #vc .c-masthead-meta strong { color: var(--ink); font-weight: 500; }
+    #vc .c-masthead-nav {
+      display: flex; gap: 32px; align-items: center;
+      margin-top: 24px; padding-top: 16px;
+      border-top: 1px solid var(--ink);
+      transition: opacity 0.2s, margin 0.25s, padding 0.25s;
+    }
+    #vc .c-masthead.compact .c-masthead-nav { opacity: 0; margin-top: 0; padding-top: 0; border-top: none; height: 0; overflow: hidden; }
+    #vc .c-masthead-nav a {
+      font-family: var(--font-serif); font-style: italic; font-size: 17px;
+      color: var(--ink); transition: color 0.15s;
+    }
+    #vc .c-masthead-nav a:hover { color: var(--accent); }
+    #vc .c-masthead-nav a.active { color: var(--accent); }
+    #vc .c-masthead-nav .c-nav-spacer { flex: 1; }
+    #vc .c-masthead-nav .c-nav-pill {
+      padding: 6px 16px; border: 1px solid var(--ink); border-radius: 100px;
+      font-size: 13px; font-family: var(--font-sans); font-style: normal;
+      transition: all 0.15s;
+    }
+    #vc .c-masthead-nav .c-nav-pill:hover { background: var(--ink); color: var(--bg); }
+
+    #vc .c-body { padding: 80px 56px 100px; max-width: 1280px; }
+    #vc .c-lead {
+      display: grid; grid-template-columns: 1fr 1.5fr; gap: 80px;
+      margin-bottom: 100px;
+    }
+    #vc .c-lead-eyebrow { font-family: var(--font-serif); font-style: italic; font-size: 18px; color: var(--accent); margin-bottom: 16px; }
+    #vc .c-lead-title { font-family: var(--font-serif); font-size: 48px; line-height: 1.05; }
+    #vc .c-lead-text {
+      font-size: 20px; line-height: 1.55; color: var(--ink-2);
+    }
+    #vc .c-lead-text em { font-family: var(--font-serif); font-style: italic; font-size: 22px; }
+    #vc .c-lead-text p + p { margin-top: 24px; }
+
+    #vc .c-section-rule {
+      display: flex; align-items: center; gap: 24px;
+      margin-bottom: 32px;
+    }
+    #vc .c-section-rule h2 { font-family: var(--font-serif); font-style: italic; font-size: 32px; }
+    #vc .c-section-rule::after { content: ''; flex: 1; height: 1px; background: var(--ink); }
+    #vc .c-section-rule .count { font-size: 13px; color: var(--muted); font-family: var(--font-sans); font-style: normal; }
+
+    #vc .c-feature {
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 56px;
+      padding: 40px 0;
+      border-top: 1px solid var(--line);
+      align-items: center;
+      cursor: pointer; transition: all 0.2s;
+    }
+    #vc .c-feature:hover { padding-left: 12px; padding-right: 12px; }
+    #vc .c-feature-preview {
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, var(--bg-2) 0%, #d4cfc2 100%);
+      border-radius: 12px;
+      display: grid; place-items: center;
+      font-family: var(--font-serif); font-style: italic; color: var(--muted-2);
+    }
+    #vc .c-feature:nth-of-type(2) .c-feature-preview { background: linear-gradient(135deg, #2a2825 0%, #4a4540 100%); color: #888; }
+    #vc .c-feature:nth-of-type(3) .c-feature-preview { background: linear-gradient(135deg, #ffd8c8 0%, #ff9e85 100%); color: #aa5a45; }
+    #vc .c-feature:nth-of-type(4) .c-feature-preview { background: linear-gradient(135deg, #d5d0c5 0%, #b8b3a8 100%); color: #6b665d; }
+    #vc .c-feature-info { padding: 24px 0; }
+    #vc .c-feature-num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 18px; margin-bottom: 8px; }
+    #vc .c-feature-title { font-family: var(--font-serif); font-size: 44px; line-height: 1.05; margin-bottom: 16px; }
+    #vc .c-feature-title em { font-style: italic; color: var(--accent); }
+    #vc .c-feature-blurb { font-size: 16px; line-height: 1.6; color: var(--muted); margin-bottom: 24px; max-width: 480px; }
+    #vc .c-feature-meta { display: flex; gap: 24px; font-size: 12px; color: var(--muted-2); }
+    #vc .c-feature-meta span strong { color: var(--ink); display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT D — MINIMAL / SCROLL-ANCHORED
+       Almost no chrome. Just a tiny brand mark and section indicator.
+       Everything is one long thoughtful scroll. Section anchors.
+       ─────────────────────────────────────────────────────────── */
+    #vd .d-mark {
+      position: fixed; top: 80px; left: 40px; z-index: 60;
+      display: flex; align-items: center; gap: 14px;
+      mix-blend-mode: difference;
+      color: var(--bg);
+    }
+    #vd .d-mark-glyph {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--accent);
+      display: grid; place-items: center;
+      font-family: var(--font-serif); font-style: italic; font-size: 20px; color: var(--ink);
+    }
+    #vd .d-mark-name {
+      font-family: var(--font-serif); font-style: italic; font-size: 17px;
+    }
+
+    #vd .d-rail {
+      position: fixed; top: 50%; right: 32px; transform: translateY(-50%);
+      z-index: 60;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    #vd .d-rail-item {
+      display: flex; align-items: center; gap: 12px; justify-content: flex-end;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted-2); transition: all 0.2s;
+      cursor: pointer;
+    }
+    #vd .d-rail-item:hover { color: var(--ink); }
+    #vd .d-rail-item.active { color: var(--accent); }
+    #vd .d-rail-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      border: 1px solid currentColor; flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    #vd .d-rail-item.active .d-rail-dot { background: var(--accent); border-color: var(--accent); transform: scale(1.4); }
+    #vd .d-rail-label { opacity: 0; transition: opacity 0.2s; }
+    #vd .d-rail-item:hover .d-rail-label,
+    #vd .d-rail-item.active .d-rail-label { opacity: 1; }
+
+    #vd section { padding: 160px 80px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+    #vd .d-section-tag { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 18px; margin-bottom: 16px; }
+    #vd .d-section-rule { font-family: var(--font-sans); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted-2); margin-bottom: 64px; display: flex; align-items: center; gap: 16px; }
+    #vd .d-section-rule::after { content: ''; flex: 1; max-width: 80px; height: 1px; background: var(--muted-2); }
+
+    #vd .d-hero-headline {
+      font-family: var(--font-serif);
+      font-size: clamp(72px, 12vw, 220px);
+      font-weight: 400; line-height: 0.86;
+      letter-spacing: -0.045em;
+      max-width: 1500px;
+    }
+    #vd .d-hero-headline em { font-style: italic; color: var(--accent); }
+    #vd .d-hero-foot {
+      margin-top: 80px;
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: end;
+      max-width: 1100px;
+    }
+    #vd .d-hero-bio {
+      font-size: 20px; line-height: 1.55; color: var(--ink-2);
+    }
+    #vd .d-hero-bio em { font-family: var(--font-serif); font-style: italic; font-size: 22px; }
+    #vd .d-hero-meta { font-size: 13px; line-height: 1.7; color: var(--muted); }
+    #vd .d-hero-meta dt { font-family: var(--font-sans); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted-2); margin-bottom: 2px; }
+    #vd .d-hero-meta dd + dt { margin-top: 12px; }
+    #vd .d-hero-meta strong { color: var(--ink); font-weight: 500; }
+
+    #vd .d-work-grid { display: grid; gap: 4px; margin-top: 24px; }
+    #vd .d-work-row {
+      display: grid; grid-template-columns: 80px 1fr 200px 100px 40px;
+      gap: 32px; align-items: center;
+      padding: 36px 24px;
+      border-top: 1px solid var(--line);
+      cursor: pointer; transition: all 0.3s;
+    }
+    #vd .d-work-row:last-of-type { border-bottom: 1px solid var(--line); }
+    #vd .d-work-row:hover {
+      background: var(--ink); color: var(--bg); border-color: var(--ink);
+      padding-left: 32px; padding-right: 32px;
+    }
+    #vd .d-work-num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 20px; }
+    #vd .d-work-name { font-family: var(--font-serif); font-size: 40px; line-height: 1.05; }
+    #vd .d-work-name em { font-style: italic; color: var(--accent); }
+    #vd .d-work-blurb { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    #vd .d-work-row:hover .d-work-blurb { color: #aaa; }
+    #vd .d-work-meta { font-family: var(--font-serif); font-style: italic; font-size: 15px; color: var(--muted-2); text-align: right; }
+    #vd .d-work-row:hover .d-work-meta { color: #999; }
+    #vd .d-work-arr {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: transparent; border: 1px solid var(--line);
+      display: grid; place-items: center; transition: all 0.2s;
+    }
+    #vd .d-work-row:hover .d-work-arr { background: var(--accent); border-color: var(--accent); color: var(--ink); transform: rotate(-45deg); }
+
+    #vd .d-cta-block { text-align: center; max-width: 880px; margin: 0 auto; }
+    #vd .d-cta-headline { font-family: var(--font-serif); font-size: clamp(48px, 6vw, 88px); font-weight: 400; line-height: 1.05; margin-bottom: 32px; }
+    #vd .d-cta-headline em { font-style: italic; color: var(--accent); }
+    #vd .d-cta-btn {
+      display: inline-flex; align-items: center; gap: 14px;
+      padding: 18px 36px;
+      background: var(--ink); color: var(--bg);
+      border-radius: 100px; font-size: 15px;
+      transition: all 0.15s;
+    }
+    #vd .d-cta-btn:hover { background: var(--accent); color: var(--ink); }
+    #vd .d-cta-btn-arr {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--accent); color: var(--ink);
+      display: grid; place-items: center; font-size: 13px;
+      transition: all 0.15s;
+    }
+    #vd .d-cta-btn:hover .d-cta-btn-arr { background: var(--ink); color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <!-- Variant nav -->
+  <div id="variant-nav">
+    <span class="label">Sketch 003 · Navigation & Layout · using Signature visual language</span>
+    <button class="vtab active" onclick="showVariant('a', this)">A · Vertical Rail</button>
+    <button class="vtab" onclick="showVariant('b', this)">B · Floating Dock</button>
+    <button class="vtab" onclick="showVariant('c', this)">C · Inline Masthead</button>
+    <button class="vtab" onclick="showVariant('d', this)">D · Scroll-Anchored</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════ VARIANT A — VERTICAL RAIL ══════════════════════════════════════════ -->
+  <div id="va" class="variant active">
+    <div class="a-shell">
+      <aside class="a-rail">
+        <div class="a-brand">
+          <div class="a-brand-name">Farzaneh<br>Falakrou</div>
+          <div class="a-brand-role">Product designer · b. 1995</div>
+        </div>
+        <nav class="a-nav">
+          <a class="a-nav-link active" href="#"><span>Work</span><span class="a-nav-count">04</span></a>
+          <a class="a-nav-link" href="#"><span>About</span><span class="a-nav-count">—</span></a>
+          <a class="a-nav-link" href="#"><span>Process</span><span class="a-nav-count">06</span></a>
+          <a class="a-nav-link" href="#"><span>Writing</span><span class="a-nav-count">12</span></a>
+          <a class="a-nav-link" href="#"><span>Contact</span><span class="a-nav-count">↗</span></a>
+        </nav>
+        <div class="a-rail-foot">
+          <div class="a-rail-status"><span class="pulse-dot"></span> Open to senior roles</div>
+          <div class="a-rail-socials">
+            <a href="#">↗ Read.cv</a>
+            <a href="#">↗ LinkedIn</a>
+            <a href="#">↗ Dribbble</a>
+            <a href="#">↗ Email</a>
+          </div>
+        </div>
+      </aside>
+
+      <main class="a-content">
+        <div class="a-eyebrow eyebrow"><span class="pulse-dot"></span> Available May 2026</div>
+        <h1 class="a-headline">Designing <em>products</em> that<br>feel right — not just<br><span class="underline-accent">look</span> it.</h1>
+        <p class="a-intro">Five years across EdTech, PropTech, and consumer. I work on the parts most designers skip — <em>the small moments</em> that decide whether a product feels inevitable or assembled.</p>
+
+        <div class="a-work-head">
+          <div class="a-work-title">Selected <em style="font-style: italic; color: var(--accent);">work</em></div>
+          <div class="a-work-meta">2021 — 2024 · 04 of 12</div>
+        </div>
+
+        <div class="a-project" onclick="alert('Open: Moodle')">
+          <span class="a-project-num">01</span>
+          <div class="a-project-name">Moodle <em>Redesign</em></div>
+          <div class="a-project-blurb">Rethinking the LMS for 800M+ students worldwide.</div>
+          <div class="a-project-year">2024</div>
+          <div class="a-project-arr">↗</div>
+        </div>
+        <div class="a-project" onclick="alert('Open: Dino')">
+          <span class="a-project-num">02</span>
+          <div class="a-project-name"><em>Dino</em> Studio</div>
+          <div class="a-project-blurb">Brand identity & web for a creative production studio.</div>
+          <div class="a-project-year">2023</div>
+          <div class="a-project-arr">↗</div>
+        </div>
+        <div class="a-project" onclick="alert('Open: Top Notch')">
+          <span class="a-project-num">03</span>
+          <div class="a-project-name"><em>Top</em> Notch</div>
+          <div class="a-project-blurb">E-commerce checkout flow redesigned for clarity.</div>
+          <div class="a-project-year">2023</div>
+          <div class="a-project-arr">↗</div>
+        </div>
+        <div class="a-project" onclick="alert('Open: Homelon')">
+          <span class="a-project-num">04</span>
+          <div class="a-project-name"><em>Homelon</em></div>
+          <div class="a-project-blurb">Rental search for first-time renters.</div>
+          <div class="a-project-year">2022</div>
+          <div class="a-project-arr">↗</div>
+        </div>
+      </main>
+    </div>
+
+    <div class="ref-bar">
+      <h4>Variant A · Vertical Rail</h4>
+      <div class="ref">Persistent left column. Brand + nav + status always visible. Content on the right gets clean focus.</div>
+      <div class="says">Pros: Always-on identity, gallery-like, encourages deep browsing. Cons: Loses screen real estate; weaker on mobile.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ VARIANT B — FLOATING DOCK ══════════════════════════════════════════ -->
+  <div id="vb" class="variant">
+    <div class="b-mark">Farzaneh</div>
+
+    <nav class="b-dock" id="b-dock">
+      <a href="#" class="active">Work</a>
+      <a href="#">About</a>
+      <a href="#">Notes</a>
+      <a href="#">Process</a>
+      <div class="b-dock-sep"></div>
+      <a href="#" class="b-dock-cta">Get in touch ↗</a>
+    </nav>
+
+    <section class="b-hero">
+      <div class="b-eyebrow eyebrow"><span class="b-pulse-dot"></span> Product designer · Available May 2026</div>
+      <h1 class="b-headline">
+        I design <em>products</em><br>that <span class="underline-accent">feel right</span> —<br>not just look it.
+      </h1>
+      <div class="b-sub">
+        <div class="b-sub-text">
+          Five years across EdTech, PropTech, and consumer. I obsess over <em>the small moments</em> that make products feel inevitable instead of assembled.
+        </div>
+        <div class="b-sub-meta">
+          <div><strong>Based in</strong> Tehran, IR</div>
+          <div><strong>Currently</strong> open to senior in-house roles</div>
+          <div><strong>Recently shipped</strong> Moodle redesign · May 2024</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="b-work">
+      <div class="b-work-head">
+        <h2 class="b-work-title">Selected <em>work</em></h2>
+        <a href="#" class="b-work-link">View all 12 →</a>
+      </div>
+      <div class="b-grid">
+        <div class="b-card" onclick="alert('Open: Moodle')">
+          <div class="b-card-preview">moodle preview</div>
+          <div class="b-card-body">
+            <div class="b-card-info">
+              <div class="b-card-tag">EdTech · 2024</div>
+              <div class="b-card-name">Moodle <em>Redesign</em></div>
+            </div>
+            <div class="b-card-arr">↗</div>
+          </div>
+        </div>
+        <div class="b-card" onclick="alert('Open: Dino')">
+          <div class="b-card-preview">dino preview</div>
+          <div class="b-card-body">
+            <div class="b-card-info">
+              <div class="b-card-tag">Branding · 2023</div>
+              <div class="b-card-name"><em>Dino</em> Studio</div>
+            </div>
+            <div class="b-card-arr">↗</div>
+          </div>
+        </div>
+        <div class="b-card" onclick="alert('Open: Top Notch')">
+          <div class="b-card-preview">top notch preview</div>
+          <div class="b-card-body">
+            <div class="b-card-info">
+              <div class="b-card-tag">Commerce · 2023</div>
+              <div class="b-card-name"><em>Top</em> Notch</div>
+            </div>
+            <div class="b-card-arr">↗</div>
+          </div>
+        </div>
+        <div class="b-card" onclick="alert('Open: Homelon')">
+          <div class="b-card-preview">homelon preview</div>
+          <div class="b-card-body">
+            <div class="b-card-info">
+              <div class="b-card-tag">PropTech · 2022</div>
+              <div class="b-card-name"><em>Homelon</em></div>
+            </div>
+            <div class="b-card-arr">↗</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ref-bar">
+      <h4>Variant B · Floating Dock</h4>
+      <div class="ref">Pill nav floats centered at bottom. Hides on scroll-down, reveals on scroll-up. Brand mark stays top-left.</div>
+      <div class="says">Pros: Maximum content area, contemporary, thumb-friendly on mobile. Cons: Less hierarchical, can feel "trendy".</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ VARIANT C — INLINE MASTHEAD ══════════════════════════════════════════ -->
+  <div id="vc" class="variant">
+    <header class="c-masthead" id="c-masthead">
+      <div class="c-masthead-row">
+        <h1 class="c-masthead-name">Farzaneh <em>Falakrou</em></h1>
+        <div class="c-masthead-meta">
+          <strong>Portfolio Vol. III</strong><br>
+          Updated May 2026 · Tehran, IR
+        </div>
+      </div>
+      <nav class="c-masthead-nav">
+        <a href="#" class="active">Work</a>
+        <a href="#">About</a>
+        <a href="#">Process notes</a>
+        <a href="#">Writing</a>
+        <span class="c-nav-spacer"></span>
+        <a href="#" class="c-nav-pill">Available · let's talk →</a>
+      </nav>
+    </header>
+
+    <main class="c-body">
+      <section class="c-lead">
+        <div>
+          <div class="c-lead-eyebrow">A note from the designer</div>
+          <h2 class="c-lead-title">On designing products<br>that <em style="font-style: italic; color: var(--accent);">feel right</em>.</h2>
+        </div>
+        <div class="c-lead-text">
+          <p>Most digital products feel assembled. Stitched together from templates and trend reports. <em>My work is the opposite of that</em> — slow, considered, often-times stubborn about details that look small but compound.</p>
+          <p>Five years across EdTech, PropTech, and consumer. What follows are four selected projects from the past three years.</p>
+        </div>
+      </section>
+
+      <div class="c-section-rule">
+        <h2>Selected work</h2>
+        <span class="count">04 / 12</span>
+      </div>
+
+      <article class="c-feature" onclick="alert('Open: Moodle')">
+        <div class="c-feature-preview">moodle preview</div>
+        <div class="c-feature-info">
+          <div class="c-feature-num">01.</div>
+          <h3 class="c-feature-title">Moodle <em>Redesign</em></h3>
+          <p class="c-feature-blurb">When the LMS feels like a filing cabinet, students stop showing up. Six months of research, three rounds of prototyping, one institutional rollout.</p>
+          <div class="c-feature-meta">
+            <span><strong>Category</strong> EdTech</span>
+            <span><strong>Role</strong> Lead designer</span>
+            <span><strong>Year</strong> 2024</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="c-feature" onclick="alert('Open: Dino')">
+        <div class="c-feature-preview">dino preview</div>
+        <div class="c-feature-info">
+          <div class="c-feature-num">02.</div>
+          <h3 class="c-feature-title"><em>Dino</em> Studio</h3>
+          <p class="c-feature-blurb">Brand identity and digital presence for a creative production studio. The output is a system the team uses internally, not a logo on a deck.</p>
+          <div class="c-feature-meta">
+            <span><strong>Category</strong> Branding</span>
+            <span><strong>Role</strong> Designer</span>
+            <span><strong>Year</strong> 2023</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="c-feature" onclick="alert('Open: Top Notch')">
+        <div class="c-feature-preview">top notch preview</div>
+        <div class="c-feature-info">
+          <div class="c-feature-num">03.</div>
+          <h3 class="c-feature-title"><em>Top</em> Notch</h3>
+          <p class="c-feature-blurb">E-commerce checkout redesign. 23% reduction in cart abandonment. The work was about removing the moments people had to think — not persuading them harder.</p>
+          <div class="c-feature-meta">
+            <span><strong>Category</strong> E-commerce</span>
+            <span><strong>Role</strong> Product designer</span>
+            <span><strong>Year</strong> 2023</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="c-feature" onclick="alert('Open: Homelon')">
+        <div class="c-feature-preview">homelon preview</div>
+        <div class="c-feature-info">
+          <div class="c-feature-num">04.</div>
+          <h3 class="c-feature-title"><em>Homelon</em></h3>
+          <p class="c-feature-blurb">Rental search platform for first-time renters. A population terrified by listings written for landlords. Designing for emotional state, not just task.</p>
+          <div class="c-feature-meta">
+            <span><strong>Category</strong> PropTech</span>
+            <span><strong>Role</strong> Product designer</span>
+            <span><strong>Year</strong> 2022</span>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <div class="ref-bar">
+      <h4>Variant C · Inline Masthead</h4>
+      <div class="ref">Big name banner sticky on top. Compacts when you scroll. Nav lives inline below the banner.</div>
+      <div class="says">Pros: Name IS the brand mark, editorial pacing, hierarchical clarity. Cons: Compact-state transition needs care; can feel formal.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ VARIANT D — SCROLL-ANCHORED ══════════════════════════════════════════ -->
+  <div id="vd" class="variant">
+    <div class="d-mark">
+      <div class="d-mark-glyph">F</div>
+      <div class="d-mark-name">Farzaneh Falakrou</div>
+    </div>
+
+    <nav class="d-rail" id="d-rail">
+      <div class="d-rail-item active" data-anchor="d-hero">
+        <span class="d-rail-label">Intro</span>
+        <span class="d-rail-dot"></span>
+      </div>
+      <div class="d-rail-item" data-anchor="d-work">
+        <span class="d-rail-label">Work</span>
+        <span class="d-rail-dot"></span>
+      </div>
+      <div class="d-rail-item" data-anchor="d-about">
+        <span class="d-rail-label">About</span>
+        <span class="d-rail-dot"></span>
+      </div>
+      <div class="d-rail-item" data-anchor="d-contact">
+        <span class="d-rail-label">Contact</span>
+        <span class="d-rail-dot"></span>
+      </div>
+    </nav>
+
+    <section id="d-hero">
+      <div class="d-section-tag">— Welcome</div>
+      <div class="d-section-rule">Section 01 / Intro</div>
+      <h1 class="d-hero-headline">
+        I design <em>products</em><br>that feel <em>right</em> —<br>not just look it.
+      </h1>
+      <div class="d-hero-foot">
+        <p class="d-hero-bio">
+          Five years across EdTech, PropTech, and consumer. I work on the parts most designers skip — <em>the small moments</em> that decide whether a product feels inevitable or assembled.
+        </p>
+        <dl class="d-hero-meta">
+          <dt>Based in</dt>
+          <dd><strong>Tehran, IR</strong></dd>
+          <dt>Currently</dt>
+          <dd><strong>Open to senior in-house roles</strong></dd>
+          <dt>Last shipped</dt>
+          <dd><strong>Moodle redesign, May 2024</strong></dd>
+        </dl>
+      </div>
+    </section>
+
+    <section id="d-work">
+      <div class="d-section-tag">— Selected work</div>
+      <div class="d-section-rule">Section 02 / Work · 04 of 12</div>
+      <div class="d-work-grid">
+        <div class="d-work-row" onclick="alert('Open: Moodle')">
+          <div class="d-work-num">01</div>
+          <div class="d-work-name">Moodle <em>Redesign</em></div>
+          <div class="d-work-blurb">Rethinking the LMS for 800M+ students worldwide. Six months of research.</div>
+          <div class="d-work-meta">EdTech · 2024</div>
+          <div class="d-work-arr">↗</div>
+        </div>
+        <div class="d-work-row" onclick="alert('Open: Dino')">
+          <div class="d-work-num">02</div>
+          <div class="d-work-name"><em>Dino</em> Studio</div>
+          <div class="d-work-blurb">Brand identity and design system for a creative production studio.</div>
+          <div class="d-work-meta">Branding · 2023</div>
+          <div class="d-work-arr">↗</div>
+        </div>
+        <div class="d-work-row" onclick="alert('Open: Top Notch')">
+          <div class="d-work-num">03</div>
+          <div class="d-work-name"><em>Top</em> Notch</div>
+          <div class="d-work-blurb">E-commerce checkout redesign. 23% reduction in cart abandonment.</div>
+          <div class="d-work-meta">Commerce · 2023</div>
+          <div class="d-work-arr">↗</div>
+        </div>
+        <div class="d-work-row" onclick="alert('Open: Homelon')">
+          <div class="d-work-num">04</div>
+          <div class="d-work-name"><em>Homelon</em></div>
+          <div class="d-work-blurb">Rental search platform for first-time renters in Tehran.</div>
+          <div class="d-work-meta">PropTech · 2022</div>
+          <div class="d-work-arr">↗</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="d-about">
+      <div class="d-section-tag">— About</div>
+      <div class="d-section-rule">Section 03 / About</div>
+      <h2 style="font-family: var(--font-serif); font-size: clamp(48px, 6vw, 80px); line-height: 1.05; max-width: 1000px; margin-bottom: 32px;">
+        I started as an <em style="font-style: italic; color: var(--accent);">architect</em> — which is to say I still think in plans, sections, and elevations.
+      </h2>
+      <p style="font-size: 19px; line-height: 1.7; color: var(--ink-2); max-width: 640px;">
+        Designing software felt like a natural extension of designing buildings: both are about shaping how people move through a space, both reward thinking in systems, and both fail in the same way — when surface beauty hides a structure that doesn't hold.
+      </p>
+    </section>
+
+    <section id="d-contact" style="min-height: 80vh;">
+      <div class="d-cta-block">
+        <div class="d-section-tag" style="text-align: center;">— Get in touch</div>
+        <div class="d-section-rule" style="justify-content: center;">Section 04 / Contact</div>
+        <h2 class="d-cta-headline">Got a <em>problem</em> worth<br>thinking carefully about?</h2>
+        <a href="mailto:farzaneh@example.com" class="d-cta-btn">
+          farzaneh@example.com
+          <span class="d-cta-btn-arr">↗</span>
+        </a>
+      </div>
+    </section>
+
+    <div class="ref-bar">
+      <h4>Variant D · Scroll-Anchored</h4>
+      <div class="ref">Almost no chrome. Brand mark top-left (mix-blend), section rail on the right tracks scroll position.</div>
+      <div class="says">Pros: Content is everything, feels like a long read, signature & confident. Cons: Single-page only, harder to share deep links.</div>
+    </div>
+  </div>
+
+  <script>
+    function showVariant(id, btn) {
+      document.querySelectorAll('.variant').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.vtab').forEach(t => t.classList.remove('active'));
+      document.getElementById('v' + id).classList.add('active');
+      btn.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    // ─── Variant B: dock hide-on-scroll-down ───
+    (function() {
+      const dock = document.getElementById('b-dock');
+      let lastY = 0;
+      window.addEventListener('scroll', () => {
+        if (!document.getElementById('vb').classList.contains('active')) return;
+        const y = window.scrollY;
+        if (y > lastY && y > 200) dock.classList.add('hidden');
+        else dock.classList.remove('hidden');
+        lastY = y;
+      });
+    })();
+
+    // ─── Variant C: masthead compact on scroll ───
+    (function() {
+      const masthead = document.getElementById('c-masthead');
+      window.addEventListener('scroll', () => {
+        if (!document.getElementById('vc').classList.contains('active')) return;
+        if (window.scrollY > 80) masthead.classList.add('compact');
+        else masthead.classList.remove('compact');
+      });
+    })();
+
+    // ─── Variant D: rail tracks active section ───
+    (function() {
+      const items = document.querySelectorAll('#d-rail .d-rail-item');
+      window.addEventListener('scroll', () => {
+        if (!document.getElementById('vd').classList.contains('active')) return;
+        const scroll = window.scrollY + window.innerHeight / 3;
+        items.forEach(item => {
+          const target = document.getElementById(item.dataset.anchor);
+          if (!target) return;
+          const top = target.offsetTop;
+          const bottom = top + target.offsetHeight;
+          if (scroll >= top && scroll < bottom) {
+            items.forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+          }
+        });
+      });
+      items.forEach(item => {
+        item.addEventListener('click', () => {
+          const target = document.getElementById(item.dataset.anchor);
+          target?.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

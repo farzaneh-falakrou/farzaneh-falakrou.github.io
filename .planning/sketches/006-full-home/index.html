@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farzaneh Falakrou — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #ebe8e2;
+      --bg-2:      #e3dfd6;
+      --bg-3:      #dcd6c9;
+      --ink:       #1a1a1a;
+      --ink-2:     #2a2a2a;
+      --muted:     #5a5a5a;
+      --muted-2:   #8a8a85;
+      --line:      #d5d0c5;
+      --accent:    #ff5a36;
+      --accent-soft: #ffd8c8;
+      --surface:   #ffffff;
+      --dark:      #1a1612;
+
+      --font-serif: 'Instrument Serif', serif;
+      --font-sans:  'Inter', system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; overflow-x: hidden; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    /* ── Sketch chrome ── */
+    .ref-bar {
+      position: fixed; top: 12px; left: 12px;
+      background: rgba(0,0,0,0.88); color: #fff;
+      padding: 10px 14px; border-radius: 10px;
+      font-family: system-ui; font-size: 11px; line-height: 1.5;
+      max-width: 420px; z-index: 9997; opacity: 0.92;
+    }
+    .ref-bar h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #888; margin-bottom: 3px; }
+    .ref-bar .ref { color: #ddd; }
+    .ref-bar small { color: var(--accent); font-weight: 500; }
+
+    /* ───────────────────────────────────────────────────────────
+       Brand mark (top-left, sticky)
+       ─────────────────────────────────────────────────────────── */
+    .brand {
+      position: fixed; top: 60px; left: 40px; z-index: 60;
+      font-family: var(--font-serif); font-style: italic; font-size: 22px;
+      color: var(--ink);
+      transition: color 0.3s;
+    }
+    body.dark-section .brand { color: var(--bg); }
+
+    /* ───────────────────────────────────────────────────────────
+       Floating Dock (bottom-center)
+       ─────────────────────────────────────────────────────────── */
+    .dock {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      z-index: 60;
+      background: rgba(26,26,26,0.92); backdrop-filter: blur(10px);
+      padding: 6px;
+      border-radius: 100px;
+      display: flex; gap: 2px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      transition: transform 0.3s ease;
+    }
+    .dock.hidden { transform: translate(-50%, 120px); }
+    .dock a {
+      padding: 10px 22px; font-size: 13px; color: #e8e5df;
+      border-radius: 100px; transition: all 0.15s;
+      display: flex; align-items: center; gap: 8px;
+      cursor: pointer;
+    }
+    .dock a:hover { background: #2a2a2a; color: var(--accent); }
+    .dock a.active { background: var(--accent); color: var(--ink); }
+    .dock-sep { width: 1px; background: #3a3a3a; margin: 6px 4px; }
+    .dock-cta { background: var(--accent); color: var(--ink); font-weight: 500; }
+    .dock-cta:hover { background: #ffaa8a; color: var(--ink); }
+
+    /* ═══════════════════════════════════════════════════════════
+       HERO
+       ─────────────────────────────────────────────────────────── */
+    .hero { padding: 140px 80px 100px; scroll-margin-top: 0; }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 13px; color: var(--muted); margin-bottom: 32px;
+    }
+    .pulse-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+      display: inline-block; animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    .hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(72px, 10vw, 168px); font-weight: 400;
+      line-height: 0.92; letter-spacing: -0.04em;
+      max-width: 1400px;
+    }
+    .hero h1 em { font-style: italic; color: var(--accent); }
+    .underline-accent {
+      text-decoration: underline;
+      text-decoration-thickness: 3px;
+      text-underline-offset: 8px;
+      text-decoration-color: var(--accent);
+    }
+    .hero-sub {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+      max-width: 1100px; margin-top: 64px;
+      padding-top: 32px; border-top: 1px solid var(--line);
+    }
+    .hero-sub-text { font-size: 19px; line-height: 1.55; color: var(--ink-2); }
+    .hero-sub-text em { font-family: var(--font-serif); font-style: italic; font-size: 21px; }
+    .hero-sub-meta { font-size: 13px; line-height: 1.7; color: var(--muted); }
+    .hero-sub-meta strong { color: var(--ink); font-weight: 500; }
+
+    /* ═══════════════════════════════════════════════════════════
+       MARQUEE (skills strip)
+       ─────────────────────────────────────────────────────────── */
+    .marquee {
+      background: var(--ink); color: var(--bg);
+      padding: 18px 0; overflow: hidden;
+      white-space: nowrap; border-radius: 4px;
+      margin: 0 40px 60px;
+    }
+    .marquee-track {
+      display: inline-flex; gap: 48px; animation: scroll 36s linear infinite;
+    }
+    .marquee span { font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.8; }
+    .marquee span.dot { color: var(--accent); opacity: 1; }
+    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* ═══════════════════════════════════════════════════════════
+       WORK — Asymmetric Split rows (from 004 D)
+       ─────────────────────────────────────────────────────────── */
+    .work { padding: 60px 80px 100px; scroll-margin-top: 40px; }
+    .work-head {
+      display: flex; align-items: end; justify-content: space-between;
+      margin-bottom: 56px;
+      max-width: 1500px; margin-left: auto; margin-right: auto;
+    }
+    .work-title { font-family: var(--font-serif); font-size: clamp(48px, 6vw, 80px); font-weight: 400; line-height: 1; }
+    .work-title em { font-style: italic; color: var(--accent); }
+    .work-meta { font-size: 13px; color: var(--muted); padding-bottom: 8px; }
+
+    .work-grid {
+      display: flex; flex-direction: column; gap: 16px;
+      max-width: 1500px; margin: 0 auto;
+    }
+    .work-card {
+      background: var(--surface); border-radius: 24px;
+      padding: 24px;
+      cursor: pointer; transition: all 0.25s;
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px;
+      align-items: stretch;
+    }
+    .work-card:hover { transform: translateX(8px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+    .work-card:nth-child(even) { grid-template-columns: 1fr 1.2fr; }
+    .work-card:nth-child(even) .work-preview { order: 2; }
+    .work-card:nth-child(even) .work-body { order: 1; }
+    .work-preview {
+      min-height: 320px; border-radius: 16px;
+      display: grid; place-items: center;
+      font-family: var(--font-serif); font-style: italic; font-size: 14px;
+      position: relative; overflow: hidden;
+    }
+    .prev-1 { background: linear-gradient(135deg, var(--bg-2) 0%, #d4cfc2 100%); color: var(--muted-2); }
+    .prev-2 { background: linear-gradient(135deg, #2a2825 0%, #4a4540 100%); color: #888; }
+    .prev-3 { background: linear-gradient(135deg, #ffd8c8 0%, #ff9e85 100%); color: #aa5a45; }
+    .prev-4 { background: linear-gradient(135deg, #d5d0c5 0%, #b8b3a8 100%); color: #6b665d; }
+    .prev-glow::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255,90,54,0.08), transparent 60%);
+    }
+
+    .work-body {
+      padding: 16px 16px 16px 0;
+      display: flex; flex-direction: column; justify-content: space-between; gap: 24px;
+    }
+    .work-card:nth-child(even) .work-body { padding: 16px 0 16px 16px; }
+    .work-head-row {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .work-num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 24px; }
+    .work-year { font-family: var(--font-serif); font-style: italic; color: var(--muted-2); font-size: 18px; }
+    .work-name {
+      font-family: var(--font-serif); font-size: clamp(36px, 4vw, 52px); line-height: 1.0;
+      margin-bottom: 24px;
+    }
+    .work-name em { font-style: italic; color: var(--accent); }
+    .work-desc {
+      font-size: 16px; line-height: 1.6; color: var(--ink-2);
+      max-width: 480px;
+    }
+    .work-desc em { font-family: var(--font-serif); font-style: italic; font-size: 17px; }
+    .work-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .work-tag {
+      padding: 5px 12px; border: 1px solid var(--line); border-radius: 100px;
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
+    }
+    .work-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 20px; border-top: 1px solid var(--line);
+    }
+    .work-cta { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink); font-weight: 500; }
+    .work-cta-arr {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--ink); color: var(--bg);
+      display: grid; place-items: center; font-size: 12px;
+      transition: all 0.2s;
+    }
+    .work-card:hover .work-cta-arr { background: var(--accent); color: var(--ink); transform: rotate(-45deg); }
+    .work-stats { font-family: var(--font-serif); font-style: italic; color: var(--muted-2); font-size: 14px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       ABOUT teaser
+       ─────────────────────────────────────────────────────────── */
+    .about {
+      padding: 120px 80px;
+      max-width: 1500px; margin: 0 auto;
+      scroll-margin-top: 40px;
+    }
+    .about-head {
+      font-family: var(--font-serif); font-style: italic;
+      color: var(--accent); font-size: 22px; margin-bottom: 24px;
+    }
+    .about-grid {
+      display: grid; grid-template-columns: 1.5fr 1fr; gap: 80px;
+      align-items: start;
+    }
+    .about-title {
+      font-family: var(--font-serif);
+      font-size: clamp(48px, 6vw, 84px); font-weight: 400;
+      line-height: 1.04; letter-spacing: -0.025em;
+      margin-bottom: 40px;
+    }
+    .about-title em { font-style: italic; color: var(--accent); }
+    .about-text {
+      font-size: 18px; line-height: 1.7; color: var(--ink-2);
+      max-width: 640px;
+    }
+    .about-text em { font-family: var(--font-serif); font-style: italic; font-size: 20px; }
+    .about-text p + p { margin-top: 20px; }
+    .about-link {
+      display: inline-flex; align-items: center; gap: 12px;
+      margin-top: 40px;
+      padding: 14px 24px;
+      background: transparent; border: 1px solid var(--ink); border-radius: 100px;
+      font-size: 14px; transition: all 0.15s;
+    }
+    .about-link:hover { background: var(--ink); color: var(--bg); }
+    .about-link-arr { font-size: 16px; }
+
+    .about-side {
+      padding-top: 12px;
+    }
+    .about-side-block { margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+    .about-side-label {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--accent); margin-bottom: 10px;
+    }
+    .about-side-value {
+      font-family: var(--font-serif); font-size: 20px;
+      line-height: 1.3; color: var(--ink);
+    }
+    .about-side-value.small {
+      font-family: var(--font-sans); font-size: 13px;
+      color: var(--ink-2); line-height: 1.7;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       CONTACT CTA
+       ─────────────────────────────────────────────────────────── */
+    .contact {
+      background: var(--ink); color: var(--bg);
+      padding: 160px 80px;
+      scroll-margin-top: 0;
+    }
+    .contact-inner {
+      max-width: 1200px; margin: 0 auto;
+      text-align: center;
+    }
+    .contact-eyebrow {
+      font-family: var(--font-serif); font-style: italic;
+      color: var(--accent); font-size: 22px; margin-bottom: 24px;
+    }
+    .contact-title {
+      font-family: var(--font-serif);
+      font-size: clamp(56px, 8vw, 120px); font-weight: 400;
+      line-height: 1; letter-spacing: -0.035em;
+      margin-bottom: 48px;
+    }
+    .contact-title em { font-style: italic; color: var(--accent); }
+    .contact-cta {
+      display: inline-flex; align-items: center; gap: 16px;
+      padding: 22px 42px;
+      background: var(--accent); color: var(--ink);
+      border-radius: 100px;
+      font-size: 17px; font-weight: 500;
+      transition: all 0.15s;
+    }
+    .contact-cta:hover { background: var(--bg); color: var(--ink); }
+    .contact-cta-arr {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--ink); color: var(--accent);
+      display: grid; place-items: center; font-size: 14px;
+      transition: all 0.15s;
+    }
+    .contact-cta:hover .contact-cta-arr { background: var(--accent); color: var(--ink); }
+    .contact-alt {
+      margin-top: 48px;
+      display: flex; gap: 32px; justify-content: center;
+      font-size: 13px; color: rgba(235,232,226,0.55);
+    }
+    .contact-alt a { transition: color 0.15s; }
+    .contact-alt a:hover { color: var(--accent); }
+
+    /* ═══════════════════════════════════════════════════════════
+       FOOTER
+       ─────────────────────────────────────────────────────────── */
+    .footer {
+      background: var(--ink); color: var(--bg);
+      padding: 60px 80px 100px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-inner {
+      max-width: 1500px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr auto auto auto;
+      gap: 56px; align-items: start;
+    }
+    .footer-brand { font-family: var(--font-serif); font-style: italic; font-size: 24px; }
+    .footer-brand small { display: block; font-family: var(--font-sans); font-style: normal; font-size: 12px; color: rgba(235,232,226,0.4); margin-top: 6px; letter-spacing: 0.06em; }
+    .footer-col { font-size: 13px; line-height: 1.9; }
+    .footer-col-label {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--accent); margin-bottom: 12px;
+    }
+    .footer-col a { color: rgba(235,232,226,0.7); transition: color 0.15s; }
+    .footer-col a:hover { color: var(--accent); }
+
+    .footer-meta {
+      max-width: 1500px; margin: 64px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 11px; color: rgba(235,232,226,0.4);
+    }
+    .footer-meta .pulse-dot { vertical-align: middle; margin-right: 6px; }
+  </style>
+</head>
+<body>
+
+  <div class="ref-bar">
+    <h4>Sketch 006 · Full Home</h4>
+    <div class="ref">Stitched: Hero <small>003B</small> + Selected Work <small>004D</small> + About teaser + Contact CTA + Footer. Floating dock live with hide-on-scroll-down.</div>
+  </div>
+
+  <!-- Brand mark -->
+  <div class="brand">Farzaneh</div>
+
+  <!-- Floating dock -->
+  <nav class="dock" id="dock">
+    <a class="active" data-anchor="hero">Home</a>
+    <a data-anchor="work">Work</a>
+    <a data-anchor="about">About</a>
+    <a data-anchor="contact">Contact</a>
+    <div class="dock-sep"></div>
+    <a class="dock-cta">Get in touch ↗</a>
+  </nav>
+
+  <!-- ─────────── HERO ─────────── -->
+  <section class="hero" id="hero">
+    <div class="hero-eyebrow"><span class="pulse-dot"></span>Product designer · Available May 2026</div>
+    <h1>
+      I design <em>products</em><br>that <span class="underline-accent">feel right</span> —<br>not just look it.
+    </h1>
+    <div class="hero-sub">
+      <div class="hero-sub-text">
+        Five years across EdTech, PropTech, and consumer. I obsess over <em>the small moments</em> that make products feel inevitable instead of assembled.
+      </div>
+      <div class="hero-sub-meta">
+        <div><strong>Based in</strong> Tehran, IR</div>
+        <div><strong>Currently</strong> open to senior in-house roles</div>
+        <div><strong>Recently shipped</strong> Moodle redesign · May 2024</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── MARQUEE ─────────── -->
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>UX Research</span><span class="dot">●</span>
+      <span>Product Design</span><span class="dot">●</span>
+      <span>Design Systems</span><span class="dot">●</span>
+      <span>Interaction</span><span class="dot">●</span>
+      <span>Prototyping</span><span class="dot">●</span>
+      <span>Branding</span><span class="dot">●</span>
+      <span>Information Architecture</span><span class="dot">●</span>
+      <span>UX Research</span><span class="dot">●</span>
+      <span>Product Design</span><span class="dot">●</span>
+      <span>Design Systems</span><span class="dot">●</span>
+      <span>Interaction</span><span class="dot">●</span>
+      <span>Prototyping</span><span class="dot">●</span>
+      <span>Branding</span><span class="dot">●</span>
+      <span>Information Architecture</span><span class="dot">●</span>
+    </div>
+  </div>
+
+  <!-- ─────────── WORK ─────────── -->
+  <section class="work" id="work">
+    <div class="work-head">
+      <h2 class="work-title">Selected <em>work</em></h2>
+      <div class="work-meta">04 of 12 · view all →</div>
+    </div>
+
+    <div class="work-grid">
+      <article class="work-card" onclick="window.location='case-study.html'">
+        <div class="work-preview prev-1 prev-glow">moodle preview</div>
+        <div class="work-body">
+          <div>
+            <div class="work-head-row">
+              <span class="work-num">01.</span>
+              <span class="work-year">2024</span>
+            </div>
+            <h3 class="work-name">Moodle <em>Redesign</em></h3>
+            <p class="work-desc">Rethinking the LMS for 800M+ students. The product had grown by accretion — <em>my job was to edit, not add</em>. Six months of research, three prototype rounds, one institutional rollout.</p>
+            <div class="work-tags">
+              <span class="work-tag">EdTech</span>
+              <span class="work-tag">UX Research</span>
+              <span class="work-tag">Product</span>
+            </div>
+          </div>
+          <div class="work-footer">
+            <a class="work-cta">Read the case study <span class="work-cta-arr">↗</span></a>
+            <span class="work-stats">+34% sessions · 6 mo.</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-card" onclick="window.location='case-study.html'">
+        <div class="work-preview prev-2">dino preview</div>
+        <div class="work-body">
+          <div>
+            <div class="work-head-row">
+              <span class="work-num">02.</span>
+              <span class="work-year">2023</span>
+            </div>
+            <h3 class="work-name"><em>Dino</em> Studio</h3>
+            <p class="work-desc">Brand identity and digital presence for a creative production studio. The brief was a logo; the output was a system. <em>Identity as architecture</em>, not as decoration.</p>
+            <div class="work-tags">
+              <span class="work-tag">Branding</span>
+              <span class="work-tag">Web</span>
+              <span class="work-tag">Identity</span>
+            </div>
+          </div>
+          <div class="work-footer">
+            <a class="work-cta">Read the case study <span class="work-cta-arr">↗</span></a>
+            <span class="work-stats">3 brand pillars · 12 components</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-card" onclick="window.location='case-study.html'">
+        <div class="work-preview prev-3">top notch preview</div>
+        <div class="work-body">
+          <div>
+            <div class="work-head-row">
+              <span class="work-num">03.</span>
+              <span class="work-year">2023</span>
+            </div>
+            <h3 class="work-name"><em>Top</em> Notch</h3>
+            <p class="work-desc">E-commerce checkout flow redesigned for clarity. 23% reduction in cart abandonment. The work was <em>less about persuasion</em> and more about removing the moments people had to think.</p>
+            <div class="work-tags">
+              <span class="work-tag">E-Commerce</span>
+              <span class="work-tag">Product</span>
+              <span class="work-tag">Conversion</span>
+            </div>
+          </div>
+          <div class="work-footer">
+            <a class="work-cta">Read the case study <span class="work-cta-arr">↗</span></a>
+            <span class="work-stats">−23% abandonment</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-card" onclick="window.location='case-study.html'">
+        <div class="work-preview prev-4">homelon preview</div>
+        <div class="work-body">
+          <div>
+            <div class="work-head-row">
+              <span class="work-num">04.</span>
+              <span class="work-year">2022</span>
+            </div>
+            <h3 class="work-name"><em>Homelon</em></h3>
+            <p class="work-desc">Rental search platform for first-time renters — a population terrified by listings written for landlords. Notes on <em>designing for emotional state</em>, not just task.</p>
+            <div class="work-tags">
+              <span class="work-tag">PropTech</span>
+              <span class="work-tag">Mobile</span>
+              <span class="work-tag">Search UX</span>
+            </div>
+          </div>
+          <div class="work-footer">
+            <a class="work-cta">Read the case study <span class="work-cta-arr">↗</span></a>
+            <span class="work-stats">2× engagement</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ─────────── ABOUT teaser ─────────── -->
+  <section class="about" id="about">
+    <div class="about-head">— About</div>
+    <div class="about-grid">
+      <div>
+        <h2 class="about-title">I started as an <em>architect</em> —<br>which is to say I still<br>think in plans, sections,<br>and elevations.</h2>
+        <div class="about-text">
+          <p>Designing software felt like a natural extension of designing buildings: both are about shaping how people move through a space, both reward thinking in systems, and both fail in the same way — <em>when surface beauty hides a structure that doesn't hold</em>.</p>
+          <p>Today I lead product design work for institutional clients in EdTech, PropTech, and consumer. I write occasionally about the parts of the work that don't fit in a case study.</p>
+        </div>
+        <a class="about-link">
+          More about me
+          <span class="about-link-arr">→</span>
+        </a>
+      </div>
+      <aside class="about-side">
+        <div class="about-side-block">
+          <div class="about-side-label">Currently</div>
+          <div class="about-side-value">Lead Product Designer, Independent</div>
+        </div>
+        <div class="about-side-block">
+          <div class="about-side-label">Previously</div>
+          <div class="about-side-value small">
+            Senior Designer · Top Notch, 2022–23<br>
+            Designer · Homelon, 2021–22<br>
+            Architect · TFM Studio, 2017–20
+          </div>
+        </div>
+        <div class="about-side-block">
+          <div class="about-side-label">Tools</div>
+          <div class="about-side-value small">
+            Figma · FigJam · Maze · Notion<br>
+            HTML/CSS · React (light)<br>
+            Photography · Pen & paper
+          </div>
+        </div>
+        <div class="about-side-block">
+          <div class="about-side-label">Selected by</div>
+          <div class="about-side-value small">
+            Awwwards (nominee) · 2023<br>
+            CSS Design Awards · 2022
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ─────────── CONTACT CTA ─────────── -->
+  <section class="contact" id="contact" data-darken>
+    <div class="contact-inner">
+      <div class="contact-eyebrow">— Let's talk</div>
+      <h2 class="contact-title">Got a <em>problem</em> worth<br>thinking carefully about?</h2>
+      <a class="contact-cta" href="mailto:farzaneh@example.com">
+        farzaneh@example.com
+        <span class="contact-cta-arr">↗</span>
+      </a>
+      <div class="contact-alt">
+        <a href="#">↗ LinkedIn</a>
+        <a href="#">↗ Read.cv</a>
+        <a href="#">↗ Dribbble</a>
+        <a href="#">↗ Download CV</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── FOOTER ─────────── -->
+  <footer class="footer" data-darken>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        Farzaneh Falakrou
+        <small>PORTFOLIO · VOL. III · 2026</small>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-label">Index</div>
+        <a href="#">Selected work</a><br>
+        <a href="#">About</a><br>
+        <a href="#">Process notes</a><br>
+        <a href="#">Writing</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-label">Elsewhere</div>
+        <a href="#">LinkedIn</a><br>
+        <a href="#">Read.cv</a><br>
+        <a href="#">Dribbble</a><br>
+        <a href="#">Instagram</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-label">Contact</div>
+        <a href="mailto:farzaneh@example.com">farzaneh@example.com</a><br>
+        <a href="#">Schedule a call ↗</a>
+      </div>
+    </div>
+    <div class="footer-meta">
+      <span><span class="pulse-dot"></span>Last updated 15.05.2026</span>
+      <span>© Farzaneh Falakrou · Designed & built in Tehran</span>
+    </div>
+  </footer>
+
+  <script>
+    // ─── Dock hide on scroll-down ───
+    (function() {
+      const dock = document.getElementById('dock');
+      let lastY = 0;
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        if (y > lastY && y > 200) dock.classList.add('hidden');
+        else dock.classList.remove('hidden');
+        lastY = y;
+      });
+    })();
+
+    // ─── Dock active section tracking ───
+    (function() {
+      const links = document.querySelectorAll('#dock a[data-anchor]');
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY + window.innerHeight / 3;
+        let current = null;
+        links.forEach(link => {
+          const target = document.getElementById(link.dataset.anchor);
+          if (target && y >= target.offsetTop) current = link;
+        });
+        if (current) {
+          links.forEach(l => l.classList.remove('active'));
+          current.classList.add('active');
+        }
+      });
+      links.forEach(link => {
+        link.addEventListener('click', () => {
+          const target = document.getElementById(link.dataset.anchor);
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+    })();
+
+    // ─── Brand-mark color flip on dark sections ───
+    (function() {
+      const darkSections = document.querySelectorAll('[data-darken]');
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY + 80;
+        let inDark = false;
+        darkSections.forEach(s => {
+          const top = s.offsetTop;
+          const bottom = top + s.offsetHeight;
+          if (y >= top && y < bottom) inDark = true;
+        });
+        document.body.classList.toggle('dark-section', inDark);
+      });
+    })();
+  </script>
+</body>
+</html>

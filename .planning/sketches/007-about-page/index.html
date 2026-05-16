@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sketch 007 — About Page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #ebe8e2;
+      --bg-2:      #e3dfd6;
+      --bg-3:      #dcd6c9;
+      --ink:       #1a1a1a;
+      --ink-2:     #2a2a2a;
+      --muted:     #5a5a5a;
+      --muted-2:   #8a8a85;
+      --line:      #d5d0c5;
+      --accent:    #ff5a36;
+      --surface:   #ffffff;
+      --dark:      #1a1612;
+      --font-serif: 'Instrument Serif', serif;
+      --font-sans:  'Inter', system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; overflow-x: clip; }
+    body { font-family: var(--font-sans); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    #variant-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9998;
+      background: #fff; border-bottom: 1px solid #e5e5e5;
+      padding: 10px 20px; display: flex; gap: 8px; align-items: center;
+      font-family: system-ui; font-size: 13px;
+    }
+    #variant-nav .label { color: #999; margin-right: 8px; font-size: 12px; }
+    .vtab {
+      padding: 6px 14px; border-radius: 6px; border: 1px solid #ddd;
+      background: #fff; cursor: pointer; font-size: 12px; font-family: system-ui;
+      transition: all 0.15s; color: #333;
+    }
+    .vtab:hover { background: #f5f5f5; }
+    .vtab.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+    .vtab small { color: #999; margin-left: 6px; font-size: 11px; }
+    .vtab.active small { color: #888; }
+
+    .variant { display: none; min-height: 100vh; padding-top: 56px; }
+    .variant.active { display: block; }
+
+    .ref-bar {
+      position: fixed; bottom: 16px; left: 16px;
+      background: rgba(0,0,0,0.88); color: #fff;
+      padding: 12px 16px; border-radius: 12px;
+      font-family: system-ui; font-size: 12px; line-height: 1.5;
+      max-width: 400px; z-index: 9997; opacity: 0.92;
+    }
+    .ref-bar h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #888; margin-bottom: 4px; }
+    .ref-bar .ref { color: #ddd; }
+    .ref-bar .says { color: #aaa; font-style: italic; margin-top: 6px; font-size: 11px; }
+
+    /* Portrait placeholder */
+    .portrait {
+      background: linear-gradient(160deg, #d5cfc5 0%, #b8b0a5 50%, #8a7f6b 100%);
+      border-radius: 16px;
+      display: grid; place-items: center;
+      font-family: var(--font-serif); font-style: italic; color: rgba(255,255,255,0.5); font-size: 14px;
+      position: relative; overflow: hidden;
+    }
+    .portrait::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255,90,54,0.12), transparent 60%);
+    }
+    .img {
+      border-radius: 12px;
+      background: linear-gradient(135deg, #e3dfd6 0%, #c9c3b4 100%);
+      display: grid; place-items: center;
+      font-family: var(--font-serif); font-style: italic; color: var(--muted-2); font-size: 14px;
+    }
+    .img-dark { background: linear-gradient(135deg, #2a2825 0%, #4a4540 100%); color: #888; }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT A — EDITORIAL PROFILE
+       Long-form magazine-style profile. Big italic headline.
+       Portrait inline. Career as numbered narrative.
+       ─────────────────────────────────────────────────────────── */
+    #va .a-top {
+      padding: 32px 56px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--line);
+    }
+    #va .a-back { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+    #va .a-back:hover { color: var(--accent); }
+    #va .a-top-meta { font-family: var(--font-serif); font-style: italic; font-size: 16px; color: var(--muted); }
+
+    #va .a-hero {
+      padding: 120px 56px 80px;
+      max-width: 1280px; margin: 0 auto;
+      text-align: center;
+    }
+    #va .a-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 22px; margin-bottom: 20px; }
+    #va .a-hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(64px, 9vw, 140px); line-height: 0.92;
+      letter-spacing: -0.04em; font-weight: 400;
+    }
+    #va .a-hero h1 em { font-style: italic; color: var(--accent); }
+
+    #va .a-portrait-row {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 56px 80px;
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: 64px;
+      align-items: end;
+    }
+    #va .a-portrait { height: 560px; }
+    #va .a-caption {
+      font-family: var(--font-serif); font-size: 26px; line-height: 1.4;
+      color: var(--ink-2); padding-bottom: 32px;
+    }
+    #va .a-caption em { font-style: italic; color: var(--accent); }
+    #va .a-meta {
+      margin-top: 24px;
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+      font-size: 13px;
+    }
+    #va .a-meta div span { color: var(--muted); display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+
+    #va .a-body {
+      max-width: 720px; margin: 0 auto;
+      padding: 60px 24px 120px;
+      font-size: 19px; line-height: 1.7; color: var(--ink-2);
+    }
+    #va .a-section-mark { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 18px; margin: 64px 0 16px; }
+    #va .a-body h2 { font-family: var(--font-serif); font-size: 48px; font-weight: 400; line-height: 1.05; color: var(--ink); margin-bottom: 32px; letter-spacing: -0.02em; }
+    #va .a-body h2 em { font-style: italic; color: var(--accent); }
+    #va .a-body p + p { margin-top: 24px; }
+    #va .a-body p.dropcap::first-letter { font-family: var(--font-serif); font-style: italic; font-size: 96px; line-height: 0.85; float: left; padding-right: 12px; padding-top: 8px; color: var(--accent); }
+    #va .a-body em { font-family: var(--font-serif); font-style: italic; font-size: 20px; color: var(--ink); }
+    #va .a-pullquote {
+      margin: 56px -80px;
+      font-family: var(--font-serif); font-size: 40px; line-height: 1.15;
+      color: var(--ink); text-align: center;
+    }
+    #va .a-pullquote em { font-style: italic; color: var(--accent); }
+    #va .a-pullquote::before { content: '"'; font-size: 72px; color: var(--accent); display: block; line-height: 0.5; margin-bottom: 16px; }
+
+    #va .a-timeline {
+      margin: 64px -40px;
+      border-top: 1px solid var(--ink);
+    }
+    #va .a-timeline-row {
+      display: grid; grid-template-columns: 80px 1fr 200px;
+      gap: 32px; align-items: baseline;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    #va .a-timeline-year { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 20px; }
+    #va .a-timeline-title { font-family: var(--font-serif); font-size: 24px; line-height: 1.2; }
+    #va .a-timeline-title em { font-style: italic; }
+    #va .a-timeline-where { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    #va .a-timeline-cat { font-size: 12px; color: var(--muted-2); text-align: right; }
+
+    #va .a-currently {
+      background: var(--ink); color: var(--bg);
+      border-radius: 24px;
+      padding: 48px;
+      margin: 64px -40px;
+    }
+    #va .a-currently-label { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 22px; margin-bottom: 24px; }
+    #va .a-currently-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    #va .a-currently-item {}
+    #va .a-currently-item span { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); display: block; margin-bottom: 8px; }
+    #va .a-currently-item strong { font-family: var(--font-serif); font-size: 22px; font-weight: 400; line-height: 1.3; color: var(--bg); }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT B — STRUCTURED TWO-COLUMN
+       Photo + bio left. Sidebar with all metadata right.
+       Mirrors the case study template structure.
+       ─────────────────────────────────────────────────────────── */
+    #vb .b-top {
+      padding: 32px 56px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--line);
+    }
+    #vb .b-back { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+    #vb .b-top-meta { font-family: var(--font-serif); font-style: italic; font-size: 16px; color: var(--muted); }
+
+    #vb .b-hero {
+      padding: 100px 56px 60px;
+      max-width: 1280px; margin: 0 auto;
+    }
+    #vb .b-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 22px; margin-bottom: 20px; }
+    #vb .b-hero h1 { font-family: var(--font-serif); font-size: clamp(56px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.03em; font-weight: 400; max-width: 1100px; }
+    #vb .b-hero h1 em { font-style: italic; color: var(--accent); }
+
+    #vb .b-portrait-block {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 56px 60px;
+    }
+    #vb .b-portrait { height: 480px; }
+
+    #vb .b-body {
+      max-width: 1280px; margin: 0 auto;
+      padding: 60px 56px 120px;
+      display: grid; grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 80px; align-items: start;
+    }
+
+    #vb .b-article { max-width: 680px; }
+    #vb .b-section { padding: 32px 0; }
+    #vb .b-section:not(:last-child) { border-bottom: 1px solid var(--line); }
+    #vb .b-section-mark { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 18px; margin-bottom: 16px; display: flex; align-items: baseline; gap: 12px; }
+    #vb .b-section-mark::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
+    #vb .b-section h2 { font-family: var(--font-serif); font-size: 40px; font-weight: 400; line-height: 1.05; margin-bottom: 24px; }
+    #vb .b-section h2 em { font-style: italic; color: var(--accent); }
+    #vb .b-section p { font-size: 18px; line-height: 1.7; color: var(--ink-2); margin-bottom: 16px; }
+    #vb .b-section p em { font-family: var(--font-serif); font-style: italic; font-size: 20px; }
+
+    #vb .b-side { position: sticky; top: 80px; align-self: start; }
+    #vb .b-side-block { padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
+    #vb .b-side-block:last-child { border-bottom: none; }
+    #vb .b-side-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 10px; }
+    #vb .b-side-value { font-family: var(--font-serif); font-size: 20px; line-height: 1.3; }
+    #vb .b-side-value.small { font-family: var(--font-sans); font-size: 13px; color: var(--ink-2); line-height: 1.7; }
+    #vb .b-side-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border: 1px solid var(--ink); border-radius: 100px;
+      font-size: 12px; transition: all 0.15s;
+    }
+    #vb .b-side-link:hover { background: var(--ink); color: var(--bg); }
+
+    #vb .b-timeline-row {
+      display: grid; grid-template-columns: 72px 1fr;
+      gap: 16px; align-items: baseline;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    #vb .b-timeline-row:last-child { border-bottom: none; }
+    #vb .b-timeline-year { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 16px; }
+    #vb .b-timeline-title { font-family: var(--font-serif); font-size: 17px; line-height: 1.3; }
+    #vb .b-timeline-where { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT C — CONVERSATIONAL JOURNEY
+       Letter-style: "Hi, I'm Farzaneh." Warm, personal, scrollable.
+       Multiple full-width sections building a personal narrative.
+       ─────────────────────────────────────────────────────────── */
+    #vc .c-top {
+      padding: 32px 56px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--line);
+    }
+    #vc .c-back { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+    #vc .c-top-meta { font-family: var(--font-serif); font-style: italic; font-size: 16px; color: var(--muted); }
+
+    #vc .c-hero {
+      padding: 120px 80px 80px;
+      max-width: 1500px; margin: 0 auto;
+      display: grid; grid-template-columns: 1.4fr 1fr; gap: 80px;
+      align-items: center;
+    }
+    #vc .c-greeting {
+      font-family: var(--font-serif); font-style: italic; color: var(--accent);
+      font-size: 28px; margin-bottom: 24px;
+    }
+    #vc .c-hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(52px, 6vw, 88px); line-height: 1.0;
+      letter-spacing: -0.025em; font-weight: 400;
+    }
+    #vc .c-hero h1 em { font-style: italic; color: var(--accent); }
+    #vc .c-hero-right { display: flex; flex-direction: column; gap: 24px; }
+    #vc .c-portrait { height: 480px; }
+
+    /* Chapter sections */
+    #vc .c-chapter {
+      padding: 100px 80px;
+      max-width: 1500px; margin: 0 auto;
+    }
+    #vc .c-chapter-label {
+      display: flex; align-items: baseline; gap: 16px;
+      font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 22px;
+      margin-bottom: 24px;
+    }
+    #vc .c-chapter-label-num { font-family: var(--font-sans); font-style: normal; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+    #vc .c-chapter-label::after { content: ''; flex: 1; max-width: 100px; height: 1px; background: var(--accent); margin-left: 8px; }
+
+    #vc .c-chapter h2 { font-family: var(--font-serif); font-size: clamp(40px, 5vw, 64px); font-weight: 400; line-height: 1.05; margin-bottom: 32px; max-width: 900px; }
+    #vc .c-chapter h2 em { font-style: italic; color: var(--accent); }
+    #vc .c-chapter-text {
+      display: grid; grid-template-columns: 1.4fr 1fr; gap: 64px;
+      align-items: start;
+    }
+    #vc .c-chapter-text p { font-size: 19px; line-height: 1.7; color: var(--ink-2); margin-bottom: 24px; }
+    #vc .c-chapter-text p em { font-family: var(--font-serif); font-style: italic; font-size: 21px; }
+    #vc .c-chapter-text .c-side-img { height: 380px; }
+
+    /* "Currently" block — personal vibes */
+    #vc .c-currently {
+      background: var(--ink); color: var(--bg); border-radius: 24px;
+      margin: 60px 80px;
+      padding: 80px;
+    }
+    #vc .c-currently-label { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 28px; margin-bottom: 8px; }
+    #vc .c-currently-title { font-family: var(--font-serif); font-size: clamp(40px, 4.5vw, 64px); font-weight: 400; line-height: 1.05; margin-bottom: 56px; }
+    #vc .c-currently-title em { font-style: italic; color: var(--accent); }
+    #vc .c-currently-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+    #vc .c-currently-item { padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.15); }
+    #vc .c-currently-item span { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); display: block; margin-bottom: 8px; }
+    #vc .c-currently-item strong { font-family: var(--font-serif); font-size: 19px; font-weight: 400; line-height: 1.3; }
+
+    /* Timeline */
+    #vc .c-timeline {
+      padding: 100px 80px;
+      max-width: 1500px; margin: 0 auto;
+    }
+    #vc .c-tl-head { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 28px; margin-bottom: 32px; }
+    #vc .c-tl-row {
+      display: grid; grid-template-columns: 100px 1fr 1fr 180px;
+      gap: 32px; align-items: baseline;
+      padding: 24px 0;
+      border-top: 1px solid var(--line);
+      transition: background 0.2s; cursor: pointer;
+    }
+    #vc .c-tl-row:hover { background: var(--bg-2); padding: 24px 16px; margin: 0 -16px; }
+    #vc .c-tl-row:last-child { border-bottom: 1px solid var(--line); }
+    #vc .c-tl-yr { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 20px; }
+    #vc .c-tl-title { font-family: var(--font-serif); font-size: 24px; line-height: 1.2; }
+    #vc .c-tl-title em { font-style: italic; }
+    #vc .c-tl-where { font-size: 14px; color: var(--muted); }
+    #vc .c-tl-where strong { color: var(--ink); }
+    #vc .c-tl-tag { font-size: 12px; color: var(--muted-2); text-align: right; }
+  </style>
+</head>
+<body>
+
+  <div id="variant-nav">
+    <span class="label">Sketch 007 · Full About Page</span>
+    <button class="vtab active" onclick="showVariant('a', this)">A · Editorial Profile<small>magazine-style</small></button>
+    <button class="vtab" onclick="showVariant('b', this)">B · Structured Two-column<small>case-study-style</small></button>
+    <button class="vtab" onclick="showVariant('c', this)">C · Conversational Journey<small>chapters</small></button>
+  </div>
+
+  <!-- ══════════════════════════════════════════ VARIANT A — EDITORIAL PROFILE ══════════════════════════════════════════ -->
+  <div id="va" class="variant active">
+    <header class="a-top">
+      <a class="a-back" href="#">← Home</a>
+      <div class="a-top-meta">About · Vol. III</div>
+    </header>
+
+    <section class="a-hero">
+      <div class="a-eyebrow">— On the designer</div>
+      <h1>Farzaneh <em>Falakrou</em>,<br>in <em>her own words.</em></h1>
+    </section>
+
+    <section class="a-portrait-row">
+      <div class="portrait a-portrait">portrait of Farzaneh</div>
+      <div class="a-caption">
+        Born in Tehran, trained as an architect, now designing software for institutions and people who use it. <em>A portfolio of considered details, mostly.</em>
+        <div class="a-meta">
+          <div><span>Born</span>Tehran, 1995</div>
+          <div><span>Based in</span>Tehran, IR</div>
+          <div><span>Trained at</span>University of Tehran</div>
+          <div><span>Languages</span>Farsi, English</div>
+        </div>
+      </div>
+    </section>
+
+    <article class="a-body">
+      <p class="dropcap">I'm not sure when I became a designer, only that I never stopped being an architect. The first thing I drew with intention was a section through a building I couldn't have lived in if you'd paid me — and I've been drawing sections through things ever since. Through products, mostly.</p>
+
+      <div class="a-section-mark">— On the work</div>
+      <h2>I think in <em>plans, sections, and elevations.</em></h2>
+      <p>Designing software felt like a natural extension of designing buildings. Both are about shaping how people move through a space. Both reward thinking in systems. And both fail in the same way — <em>when surface beauty hides a structure that doesn't hold</em>.</p>
+      <p>My work tends toward subtraction. I'd rather remove three features than add one. I'd rather have one button that's exactly right than three that are mostly fine. I write a lot of the copy myself, often before I open Figma — because if the words don't work, the layout can't save them.</p>
+
+      <div class="a-pullquote">
+        My work tends toward<br><em>subtraction</em>. I'd rather<br>remove three features<br>than add one.
+      </div>
+
+      <div class="a-section-mark">— On the approach</div>
+      <h2>Slow design, mostly.</h2>
+      <p>I spend more time on the brief than on the artwork. Most of the projects I'm proud of started with a meeting where I argued against the thing we'd been asked to make. The output is usually smaller than what was requested, and usually does more.</p>
+      <p>I believe in <em>shipping</em>, but I'm allergic to "good enough." If a thing can be ten percent better with a day of additional attention, I'll take the day. The compound effect of those days is, I think, the only thing that separates one designer from another.</p>
+
+      <div class="a-section-mark">— On the path</div>
+      <h2>How I got here.</h2>
+
+      <div class="a-timeline">
+        <div class="a-timeline-row">
+          <div class="a-timeline-year">2024–</div>
+          <div>
+            <div class="a-timeline-title">Independent, <em>by choice</em></div>
+            <div class="a-timeline-where">Tehran · Working with institutional clients</div>
+          </div>
+          <div class="a-timeline-cat">Product Design</div>
+        </div>
+        <div class="a-timeline-row">
+          <div class="a-timeline-year">2022–24</div>
+          <div>
+            <div class="a-timeline-title">Senior Designer at <em>Top Notch</em></div>
+            <div class="a-timeline-where">E-commerce platform, Series B</div>
+          </div>
+          <div class="a-timeline-cat">Product · Conversion</div>
+        </div>
+        <div class="a-timeline-row">
+          <div class="a-timeline-year">2021–22</div>
+          <div>
+            <div class="a-timeline-title">Designer at <em>Homelon</em></div>
+            <div class="a-timeline-where">PropTech, seed stage</div>
+          </div>
+          <div class="a-timeline-cat">Mobile · Search UX</div>
+        </div>
+        <div class="a-timeline-row">
+          <div class="a-timeline-year">2017–20</div>
+          <div>
+            <div class="a-timeline-title">Architect at <em>TFM Studio</em></div>
+            <div class="a-timeline-where">Residential + cultural projects</div>
+          </div>
+          <div class="a-timeline-cat">Architecture</div>
+        </div>
+        <div class="a-timeline-row">
+          <div class="a-timeline-year">2012–17</div>
+          <div>
+            <div class="a-timeline-title">M.Arch, <em>University of Tehran</em></div>
+            <div class="a-timeline-where">Thesis: Domestic space and digital ritual</div>
+          </div>
+          <div class="a-timeline-cat">Education</div>
+        </div>
+      </div>
+
+      <div class="a-currently">
+        <div class="a-currently-label">— Currently</div>
+        <div class="a-currently-grid">
+          <div class="a-currently-item">
+            <span>Reading</span>
+            <strong>Words for Pictures<br><em>by Brian Michael Bendis</em></strong>
+          </div>
+          <div class="a-currently-item">
+            <span>Listening to</span>
+            <strong>Nima Manesh<br><em>any season</em></strong>
+          </div>
+          <div class="a-currently-item">
+            <span>Tools I love</span>
+            <strong>Figma, Notion,<br>pen & paper</strong>
+          </div>
+          <div class="a-currently-item">
+            <span>Looking for</span>
+            <strong>Senior in-house<br>product role</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="a-section-mark">— Get in touch</div>
+      <h2>Want to <em>work together?</em></h2>
+      <p>Drop a line at <em>farzaneh@example.com</em>, or find me on Read.cv, LinkedIn, and Dribbble. I read every message. I reply to most.</p>
+    </article>
+
+    <div class="ref-bar">
+      <h4>Variant A · Editorial Profile</h4>
+      <div class="ref">Long-form magazine-style profile. Hero, portrait + caption, narrative body with pull quotes, timeline as a structured list, dark "Currently" block, closing contact.</div>
+      <div class="says">Reads like a profile in a design magazine. Most personality. Writing-heavy.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ VARIANT B — STRUCTURED TWO-COLUMN ══════════════════════════════════════════ -->
+  <div id="vb" class="variant">
+    <header class="b-top">
+      <a class="b-back" href="#">← Home</a>
+      <div class="b-top-meta">About · Vol. III</div>
+    </header>
+
+    <section class="b-hero">
+      <div class="b-eyebrow">— On the designer</div>
+      <h1>I started as an <em>architect</em> — which is to say I still think in plans, sections, and elevations.</h1>
+    </section>
+
+    <div class="b-portrait-block">
+      <div class="portrait b-portrait">portrait of Farzaneh</div>
+    </div>
+
+    <main class="b-body">
+      <article class="b-article">
+        <section class="b-section">
+          <div class="b-section-mark">— Hello</div>
+          <h2><em>The short version.</em></h2>
+          <p>I'm a product designer based in Tehran, working with institutional clients on EdTech, PropTech, and consumer products. I started my career as an architect and brought the discipline with me when I switched to designing software.</p>
+          <p>My work tends toward subtraction. <em>I'd rather remove three features than add one.</em> I write a lot of the copy myself before opening Figma — because if the words don't work, the layout can't save them.</p>
+        </section>
+
+        <section class="b-section">
+          <div class="b-section-mark">— Approach</div>
+          <h2>Slow design, <em>mostly.</em></h2>
+          <p>I spend more time on the brief than on the artwork. Most of the projects I'm proud of started with a meeting where I argued against the thing we'd been asked to make. The output is usually smaller than what was requested, and usually does more.</p>
+          <p>I believe in shipping. I'm allergic to "good enough."</p>
+        </section>
+
+        <section class="b-section">
+          <div class="b-section-mark">— Path</div>
+          <h2>How I <em>got here.</em></h2>
+          <div class="b-timeline-row">
+            <div class="b-timeline-year">2024–</div>
+            <div>
+              <div class="b-timeline-title">Independent, <em>by choice</em></div>
+              <div class="b-timeline-where">Tehran · Institutional product work</div>
+            </div>
+          </div>
+          <div class="b-timeline-row">
+            <div class="b-timeline-year">2022–24</div>
+            <div>
+              <div class="b-timeline-title">Senior Designer · <em>Top Notch</em></div>
+              <div class="b-timeline-where">E-commerce, Series B</div>
+            </div>
+          </div>
+          <div class="b-timeline-row">
+            <div class="b-timeline-year">2021–22</div>
+            <div>
+              <div class="b-timeline-title">Designer · <em>Homelon</em></div>
+              <div class="b-timeline-where">PropTech, seed stage</div>
+            </div>
+          </div>
+          <div class="b-timeline-row">
+            <div class="b-timeline-year">2017–20</div>
+            <div>
+              <div class="b-timeline-title">Architect · <em>TFM Studio</em></div>
+              <div class="b-timeline-where">Residential + cultural</div>
+            </div>
+          </div>
+          <div class="b-timeline-row">
+            <div class="b-timeline-year">2012–17</div>
+            <div>
+              <div class="b-timeline-title">M.Arch · <em>University of Tehran</em></div>
+              <div class="b-timeline-where">Thesis: Domestic space and digital ritual</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="b-section">
+          <div class="b-section-mark">— Get in touch</div>
+          <h2>Want to <em>work together?</em></h2>
+          <p>Drop a line at <em>farzaneh@example.com</em>, or find me on Read.cv, LinkedIn, and Dribbble. I read every message; I reply to most.</p>
+        </section>
+      </article>
+
+      <aside class="b-side">
+        <div class="b-side-block">
+          <div class="b-side-label">Currently</div>
+          <div class="b-side-value">Independent, by choice</div>
+          <div class="b-side-value small" style="margin-top: 6px;">Open to senior in-house roles</div>
+        </div>
+        <div class="b-side-block">
+          <div class="b-side-label">Based in</div>
+          <div class="b-side-value">Tehran, IR</div>
+        </div>
+        <div class="b-side-block">
+          <div class="b-side-label">Tools</div>
+          <div class="b-side-value small">
+            Figma · FigJam · Maze<br>
+            Notion · GitHub<br>
+            HTML/CSS · React (light)<br>
+            Photography · Pen & paper
+          </div>
+        </div>
+        <div class="b-side-block">
+          <div class="b-side-label">Languages</div>
+          <div class="b-side-value small">Farsi · English</div>
+        </div>
+        <div class="b-side-block">
+          <div class="b-side-label">Selected by</div>
+          <div class="b-side-value small">
+            Awwwards (nominee) · 2023<br>
+            CSS Design Awards · 2022
+          </div>
+        </div>
+        <div class="b-side-block">
+          <div class="b-side-label">Reading</div>
+          <div class="b-side-value small"><em>Words for Pictures</em><br>Brian M. Bendis</div>
+        </div>
+        <div class="b-side-block">
+          <div class="b-side-label">Resources</div>
+          <a class="b-side-link" href="#">Download CV ↗</a>
+        </div>
+      </aside>
+    </main>
+
+    <div class="ref-bar">
+      <h4>Variant B · Structured Two-column</h4>
+      <div class="ref">Mirrors the case study template. Bio on the left as numbered sections, sticky metadata sidebar on the right with all the meta + currently + tools.</div>
+      <div class="says">Consistent with case study template structure. Easy to scan. Less personality than A but more efficient.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ VARIANT C — CONVERSATIONAL JOURNEY ══════════════════════════════════════════ -->
+  <div id="vc" class="variant">
+    <header class="c-top">
+      <a class="c-back" href="#">← Home</a>
+      <div class="c-top-meta">About · Vol. III</div>
+    </header>
+
+    <section class="c-hero">
+      <div>
+        <div class="c-greeting">Hi, I'm Farzaneh —</div>
+        <h1>and this is how I got<br>to <em>designing software</em><br>by way of <em>architecture</em>.</h1>
+      </div>
+      <div class="c-hero-right">
+        <div class="portrait c-portrait">portrait of Farzaneh</div>
+      </div>
+    </section>
+
+    <section class="c-chapter">
+      <div class="c-chapter-label">
+        <span class="c-chapter-label-num">Chapter 01</span>
+        — Where it started
+      </div>
+      <h2>Tehran, <em>2012.</em></h2>
+      <div class="c-chapter-text">
+        <div>
+          <p>I went into architecture because I wanted to design things people lived inside. Five years of school, three years at a residential studio in Tehran. The work was slow and rewarding in the way slow work usually is.</p>
+          <p>But I kept finding myself drawn to the digital tools we used to design buildings — and to the question of <em>why those tools were so bad at it</em>.</p>
+        </div>
+        <div class="img img-dark c-side-img">a photo from architecture school</div>
+      </div>
+    </section>
+
+    <section class="c-chapter">
+      <div class="c-chapter-label">
+        <span class="c-chapter-label-num">Chapter 02</span>
+        — The pivot
+      </div>
+      <h2>So I started <em>making software.</em></h2>
+      <div class="c-chapter-text">
+        <div>
+          <p>In 2021 I joined Homelon as a designer. I expected it to feel like starting over. What I found instead was that the discipline of architecture — thinking in plans, sections, elevations; sweating circulation; reading drawings — translated almost directly.</p>
+          <p>The vocabulary was different. The rigor wasn't.</p>
+        </div>
+        <div class="img c-side-img">homelon screen</div>
+      </div>
+    </section>
+
+    <div class="c-currently">
+      <div class="c-currently-label">— Currently</div>
+      <h2 class="c-currently-title">A few things I'm <em>thinking about</em> this season.</h2>
+      <div class="c-currently-grid">
+        <div class="c-currently-item">
+          <span>Reading</span>
+          <strong>Words for Pictures<br>by Brian M. Bendis</strong>
+        </div>
+        <div class="c-currently-item">
+          <span>Listening to</span>
+          <strong>Nima Manesh<br>any season</strong>
+        </div>
+        <div class="c-currently-item">
+          <span>Studying</span>
+          <strong>Persian miniature<br>composition</strong>
+        </div>
+        <div class="c-currently-item">
+          <span>Looking for</span>
+          <strong>Senior in-house<br>product role</strong>
+        </div>
+      </div>
+    </div>
+
+    <section class="c-chapter">
+      <div class="c-chapter-label">
+        <span class="c-chapter-label-num">Chapter 03</span>
+        — Today
+      </div>
+      <h2>I work mostly <em>alone</em>, with<br>institutional clients.</h2>
+      <div class="c-chapter-text">
+        <div>
+          <p>Today I'm an independent product designer based in Tehran, working with EdTech, PropTech, and consumer clients. I write copy before I open Figma. I argue against most of the briefs I'm given. I ship slowly and edit constantly.</p>
+          <p><em>I'm currently looking for a senior in-house product role</em> at a company where craft and systems thinking matter equally.</p>
+        </div>
+        <div class="img c-side-img">a workspace photo</div>
+      </div>
+    </section>
+
+    <section class="c-timeline">
+      <div class="c-tl-head">— The compressed version</div>
+      <div class="c-tl-row">
+        <div class="c-tl-yr">2024–</div>
+        <div class="c-tl-title">Independent, <em>by choice</em></div>
+        <div class="c-tl-where"><strong>Tehran</strong> · Institutional product work</div>
+        <div class="c-tl-tag">Product Design</div>
+      </div>
+      <div class="c-tl-row">
+        <div class="c-tl-yr">2022–24</div>
+        <div class="c-tl-title">Senior Designer · <em>Top Notch</em></div>
+        <div class="c-tl-where"><strong>E-commerce</strong> · Series B</div>
+        <div class="c-tl-tag">Product · Conversion</div>
+      </div>
+      <div class="c-tl-row">
+        <div class="c-tl-yr">2021–22</div>
+        <div class="c-tl-title">Designer · <em>Homelon</em></div>
+        <div class="c-tl-where"><strong>PropTech</strong> · seed stage</div>
+        <div class="c-tl-tag">Mobile · Search</div>
+      </div>
+      <div class="c-tl-row">
+        <div class="c-tl-yr">2017–20</div>
+        <div class="c-tl-title">Architect · <em>TFM Studio</em></div>
+        <div class="c-tl-where"><strong>Residential</strong> + cultural</div>
+        <div class="c-tl-tag">Architecture</div>
+      </div>
+      <div class="c-tl-row">
+        <div class="c-tl-yr">2012–17</div>
+        <div class="c-tl-title">M.Arch · <em>University of Tehran</em></div>
+        <div class="c-tl-where"><strong>Thesis</strong> Domestic space & digital ritual</div>
+        <div class="c-tl-tag">Education</div>
+      </div>
+    </section>
+
+    <div class="ref-bar">
+      <h4>Variant C · Conversational Journey</h4>
+      <div class="ref">Letter-style. Chapters telling the architect → designer story. Dark "Currently" block mid-page. Timeline as a compressed reference at the end.</div>
+      <div class="says">Warmest, most personal. Narrative-driven. Good if you want About to feel like a conversation, not a CV.</div>
+    </div>
+  </div>
+
+  <script>
+    function showVariant(id, btn) {
+      document.querySelectorAll('.variant').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.vtab').forEach(t => t.classList.remove('active'));
+      document.getElementById('v' + id).classList.add('active');
+      btn.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  </script>
+</body>
+</html>

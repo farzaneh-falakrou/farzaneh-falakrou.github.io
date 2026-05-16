@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sketch 004 — Card Descriptions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #ebe8e2;
+      --bg-2:      #e3dfd6;
+      --ink:       #1a1a1a;
+      --ink-2:     #2a2a2a;
+      --muted:     #5a5a5a;
+      --muted-2:   #8a8a85;
+      --line:      #d5d0c5;
+      --accent:    #ff5a36;
+      --surface:   #ffffff;
+      --font-serif: 'Instrument Serif', serif;
+      --font-sans:  'Inter', system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; }
+    body { font-family: var(--font-sans); background: var(--bg); color: var(--ink); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    #variant-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9998;
+      background: #fff; border-bottom: 1px solid #e5e5e5;
+      padding: 10px 20px; display: flex; gap: 8px; align-items: center;
+      font-family: system-ui; font-size: 13px;
+    }
+    #variant-nav .label { color: #999; margin-right: 8px; font-size: 12px; }
+    .vtab {
+      padding: 6px 14px; border-radius: 6px; border: 1px solid #ddd;
+      background: #fff; cursor: pointer; font-size: 12px; font-family: system-ui;
+      transition: all 0.15s; color: #333;
+    }
+    .vtab:hover { background: #f5f5f5; }
+    .vtab.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+    .vtab small { color: #999; margin-left: 6px; font-size: 11px; }
+    .vtab.active small { color: #888; }
+
+    .variant { display: none; min-height: 100vh; padding-top: 80px; }
+    .variant.active { display: block; }
+
+    .section-head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      padding: 32px 80px 32px;
+      max-width: 1400px; margin: 0 auto;
+    }
+    .section-head h2 { font-family: var(--font-serif); font-size: 56px; line-height: 1; }
+    .section-head h2 em { font-style: italic; color: var(--accent); }
+    .section-head .meta { font-size: 13px; color: var(--muted); }
+
+    .container { padding: 0 80px 100px; max-width: 1400px; margin: 0 auto; }
+
+    .ref-bar {
+      position: fixed; bottom: 16px; left: 16px;
+      background: rgba(0,0,0,0.88); color: #fff;
+      padding: 12px 16px; border-radius: 12px;
+      font-family: system-ui; font-size: 12px; line-height: 1.5;
+      max-width: 400px; z-index: 9997; opacity: 0.92;
+    }
+    .ref-bar h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #888; margin-bottom: 4px; }
+    .ref-bar .ref { color: #ddd; }
+    .ref-bar .says { color: #aaa; font-style: italic; margin-top: 6px; font-size: 11px; }
+
+    /* Shared preview gradients (per project) */
+    .prev-1 { background: linear-gradient(135deg, var(--bg-2) 0%, #d4cfc2 100%); color: var(--muted-2); }
+    .prev-2 { background: linear-gradient(135deg, #2a2825 0%, #4a4540 100%); color: #888; }
+    .prev-3 { background: linear-gradient(135deg, #ffd8c8 0%, #ff9e85 100%); color: #aa5a45; }
+    .prev-4 { background: linear-gradient(135deg, #d5d0c5 0%, #b8b3a8 100%); color: #6b665d; }
+    .prev-glow::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255,90,54,0.08), transparent 60%);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT A — INLINE DESCRIPTION (always visible)
+       Description sits between project name and meta. Classic, clear.
+       ─────────────────────────────────────────────────────────── */
+    #va .a-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    #va .a-card {
+      background: var(--surface); border-radius: 24px;
+      padding: 32px; cursor: pointer;
+      transition: all 0.25s;
+      display: flex; flex-direction: column; gap: 28px;
+    }
+    #va .a-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.08); }
+    #va .a-preview {
+      height: 220px; border-radius: 16px;
+      display: grid; place-items: center;
+      font-family: var(--font-serif); font-style: italic; font-size: 14px;
+      position: relative; overflow: hidden;
+    }
+    #va .a-body { display: flex; flex-direction: column; gap: 16px; }
+    #va .a-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    #va .a-name {
+      font-family: var(--font-serif); font-size: 36px; line-height: 1.05;
+    }
+    #va .a-name em { font-style: italic; color: var(--accent); }
+    #va .a-desc {
+      font-size: 15px; line-height: 1.55; color: var(--ink-2);
+      max-width: 460px;
+    }
+    #va .a-foot {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 8px; padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+    #va .a-meta { font-size: 12px; color: var(--muted); letter-spacing: 0.04em; }
+    #va .a-meta strong { color: var(--ink); }
+    #va .a-arr {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--ink); color: var(--bg);
+      display: grid; place-items: center;
+      transition: all 0.2s;
+    }
+    #va .a-card:hover .a-arr { background: var(--accent); color: var(--ink); transform: rotate(-45deg); }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT B — HOVER REVEAL (clean rest state)
+       At rest: just tag + name. On hover: description + meta slide up.
+       ─────────────────────────────────────────────────────────── */
+    #vb .b-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    #vb .b-card {
+      background: var(--surface); border-radius: 24px;
+      cursor: pointer; transition: all 0.3s;
+      position: relative; overflow: hidden;
+      height: 460px;
+    }
+    #vb .b-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.08); }
+    #vb .b-preview {
+      height: 260px; margin: 16px 16px 0;
+      border-radius: 12px;
+      display: grid; place-items: center;
+      font-family: var(--font-serif); font-style: italic; font-size: 14px;
+      position: relative; overflow: hidden;
+      transition: height 0.35s ease;
+    }
+    #vb .b-card:hover .b-preview { height: 200px; }
+    #vb .b-body {
+      padding: 28px 32px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    #vb .b-row-top {
+      display: flex; align-items: baseline; justify-content: space-between;
+    }
+    #vb .b-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    #vb .b-year { font-family: var(--font-serif); font-style: italic; color: var(--muted-2); font-size: 16px; }
+    #vb .b-name {
+      font-family: var(--font-serif); font-size: 36px; line-height: 1.05;
+    }
+    #vb .b-name em { font-style: italic; color: var(--accent); }
+    #vb .b-reveal {
+      max-height: 0; opacity: 0; overflow: hidden;
+      transition: max-height 0.35s ease, opacity 0.25s ease;
+    }
+    #vb .b-card:hover .b-reveal { max-height: 200px; opacity: 1; }
+    #vb .b-desc {
+      font-size: 14px; line-height: 1.55; color: var(--ink-2);
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      margin-top: 4px;
+    }
+    #vb .b-arr {
+      position: absolute; top: 32px; right: 32px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.85); backdrop-filter: blur(8px);
+      display: grid; place-items: center; font-size: 14px;
+      transition: all 0.25s;
+      z-index: 2;
+    }
+    #vb .b-card:hover .b-arr { background: var(--accent); transform: rotate(-45deg); }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT C — EDITORIAL CAPTION (description as pull-quote)
+       Description treated like a magazine caption — italic serif,
+       sits prominently between preview and meta. Bigger visual weight.
+       ─────────────────────────────────────────────────────────── */
+    #vc .c-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+    #vc .c-card {
+      background: var(--surface); border-radius: 24px;
+      padding: 36px;
+      cursor: pointer; transition: all 0.25s;
+      display: flex; flex-direction: column; gap: 28px;
+    }
+    #vc .c-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.08); }
+    #vc .c-top-row {
+      display: flex; align-items: baseline; justify-content: space-between;
+      padding-bottom: 20px; border-bottom: 1px solid var(--line);
+    }
+    #vc .c-num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 22px; }
+    #vc .c-meta { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+    #vc .c-preview {
+      height: 220px; border-radius: 12px;
+      display: grid; place-items: center;
+      font-family: var(--font-serif); font-style: italic; font-size: 14px;
+      position: relative; overflow: hidden;
+    }
+    #vc .c-name {
+      font-family: var(--font-serif); font-size: 40px; line-height: 1.0;
+    }
+    #vc .c-name em { font-style: italic; color: var(--accent); }
+    #vc .c-quote {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: 22px; line-height: 1.4;
+      color: var(--ink-2);
+      padding-left: 20px;
+      border-left: 2px solid var(--accent);
+    }
+    #vc .c-foot {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 4px;
+    }
+    #vc .c-link {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 13px; color: var(--ink);
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 2px; transition: all 0.15s;
+    }
+    #vc .c-link:hover { color: var(--accent); border-color: var(--accent); }
+    #vc .c-context { font-size: 12px; color: var(--muted); }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT D — ASYMMETRIC SPLIT (image left, content right)
+       Each project gets a wide row. Preview on left, dedicated
+       column for name + description + metadata on right.
+       ─────────────────────────────────────────────────────────── */
+    #vd .d-grid { display: flex; flex-direction: column; gap: 16px; }
+    #vd .d-card {
+      background: var(--surface); border-radius: 24px;
+      padding: 24px;
+      cursor: pointer; transition: all 0.25s;
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px;
+      align-items: stretch;
+    }
+    #vd .d-card:hover { transform: translateX(8px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+    #vd .d-card:nth-child(even) { grid-template-columns: 1fr 1.2fr; }
+    #vd .d-card:nth-child(even) .d-preview { order: 2; }
+    #vd .d-card:nth-child(even) .d-body { order: 1; }
+    #vd .d-preview {
+      min-height: 280px; border-radius: 16px;
+      display: grid; place-items: center;
+      font-family: var(--font-serif); font-style: italic; font-size: 14px;
+      position: relative; overflow: hidden;
+    }
+    #vd .d-body {
+      padding: 16px 16px 16px 0;
+      display: flex; flex-direction: column; justify-content: space-between; gap: 24px;
+    }
+    #vd .d-card:nth-child(even) .d-body { padding: 16px 0 16px 16px; }
+    #vd .d-head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    #vd .d-num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 24px; }
+    #vd .d-year { font-family: var(--font-serif); font-style: italic; color: var(--muted-2); font-size: 18px; }
+    #vd .d-name {
+      font-family: var(--font-serif); font-size: 48px; line-height: 1.0;
+      margin-bottom: 24px;
+    }
+    #vd .d-name em { font-style: italic; color: var(--accent); }
+    #vd .d-desc {
+      font-size: 16px; line-height: 1.6; color: var(--ink-2);
+      max-width: 480px;
+    }
+    #vd .d-desc em { font-family: var(--font-serif); font-style: italic; font-size: 17px; }
+    #vd .d-tags {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    #vd .d-tag {
+      padding: 5px 12px; border: 1px solid var(--line); border-radius: 100px;
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
+    }
+    #vd .d-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 20px; border-top: 1px solid var(--line);
+    }
+    #vd .d-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 14px; color: var(--ink); font-weight: 500;
+      transition: all 0.2s;
+    }
+    #vd .d-cta-arr {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--ink); color: var(--bg);
+      display: grid; place-items: center; font-size: 12px;
+      transition: all 0.2s;
+    }
+    #vd .d-card:hover .d-cta-arr { background: var(--accent); color: var(--ink); transform: rotate(-45deg); }
+    #vd .d-stats { font-family: var(--font-serif); font-style: italic; color: var(--muted-2); font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <div id="variant-nav">
+    <span class="label">Sketch 004 · Card Description Treatments</span>
+    <button class="vtab active" onclick="showVariant('a', this)">A · Inline<small>always visible</small></button>
+    <button class="vtab" onclick="showVariant('b', this)">B · Hover Reveal<small>clean at rest</small></button>
+    <button class="vtab" onclick="showVariant('c', this)">C · Editorial Caption<small>as pull-quote</small></button>
+    <button class="vtab" onclick="showVariant('d', this)">D · Asymmetric Split<small>full row layout</small></button>
+  </div>
+
+  <!-- ══════════════════════════════ VARIANT A ══════════════════════════════ -->
+  <div id="va" class="variant active">
+    <div class="section-head">
+      <h2>Selected <em>work</em></h2>
+      <div class="meta">04 of 12 · view all →</div>
+    </div>
+    <div class="container">
+      <div class="a-grid">
+        <div class="a-card" onclick="alert('Open: Moodle')">
+          <div class="a-preview prev-1 prev-glow">moodle preview</div>
+          <div class="a-body">
+            <div class="a-tag">EdTech · UX Research</div>
+            <h3 class="a-name">Moodle <em>Redesign</em></h3>
+            <p class="a-desc">Rethinking the LMS experience for institutions with 800M+ students. Six months of research turned into a calmer, more readable interface.</p>
+          </div>
+          <div class="a-foot">
+            <div class="a-meta"><strong>2024</strong> · Lead Designer</div>
+            <div class="a-arr">↗</div>
+          </div>
+        </div>
+        <div class="a-card" onclick="alert('Open: Dino')">
+          <div class="a-preview prev-2">dino preview</div>
+          <div class="a-body">
+            <div class="a-tag">Branding · Web</div>
+            <h3 class="a-name"><em>Dino</em> Studio</h3>
+            <p class="a-desc">Identity and digital presence for a creative production studio. The brief was a logo; the output was a system the team uses internally.</p>
+          </div>
+          <div class="a-foot">
+            <div class="a-meta"><strong>2023</strong> · Designer</div>
+            <div class="a-arr">↗</div>
+          </div>
+        </div>
+        <div class="a-card" onclick="alert('Open: Top Notch')">
+          <div class="a-preview prev-3">top notch preview</div>
+          <div class="a-body">
+            <div class="a-tag">E-Commerce · Product</div>
+            <h3 class="a-name"><em>Top</em> Notch</h3>
+            <p class="a-desc">A checkout flow redesigned for clarity, not persuasion. The result was a 23% reduction in cart abandonment.</p>
+          </div>
+          <div class="a-foot">
+            <div class="a-meta"><strong>2023</strong> · Product Designer</div>
+            <div class="a-arr">↗</div>
+          </div>
+        </div>
+        <div class="a-card" onclick="alert('Open: Homelon')">
+          <div class="a-preview prev-4">homelon preview</div>
+          <div class="a-body">
+            <div class="a-tag">PropTech · Mobile</div>
+            <h3 class="a-name"><em>Homelon</em></h3>
+            <p class="a-desc">Rental search platform for first-time renters — a population terrified by listings written for landlords.</p>
+          </div>
+          <div class="a-foot">
+            <div class="a-meta"><strong>2022</strong> · Product Designer</div>
+            <div class="a-arr">↗</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ref-bar">
+      <h4>Variant A · Inline Description</h4>
+      <div class="ref">Description sits below the project name, clearly visible at rest. Meta row at the bottom with a dividing line.</div>
+      <div class="says">Pros: Easy to scan, no hidden content, descriptions can be longer. Cons: More visual noise, cards get taller.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ VARIANT B ══════════════════════════════ -->
+  <div id="vb" class="variant">
+    <div class="section-head">
+      <h2>Selected <em>work</em></h2>
+      <div class="meta">04 of 12 · hover to reveal · view all →</div>
+    </div>
+    <div class="container">
+      <div class="b-grid">
+        <div class="b-card" onclick="alert('Open: Moodle')">
+          <div class="b-arr">↗</div>
+          <div class="b-preview prev-1 prev-glow">moodle preview</div>
+          <div class="b-body">
+            <div class="b-row-top">
+              <span class="b-tag">EdTech · UX Research</span>
+              <span class="b-year">2024</span>
+            </div>
+            <h3 class="b-name">Moodle <em>Redesign</em></h3>
+            <div class="b-reveal">
+              <p class="b-desc">Rethinking the LMS for 800M+ students. Six months of research; three rounds of prototyping; one institutional rollout.</p>
+            </div>
+          </div>
+        </div>
+        <div class="b-card" onclick="alert('Open: Dino')">
+          <div class="b-arr">↗</div>
+          <div class="b-preview prev-2">dino preview</div>
+          <div class="b-body">
+            <div class="b-row-top">
+              <span class="b-tag">Branding · Web</span>
+              <span class="b-year">2023</span>
+            </div>
+            <h3 class="b-name"><em>Dino</em> Studio</h3>
+            <div class="b-reveal">
+              <p class="b-desc">Identity and digital presence for a creative production studio. A system, not a logo.</p>
+            </div>
+          </div>
+        </div>
+        <div class="b-card" onclick="alert('Open: Top Notch')">
+          <div class="b-arr">↗</div>
+          <div class="b-preview prev-3">top notch preview</div>
+          <div class="b-body">
+            <div class="b-row-top">
+              <span class="b-tag">E-Commerce · Product</span>
+              <span class="b-year">2023</span>
+            </div>
+            <h3 class="b-name"><em>Top</em> Notch</h3>
+            <div class="b-reveal">
+              <p class="b-desc">A checkout flow redesigned for clarity, not persuasion. 23% reduction in cart abandonment.</p>
+            </div>
+          </div>
+        </div>
+        <div class="b-card" onclick="alert('Open: Homelon')">
+          <div class="b-arr">↗</div>
+          <div class="b-preview prev-4">homelon preview</div>
+          <div class="b-body">
+            <div class="b-row-top">
+              <span class="b-tag">PropTech · Mobile</span>
+              <span class="b-year">2022</span>
+            </div>
+            <h3 class="b-name"><em>Homelon</em></h3>
+            <div class="b-reveal">
+              <p class="b-desc">Rental search platform for first-time renters — designing for emotional state, not just task.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ref-bar">
+      <h4>Variant B · Hover Reveal</h4>
+      <div class="ref">Clean at rest: tag + name + year. Preview shrinks on hover and description slides in below the title.</div>
+      <div class="says">Pros: Less visual noise, rewards engagement, feels crafted. Cons: Mobile fallback needed, hidden info on first scroll.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ VARIANT C ══════════════════════════════ -->
+  <div id="vc" class="variant">
+    <div class="section-head">
+      <h2>Selected <em>work</em></h2>
+      <div class="meta">04 of 12 · view all →</div>
+    </div>
+    <div class="container">
+      <div class="c-grid">
+        <div class="c-card" onclick="alert('Open: Moodle')">
+          <div class="c-top-row">
+            <span class="c-num">01.</span>
+            <span class="c-meta">EdTech · 2024</span>
+          </div>
+          <div class="c-preview prev-1 prev-glow">moodle preview</div>
+          <h3 class="c-name">Moodle <em>Redesign</em></h3>
+          <p class="c-quote">When the LMS feels like a filing cabinet, students stop showing up. Six months of research, one institutional rollout.</p>
+          <div class="c-foot">
+            <a class="c-link" href="#">Read the case study<span>→</span></a>
+            <span class="c-context">UX Research · Lead Designer</span>
+          </div>
+        </div>
+        <div class="c-card" onclick="alert('Open: Dino')">
+          <div class="c-top-row">
+            <span class="c-num">02.</span>
+            <span class="c-meta">Branding · 2023</span>
+          </div>
+          <div class="c-preview prev-2">dino preview</div>
+          <h3 class="c-name"><em>Dino</em> Studio</h3>
+          <p class="c-quote">The brief was a logo. The output was a system the team uses internally — identity as architecture, not decoration.</p>
+          <div class="c-foot">
+            <a class="c-link" href="#">Read the case study<span>→</span></a>
+            <span class="c-context">Web · Designer</span>
+          </div>
+        </div>
+        <div class="c-card" onclick="alert('Open: Top Notch')">
+          <div class="c-top-row">
+            <span class="c-num">03.</span>
+            <span class="c-meta">E-Commerce · 2023</span>
+          </div>
+          <div class="c-preview prev-3">top notch preview</div>
+          <h3 class="c-name"><em>Top</em> Notch</h3>
+          <p class="c-quote">23% reduction in cart abandonment. The work was about removing the moments people had to think — not persuading them harder.</p>
+          <div class="c-foot">
+            <a class="c-link" href="#">Read the case study<span>→</span></a>
+            <span class="c-context">Product · Designer</span>
+          </div>
+        </div>
+        <div class="c-card" onclick="alert('Open: Homelon')">
+          <div class="c-top-row">
+            <span class="c-num">04.</span>
+            <span class="c-meta">PropTech · 2022</span>
+          </div>
+          <div class="c-preview prev-4">homelon preview</div>
+          <h3 class="c-name"><em>Homelon</em></h3>
+          <p class="c-quote">First-time renters are terrified by listings written for landlords. Notes on designing for emotional state, not just task.</p>
+          <div class="c-foot">
+            <a class="c-link" href="#">Read the case study<span>→</span></a>
+            <span class="c-context">Mobile · Product Designer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ref-bar">
+      <h4>Variant C · Editorial Caption</h4>
+      <div class="ref">Description treated as a pull-quote — italic serif, vertical accent rule. Reads like a magazine teaser.</div>
+      <div class="says">Pros: Strong voice, distinctive, leans into the editorial lineage. Cons: Description must be tight & poetic (writing tax).</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ VARIANT D ══════════════════════════════ -->
+  <div id="vd" class="variant">
+    <div class="section-head">
+      <h2>Selected <em>work</em></h2>
+      <div class="meta">04 of 12 · view all →</div>
+    </div>
+    <div class="container">
+      <div class="d-grid">
+        <div class="d-card" onclick="alert('Open: Moodle')">
+          <div class="d-preview prev-1 prev-glow">moodle preview</div>
+          <div class="d-body">
+            <div>
+              <div class="d-head">
+                <span class="d-num">01.</span>
+                <span class="d-year">2024</span>
+              </div>
+              <h3 class="d-name">Moodle <em>Redesign</em></h3>
+              <p class="d-desc">Rethinking the LMS experience for institutions with 800M+ students. The product had grown by accretion — <em>my job was to edit, not add</em>. Six months of research, three prototype rounds, one institutional rollout.</p>
+              <div class="d-tags">
+                <span class="d-tag">EdTech</span>
+                <span class="d-tag">UX Research</span>
+                <span class="d-tag">Product Design</span>
+              </div>
+            </div>
+            <div class="d-footer">
+              <a class="d-cta">Read the case study <span class="d-cta-arr">↗</span></a>
+              <span class="d-stats">+800M users · 6 mo.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-card" onclick="alert('Open: Dino')">
+          <div class="d-preview prev-2">dino preview</div>
+          <div class="d-body">
+            <div>
+              <div class="d-head">
+                <span class="d-num">02.</span>
+                <span class="d-year">2023</span>
+              </div>
+              <h3 class="d-name"><em>Dino</em> Studio</h3>
+              <p class="d-desc">Brand identity and digital presence for a creative production studio. The brief was a logo; the output was a system. <em>Identity as architecture</em>, not as decoration.</p>
+              <div class="d-tags">
+                <span class="d-tag">Branding</span>
+                <span class="d-tag">Web</span>
+                <span class="d-tag">Identity</span>
+              </div>
+            </div>
+            <div class="d-footer">
+              <a class="d-cta">Read the case study <span class="d-cta-arr">↗</span></a>
+              <span class="d-stats">3 brand pillars · 12 components</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-card" onclick="alert('Open: Top Notch')">
+          <div class="d-preview prev-3">top notch preview</div>
+          <div class="d-body">
+            <div>
+              <div class="d-head">
+                <span class="d-num">03.</span>
+                <span class="d-year">2023</span>
+              </div>
+              <h3 class="d-name"><em>Top</em> Notch</h3>
+              <p class="d-desc">E-commerce checkout flow redesigned for clarity. 23% reduction in cart abandonment. The work was <em>less about persuasion</em> and more about removing the moments people had to think.</p>
+              <div class="d-tags">
+                <span class="d-tag">E-Commerce</span>
+                <span class="d-tag">Product</span>
+                <span class="d-tag">Conversion</span>
+              </div>
+            </div>
+            <div class="d-footer">
+              <a class="d-cta">Read the case study <span class="d-cta-arr">↗</span></a>
+              <span class="d-stats">−23% abandonment</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-card" onclick="alert('Open: Homelon')">
+          <div class="d-preview prev-4">homelon preview</div>
+          <div class="d-body">
+            <div>
+              <div class="d-head">
+                <span class="d-num">04.</span>
+                <span class="d-year">2022</span>
+              </div>
+              <h3 class="d-name"><em>Homelon</em></h3>
+              <p class="d-desc">Rental search platform for first-time renters — a population terrified by listings written for landlords. Notes on <em>designing for emotional state</em>, not just task.</p>
+              <div class="d-tags">
+                <span class="d-tag">PropTech</span>
+                <span class="d-tag">Mobile</span>
+                <span class="d-tag">Search UX</span>
+              </div>
+            </div>
+            <div class="d-footer">
+              <a class="d-cta">Read the case study <span class="d-cta-arr">↗</span></a>
+              <span class="d-stats">2× engagement</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ref-bar">
+      <h4>Variant D · Asymmetric Split</h4>
+      <div class="ref">Each project gets a full-width row. Preview + body alternate left/right. Tags, stats, CTA — more breathing room per project.</div>
+      <div class="says">Pros: Cinematic, more room for detail, can scale to many projects. Cons: Slower to scan, only ~3 projects above the fold on desktop.</div>
+    </div>
+  </div>
+
+  <script>
+    function showVariant(id, btn) {
+      document.querySelectorAll('.variant').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.vtab').forEach(t => t.classList.remove('active'));
+      document.getElementById('v' + id).classList.add('active');
+      btn.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  </script>
+</body>
+</html>

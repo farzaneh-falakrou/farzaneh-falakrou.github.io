@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moodle Redesign — Farzaneh Falakrou</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #ebe8e2;
+      --bg-2:      #e3dfd6;
+      --ink:       #1a1a1a;
+      --ink-2:     #2a2a2a;
+      --muted:     #5a5a5a;
+      --muted-2:   #8a8a85;
+      --line:      #d5d0c5;
+      --accent:    #ff5a36;
+      --surface:   #ffffff;
+
+      --font-serif: 'Instrument Serif', serif;
+      --font-sans:  'Inter', system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; overflow-x: clip; }
+    body { font-family: var(--font-sans); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    .img {
+      border-radius: 12px;
+      display: grid; place-items: center;
+      font-family: var(--font-serif); font-style: italic; color: var(--muted-2); font-size: 14px;
+      position: relative; overflow: hidden;
+    }
+    .img-1 { background: linear-gradient(135deg, #e3dfd6 0%, #c9c3b4 100%); }
+    .img-2 { background: linear-gradient(135deg, #2a2825 0%, #4a4540 100%); color: #888; }
+    .img-3 { background: linear-gradient(135deg, #ffd8c8 0%, #ff9e85 100%); color: #aa5a45; }
+    .img-glow::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 30%, rgba(255,90,54,0.1), transparent 60%); }
+
+    /* Header */
+    .e-top {
+      padding: 32px 56px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--line);
+    }
+    .e-back { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); transition: color 0.15s; }
+    .e-back:hover { color: var(--accent); }
+    .e-top-meta { font-family: var(--font-serif); font-style: italic; font-size: 16px; color: var(--muted); }
+
+    /* Editorial hero */
+    .e-hero {
+      padding: 100px 56px 60px;
+      max-width: 1280px; margin: 0 auto;
+      text-align: center;
+    }
+    .e-hero-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 22px; margin-bottom: 20px; }
+    .e-hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(64px, 9vw, 140px); line-height: 0.95;
+      letter-spacing: -0.035em; font-weight: 400;
+      margin-bottom: 32px;
+    }
+    .e-hero h1 em { font-style: italic; color: var(--accent); }
+    .e-hero-sub { font-family: var(--font-serif); font-size: 26px; line-height: 1.4; color: var(--ink-2); max-width: 760px; margin: 0 auto; }
+    .e-hero-byline {
+      margin-top: 56px;
+      display: flex; justify-content: center; gap: 40px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted);
+    }
+    .e-hero-byline strong { color: var(--ink); display: block; font-size: 13px; text-transform: none; letter-spacing: 0; margin-top: 4px; font-weight: 500; }
+
+    .e-cover { padding: 0 56px 60px; max-width: 1280px; margin: 0 auto; }
+    .e-cover-img { height: 540px; }
+
+    /* Top metadata strip */
+    .e-meta-strip {
+      max-width: 1280px; margin: 0 auto;
+      padding: 32px 56px;
+      display: grid; grid-template-columns: repeat(6, 1fr) auto;
+      gap: 24px; align-items: center;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .e-meta-strip-item span {
+      display: block;
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--accent); margin-bottom: 6px;
+    }
+    .e-meta-strip-item strong {
+      font-family: var(--font-serif); font-size: 17px; font-weight: 400;
+      line-height: 1.25; color: var(--ink);
+    }
+    .e-meta-strip-item strong.small {
+      font-family: var(--font-sans); font-size: 12px; line-height: 1.5;
+      color: var(--ink-2); font-weight: 400;
+    }
+    .e-meta-strip-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border: 1px solid var(--ink); border-radius: 100px;
+      font-size: 12px; transition: all 0.15s; white-space: nowrap;
+    }
+    .e-meta-strip-link:hover { background: var(--ink); color: var(--bg); }
+
+    /* Two-column body */
+    .e-body {
+      max-width: 1280px; margin: 0 auto;
+      padding: 80px 56px 120px;
+      display: grid; grid-template-columns: 200px minmax(0, 1fr);
+      gap: 80px; align-items: start;
+    }
+
+    .e-toc { position: sticky; top: 60px; align-self: start; }
+    .e-toc-label { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 18px; margin-bottom: 16px; }
+    .e-toc-item {
+      display: flex; align-items: baseline; gap: 12px;
+      padding: 10px 0; font-size: 13px; color: var(--muted);
+      border-top: 1px solid var(--line);
+      cursor: pointer; transition: color 0.15s;
+    }
+    .e-toc-item:hover { color: var(--ink); }
+    .e-toc-item.active { color: var(--accent); font-weight: 500; }
+    .e-toc-num { font-family: var(--font-serif); font-style: italic; flex-shrink: 0; min-width: 18px; }
+    .e-toc-progress { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 11px; color: var(--muted-2); font-family: var(--font-serif); font-style: italic; }
+
+    .e-article {
+      max-width: 720px; margin: 0 auto;
+      font-size: 19px; line-height: 1.7; color: var(--ink-2);
+    }
+    .e-section-mark {
+      display: flex; align-items: baseline; gap: 12px;
+      font-family: var(--font-serif); font-style: italic;
+      color: var(--accent); font-size: 18px; margin-bottom: 16px;
+    }
+    .e-section-mark::before { content: ''; flex-shrink: 0; width: 24px; height: 1px; background: var(--accent); align-self: center; }
+    .e-section-mark-num {
+      font-family: var(--font-sans); font-style: normal;
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--muted); margin-left: auto;
+    }
+    .e-article h2 { font-family: var(--font-serif); font-size: 48px; font-weight: 400; line-height: 1.05; color: var(--ink); margin-bottom: 32px; letter-spacing: -0.02em; }
+    .e-article h2 em { font-style: italic; color: var(--accent); }
+    .e-article p + p { margin-top: 24px; }
+    .e-article p.dropcap::first-letter { font-family: var(--font-serif); font-style: italic; font-size: 96px; line-height: 0.85; font-weight: 400; float: left; padding-right: 12px; padding-top: 8px; color: var(--accent); }
+    .e-article em { font-family: var(--font-serif); font-style: italic; font-size: 20px; color: var(--ink); }
+    .e-section { padding: 48px 0; scroll-margin-top: 40px; }
+    .e-section:not(:last-child) { border-bottom: 1px solid var(--line); }
+    .e-pullquote {
+      margin: 56px -80px;
+      font-family: var(--font-serif); font-size: 40px; line-height: 1.15;
+      color: var(--ink); text-align: center;
+    }
+    .e-pullquote em { font-style: italic; color: var(--accent); }
+    .e-pullquote::before { content: '"'; font-size: 72px; color: var(--accent); display: block; line-height: 0.5; margin-bottom: 16px; }
+    .e-figure { margin: 48px -40px; display: flex; flex-direction: column; gap: 12px; }
+    .e-figure .img { height: 360px; }
+    .e-figure figcaption { font-size: 13px; color: var(--muted); font-style: italic; font-family: var(--font-serif); }
+    .e-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 48px -40px 0; }
+    .e-grid-2 .img { height: 260px; }
+    .e-grid-2-cap { font-size: 13px; color: var(--muted); font-style: italic; font-family: var(--font-serif); margin: 12px -40px 0; }
+    .e-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      margin: 48px 0 24px; padding: 32px 0;
+      border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink);
+    }
+    .e-stat-num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 56px; line-height: 1; }
+    .e-stat-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-top: 8px; }
+
+    /* Footer: next case study */
+    .e-footer {
+      max-width: 1280px; margin: 0 auto;
+      padding: 80px 56px 120px;
+      border-top: 1px solid var(--line);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center;
+    }
+    .e-next-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 12px; }
+    .e-next-title { font-family: var(--font-serif); font-size: 56px; line-height: 1; margin-bottom: 16px; }
+    .e-next-title em { font-style: italic; color: var(--accent); }
+    .e-next-blurb { font-size: 14px; color: var(--muted); }
+    .e-next-img { height: 240px; cursor: pointer; transition: transform 0.2s; }
+    .e-next-img:hover { transform: translateY(-4px); }
+  </style>
+</head>
+<body>
+
+  <header class="e-top">
+    <a class="e-back" href="index.html">← Selected work</a>
+    <div class="e-top-meta">Vol. III, no. 1</div>
+  </header>
+
+  <section class="e-hero">
+    <div class="e-hero-eyebrow">— A case study</div>
+    <h1>On the quiet<br>redesign of <em>Moodle</em></h1>
+    <p class="e-hero-sub">Notes on shipping a calmer learning interface for institutions with 800M+ students — and what six months of research actually changed.</p>
+    <div class="e-hero-byline">
+      <div>By <strong>Farzaneh Falakrou</strong></div>
+      <div>Year <strong>2024</strong></div>
+      <div>Reading time <strong>~12 minutes</strong></div>
+    </div>
+  </section>
+
+  <div class="e-cover">
+    <div class="img img-1 img-glow e-cover-img">moodle redesign cover</div>
+  </div>
+
+  <div class="e-meta-strip">
+    <div class="e-meta-strip-item"><span>Role</span><strong>Lead Designer</strong></div>
+    <div class="e-meta-strip-item"><span>Team</span><strong class="small">2D · 1PM · 5E · 1R</strong></div>
+    <div class="e-meta-strip-item"><span>Duration</span><strong>6 months</strong></div>
+    <div class="e-meta-strip-item"><span>Stack</span><strong class="small">Figma · Maze<br>Notion · GitHub</strong></div>
+    <div class="e-meta-strip-item"><span>Industry</span><strong>EdTech</strong></div>
+    <div class="e-meta-strip-item"><span>Year</span><strong>2024</strong></div>
+    <a class="e-meta-strip-link" href="#">moodle.org ↗</a>
+  </div>
+
+  <div class="e-body">
+    <aside class="e-toc">
+      <div class="e-toc-label">Contents</div>
+      <div class="e-toc-item active" data-anchor="e-s1"><span class="e-toc-num">01</span><span>Context</span></div>
+      <div class="e-toc-item" data-anchor="e-s2"><span class="e-toc-num">02</span><span>The Problem</span></div>
+      <div class="e-toc-item" data-anchor="e-s3"><span class="e-toc-num">03</span><span>Research</span></div>
+      <div class="e-toc-item" data-anchor="e-s4"><span class="e-toc-num">04</span><span>Approach</span></div>
+      <div class="e-toc-item" data-anchor="e-s5"><span class="e-toc-num">05</span><span>Solution</span></div>
+      <div class="e-toc-item" data-anchor="e-s6"><span class="e-toc-num">06</span><span>Outcome</span></div>
+      <div class="e-toc-progress">Section 01 of 06</div>
+    </aside>
+
+    <article class="e-article">
+      <section class="e-section" id="e-s1">
+        <div class="e-section-mark">Context<span class="e-section-mark-num">Section 01</span></div>
+        <p class="dropcap">By the time we started, Moodle was already the most-used LMS in the world. That wasn't the problem. The problem was that <em>most of those users dreaded opening it</em> — and many had stopped showing up to class because of it.</p>
+        <p>The product had grown by accretion. Each year a new feature, a new committee, a new modal. Six versions of the same button living in three places. The team had been patching the surface for so long that no one remembered the room underneath.</p>
+      </section>
+
+      <section class="e-section" id="e-s2">
+        <div class="e-section-mark">The Problem<span class="e-section-mark-num">Section 02</span></div>
+        <h2>When the LMS feels like a <em>filing cabinet</em>, students stop showing up.</h2>
+        <p>The first round of research interviews returned the same observation, almost verbatim, from twelve different students at five different institutions: <em>"I just don't know where anything is."</em> Course pages had become storage. Discussion forums lived three clicks deep. Submitting an assignment required confidence.</p>
+        <p>We mapped the existing navigation against the actual journeys students took, and the gap was — embarrassingly — the size of the product itself.</p>
+      </section>
+
+      <section class="e-section" id="e-s3">
+        <div class="e-section-mark">Research<span class="e-section-mark-num">Section 03</span></div>
+        <h2>Six weeks of <em>listening.</em></h2>
+        <p>47 students. 12 instructors. 5 institutional admins. We sat with each one, opened Moodle, and watched.</p>
+        <figure class="e-figure">
+          <div class="img img-2">research synthesis board</div>
+          <figcaption>Fig. 1 — Synthesis board from the discovery phase, mapping observed friction points across 47 user interviews.</figcaption>
+        </figure>
+        <p>The signal was deafeningly consistent. The problem wasn't in any one place; it was the cumulative weight of a hundred small frictions, each of which had a perfectly reasonable explanation at the time it was added.</p>
+      </section>
+
+      <div class="e-pullquote">Most digital products feel<br><em>assembled</em>. The work was<br>to make this one feel<br><em>made</em>.</div>
+
+      <section class="e-section" id="e-s4">
+        <div class="e-section-mark">Approach<span class="e-section-mark-num">Section 04</span></div>
+        <h2>Editing, not adding.</h2>
+        <p>We approached the redesign as a writing problem before a design problem. The team had already collected a stack of "feature ideas" three inches deep. We threw out the stack.</p>
+        <p>Instead, we asked what could be <em>removed</em>. What could be hidden until needed. What could be combined. The first prototype had 31% fewer surfaces. The second had 44% fewer.</p>
+      </section>
+
+      <section class="e-section" id="e-s5">
+        <div class="e-section-mark">Solution<span class="e-section-mark-num">Section 05</span></div>
+        <h2>A calmer interface, by <em>subtraction.</em></h2>
+        <p>The new course landing surface puts the next action — the thing the student actually needs — at the top of the page. Everything else is one tap away, not three.</p>
+        <div class="e-grid-2">
+          <div class="img img-3">final-screen-1</div>
+          <div class="img img-1 img-glow">final-screen-2</div>
+        </div>
+        <p class="e-grid-2-cap">Fig. 2 — The redesigned course landing surface (left) and assignment flow (right).</p>
+      </section>
+
+      <section class="e-section" id="e-s6">
+        <div class="e-section-mark">Outcome<span class="e-section-mark-num">Section 06</span></div>
+        <h2>What changed.</h2>
+        <div class="e-stats">
+          <div><div class="e-stat-num">+34%</div><div class="e-stat-label">avg. session length</div></div>
+          <div><div class="e-stat-num">−22%</div><div class="e-stat-label">support tickets</div></div>
+          <div><div class="e-stat-num">47 → 62</div><div class="e-stat-label">institution NPS</div></div>
+        </div>
+        <p>The numbers are not the story — the institutions reporting that students are simply <em>showing up more</em> is. What we removed mattered more than what we added.</p>
+      </section>
+    </article>
+  </div>
+
+  <section class="e-footer">
+    <div>
+      <div class="e-next-eyebrow">Next case study</div>
+      <h2 class="e-next-title"><em>Dino</em> Studio<br>identity</h2>
+      <p class="e-next-blurb">Branding for a creative production studio that didn't want a logo. They wanted a system.</p>
+    </div>
+    <a href="case-study.html"><div class="img img-2 e-next-img">dino preview</div></a>
+  </section>
+
+  <script>
+    (function() {
+      const items = document.querySelectorAll('.e-toc-item');
+      const progress = document.querySelector('.e-toc-progress');
+      const total = items.length;
+      function update() {
+        const y = window.scrollY + window.innerHeight / 3;
+        let active = null;
+        items.forEach(item => {
+          const target = document.getElementById(item.dataset.anchor);
+          if (!target) return;
+          if (y >= target.offsetTop) active = item;
+        });
+        if (active) {
+          items.forEach(i => i.classList.remove('active'));
+          active.classList.add('active');
+          const idx = Array.from(items).indexOf(active) + 1;
+          if (progress) progress.textContent = `Section ${String(idx).padStart(2,'0')} of ${String(total).padStart(2,'0')}`;
+        }
+      }
+      window.addEventListener('scroll', update);
+      items.forEach(item => {
+        item.addEventListener('click', () => {
+          const target = document.getElementById(item.dataset.anchor);
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
