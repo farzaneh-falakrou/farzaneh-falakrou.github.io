@@ -17,11 +17,11 @@
 6. Unused legacy components (Mailchimp, RouteGuard, ThemeToggle, etc.) removed from `src/components/`
 7. MDX content rendering works end-to-end with a sample doc
 
-**Plans:** 3/4 plans executed
+**Plans:** 4/4 plans complete
 - [x] 01-01-PLAN.md — Strip legacy components, routes, deps; reduce layout/page to placeholders; build/lint clean
 - [x] 01-02-PLAN.md — Walking skeleton: tokens.css + base.css + next/font in layout.tsx + stub chrome + /styleguide with stub sections + MDX proof
 - [x] 01-03-PLAN.md — Six primitives (Eyebrow, DisplayHeading, Italic, UnderlineAccent, PulseDot, TagChip) + wire into /styleguide
-- [ ] 01-04-PLAN.md — Replace stub chrome with BrandMark mix-blend-difference + FloatingDock IntersectionObserver/scroll-hide/smooth-scroll
+- [x] 01-04-PLAN.md — Replace stub chrome with BrandMark mix-blend-difference + FloatingDock IntersectionObserver/scroll-hide/smooth-scroll
 
 ---
 
