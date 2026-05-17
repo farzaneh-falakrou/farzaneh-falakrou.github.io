@@ -37,3 +37,20 @@
 :global(section[data-darken]) h2 {
   color: var(--bg);
 }
+
+/* Hero body paragraph — matches sketch .hero-sub-text (line 121) */
+.heroBody {
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  max-width: 640px;
+  margin-top: 40px;
+}
+
+/* Tag row spacing — matches sketch .work-tags (line 206) */
+.tagRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}

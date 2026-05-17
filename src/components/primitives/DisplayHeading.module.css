@@ -1,0 +1,39 @@
+/* Base display heading: lifted from sketch .hero h1 (lines 103–109) */
+.display {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+}
+
+/* Italic/accent children: sketch .hero h1 em (line 109), .work-title em (line 200),
+   .about-title em (line 247), .contact-title em (line 303) */
+.display em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+/* Hero size: sketch .hero h1 font-size (line 105) */
+.size_hero {
+  font-size: clamp(72px, 10vw, 168px);
+}
+
+/* Work size: sketch .work-title (lines 193–199) — note: .work-name is cards, .work-title is the section head */
+.size_work {
+  font-size: clamp(48px, 6vw, 80px);
+  line-height: 1;
+}
+
+/* About size: sketch .about-title (lines 243–248) */
+.size_about {
+  font-size: clamp(48px, 6vw, 84px);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+}
+
+/* Contact size: sketch .contact-title (lines 300–305) */
+.size_contact {
+  font-size: clamp(56px, 8vw, 120px);
+  line-height: 1;
+  letter-spacing: -0.035em;
+}

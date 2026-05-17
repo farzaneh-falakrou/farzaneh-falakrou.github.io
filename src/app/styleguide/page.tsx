@@ -1,38 +1,57 @@
+import {
+  Eyebrow,
+  DisplayHeading,
+  Italic,
+  UnderlineAccent,
+  TagChip,
+} from "@/components/primitives";
 import styles from "./page.module.css";
 
 export default function StyleguidePage() {
   return (
     <main>
+      {/* ── Hero ────────────────────────────────────────────────── */}
       <section id="hero" className={styles.section}>
-        <h1>Hero placeholder</h1>
-        <p>
-          This is the hero section of the styleguide. It demonstrates the cream background, Instrument
-          Serif heading, and Inter body text. Phase 2 (HOME-01) replaces this with real hero content.
+        <Eyebrow variant="sans" withPulseDot>
+          Product designer · Available May 2026
+        </Eyebrow>
+        <DisplayHeading as="h1" size="hero">
+          I design <Italic>products</Italic> that{" "}
+          <UnderlineAccent>feel right</UnderlineAccent> — not just look it.
+        </DisplayHeading>
+        <p className={styles.heroBody}>
+          Combining systems thinking with strong aesthetic taste —{" "}
+          <Italic>the kind of design that ships.</Italic>
         </p>
       </section>
 
+      {/* ── Work ────────────────────────────────────────────────── */}
       <section id="work" className={styles.section}>
-        <h2>Work placeholder</h2>
-        <p>
-          This is the work section of the styleguide. Phase 2 (HOME-03) adds real project cards.
-          PLAN 03 wires the TagChip and DisplayHeading primitives into this section.
-        </p>
+        <Eyebrow variant="sans">Selected work · 2024–2026</Eyebrow>
+        <DisplayHeading as="h2" size="work">
+          Selected <Italic>work</Italic>
+        </DisplayHeading>
+        <div className={styles.tagRow}>
+          <TagChip>EDTECH</TagChip>
+          <TagChip>STRATEGY</TagChip>
+          <TagChip>UI/UX</TagChip>
+        </div>
       </section>
 
+      {/* ── About (dark) ────────────────────────────────────────── */}
       <section id="about" className={styles.section} data-darken>
-        <h2>About placeholder</h2>
-        <p>
-          This is the about section — rendered dark (ink background, cream text) via the data-darken
-          attribute. The brand mark does not yet invert over dark sections; PLAN 04 adds mix-blend-difference.
-        </p>
+        <Eyebrow variant="italic">About me —</Eyebrow>
+        <DisplayHeading as="h2" size="about">
+          Five years of <Italic>shipping</Italic>.
+        </DisplayHeading>
       </section>
 
+      {/* ── Contact (dark) ──────────────────────────────────────── */}
       <section id="contact" className={styles.section} data-darken>
-        <h2>Contact placeholder</h2>
-        <p>
-          This is the contact section — also dark via data-darken. Phase 2 (HOME-06) adds real contact
-          copy. Clicking the floating dock CTA jumps here via native browser anchor behavior.
-        </p>
+        <Eyebrow variant="italic">Get in touch —</Eyebrow>
+        <DisplayHeading as="h2" size="contact">
+          Let&apos;s <Italic>talk</Italic>.
+        </DisplayHeading>
       </section>
     </main>
   );

@@ -1,0 +1,22 @@
+/* Sans variant: lifted from sketch .hero-eyebrow (lines 93–96) */
+.sans {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Italic variant: lifted from sketch .about-head (lines 233–236) and .contact-eyebrow (lines 293–296) */
+.italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--accent);
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
