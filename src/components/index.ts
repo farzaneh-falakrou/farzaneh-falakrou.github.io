@@ -2,4 +2,5 @@
 export { BrandMark } from "./chrome/BrandMark";
 export { FloatingDock } from "./chrome/FloatingDock";
 
-// Primitives — populated by PLAN 03
+// Primitives
+export * from "./primitives";
