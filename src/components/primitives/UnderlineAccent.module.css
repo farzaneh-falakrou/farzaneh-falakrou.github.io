@@ -1,0 +1,7 @@
+/* Lifted verbatim from sketch .underline-accent (lines 110–115) */
+.underline {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 8px;
+  text-decoration-color: var(--accent);
+}

@@ -1,0 +1,8 @@
+/* Minimal default for standalone body-text use.
+   Matches sketch .work-desc em (line 205) and .about-text em (line 252).
+   When nested inside DisplayHeading, the DisplayHeading module's .display em
+   rule adds color: var(--accent) via descendant CSS — no extra class needed. */
+.em {
+  font-family: var(--font-serif);
+  font-style: italic;
+}
