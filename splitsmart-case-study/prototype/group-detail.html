@@ -72,76 +72,78 @@
             <i data-lucide="arrow-left" class="h-4 w-4" aria-hidden="true"></i>
           </a>
           <div>
-            <h1 class="text-2xl font-extrabold tracking-tight">Paris Trip</h1>
+            <h1 class="text-[26px] font-extrabold tracking-tight leading-tight">Paris Trip</h1>
             <p class="mt-0.5 text-[13px] text-muted">Travel · 3 members · created by you · 2 days ago</p>
           </div>
         </div>
         <div class="flex flex-wrap items-center gap-2">
-          <a href="settle-up.html" class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-line bg-white px-3.5 text-[12px] font-semibold text-ink">
-            <i data-lucide="scale" class="h-3.5 w-3.5 text-muted" aria-hidden="true"></i> Settle Up
+          <a href="settle-up.html" class="inline-flex h-9 items-center gap-1.5 rounded-lg bg-violet px-3.5 text-[12px] font-semibold text-white shadow-lift">
+            <i data-lucide="scale" class="h-3.5 w-3.5" aria-hidden="true"></i> Settle Up
           </a>
-          <a href="add-expense.html" class="inline-flex h-9 items-center gap-1.5 rounded-lg bg-violet px-3.5 text-[12px] font-semibold text-white shadow-lift">
-            <i data-lucide="plus" class="h-3.5 w-3.5" aria-hidden="true"></i> Add Expense
+          <a href="add-expense.html" class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-line bg-white px-3.5 text-[12px] font-semibold text-ink">
+            <i data-lucide="plus" class="h-3.5 w-3.5 text-muted" aria-hidden="true"></i> Add Expense
           </a>
         </div>
       </header>
 
       <!-- STATS -->
       <section class="mb-4 grid grid-cols-3 gap-4 max-md:grid-cols-1">
-        <article id="budget-card" class="grid grid-cols-[44px_1fr] items-center gap-3 rounded-2xl border border-line bg-white p-4 shadow-soft">
-          <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-violet/10 text-violet"><i data-lucide="wallet" class="h-5 w-5"></i></span>
-          <div class="min-w-0">
-            <small class="block text-[11px] text-muted">Your budget</small>
-            <div data-budget-view class="flex items-center gap-1.5">
-              <p class="text-[20px] font-extrabold tabular-nums leading-tight"><span class="sr-only">Your budget: </span><span data-budget-display>£500.00</span></p>
-              <button type="button" data-budget-edit aria-label="Edit your budget" class="grid h-7 w-7 place-items-center rounded-md text-muted transition hover:bg-shell hover:text-violet">
-                <i data-lucide="pencil" class="h-3.5 w-3.5" aria-hidden="true"></i>
-              </button>
-            </div>
-            <form data-budget-form class="hidden items-center gap-1.5" autocomplete="off" aria-label="Edit your budget">
-              <span class="inline-flex items-center rounded-md border border-line bg-white px-2 focus-within:border-violet">
-                <span aria-hidden="true" class="text-[13px] font-semibold text-muted">£</span>
-                <input data-budget-input type="number" inputmode="decimal" min="0" step="0.01" required class="w-20 border-0 bg-transparent py-1 text-[15px] font-extrabold tabular-nums outline-none" />
-              </span>
-              <button type="submit" class="inline-flex h-7 items-center rounded-md bg-violet px-2 text-[11px] font-semibold text-white">Save</button>
-              <button type="button" data-budget-cancel class="inline-flex h-7 items-center rounded-md border border-line bg-white px-2 text-[11px] font-semibold text-muted">Cancel</button>
-            </form>
-          </div>
-        </article>
         <article class="grid grid-cols-[44px_1fr] items-center gap-3 rounded-2xl border border-line bg-white p-4 shadow-soft">
-          <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-amber/10 text-amber"><i data-lucide="receipt" class="h-5 w-5"></i></span>
+          <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-violet/10 text-violet"><i data-lucide="receipt" class="h-5 w-5"></i></span>
           <span>
-            <small class="block text-[11px] text-muted">Your spent</small>
-            <p class="block text-[20px] font-extrabold tabular-nums"><span class="sr-only">Your spent: </span>£350.00</p>
+            <small class="block text-[11px] text-muted">You spent</small>
+            <p class="block text-[20px] font-extrabold tabular-nums"><span class="sr-only">You spent: </span>£350.00</p>
           </span>
         </article>
-        <article class="grid grid-cols-[44px_1fr] items-center gap-3 rounded-2xl bg-violet p-4 text-white shadow-lift">
-          <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-white/15"><i data-lucide="piggy-bank" class="h-5 w-5"></i></span>
+        <article class="grid grid-cols-[44px_1fr] items-center gap-3 rounded-2xl border border-line bg-white p-4 shadow-soft">
+          <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-mint/15 text-mint"><i data-lucide="arrow-up" class="h-5 w-5"></i></span>
           <span>
-            <small class="block text-[11px] text-white/85">Your remaining</small>
-            <p class="block text-[20px] font-extrabold tabular-nums"><span class="sr-only">Your remaining: </span><span data-budget-remaining>£150.00</span></p>
+            <small class="block text-[11px] text-muted">Owed to you</small>
+            <p class="block text-[20px] font-extrabold tabular-nums text-mint"><span class="sr-only">Owed to you: </span>£45.00</p>
+          </span>
+        </article>
+        <article class="grid grid-cols-[44px_1fr] items-center gap-3 rounded-2xl border border-line bg-white p-4 shadow-soft">
+          <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-coral/15 text-coral"><i data-lucide="arrow-down" class="h-5 w-5"></i></span>
+          <span>
+            <small class="block text-[11px] text-muted">You owe</small>
+            <p class="block text-[20px] font-extrabold tabular-nums text-coral"><span class="sr-only">You owe: </span>£20.00</p>
           </span>
         </article>
       </section>
 
-      <!-- BUDGET BAR + MEMBERS -->
+      <!-- RECENT ACTIVITY + MEMBERS -->
       <section class="mb-4 grid grid-cols-[1.4fr_1fr] gap-4 max-lg:grid-cols-1">
         <article class="rounded-2xl border border-line bg-white p-5 shadow-soft">
           <div class="mb-3 flex items-center justify-between gap-3">
-            <h2 class="text-[14px] font-bold">Expense vs Budget</h2>
-            <span data-budget-pct class="rounded-full bg-violet/10 px-2.5 py-1 text-[11px] font-bold text-violet">70% used</span>
+            <h2 class="text-[14px] font-bold">Recent activity</h2>
+            <button type="button" aria-label="View all expenses in Paris Trip" class="text-[11px] font-semibold text-violet">View all</button>
           </div>
-          <div class="mb-2 flex justify-between text-[12px] text-muted">
-            <span>Spent</span><span>Budget</span>
+          <div class="grid gap-2">
+            <div class="flex items-center gap-3 rounded-lg border border-line p-3">
+              <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-lg bg-amber/10 text-amber"><i data-lucide="utensils" class="h-4 w-4"></i></span>
+              <span class="min-w-0 flex-1">
+                <b class="block text-[12.5px]">Dinner at Le Meurice</b>
+                <small class="block text-[11px] text-muted">Alex paid · 22 May</small>
+              </span>
+              <b class="text-[12.5px] tabular-nums">£35.00</b>
+            </div>
+            <div class="flex items-center gap-3 rounded-lg border border-line p-3">
+              <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-lg bg-amber/10 text-amber"><i data-lucide="wine" class="h-4 w-4"></i></span>
+              <span class="min-w-0 flex-1">
+                <b class="block text-[12.5px]">Group dinner — day 2</b>
+                <small class="block text-[11px] text-muted">Mina paid · 21 May</small>
+              </span>
+              <b class="text-[12.5px] tabular-nums">£80.00</b>
+            </div>
+            <div class="flex items-center gap-3 rounded-lg border border-line p-3">
+              <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-lg bg-coral/10 text-coral"><i data-lucide="ticket" class="h-4 w-4"></i></span>
+              <span class="min-w-0 flex-1">
+                <b class="block text-[12.5px]">Louvre tickets</b>
+                <small class="block text-[11px] text-muted">Luigi paid · 19 May</small>
+              </span>
+              <b class="text-[12.5px] tabular-nums">£55.00</b>
+            </div>
           </div>
-          <span data-budget-bar-track class="block h-2.5 overflow-hidden rounded-full bg-slate-100" role="img" aria-label="Your spent £350 of £500 — 70% of your budget used">
-            <i data-budget-bar class="block h-full rounded-full bg-violet" style="width:70%" aria-hidden="true"></i>
-          </span>
-          <div class="mt-2 flex justify-between text-[13px]">
-            <b class="text-ink tabular-nums">£350.00</b>
-            <b data-budget-summary class="text-ink tabular-nums">£500.00</b>
-          </div>
-          <p data-budget-headroom class="mt-3 text-[11px] text-muted">You're <b class="text-ink tabular-nums">£150.00</b> under your budget — comfortable headroom for the rest of the trip.</p>
         </article>
 
         <article class="rounded-2xl border border-line bg-white p-5 shadow-soft">
@@ -153,28 +155,16 @@
           </div>
           <div class="grid grid-cols-3 gap-3">
             <div class="grid place-items-center gap-1.5 text-center">
-              <span aria-hidden="true" class="relative grid h-12 w-12 place-items-center rounded-full border-2 border-white bg-violet text-[16px] font-bold text-white shadow">
-                A
-                <i class="absolute -bottom-0.5 -right-0.5 grid h-3.5 w-3.5 place-items-center rounded-full border-2 border-white bg-mint"></i>
-              </span>
+              <span aria-hidden="true" class="grid h-12 w-12 place-items-center rounded-full border-2 border-white bg-violet text-[16px] font-bold text-white shadow">A</span>
               <b class="text-[12px]">Alex <span class="font-normal text-muted">(you)</span></b>
-              <small class="text-[10px] font-semibold text-mint tabular-nums">+ £25.00</small>
             </div>
             <div class="grid place-items-center gap-1.5 text-center">
-              <span aria-hidden="true" class="relative grid h-12 w-12 place-items-center rounded-full border-2 border-white bg-coral text-[16px] font-bold text-white shadow">
-                L
-                <i class="absolute -bottom-0.5 -right-0.5 grid h-3.5 w-3.5 place-items-center rounded-full border-2 border-white bg-mint"></i>
-              </span>
+              <span aria-hidden="true" class="grid h-12 w-12 place-items-center rounded-full border-2 border-white bg-ocean text-[16px] font-bold text-white shadow">L</span>
               <b class="text-[12px]">Luigi</b>
-              <small class="text-[10px] font-semibold text-mint tabular-nums">+ £85.00</small>
             </div>
             <div class="grid place-items-center gap-1.5 text-center">
-              <span aria-hidden="true" class="relative grid h-12 w-12 place-items-center rounded-full border-2 border-white bg-mint text-[16px] font-bold text-white shadow">
-                M
-                <i class="absolute -bottom-0.5 -right-0.5 grid h-3.5 w-3.5 place-items-center rounded-full border-2 border-white bg-coral"></i>
-              </span>
+              <span aria-hidden="true" class="grid h-12 w-12 place-items-center rounded-full border-2 border-white bg-mint text-[16px] font-bold text-white shadow">M</span>
               <b class="text-[12px]">Mina</b>
-              <small class="text-[10px] font-semibold text-coral tabular-nums">− £110.00</small>
             </div>
           </div>
         </article>
@@ -209,7 +199,7 @@
                     <b class="block">Dinner at Le Meurice</b>
                     <small class="block text-[11px] text-muted">Tasting menu</small>
                   </td>
-                  <td class="px-3 py-3"><span class="rounded-full bg-amber/10 px-2 py-0.5 text-[10px] font-bold text-amber">Food</span></td>
+                  <td class="px-3 py-3"><span class="rounded-full bg-shell px-2 py-0.5 text-[10px] font-semibold text-ink">Food</span></td>
                   <td class="px-3 py-3 text-muted">22 May 2026</td>
                   <td class="px-3 py-3">
                     <span class="flex items-center gap-2">
@@ -231,7 +221,7 @@
                     <b class="block">Group dinner — day 2</b>
                     <small class="block text-[11px] text-muted">Bistro + Eiffel ascent</small>
                   </td>
-                  <td class="px-3 py-3"><span class="rounded-full bg-amber/10 px-2 py-0.5 text-[10px] font-bold text-amber">Food</span></td>
+                  <td class="px-3 py-3"><span class="rounded-full bg-shell px-2 py-0.5 text-[10px] font-semibold text-ink">Food</span></td>
                   <td class="px-3 py-3 text-muted">21 May 2026</td>
                   <td class="px-3 py-3">
                     <span class="flex items-center gap-2">
@@ -253,11 +243,11 @@
                     <b class="block">Louvre tickets</b>
                     <small class="block text-[11px] text-muted">Skip-the-line × 3</small>
                   </td>
-                  <td class="px-3 py-3"><span class="rounded-full bg-coral/10 px-2 py-0.5 text-[10px] font-bold text-coral">Activity</span></td>
+                  <td class="px-3 py-3"><span class="rounded-full bg-shell px-2 py-0.5 text-[10px] font-semibold text-ink">Activity</span></td>
                   <td class="px-3 py-3 text-muted">19 May 2026</td>
                   <td class="px-3 py-3">
                     <span class="flex items-center gap-2">
-                      <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full bg-coral text-[9px] font-bold text-white">L</span>
+                      <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full bg-ocean text-[9px] font-bold text-white">L</span>
                       Luigi
                     </span>
                   </td>
@@ -275,11 +265,11 @@
                     <b class="block">Metro passes</b>
                     <small class="block text-[11px] text-muted">3-day pass × 3</small>
                   </td>
-                  <td class="px-3 py-3"><span class="rounded-full bg-violet/10 px-2 py-0.5 text-[10px] font-bold text-violet">Transport</span></td>
+                  <td class="px-3 py-3"><span class="rounded-full bg-shell px-2 py-0.5 text-[10px] font-semibold text-ink">Transport</span></td>
                   <td class="px-3 py-3 text-muted">18 May 2026</td>
                   <td class="px-3 py-3">
                     <span class="flex items-center gap-2">
-                      <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full bg-coral text-[9px] font-bold text-white">L</span>
+                      <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full bg-ocean text-[9px] font-bold text-white">L</span>
                       Luigi
                     </span>
                   </td>
@@ -297,7 +287,7 @@
                     <b class="block">Hotel — 3 nights</b>
                     <small class="block text-[11px] text-muted">Hôtel du Nord</small>
                   </td>
-                  <td class="px-3 py-3"><span class="rounded-full bg-ocean/10 px-2 py-0.5 text-[10px] font-bold text-ocean">Accommodation</span></td>
+                  <td class="px-3 py-3"><span class="rounded-full bg-shell px-2 py-0.5 text-[10px] font-semibold text-ink">Accommodation</span></td>
                   <td class="px-3 py-3 text-muted">18 May 2026</td>
                   <td class="px-3 py-3">
                     <span class="flex items-center gap-2">
@@ -493,66 +483,6 @@
         lucide.createIcons();
       });
     });
-
-    (function () {
-      const card = document.getElementById('budget-card');
-      if (!card) return;
-      const SPENT = 350;
-      const fmt = n => '£' + n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      const view = card.querySelector('[data-budget-view]');
-      const form = card.querySelector('[data-budget-form]');
-      const display = card.querySelector('[data-budget-display]');
-      const editBtn = card.querySelector('[data-budget-edit]');
-      const cancelBtn = card.querySelector('[data-budget-cancel]');
-      const input = card.querySelector('[data-budget-input]');
-      const remainingEl = document.querySelector('[data-budget-remaining]');
-      const pctEl = document.querySelector('[data-budget-pct]');
-      const barEl = document.querySelector('[data-budget-bar]');
-      const barTrack = document.querySelector('[data-budget-bar-track]');
-      const summaryEl = document.querySelector('[data-budget-summary]');
-      const headroomEl = document.querySelector('[data-budget-headroom]');
-      let budget = parseFloat((display.textContent || '').replace(/[^0-9.]/g, '')) || 0;
-
-      const openEdit = () => {
-        input.value = budget.toFixed(2);
-        view.classList.add('hidden');
-        form.classList.remove('hidden');
-        form.classList.add('flex');
-        input.focus();
-        input.select();
-      };
-      const closeEdit = () => {
-        form.classList.add('hidden');
-        form.classList.remove('flex');
-        view.classList.remove('hidden');
-        editBtn.focus();
-      };
-      const apply = () => {
-        const val = parseFloat(input.value);
-        if (!Number.isFinite(val) || val < 0) return;
-        budget = val;
-        display.textContent = fmt(budget);
-        const remaining = budget - SPENT;
-        const pct = budget > 0 ? Math.min(100, Math.round((SPENT / budget) * 100)) : 0;
-        if (remainingEl) remainingEl.textContent = fmt(remaining);
-        if (pctEl) pctEl.textContent = pct + '% used';
-        if (barEl) barEl.style.width = pct + '%';
-        if (barTrack) barTrack.setAttribute('aria-label', `Spent ${fmt(SPENT)} of ${fmt(budget)} — ${pct}% of budget used`);
-        if (summaryEl) summaryEl.textContent = fmt(budget);
-        if (headroomEl) {
-          const absDiff = fmt(Math.abs(remaining));
-          headroomEl.innerHTML = remaining >= 0
-            ? `You're <b class="text-ink tabular-nums">${absDiff}</b> under budget — comfortable headroom for the rest of the trip.`
-            : `You're <b class="text-ink tabular-nums">${absDiff}</b> over budget — review upcoming expenses.`;
-        }
-        closeEdit();
-      };
-
-      editBtn.addEventListener('click', openEdit);
-      cancelBtn.addEventListener('click', closeEdit);
-      form.addEventListener('submit', e => { e.preventDefault(); apply(); });
-      input.addEventListener('keydown', e => { if (e.key === 'Escape') { e.preventDefault(); closeEdit(); } });
-    })();
   </script>
 </body>
 </html>

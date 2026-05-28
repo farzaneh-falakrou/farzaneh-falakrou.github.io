@@ -64,7 +64,7 @@
       <!-- HEADER -->
       <header class="mb-4 flex items-start justify-between gap-4 max-md:flex-col">
         <div>
-          <h1 class="text-2xl font-extrabold tracking-tight">Groups</h1>
+          <h1 class="text-[26px] font-extrabold tracking-tight leading-tight">Groups</h1>
           <p class="mt-0.5 text-[13px] text-muted">3 active groups</p>
         </div>
         <div class="flex flex-wrap items-center gap-2">
@@ -80,14 +80,7 @@
       </header>
 
       <!-- STATS STRIP -->
-      <section class="mb-5 grid grid-cols-4 gap-4 max-xl:grid-cols-2 max-md:grid-cols-1">
-        <article class="grid grid-cols-[44px_1fr] items-center gap-3 rounded-2xl border border-line bg-white p-4 shadow-soft">
-          <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-violet/10 text-violet"><i data-lucide="wallet" class="h-5 w-5"></i></span>
-          <span>
-            <small class="block text-[11px] text-muted">Your total budget</small>
-            <p class="block text-[20px] font-extrabold tabular-nums"><span class="sr-only">Your total budget: </span>£750.00</p>
-          </span>
-        </article>
+      <section class="mb-5 grid grid-cols-3 gap-4 max-xl:grid-cols-2 max-md:grid-cols-1">
         <article class="grid grid-cols-[44px_1fr] items-center gap-3 rounded-2xl border border-line bg-white p-4 shadow-soft">
           <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-violet/10 text-violet"><i data-lucide="circle-dollar-sign" class="h-5 w-5"></i></span>
           <span>
@@ -123,30 +116,29 @@
         </a>
 
         <!-- Paris Trip -->
-        <a href="group-detail.html" class="relative flex flex-col gap-4 overflow-hidden rounded-2xl border border-line bg-white p-4 shadow-soft transition hover:shadow-lg">
+        <a href="group-detail.html" class="relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-line bg-white p-4 shadow-soft transition hover:shadow-lg">
           <div class="flex items-start gap-3">
-            <span aria-hidden="true" class="grid h-14 w-14 shrink-0 place-items-center rounded-lg bg-cyan/15 text-cyan"><i data-lucide="plane" class="h-6 w-6"></i></span>
+            <span aria-hidden="true" class="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-cyan/15 text-cyan"><i data-lucide="plane" class="h-6 w-6"></i></span>
             <div class="min-w-0 flex-1">
               <b class="block text-[14px]">Paris Trip</b>
-              <small class="mt-1 block text-[11px] text-muted">2 days ago</small>
+              <small class="mt-1 block text-[11px] text-muted">2 days ago · 3 members</small>
             </div>
             <button type="button" aria-label="Group options for Paris Trip" class="grid h-7 w-7 shrink-0 place-items-center rounded-md border border-line text-muted hover:bg-slate-50">
               <i data-lucide="more-horizontal" class="h-4 w-4" aria-hidden="true"></i>
             </button>
           </div>
-          <div>
-            <div class="mb-1.5 flex justify-between text-[11px] font-semibold text-muted">
-              <span>Budget used</span><span>70%</span>
-            </div>
-            <span class="block h-1.5 overflow-hidden rounded-full bg-slate-200" role="img" aria-label="70% of £500 per-person budget used — £350 of £500">
-              <i class="block h-full rounded-full bg-violet" style="width:70%" aria-hidden="true"></i>
-            </span>
-            <p class="mt-2 flex justify-between text-[11px]"><b class="text-ink tabular-nums">£350.00</b><span class="text-muted tabular-nums">of £500.00 per person</span></p>
+          <div class="rounded-xl bg-shell px-3.5 py-2.5">
+            <small class="block text-[10px] font-semibold uppercase tracking-wide text-muted">You spent</small>
+            <b class="block text-[22px] font-extrabold tabular-nums leading-tight"><span class="sr-only">You spent: </span>£350.00</b>
           </div>
-          <div class="flex items-center justify-between">
+          <div class="flex flex-wrap items-center gap-2 text-[11px]">
+            <span class="inline-flex items-center gap-1 rounded-full bg-mint/10 px-2 py-1 font-semibold text-mint"><span aria-hidden="true" class="inline-block h-1.5 w-1.5 rounded-full bg-mint"></span> £45 owed to you</span>
+            <span class="inline-flex items-center gap-1 rounded-full bg-coral/10 px-2 py-1 font-semibold text-coral"><span aria-hidden="true" class="inline-block h-1.5 w-1.5 rounded-full bg-coral"></span> £20 you owe</span>
+          </div>
+          <div class="flex items-center justify-between pt-1">
             <span class="flex avatar-stack" aria-label="3 members">
               <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full border-2 border-white bg-violet text-[8px] font-bold text-white">A</span>
-              <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full border-2 border-white bg-coral text-[8px] font-bold text-white">L</span>
+              <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full border-2 border-white bg-ocean text-[8px] font-bold text-white">L</span>
               <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full border-2 border-white bg-mint text-[8px] font-bold text-white">M</span>
             </span>
             <small class="text-[11px] font-semibold text-muted">3 members</small>
@@ -154,27 +146,25 @@
         </a>
 
         <!-- Home Bills -->
-        <a href="group-detail.html" class="relative flex flex-col gap-4 overflow-hidden rounded-2xl border border-line bg-white p-4 shadow-soft transition hover:shadow-lg">
+        <a href="group-detail.html" class="relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-line bg-white p-4 shadow-soft transition hover:shadow-lg">
           <div class="flex items-start gap-3">
-            <span aria-hidden="true" class="grid h-14 w-14 shrink-0 place-items-center rounded-lg bg-violet/15 text-violet"><i data-lucide="home" class="h-6 w-6"></i></span>
+            <span aria-hidden="true" class="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-violet/15 text-violet"><i data-lucide="home" class="h-6 w-6"></i></span>
             <div class="min-w-0 flex-1">
               <b class="block text-[14px]">Home Bills</b>
-              <small class="mt-1 block text-[11px] text-muted">1 week ago</small>
+              <small class="mt-1 block text-[11px] text-muted">1 week ago · 2 members</small>
             </div>
             <button type="button" aria-label="Group options for Home Bills" class="grid h-7 w-7 shrink-0 place-items-center rounded-md border border-line text-muted hover:bg-slate-50">
               <i data-lucide="more-horizontal" class="h-4 w-4" aria-hidden="true"></i>
             </button>
           </div>
-          <div>
-            <div class="mb-1.5 flex justify-between text-[11px] font-semibold text-muted">
-              <span>Budget used</span><span class="text-coral">96%</span>
-            </div>
-            <span class="block h-1.5 overflow-hidden rounded-full bg-slate-200" role="img" aria-label="96% of £150 per-person budget used — near limit">
-              <i class="block h-full rounded-full bg-coral" style="width:96%" aria-hidden="true"></i>
-            </span>
-            <p class="mt-2 flex justify-between text-[11px]"><b class="text-coral tabular-nums">£144.00</b><span class="text-muted tabular-nums">of £150.00 per person</span></p>
+          <div class="rounded-xl bg-shell px-3.5 py-2.5">
+            <small class="block text-[10px] font-semibold uppercase tracking-wide text-muted">You spent</small>
+            <b class="block text-[22px] font-extrabold tabular-nums leading-tight"><span class="sr-only">You spent: </span>£144.00</b>
           </div>
-          <div class="flex items-center justify-between">
+          <div class="flex flex-wrap items-center gap-2 text-[11px]">
+            <span class="inline-flex items-center gap-1 rounded-full bg-shell px-2 py-1 font-semibold text-muted"><i data-lucide="check" class="h-3 w-3" aria-hidden="true"></i> All settled</span>
+          </div>
+          <div class="flex items-center justify-between pt-1">
             <span class="flex avatar-stack" aria-label="2 members">
               <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full border-2 border-white bg-violet text-[8px] font-bold text-white">A</span>
               <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full border-2 border-white bg-ocean text-[8px] font-bold text-white">F</span>
@@ -184,27 +174,25 @@
         </a>
 
         <!-- Work Lunch -->
-        <a href="group-detail.html" class="relative flex flex-col gap-4 overflow-hidden rounded-2xl border border-line bg-white p-4 shadow-soft transition hover:shadow-lg">
+        <a href="group-detail.html" class="relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-line bg-white p-4 shadow-soft transition hover:shadow-lg">
           <div class="flex items-start gap-3">
-            <span aria-hidden="true" class="grid h-14 w-14 shrink-0 place-items-center rounded-lg bg-amber/15 text-amber"><i data-lucide="utensils" class="h-6 w-6"></i></span>
+            <span aria-hidden="true" class="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-amber/15 text-amber"><i data-lucide="utensils" class="h-6 w-6"></i></span>
             <div class="min-w-0 flex-1">
               <b class="block text-[14px]">Work Lunch</b>
-              <small class="mt-1 block text-[11px] text-muted">3 days ago</small>
+              <small class="mt-1 block text-[11px] text-muted">3 days ago · 2 members</small>
             </div>
             <button type="button" aria-label="Group options for Work Lunch" class="grid h-7 w-7 shrink-0 place-items-center rounded-md border border-line text-muted hover:bg-slate-50">
               <i data-lucide="more-horizontal" class="h-4 w-4" aria-hidden="true"></i>
             </button>
           </div>
-          <div>
-            <div class="mb-1.5 flex justify-between text-[11px] font-semibold text-muted">
-              <span>Budget used</span><span>30%</span>
-            </div>
-            <span class="block h-1.5 overflow-hidden rounded-full bg-slate-200" role="img" aria-label="30% of £100 per-person budget used">
-              <i class="block h-full rounded-full bg-violet" style="width:30%" aria-hidden="true"></i>
-            </span>
-            <p class="mt-2 flex justify-between text-[11px]"><b class="text-ink tabular-nums">£30.00</b><span class="text-muted tabular-nums">of £100.00 per person</span></p>
+          <div class="rounded-xl bg-shell px-3.5 py-2.5">
+            <small class="block text-[10px] font-semibold uppercase tracking-wide text-muted">You spent</small>
+            <b class="block text-[22px] font-extrabold tabular-nums leading-tight"><span class="sr-only">You spent: </span>£30.00</b>
           </div>
-          <div class="flex items-center justify-between">
+          <div class="flex flex-wrap items-center gap-2 text-[11px]">
+            <span class="inline-flex items-center gap-1 rounded-full bg-coral/10 px-2 py-1 font-semibold text-coral"><span aria-hidden="true" class="inline-block h-1.5 w-1.5 rounded-full bg-coral"></span> £15 you owe</span>
+          </div>
+          <div class="flex items-center justify-between pt-1">
             <span class="flex avatar-stack" aria-label="2 members">
               <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full border-2 border-white bg-violet text-[8px] font-bold text-white">A</span>
               <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full border-2 border-white bg-mint text-[8px] font-bold text-white">M</span>
@@ -220,7 +208,7 @@
           <h2 class="text-[14px] font-bold">Recent activity across groups</h2>
           <button type="button" aria-label="View all activity across groups" class="text-[11px] font-semibold text-violet">View all activity</button>
         </div>
-        <p class="-mt-2 mb-3 text-[11px] text-muted">Your share of each expense.</p>
+        <p class="-mt-2 mb-3 text-[11px] text-muted">You spent of each expense.</p>
         <div class="grid grid-cols-4 gap-3 max-xl:grid-cols-2 max-md:grid-cols-1">
           <div class="flex items-center gap-3 rounded-lg border border-line p-3">
             <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-lg bg-amber/10 text-amber"><i data-lucide="coffee" class="h-4 w-4"></i></span>

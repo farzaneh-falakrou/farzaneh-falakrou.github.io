@@ -65,19 +65,19 @@
           <i data-lucide="arrow-left" class="h-4 w-4" aria-hidden="true"></i>
         </a>
         <div>
-          <h1 class="text-2xl font-extrabold tracking-tight">Settle Up</h1>
+          <h1 class="text-[26px] font-extrabold tracking-tight leading-tight">Settle Up</h1>
           <p class="mt-0.5 text-[13px] text-muted">Simple payment summary</p>
         </div>
       </header>
 
-      <div class="mx-auto grid max-w-lg gap-3">
+      <div class="mx-auto grid max-w-2xl gap-3">
         <!-- net banner -->
         <div class="rounded-2xl border border-line bg-white p-5 shadow-soft">
-          <div class="grid grid-cols-[44px_1fr] items-center gap-3 rounded-xl bg-gradient-to-br from-violet/10 to-violet/5 p-4">
-            <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-violet text-white shadow-lift"><i data-lucide="scale" class="h-5 w-5"></i></span>
+          <div class="grid grid-cols-[44px_1fr] items-center gap-3 rounded-xl bg-shell p-4">
+            <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-white text-violet shadow-soft border border-line"><i data-lucide="scale" class="h-5 w-5"></i></span>
             <span>
               <small class="block text-[11px] font-semibold text-muted">Net balance</small>
-              <p class="text-[28px] font-extrabold leading-none text-mint tabular-nums"><span class="sr-only">Net balance: </span>+ £25.00</p>
+              <p class="text-[28px] font-extrabold leading-none text-mint tabular-nums"><span class="sr-only">Net balance: </span>+£10.00</p>
               <span class="mt-1 block text-[11px] text-muted">You're ahead overall across all groups.</span>
             </span>
           </div>
@@ -91,7 +91,7 @@
               <span aria-hidden="true" class="grid h-7 w-7 place-items-center rounded-full bg-mint/10 text-mint"><i data-lucide="arrow-down-left" class="h-4 w-4"></i></span>
               <h2 class="text-[13px] font-bold">You'll receive</h2>
             </div>
-            <b class="text-[14px] text-mint tabular-nums">+ £45.00</b>
+            <b class="text-[14px] text-mint tabular-nums">£30.00</b>
           </div>
           <div class="flex items-center justify-between p-4">
             <span class="flex items-center gap-2.5">
@@ -101,14 +101,14 @@
                 <small class="block text-[11px] text-muted">across Paris Trip · Work Lunch</small>
               </span>
             </span>
-            <b class="text-[13px] text-mint tabular-nums">£45.00</b>
+            <b class="text-[13px] text-mint tabular-nums">£30.00</b>
           </div>
-          <div class="flex gap-2 border-t border-line p-3">
-            <button type="button" aria-label="Request payment of £45.00 from Mina" class="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg bg-violet text-[12px] font-bold text-white shadow-lift">
-              <i data-lucide="send" class="h-3.5 w-3.5" aria-hidden="true"></i> Request payment
+          <div class="flex items-center justify-between gap-2 border-t border-line p-3">
+            <button type="button" aria-label="Request payment of £30.00 from Mina" class="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg bg-violet text-[12px] font-bold text-white shadow-lift">
+              <i data-lucide="send" class="h-3.5 w-3.5" aria-hidden="true"></i> Request £30.00
             </button>
-            <button type="button" aria-label="Mark Mina's payment as received" class="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-line bg-white px-3 text-[12px] font-semibold text-violet">
-              Mark as paid
+            <button type="button" aria-label="Mark £30.00 received from Mina" class="text-[12px] font-semibold text-violet underline-offset-2 hover:underline px-2">
+              Mark as received
             </button>
           </div>
         </article>
@@ -120,11 +120,11 @@
               <span aria-hidden="true" class="grid h-7 w-7 place-items-center rounded-full bg-coral/10 text-coral"><i data-lucide="arrow-up-right" class="h-4 w-4"></i></span>
               <h2 class="text-[13px] font-bold">You owe</h2>
             </div>
-            <b class="text-[14px] text-coral tabular-nums">− £20.00</b>
+            <b class="text-[14px] text-coral tabular-nums">£20.00</b>
           </div>
           <div class="flex items-center justify-between p-4">
             <span class="flex items-center gap-2.5">
-              <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-full border border-white bg-coral text-[12px] font-bold text-white">L</span>
+              <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-full border border-white bg-ocean text-[12px] font-bold text-white">L</span>
               <span>
                 <b class="block text-[12.5px]">Luigi</b>
                 <small class="block text-[11px] text-muted">from Paris Trip</small>
@@ -132,11 +132,11 @@
             </span>
             <b class="text-[13px] text-coral tabular-nums">£20.00</b>
           </div>
-          <div class="flex gap-2 border-t border-line p-3">
+          <div class="flex items-center justify-between gap-2 border-t border-line p-3">
             <button type="button" aria-label="Settle up £20.00 with Luigi" class="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg bg-coral text-[12px] font-bold text-white shadow-lift">
               <i data-lucide="credit-card" class="h-3.5 w-3.5" aria-hidden="true"></i> Settle up £20.00
             </button>
-            <button type="button" aria-label="Mark Luigi's payment as paid" class="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-line bg-white px-3 text-[12px] font-semibold text-violet">
+            <button type="button" aria-label="Mark £20.00 paid to Luigi" class="text-[12px] font-semibold text-violet underline-offset-2 hover:underline px-2">
               Mark as paid
             </button>
           </div>

@@ -64,7 +64,7 @@
       <!-- HEADER -->
       <header class="mb-4 flex items-start justify-between gap-4 max-md:flex-col">
         <div>
-          <h1 class="text-2xl font-extrabold tracking-tight">Dashboard</h1>
+          <h1 class="text-[26px] font-extrabold tracking-tight leading-tight">Dashboard</h1>
           <p class="mt-0.5 text-[13px] text-muted">Good morning, Alex — here's your snapshot for May 2026.</p>
         </div>
         <div class="flex flex-wrap items-center gap-2">
@@ -133,10 +133,10 @@
         </div>
       </section>
 
-      <!-- CARD GRID (6 items, pairs cleanly at 2-col fallback) -->
-      <section class="grid grid-cols-[1.3fr_1fr_0.9fr] gap-4 max-2xl:grid-cols-2 max-xl:grid-cols-1">
+      <!-- CARD GRID — spending full-width then 2-col rows -->
+      <section class="grid grid-cols-2 gap-6 max-xl:grid-cols-1">
         <!-- SPENDING OVER TIME -->
-        <article class="rounded-2xl border border-line bg-white p-4 shadow-soft">
+        <article class="col-span-2 max-xl:col-span-1 rounded-2xl border border-line bg-white p-5 shadow-soft">
           <div class="mb-3 flex items-start justify-between gap-3">
             <h2 class="text-[14px] font-bold">Spending over time</h2>
             <button type="button" aria-label="View full spending chart" class="text-[11px] font-semibold text-violet">View report</button>
@@ -188,14 +188,14 @@
         </article>
 
         <!-- ACTION NEEDED -->
-        <article class="rounded-2xl border border-line bg-white p-4 shadow-soft">
+        <article class="rounded-2xl border border-line bg-white p-5 shadow-soft">
           <div class="mb-3 flex items-start justify-between gap-3">
             <h2 class="text-[14px] font-bold">Needs your attention <span class="text-muted">(2)</span></h2>
             <button type="button" aria-label="View all pending actions" class="text-[11px] font-semibold text-violet">View all</button>
           </div>
           <div class="grid gap-2">
             <a href="settle-up.html" aria-label="Settle up: you owe Luigi £20.00, due in 2 days" class="grid grid-cols-[30px_1fr_auto] items-center gap-2.5 rounded-lg bg-coral/5 p-2.5 transition hover:bg-coral/10">
-              <span aria-hidden="true" class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-coral text-[10px] font-bold text-white">L</span>
+              <span aria-hidden="true" class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ocean text-[10px] font-bold text-white">L</span>
               <span class="min-w-0">
                 <b class="block text-[12.5px]">You owe Luigi £20.00</b>
                 <small class="block text-[11px] font-semibold text-coral">Due in 2 days</small>
@@ -214,19 +214,12 @@
         </article>
 
         <!-- INSIGHTS -->
-        <article class="rounded-2xl border border-line bg-white p-4 shadow-soft">
+        <article class="rounded-2xl border border-line bg-white p-5 shadow-soft">
           <div class="mb-3 flex items-start justify-between gap-3">
             <h2 class="text-[14px] font-bold">Insights</h2>
             <button type="button" aria-label="View all insights" class="text-[11px] font-semibold text-violet">View all</button>
           </div>
           <div class="grid gap-2">
-            <div class="grid grid-cols-[28px_1fr] items-start gap-2.5 rounded-lg bg-slate-50 p-2.5">
-              <span aria-hidden="true" class="mt-0.5 grid h-7 w-7 place-items-center rounded-full bg-amber/15 text-amber"><i data-lucide="alert-triangle" class="h-3.5 w-3.5"></i></span>
-              <span>
-                <b class="block text-[12.5px]">Home Bills is 96% spent</b>
-                <small class="block text-[11px] text-muted">Only £10 left from budget</small>
-              </span>
-            </div>
             <div class="grid grid-cols-[28px_1fr] items-start gap-2.5 rounded-lg bg-slate-50 p-2.5">
               <span aria-hidden="true" class="mt-0.5 grid h-7 w-7 place-items-center rounded-full bg-violet/15 text-violet"><i data-lucide="pie-chart" class="h-3.5 w-3.5"></i></span>
               <span>
@@ -244,31 +237,31 @@
           </div>
         </article>
         <!-- BY CATEGORY -->
-        <article class="rounded-2xl border border-line bg-white p-4 shadow-soft">
+        <article class="rounded-2xl border border-line bg-white p-5 shadow-soft">
           <div class="mb-3 flex items-start justify-between gap-3">
             <h2 class="text-[14px] font-bold">By category</h2>
             <button type="button" aria-haspopup="menu" class="text-[11px] font-semibold text-violet">This month</button>
           </div>
           <div class="grid grid-cols-[108px_1fr] items-center gap-3 max-md:grid-cols-1">
-            <div role="img" aria-label="Your share by category across all groups — Food &amp; Dining 28% (£145), Other 27% (£144), Accommodation 17% (£90), Transport 17% (£90), Activities 11% (£55). Total £524." class="grid h-[108px] w-[108px] place-items-center rounded-full bg-[conic-gradient(#B96D00_0_28%,#C7CCDB_28%_55%,#5A2DF0_55%_72%,#2C80F6_72%_89%,#D6394A_89%_100%)]">
+            <div role="img" aria-label="Your share by category across all groups — Food &amp; Dining 28% (£145), Other 27% (£144), Accommodation 17% (£90), Transport 17% (£90), Activities 11% (£55). Total £524." class="grid h-[108px] w-[108px] place-items-center rounded-full bg-[conic-gradient(#5A2DF0_0_28%,#7B4DFF_28%_55%,#A485FF_55%_72%,#C5B3FF_72%_89%,#E2D7FF_89%_100%)]">
               <span aria-hidden="true" class="flex h-16 w-16 flex-col items-center justify-center rounded-full bg-white text-center">
                 <b class="text-[14px] font-extrabold tabular-nums leading-none">£524</b>
                 <small class="mt-0.5 text-[9px] font-semibold text-muted leading-none">Total</small>
               </span>
             </div>
             <div class="grid gap-2 text-[11px]">
-              <p class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-muted"><i class="h-2 w-2 rounded-full bg-amber" aria-hidden="true"></i>Food &amp; Dining</span><b class="text-ink tabular-nums">£145</b></p>
-              <p class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-muted"><i class="h-2 w-2 rounded-full bg-[#C7CCDB]" aria-hidden="true"></i>Other</span><b class="text-ink tabular-nums">£144</b></p>
-              <p class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-muted"><i class="h-2 w-2 rounded-full bg-violet" aria-hidden="true"></i>Accommodation</span><b class="text-ink tabular-nums">£90</b></p>
-              <p class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-muted"><i class="h-2 w-2 rounded-full bg-ocean" aria-hidden="true"></i>Transport</span><b class="text-ink tabular-nums">£90</b></p>
-              <p class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-muted"><i class="h-2 w-2 rounded-full bg-coral" aria-hidden="true"></i>Activities</span><b class="text-ink tabular-nums">£55</b></p>
+              <p class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-muted"><i class="h-2 w-2 rounded-full" style="background:#5A2DF0" aria-hidden="true"></i>Food &amp; Dining</span><b class="text-ink tabular-nums">£145</b></p>
+              <p class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-muted"><i class="h-2 w-2 rounded-full" style="background:#7B4DFF" aria-hidden="true"></i>Other</span><b class="text-ink tabular-nums">£144</b></p>
+              <p class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-muted"><i class="h-2 w-2 rounded-full" style="background:#A485FF" aria-hidden="true"></i>Accommodation</span><b class="text-ink tabular-nums">£90</b></p>
+              <p class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-muted"><i class="h-2 w-2 rounded-full" style="background:#C5B3FF" aria-hidden="true"></i>Transport</span><b class="text-ink tabular-nums">£90</b></p>
+              <p class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-muted"><i class="h-2 w-2 rounded-full" style="background:#E2D7FF" aria-hidden="true"></i>Activities</span><b class="text-ink tabular-nums">£55</b></p>
             </div>
           </div>
           <button type="button" class="mt-3 w-full rounded-lg border border-line bg-shell py-1.5 text-[11px] font-semibold text-violet">View full report</button>
         </article>
 
         <!-- GROUPS -->
-        <article class="rounded-2xl border border-line bg-white p-4 shadow-soft">
+        <article class="rounded-2xl border border-line bg-white p-5 shadow-soft">
           <div class="mb-3 flex items-start justify-between gap-3">
             <h2 class="text-[14px] font-bold">Groups</h2>
             <a href="groups.html" class="text-[11px] font-semibold text-violet">All groups</a>
@@ -283,7 +276,7 @@
               <span class="flex items-center gap-2" aria-label="3 members">
                 <span class="flex avatar-stack" aria-hidden="true">
                   <span class="grid h-5 w-5 place-items-center rounded-full border border-white bg-violet text-[8px] font-bold text-white">A</span>
-                  <span class="grid h-5 w-5 place-items-center rounded-full border border-white bg-coral text-[8px] font-bold text-white">L</span>
+                  <span class="grid h-5 w-5 place-items-center rounded-full border border-white bg-ocean text-[8px] font-bold text-white">L</span>
                   <span class="grid h-5 w-5 place-items-center rounded-full border border-white bg-mint text-[8px] font-bold text-white">M</span>
                 </span>
                 <small class="text-[11px] font-semibold text-muted">3</small>
@@ -321,7 +314,7 @@
         </article>
 
         <!-- BALANCES (settled) -->
-        <article class="rounded-2xl border border-line bg-white p-4 shadow-soft">
+        <article class="rounded-2xl border border-line bg-white p-5 shadow-soft">
           <div class="mb-3 flex items-start justify-between gap-3">
             <h2 class="text-[14px] font-bold">Settled</h2>
             <a href="friends.html" class="text-[11px] font-semibold text-violet">All friends</a>
