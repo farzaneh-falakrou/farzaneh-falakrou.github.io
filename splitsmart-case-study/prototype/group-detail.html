@@ -12,8 +12,16 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     html { font-size: 14px; }
-    body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; -webkit-font-smoothing: antialiased; position: relative; }
+    body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(900px 500px at 85% -10%, rgba(90,45,240,0.06), transparent 60%), radial-gradient(700px 400px at -10% 100%, rgba(34,211,238,0.05), transparent 60%); }
+    body > * { position: relative; z-index: 1; }
     .avatar-stack > * + * { margin-left: -8px; }
+    .sidebar-grad { background: linear-gradient(180deg, #080B2D 0%, #080B2D 45%, #0E1142 100%) !important; }
+    .nav-active { box-shadow: 0 8px 24px -6px rgba(90,45,240,0.6), inset 0 1px 0 rgba(255,255,255,0.15); }
+    .divider-soft { height: 1px; background: linear-gradient(to right, transparent, #E1E6F0, transparent); margin: 1.5rem 0; }
+    .btn-violet { background: linear-gradient(180deg, #6B3DF5, #5A2DF0); box-shadow: 0 8px 20px -6px rgba(90,45,240,0.55), inset 0 1px 0 rgba(255,255,255,0.22); transition: box-shadow .2s, transform .1s; }
+    .btn-violet:hover { box-shadow: 0 12px 28px -6px rgba(90,45,240,0.7), inset 0 1px 0 rgba(255,255,255,0.22); }
+    .btn-violet:active { transform: translateY(1px); }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
     .tab-btn[aria-selected="true"] { color: #5A2DF0; border-bottom-color: #5A2DF0; }
@@ -26,7 +34,7 @@
   <div class="grid min-h-screen grid-cols-[230px_1fr] max-lg:grid-cols-1">
 
     <!-- SIDEBAR -->
-    <div class="sticky top-0 flex h-screen flex-col bg-[radial-gradient(circle_at_20%_0%,rgba(90,45,240,0.32),transparent_45%),linear-gradient(180deg,#0B0F33,#05071A)] px-4 py-6 text-white max-lg:static max-lg:h-auto">
+    <div class="sidebar-grad sticky top-0 flex h-screen flex-col bg-[radial-gradient(circle_at_20%_0%,rgba(90,45,240,0.32),transparent_45%),linear-gradient(180deg,#0B0F33,#05071A)] px-4 py-6 text-white max-lg:static max-lg:h-auto">
       <a href="dashboard.html" class="mb-10 flex items-center gap-2 px-2 text-[15px] font-extrabold max-lg:mb-5">
         <span class="grid h-6 w-6 -rotate-45 grid-cols-2 gap-[2px]" aria-hidden="true">
           <i class="rounded-[2px] bg-violet"></i>
@@ -37,15 +45,18 @@
         SplitSmart
       </a>
       <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.18em] text-white/55 max-lg:hidden">Menu</p>
-      <nav aria-label="Primary" class="grid gap-0.5 max-lg:grid-cols-3">
+      <nav aria-label="Primary" class="grid gap-0.5 max-lg:grid-cols-4">
         <a href="dashboard.html" class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium text-white/80 transition hover:bg-white/10 hover:text-white">
           <i data-lucide="layout-grid" class="h-4 w-4" aria-hidden="true"></i> Overview
         </a>
-        <a href="groups.html" aria-current="page" class="flex items-center gap-2.5 rounded-lg bg-violet px-3 py-2 text-[13px] font-semibold text-white shadow-lift">
+        <a href="groups.html" aria-current="page" class="nav-active flex items-center gap-2.5 rounded-lg bg-violet px-3 py-2 text-[13px] font-semibold text-white">
           <i data-lucide="users" class="h-4 w-4" aria-hidden="true"></i> Groups
         </a>
         <a href="friends.html" class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium text-white/80 transition hover:bg-white/10 hover:text-white">
           <i data-lucide="user-round" class="h-4 w-4" aria-hidden="true"></i> Friends
+        </a>
+        <a href="budget.html" class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium text-white/80 transition hover:bg-white/10 hover:text-white">
+          <i data-lucide="wallet" class="h-4 w-4" aria-hidden="true"></i> Budget
         </a>
       </nav>
       <div class="mt-auto grid gap-2 max-lg:hidden">
@@ -77,7 +88,7 @@
           </div>
         </div>
         <div class="flex flex-wrap items-center gap-2">
-          <a href="settle-up.html" class="inline-flex h-9 items-center gap-1.5 rounded-lg bg-violet px-3.5 text-[12px] font-semibold text-white shadow-lift">
+          <a href="settle-up.html" class="btn-violet inline-flex h-9 items-center gap-1.5 rounded-lg px-3.5 text-[12px] font-semibold text-white">
             <i data-lucide="scale" class="h-3.5 w-3.5" aria-hidden="true"></i> Settle Up
           </a>
           <a href="add-expense.html" class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-line bg-white px-3.5 text-[12px] font-semibold text-ink">
