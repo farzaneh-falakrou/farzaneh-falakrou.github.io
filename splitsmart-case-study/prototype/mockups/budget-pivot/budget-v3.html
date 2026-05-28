@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SplitSmart — Budget · Calm (Pivot Mockup v3)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../../assets/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    html { font-size: 14px; }
+    body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    :focus-visible { outline: 2px solid #5A2DF0; outline-offset: 2px; border-radius: 6px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .mock-banner { background: linear-gradient(90deg, #fde68a, #fcd34d); color: #78350f; font-size: 11px; font-weight: 700; text-align: center; padding: 6px 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+  </style>
+</head>
+<body class="min-h-screen bg-shell text-ink">
+
+  <div class="mock-banner">Mockup · Budget Pivot v3 · Calm / Condensed · Not Wired</div>
+
+  <div class="grid min-h-screen grid-cols-[230px_1fr] max-lg:grid-cols-1">
+
+    <!-- SIDEBAR -->
+    <div class="sticky top-0 flex h-screen flex-col bg-[radial-gradient(circle_at_20%_0%,rgba(90,45,240,0.32),transparent_45%),linear-gradient(180deg,#0B0F33,#05071A)] px-4 py-6 text-white max-lg:static max-lg:h-auto">
+      <a href="dashboard.html" class="mb-10 flex items-center gap-2 px-2 text-[15px] font-extrabold max-lg:mb-5">
+        <span class="grid h-6 w-6 -rotate-45 grid-cols-2 gap-[2px]" aria-hidden="true">
+          <i class="rounded-[2px] bg-violet"></i><i class="rounded-[2px] bg-cyan"></i>
+          <i class="rounded-[2px] bg-cyan"></i><i class="rounded-[2px] bg-violet"></i>
+        </span>
+        SplitSmart
+      </a>
+      <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.18em] text-white/55 max-lg:hidden">Menu</p>
+      <nav aria-label="Primary" class="grid gap-0.5 max-lg:grid-cols-4">
+        <a href="dashboard.html" class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium text-white/80 transition hover:bg-white/10 hover:text-white">
+          <i data-lucide="layout-grid" class="h-4 w-4" aria-hidden="true"></i> Overview
+        </a>
+        <a href="budget-v3.html" aria-current="page" class="flex items-center gap-2.5 rounded-lg bg-violet px-3 py-2 text-[13px] font-semibold text-white shadow-lift">
+          <i data-lucide="wallet" class="h-4 w-4" aria-hidden="true"></i> Budget
+        </a>
+        <a href="#" class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium text-white/80 transition hover:bg-white/10 hover:text-white">
+          <i data-lucide="users" class="h-4 w-4" aria-hidden="true"></i> Groups
+        </a>
+        <a href="#" class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium text-white/80 transition hover:bg-white/10 hover:text-white">
+          <i data-lucide="user-round" class="h-4 w-4" aria-hidden="true"></i> Friends
+        </a>
+      </nav>
+      <div class="mt-auto grid gap-2 max-lg:hidden">
+        <button type="button" class="flex w-full items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.06] p-2 text-left hover:bg-white/10">
+          <span aria-hidden="true" class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-violet text-[11px] font-bold text-white">AJ</span>
+          <span class="grid min-w-0 flex-1 leading-tight">
+            <strong class="truncate text-[12px]">Alex Johnson</strong>
+            <small class="truncate text-[10px] text-white/75">alex@email.com</small>
+          </span>
+          <i data-lucide="chevron-down" class="h-3.5 w-3.5 text-white/70" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <main class="min-w-0 px-8 py-6 max-lg:px-4">
+
+      <!-- HEADER -->
+      <header class="mb-5 flex items-start justify-between gap-4 max-md:flex-col">
+        <div>
+          <h1 class="text-2xl font-extrabold tracking-tight">Budget</h1>
+          <p class="mt-0.5 text-[13px] text-muted">This month's shared spend, against your monthly cap.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" aria-haspopup="menu" class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-line bg-white px-3 text-[12px] font-semibold text-ink">
+            May 2026 <i data-lucide="chevron-down" class="h-3.5 w-3.5 text-muted" aria-hidden="true"></i>
+          </button>
+          <button type="button" class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-line bg-white px-3 text-[12px] font-semibold text-ink">
+            <i data-lucide="pencil" class="h-3.5 w-3.5 text-muted" aria-hidden="true"></i> Edit cap
+          </button>
+        </div>
+      </header>
+
+      <!-- UNIFIED HERO -->
+      <section class="mb-5 rounded-2xl border border-line bg-white p-6 shadow-soft">
+        <!-- Top row: label + status chip -->
+        <div class="flex items-center justify-between">
+          <h2 class="text-[10px] font-bold uppercase tracking-[0.18em] text-muted">May 2026</h2>
+          <span class="inline-flex items-center gap-1 rounded-full bg-mint/10 px-2.5 py-1 text-[11px] font-bold text-mint">
+            <i data-lucide="trending-up" class="h-3 w-3" aria-hidden="true"></i> £40 under pace
+          </span>
+        </div>
+
+        <!-- Big number -->
+        <p class="mt-3 leading-none">
+          <span class="text-[44px] font-extrabold tabular-nums text-ink">£350</span>
+          <span class="ml-2 text-[20px] font-semibold tabular-nums text-muted">/ £600</span>
+        </p>
+        <p class="mt-1 text-[12px] text-muted">Your share so far · £250 left · 12 days remaining</p>
+
+        <!-- Pace bar -->
+        <div class="mt-5">
+          <div class="relative h-2.5 rounded-full bg-slate-100" role="img" aria-label="58% of monthly cap used, 61% of month elapsed">
+            <div class="h-full rounded-full bg-violet" style="width:58%"></div>
+            <div class="absolute top-1/2 -translate-y-1/2" style="left:61%">
+              <div class="h-4 w-[2px] -translate-x-1/2 rounded bg-ink"></div>
+            </div>
+          </div>
+          <div class="mt-1 flex justify-between text-[10px] font-semibold text-muted">
+            <span>May 1</span><span class="text-ink">Today · May 19</span><span>May 31</span>
+          </div>
+        </div>
+
+        <!-- 3 micro-stats in one row, divider style -->
+        <div class="mt-5 grid grid-cols-3 divide-x divide-line rounded-xl bg-slate-50 text-center">
+          <div class="px-3 py-3">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-muted">Out of pocket</p>
+            <p class="mt-1 text-[18px] font-extrabold tabular-nums text-amber">£290</p>
+            <p class="mt-0.5 text-[10px] text-muted">cash that left your wallet</p>
+          </div>
+          <div class="px-3 py-3">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-muted">You owe</p>
+            <p class="mt-1 text-[18px] font-extrabold tabular-nums text-coral">£105</p>
+            <p class="mt-0.5 text-[10px] text-muted">to 2 friends</p>
+          </div>
+          <div class="px-3 py-3">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-muted">You're owed</p>
+            <p class="mt-1 text-[18px] font-extrabold tabular-nums text-mint">£45</p>
+            <p class="mt-0.5 text-[10px] text-muted">from 1 friend</p>
+          </div>
+        </div>
+
+        <!-- Single-line equation hint -->
+        <p class="mt-3 text-center text-[11px] italic text-muted">
+          Your share <span class="not-italic font-semibold text-ink">£350</span> = out of pocket <span class="not-italic font-semibold text-amber">£290</span> + you owe <span class="not-italic font-semibold text-coral">£105</span> − you're owed <span class="not-italic font-semibold text-mint">£45</span>
+        </p>
+      </section>
+
+      <!-- 12-MONTH HISTORY -->
+      <section class="mb-5 rounded-2xl border border-line bg-white p-5 shadow-soft">
+        <div class="mb-3 flex items-start justify-between gap-3 max-md:flex-col">
+          <div>
+            <h2 class="text-[14px] font-bold">12-month history</h2>
+            <p class="mt-0.5 text-[11px] text-muted">Your share per month. Amber tick = where your cash basis landed (gap to bar = net pending that month).</p>
+          </div>
+          <div class="flex items-center gap-3 text-[10px] font-semibold text-muted">
+            <span class="inline-flex items-center gap-1"><i class="h-2 w-2 rounded-sm bg-violet"></i> Your share</span>
+            <span class="inline-flex items-center gap-1"><span class="h-[2px] w-3 bg-amber"></span> Cash</span>
+            <span class="inline-flex items-center gap-1"><i class="h-2 w-2 rounded-sm border-2 border-ink bg-white"></i> Current</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-[36px_1fr] gap-2 pt-5">
+          <div class="relative h-44 text-right text-[9px] font-semibold leading-none text-muted">
+            <span class="absolute right-0 top-0 -translate-y-1/2 tabular-nums">£900</span>
+            <span class="absolute right-0 top-1/3 -translate-y-1/2 tabular-nums">£600</span>
+            <span class="absolute right-0 top-2/3 -translate-y-1/2 tabular-nums">£300</span>
+            <span class="absolute right-0 bottom-0 translate-y-1/2 tabular-nums">£0</span>
+          </div>
+          <div class="relative h-44">
+            <div class="pointer-events-none absolute inset-0 flex flex-col justify-between">
+              <span class="h-px bg-line"></span>
+              <span class="h-px border-t border-dashed border-line"></span>
+              <span class="h-px border-t border-dashed border-line"></span>
+              <span class="h-px bg-line"></span>
+            </div>
+            <!-- Cap line at £600 = top 33.3% -->
+            <div class="pointer-events-none absolute left-0 right-0" style="top:33.3%">
+              <div class="relative">
+                <div class="h-[2px] w-full" style="background-image: linear-gradient(90deg, rgba(90,45,240,0.6) 50%, transparent 50%); background-size: 8px 2px;"></div>
+                <span class="absolute -top-4 right-0 rounded bg-violet/10 px-1.5 text-[9px] font-bold text-violet">Cap £600</span>
+              </div>
+            </div>
+            <!-- Single bar per month: violet (true share). Amber tick at cash-basis height. -->
+            <!-- Scale: £900 full height. % = value/900. Cash tick top = (1 - cash/900)*100% from top. -->
+            <div class="relative grid h-full grid-cols-12 items-end gap-3 px-1">
+              <!-- Jun: true 540 (60%), cash 510 (56.7%) -->
+              <span class="relative rounded-t-md bg-violet" style="height:60%">
+                <span class="absolute left-0 right-0 h-[2px] bg-amber" style="bottom:94.4%" title="Jun cash £510"></span>
+              </span>
+              <!-- Jul: true 610 (67.8%), cash 590 (65.6%) -->
+              <span class="relative rounded-t-md bg-violet" style="height:67.8%">
+                <span class="absolute left-0 right-0 h-[2px] bg-amber" style="bottom:96.7%" title="Jul cash £590"></span>
+              </span>
+              <!-- Aug: true 720 (80%), cash 850 (94.4%) — cash above true; tick rendered above bar tip -->
+              <span class="relative rounded-t-md bg-violet" style="height:80%">
+                <span class="absolute left-0 right-0 h-[2px] bg-amber" style="bottom:118%" title="Aug cash £850 — you fronted big"></span>
+              </span>
+              <!-- Sep: true 490 (54.4%), cash 475 (52.8%) -->
+              <span class="relative rounded-t-md bg-violet" style="height:54.4%">
+                <span class="absolute left-0 right-0 h-[2px] bg-amber" style="bottom:97%" title="Sep cash £475"></span>
+              </span>
+              <!-- Oct: true 580 (64.4%), cash 565 (62.8%) -->
+              <span class="relative rounded-t-md bg-violet" style="height:64.4%">
+                <span class="absolute left-0 right-0 h-[2px] bg-amber" style="bottom:97.4%" title="Oct cash £565"></span>
+              </span>
+              <!-- Nov: true 620 (68.9%), cash 605 (67.2%) -->
+              <span class="relative rounded-t-md bg-violet" style="height:68.9%">
+                <span class="absolute left-0 right-0 h-[2px] bg-amber" style="bottom:97.6%" title="Nov cash £605"></span>
+              </span>
+              <!-- Dec: true 710 (78.9%), cash 680 (75.6%) -->
+              <span class="relative rounded-t-md bg-violet" style="height:78.9%">
+                <span class="absolute left-0 right-0 h-[2px] bg-amber" style="bottom:95.8%" title="Dec cash £680"></span>
+              </span>
+              <!-- Jan: true 450 (50%), cash 440 (48.9%) -->
+              <span class="relative rounded-t-md bg-violet" style="height:50%">
+                <span class="absolute left-0 right-0 h-[2px] bg-amber" style="bottom:97.8%" title="Jan cash £440"></span>
+              </span>
+              <!-- Feb: true 570 (63.3%), cash 555 (61.7%) -->
+              <span class="relative rounded-t-md bg-violet" style="height:63.3%">
+                <span class="absolute left-0 right-0 h-[2px] bg-amber" style="bottom:97.4%" title="Feb cash £555"></span>
+              </span>
+              <!-- Mar: true 620 (68.9%), cash 580 (64.4%) -->
+              <span class="relative rounded-t-md bg-violet" style="height:68.9%">
+                <span class="absolute left-0 right-0 h-[2px] bg-amber" style="bottom:93.5%" title="Mar cash £580"></span>
+              </span>
+              <!-- Apr: true 580 (64.4%), cash 560 (62.2%) -->
+              <span class="relative rounded-t-md bg-violet" style="height:64.4%">
+                <span class="absolute left-0 right-0 h-[2px] bg-amber" style="bottom:96.6%" title="Apr cash £560"></span>
+              </span>
+              <!-- May (current): true 350 (38.9%), cash 290 (32.2%) — outlined bar -->
+              <span class="relative rounded-t-md border-2 border-violet bg-violet/25" style="height:38.9%">
+                <span class="absolute left-0 right-0 h-[2px] bg-amber" style="bottom:82.8%" title="May cash £290"></span>
+                <span class="pointer-events-none absolute bottom-full left-1/2 mb-1 grid -translate-x-1/2 place-items-center">
+                  <span class="whitespace-nowrap rounded-md bg-ink px-1.5 py-0.5 text-[10px] font-bold text-white tabular-nums">£350 share · £290 cash</span>
+                  <span class="-mt-[3px] h-1.5 w-1.5 rotate-45 bg-ink"></span>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="mt-1.5 grid grid-cols-[36px_1fr] gap-2">
+          <div></div>
+          <div class="grid grid-cols-12 gap-3 px-1 text-center text-[10px] font-semibold text-muted">
+            <span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span class="text-ink">May</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- BREAKDOWN ROW -->
+      <section class="mb-5 grid grid-cols-2 gap-5 max-xl:grid-cols-1">
+        <!-- BY CATEGORY -->
+        <article class="rounded-2xl border border-line bg-white p-5 shadow-soft">
+          <h2 class="text-[14px] font-bold">By category · May</h2>
+          <div class="mt-4 grid grid-cols-[120px_1fr] items-center gap-5 max-md:grid-cols-1">
+            <div role="img" aria-label="By category — Food & Dining £130 (37%), Accommodation £75 (21%), Transport £75 (21%), Utilities £42 (12%), Activities £28 (8%)." class="grid h-[120px] w-[120px] place-items-center rounded-full bg-[conic-gradient(#B96D00_0_37%,#5A2DF0_37%_58%,#2C80F6_58%_79%,#0E7A55_79%_91%,#D6394A_91%_100%)]">
+              <span aria-hidden="true" class="flex h-16 w-16 flex-col items-center justify-center rounded-full bg-white text-center shadow-soft">
+                <b class="text-[14px] font-extrabold tabular-nums leading-none">£350</b>
+                <small class="mt-0.5 text-[9px] font-semibold text-muted leading-none">May share</small>
+              </span>
+            </div>
+            <div class="grid gap-2 text-[12px]">
+              <div class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-muted"><i class="h-2 w-2 rounded-sm bg-amber"></i>Food &amp; Dining</span><b class="tabular-nums">£130</b></div>
+              <div class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-muted"><i class="h-2 w-2 rounded-sm bg-violet"></i>Accommodation</span><b class="tabular-nums">£75</b></div>
+              <div class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-muted"><i class="h-2 w-2 rounded-sm bg-ocean"></i>Transport</span><b class="tabular-nums">£75</b></div>
+              <div class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-muted"><i class="h-2 w-2 rounded-sm bg-mint"></i>Utilities</span><b class="tabular-nums">£42</b></div>
+              <div class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-muted"><i class="h-2 w-2 rounded-sm bg-coral"></i>Activities</span><b class="tabular-nums">£28</b></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- BY GROUP -->
+        <article class="rounded-2xl border border-line bg-white p-5 shadow-soft">
+          <h2 class="text-[14px] font-bold">By group · May</h2>
+          <div class="mt-4 grid gap-3">
+            <div>
+              <div class="flex items-center justify-between text-[12px]">
+                <span class="flex items-center gap-2"><span class="grid h-6 w-6 place-items-center rounded-md bg-cyan/15 text-cyan"><i data-lucide="plane" class="h-3 w-3"></i></span><b>Paris Trip</b></span>
+                <span class="tabular-nums"><b>£180</b> <small class="text-muted">· 51%</small></span>
+              </div>
+              <div class="mt-1.5 h-2 rounded-full bg-slate-100 overflow-hidden"><div class="h-full rounded-full bg-cyan" style="width:51%"></div></div>
+            </div>
+            <div>
+              <div class="flex items-center justify-between text-[12px]">
+                <span class="flex items-center gap-2"><span class="grid h-6 w-6 place-items-center rounded-md bg-violet/15 text-violet"><i data-lucide="home" class="h-3 w-3"></i></span><b>Home Bills</b></span>
+                <span class="tabular-nums"><b>£140</b> <small class="text-muted">· 40%</small></span>
+              </div>
+              <div class="mt-1.5 h-2 rounded-full bg-slate-100 overflow-hidden"><div class="h-full rounded-full bg-violet" style="width:40%"></div></div>
+            </div>
+            <div>
+              <div class="flex items-center justify-between text-[12px]">
+                <span class="flex items-center gap-2"><span class="grid h-6 w-6 place-items-center rounded-md bg-amber/15 text-amber"><i data-lucide="utensils" class="h-3 w-3"></i></span><b>Work Lunch</b></span>
+                <span class="tabular-nums"><b>£30</b> <small class="text-muted">· 9%</small></span>
+              </div>
+              <div class="mt-1.5 h-2 rounded-full bg-slate-100 overflow-hidden"><div class="h-full rounded-full bg-amber" style="width:9%"></div></div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- CONTRIBUTING EXPENSES (slim) -->
+      <section class="rounded-2xl border border-line bg-white p-5 shadow-soft">
+        <div class="mb-3 flex items-start justify-between gap-3">
+          <div>
+            <h2 class="text-[14px] font-bold">May expenses</h2>
+            <p class="mt-0.5 text-[11px] text-muted">Your share of each shared item this month.</p>
+          </div>
+          <button type="button" class="text-[11px] font-semibold text-violet">View all 9</button>
+        </div>
+        <ul class="divide-y divide-line">
+          <li class="grid grid-cols-[80px_1fr_auto_120px] items-center gap-3 py-2.5 text-[12.5px]">
+            <span class="text-muted tabular-nums">May 17</span>
+            <span><b>Dinner at Mario's</b> <small class="text-muted">· Paris Trip</small></span>
+            <b class="text-right tabular-nums">£30.00</b>
+            <span class="text-right"><span class="inline-flex items-center gap-1 rounded-md bg-coral/10 px-2 py-0.5 text-[11px] font-semibold text-coral"><i class="h-1.5 w-1.5 rounded-full bg-coral"></i>You owe</span></span>
+          </li>
+          <li class="grid grid-cols-[80px_1fr_auto_120px] items-center gap-3 py-2.5 text-[12.5px]">
+            <span class="text-muted tabular-nums">May 14</span>
+            <span><b>Electricity</b> <small class="text-muted">· Home Bills</small></span>
+            <b class="text-right tabular-nums">£42.50</b>
+            <span class="text-right"><span class="inline-flex items-center gap-1 rounded-md bg-amber/10 px-2 py-0.5 text-[11px] font-semibold text-amber"><i class="h-1.5 w-1.5 rounded-full bg-amber"></i>Owed to you</span></span>
+          </li>
+          <li class="grid grid-cols-[80px_1fr_auto_120px] items-center gap-3 py-2.5 text-[12.5px]">
+            <span class="text-muted tabular-nums">May 12</span>
+            <span><b>Eurostar tickets</b> <small class="text-muted">· Paris Trip</small></span>
+            <b class="text-right tabular-nums">£75.00</b>
+            <span class="text-right"><span class="inline-flex items-center gap-1 rounded-md bg-coral/10 px-2 py-0.5 text-[11px] font-semibold text-coral"><i class="h-1.5 w-1.5 rounded-full bg-coral"></i>You owe</span></span>
+          </li>
+          <li class="grid grid-cols-[80px_1fr_auto_120px] items-center gap-3 py-2.5 text-[12.5px]">
+            <span class="text-muted tabular-nums">May 8</span>
+            <span><b>Hotel night 2</b> <small class="text-muted">· Paris Trip</small></span>
+            <b class="text-right tabular-nums">£75.00</b>
+            <span class="text-right"><span class="inline-flex items-center gap-1 rounded-md bg-mint/10 px-2 py-0.5 text-[11px] font-semibold text-mint"><i class="h-1.5 w-1.5 rounded-full bg-mint"></i>Settled</span></span>
+          </li>
+          <li class="grid grid-cols-[80px_1fr_auto_120px] items-center gap-3 py-2.5 text-[12.5px]">
+            <span class="text-muted tabular-nums">May 5</span>
+            <span><b>Climbing entry</b> <small class="text-muted">· Climbing</small></span>
+            <b class="text-right tabular-nums">£28.00</b>
+            <span class="text-right"><span class="inline-flex items-center gap-1 rounded-md bg-mint/10 px-2 py-0.5 text-[11px] font-semibold text-mint"><i class="h-1.5 w-1.5 rounded-full bg-mint"></i>Settled</span></span>
+          </li>
+          <li class="grid grid-cols-[80px_1fr_auto_120px] items-center gap-3 py-2.5 text-[12.5px]">
+            <span class="text-muted tabular-nums">May 3</span>
+            <span><b>Council tax</b> <small class="text-muted">· Home Bills</small></span>
+            <b class="text-right tabular-nums">£99.50</b>
+            <span class="text-right"><span class="inline-flex items-center gap-1 rounded-md bg-mint/10 px-2 py-0.5 text-[11px] font-semibold text-mint"><i class="h-1.5 w-1.5 rounded-full bg-mint"></i>Settled</span></span>
+          </li>
+        </ul>
+      </section>
+
+    </main>
+  </div>
+
+  <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -28,6 +28,7 @@ Established designer portfolios spanning four design lineages:
 | 005 | case-study-template | What template should case study pages use? | **E · Editorial + Structured** (synthesis A+B) | case-study, project-page, template |
 | 006 | full-home | Does everything work as one piece when stitched together? | **Ship** | home, integration, full-page |
 | 007 | about-page | What structure should the full About page use? | **C · Conversational Journey** | about, personal, bio |
+| 008 | splitsmart-case-study | How should the SplitSmart case study read end-to-end inside the locked template? | _pending — relocated to `/splitsmart-case-study/` (2026-05-28)_ | case-study, splitsmart, full-page, integration, content |
 
 ## Locked Structural Decisions
 

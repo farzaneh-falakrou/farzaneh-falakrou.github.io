@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SplitSmart — Paris Trip</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    html { font-size: 14px; }
+    body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    .avatar-stack > * + * { margin-left: -8px; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .tab-btn[aria-selected="true"] { color: #5A2DF0; border-bottom-color: #5A2DF0; }
+    .tab-btn { border-bottom-color: transparent; }
+    :focus-visible { outline: 2px solid #5A2DF0; outline-offset: 2px; border-radius: 6px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  </style>
+</head>
+<body class="min-h-screen bg-shell text-ink">
+  <div class="grid min-h-screen grid-cols-[230px_1fr] max-lg:grid-cols-1">
+
+    <!-- SIDEBAR -->
+    <div class="sticky top-0 flex h-screen flex-col bg-[radial-gradient(circle_at_20%_0%,rgba(90,45,240,0.32),transparent_45%),linear-gradient(180deg,#0B0F33,#05071A)] px-4 py-6 text-white max-lg:static max-lg:h-auto">
+      <a href="dashboard.html" class="mb-10 flex items-center gap-2 px-2 text-[15px] font-extrabold max-lg:mb-5">
+        <span class="grid h-6 w-6 -rotate-45 grid-cols-2 gap-[2px]" aria-hidden="true">
+          <i class="rounded-[2px] bg-violet"></i>
+          <i class="rounded-[2px] bg-cyan"></i>
+          <i class="rounded-[2px] bg-cyan"></i>
+          <i class="rounded-[2px] bg-violet"></i>
+        </span>
+        SplitSmart
+      </a>
+      <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.18em] text-white/55 max-lg:hidden">Menu</p>
+      <nav aria-label="Primary" class="grid gap-0.5 max-lg:grid-cols-3">
+        <a href="dashboard.html" class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium text-white/80 transition hover:bg-white/10 hover:text-white">
+          <i data-lucide="layout-grid" class="h-4 w-4" aria-hidden="true"></i> Overview
+        </a>
+        <a href="groups.html" aria-current="page" class="flex items-center gap-2.5 rounded-lg bg-violet px-3 py-2 text-[13px] font-semibold text-white shadow-lift">
+          <i data-lucide="users" class="h-4 w-4" aria-hidden="true"></i> Groups
+        </a>
+        <a href="friends.html" class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium text-white/80 transition hover:bg-white/10 hover:text-white">
+          <i data-lucide="user-round" class="h-4 w-4" aria-hidden="true"></i> Friends
+        </a>
+      </nav>
+      <div class="mt-auto grid gap-2 max-lg:hidden">
+        <button type="button" aria-haspopup="menu" aria-label="Account menu for Alex Johnson" class="flex w-full items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.06] p-2 text-left hover:bg-white/10">
+          <span aria-hidden="true" class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-violet text-[11px] font-bold text-white">AJ</span>
+          <span class="grid min-w-0 flex-1 leading-tight">
+            <strong class="truncate text-[12px]">Alex Johnson</strong>
+            <small class="truncate text-[10px] text-white/75">alex@email.com</small>
+          </span>
+          <i data-lucide="chevron-down" class="h-3.5 w-3.5 text-white/70" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-[12px] font-semibold text-white/90 hover:bg-white/10">
+          <i data-lucide="log-out" class="h-3.5 w-3.5" aria-hidden="true"></i> Logout
+        </button>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <main class="min-w-0 px-8 py-6 max-lg:px-4">
+      <!-- HEADER -->
+      <header class="mb-4 flex items-start justify-between gap-4 max-md:flex-col">
+        <div class="flex items-center gap-3">
+          <a href="groups.html" aria-label="Back to groups" class="grid h-9 w-9 place-items-center rounded-lg border border-line bg-white text-muted">
+            <i data-lucide="arrow-left" class="h-4 w-4" aria-hidden="true"></i>
+          </a>
+          <div>
+            <h1 class="text-2xl font-extrabold tracking-tight">Paris Trip</h1>
+            <p class="mt-0.5 text-[13px] text-muted">Travel · 3 members · created by you · 2 days ago</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <a href="settle-up.html" class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-line bg-white px-3.5 text-[12px] font-semibold text-ink">
+            <i data-lucide="scale" class="h-3.5 w-3.5 text-muted" aria-hidden="true"></i> Settle Up
+          </a>
+          <a href="add-expense.html" class="inline-flex h-9 items-center gap-1.5 rounded-lg bg-violet px-3.5 text-[12px] font-semibold text-white shadow-lift">
+            <i data-lucide="plus" class="h-3.5 w-3.5" aria-hidden="true"></i> Add Expense
+          </a>
+        </div>
+      </header>
+
+      <!-- STATS -->
+      <section class="mb-4 grid grid-cols-3 gap-4 max-md:grid-cols-1">
+        <article id="budget-card" class="grid grid-cols-[44px_1fr] items-center gap-3 rounded-2xl border border-line bg-white p-4 shadow-soft">
+          <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-violet/10 text-violet"><i data-lucide="wallet" class="h-5 w-5"></i></span>
+          <div class="min-w-0">
+            <small class="block text-[11px] text-muted">Your budget</small>
+            <div data-budget-view class="flex items-center gap-1.5">
+              <p class="text-[20px] font-extrabold tabular-nums leading-tight"><span class="sr-only">Your budget: </span><span data-budget-display>£500.00</span></p>
+              <button type="button" data-budget-edit aria-label="Edit your budget" class="grid h-7 w-7 place-items-center rounded-md text-muted transition hover:bg-shell hover:text-violet">
+                <i data-lucide="pencil" class="h-3.5 w-3.5" aria-hidden="true"></i>
+              </button>
+            </div>
+            <form data-budget-form class="hidden items-center gap-1.5" autocomplete="off" aria-label="Edit your budget">
+              <span class="inline-flex items-center rounded-md border border-line bg-white px-2 focus-within:border-violet">
+                <span aria-hidden="true" class="text-[13px] font-semibold text-muted">£</span>
+                <input data-budget-input type="number" inputmode="decimal" min="0" step="0.01" required class="w-20 border-0 bg-transparent py-1 text-[15px] font-extrabold tabular-nums outline-none" />
+              </span>
+              <button type="submit" class="inline-flex h-7 items-center rounded-md bg-violet px-2 text-[11px] font-semibold text-white">Save</button>
+              <button type="button" data-budget-cancel class="inline-flex h-7 items-center rounded-md border border-line bg-white px-2 text-[11px] font-semibold text-muted">Cancel</button>
+            </form>
+          </div>
+        </article>
+        <article class="grid grid-cols-[44px_1fr] items-center gap-3 rounded-2xl border border-line bg-white p-4 shadow-soft">
+          <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-amber/10 text-amber"><i data-lucide="receipt" class="h-5 w-5"></i></span>
+          <span>
+            <small class="block text-[11px] text-muted">Your spent</small>
+            <p class="block text-[20px] font-extrabold tabular-nums"><span class="sr-only">Your spent: </span>£350.00</p>
+          </span>
+        </article>
+        <article class="grid grid-cols-[44px_1fr] items-center gap-3 rounded-2xl bg-violet p-4 text-white shadow-lift">
+          <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-white/15"><i data-lucide="piggy-bank" class="h-5 w-5"></i></span>
+          <span>
+            <small class="block text-[11px] text-white/85">Your remaining</small>
+            <p class="block text-[20px] font-extrabold tabular-nums"><span class="sr-only">Your remaining: </span><span data-budget-remaining>£150.00</span></p>
+          </span>
+        </article>
+      </section>
+
+      <!-- BUDGET BAR + MEMBERS -->
+      <section class="mb-4 grid grid-cols-[1.4fr_1fr] gap-4 max-lg:grid-cols-1">
+        <article class="rounded-2xl border border-line bg-white p-5 shadow-soft">
+          <div class="mb-3 flex items-center justify-between gap-3">
+            <h2 class="text-[14px] font-bold">Expense vs Budget</h2>
+            <span data-budget-pct class="rounded-full bg-violet/10 px-2.5 py-1 text-[11px] font-bold text-violet">70% used</span>
+          </div>
+          <div class="mb-2 flex justify-between text-[12px] text-muted">
+            <span>Spent</span><span>Budget</span>
+          </div>
+          <span data-budget-bar-track class="block h-2.5 overflow-hidden rounded-full bg-slate-100" role="img" aria-label="Your spent £350 of £500 — 70% of your budget used">
+            <i data-budget-bar class="block h-full rounded-full bg-violet" style="width:70%" aria-hidden="true"></i>
+          </span>
+          <div class="mt-2 flex justify-between text-[13px]">
+            <b class="text-ink tabular-nums">£350.00</b>
+            <b data-budget-summary class="text-ink tabular-nums">£500.00</b>
+          </div>
+          <p data-budget-headroom class="mt-3 text-[11px] text-muted">You're <b class="text-ink tabular-nums">£150.00</b> under your budget — comfortable headroom for the rest of the trip.</p>
+        </article>
+
+        <article class="rounded-2xl border border-line bg-white p-5 shadow-soft">
+          <div class="mb-3 flex items-center justify-between gap-3">
+            <h2 class="text-[14px] font-bold">Members</h2>
+            <button type="button" class="inline-flex h-8 items-center gap-1.5 rounded-lg border border-line bg-white px-2.5 text-[11px] font-semibold text-violet">
+              <i data-lucide="plus" class="h-3 w-3" aria-hidden="true"></i> Invite
+            </button>
+          </div>
+          <div class="grid grid-cols-3 gap-3">
+            <div class="grid place-items-center gap-1.5 text-center">
+              <span aria-hidden="true" class="relative grid h-12 w-12 place-items-center rounded-full border-2 border-white bg-violet text-[16px] font-bold text-white shadow">
+                A
+                <i class="absolute -bottom-0.5 -right-0.5 grid h-3.5 w-3.5 place-items-center rounded-full border-2 border-white bg-mint"></i>
+              </span>
+              <b class="text-[12px]">Alex <span class="font-normal text-muted">(you)</span></b>
+              <small class="text-[10px] font-semibold text-mint tabular-nums">+ £25.00</small>
+            </div>
+            <div class="grid place-items-center gap-1.5 text-center">
+              <span aria-hidden="true" class="relative grid h-12 w-12 place-items-center rounded-full border-2 border-white bg-coral text-[16px] font-bold text-white shadow">
+                L
+                <i class="absolute -bottom-0.5 -right-0.5 grid h-3.5 w-3.5 place-items-center rounded-full border-2 border-white bg-mint"></i>
+              </span>
+              <b class="text-[12px]">Luigi</b>
+              <small class="text-[10px] font-semibold text-mint tabular-nums">+ £85.00</small>
+            </div>
+            <div class="grid place-items-center gap-1.5 text-center">
+              <span aria-hidden="true" class="relative grid h-12 w-12 place-items-center rounded-full border-2 border-white bg-mint text-[16px] font-bold text-white shadow">
+                M
+                <i class="absolute -bottom-0.5 -right-0.5 grid h-3.5 w-3.5 place-items-center rounded-full border-2 border-white bg-coral"></i>
+              </span>
+              <b class="text-[12px]">Mina</b>
+              <small class="text-[10px] font-semibold text-coral tabular-nums">− £110.00</small>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- TABS CARD -->
+      <article class="overflow-hidden rounded-2xl border border-line bg-white shadow-soft">
+        <div role="tablist" aria-label="Group views" class="flex items-center gap-1 border-b border-line px-5">
+          <button type="button" role="tab" id="tab-btn-expenses" aria-controls="tab-expenses" class="tab-btn border-b-2 px-3 py-3 text-[13px] font-semibold text-muted transition" data-tab="expenses" aria-selected="true">Expenses</button>
+          <button type="button" role="tab" id="tab-btn-charts" aria-controls="tab-charts" class="tab-btn border-b-2 px-3 py-3 text-[13px] font-semibold text-muted transition" data-tab="charts" aria-selected="false">Charts</button>
+          <button type="button" role="tab" id="tab-btn-debts" aria-controls="tab-debts" class="tab-btn border-b-2 px-3 py-3 text-[13px] font-semibold text-muted transition" data-tab="debts" aria-selected="false">Debts</button>
+        </div>
+
+        <!-- TAB: Expenses -->
+        <div id="tab-expenses" role="tabpanel" aria-labelledby="tab-btn-expenses" class="tab-panel active">
+          <div class="overflow-x-auto">
+            <table class="w-full text-[12.5px]">
+              <thead>
+                <tr class="bg-slate-50 text-left text-[10px] font-semibold uppercase tracking-wider text-muted">
+                  <th class="px-5 py-3">Expense</th>
+                  <th class="px-3 py-3">Category</th>
+                  <th class="px-3 py-3">Date</th>
+                  <th class="px-3 py-3">Paid by</th>
+                  <th class="px-3 py-3 text-right">Amount</th>
+                  <th class="px-3 py-3 text-right">Your share</th>
+                  <th class="px-5 py-3"></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-line">
+                <tr class="transition hover:bg-shell/60">
+                  <td class="px-5 py-3">
+                    <b class="block">Dinner at Le Meurice</b>
+                    <small class="block text-[11px] text-muted">Tasting menu</small>
+                  </td>
+                  <td class="px-3 py-3"><span class="rounded-full bg-amber/10 px-2 py-0.5 text-[10px] font-bold text-amber">Food</span></td>
+                  <td class="px-3 py-3 text-muted">22 May 2026</td>
+                  <td class="px-3 py-3">
+                    <span class="flex items-center gap-2">
+                      <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full bg-violet text-[9px] font-bold text-white">A</span>
+                      Alex
+                    </span>
+                  </td>
+                  <td class="px-3 py-3 text-right text-muted tabular-nums">£105.00</td>
+                  <td class="px-3 py-3 text-right font-extrabold tabular-nums text-violet">£35.00</td>
+                  <td class="px-5 py-3">
+                    <span class="flex justify-end gap-1">
+                      <button type="button" aria-label="Edit dinner expense" class="grid h-7 w-7 place-items-center rounded-md text-muted hover:bg-slate-100"><i data-lucide="pencil" class="h-3.5 w-3.5" aria-hidden="true"></i></button>
+                      <button type="button" aria-label="Delete dinner expense" class="grid h-7 w-7 place-items-center rounded-md text-coral hover:bg-coral/10"><i data-lucide="trash-2" class="h-3.5 w-3.5" aria-hidden="true"></i></button>
+                    </span>
+                  </td>
+                </tr>
+                <tr class="transition hover:bg-shell/60">
+                  <td class="px-5 py-3">
+                    <b class="block">Group dinner — day 2</b>
+                    <small class="block text-[11px] text-muted">Bistro + Eiffel ascent</small>
+                  </td>
+                  <td class="px-3 py-3"><span class="rounded-full bg-amber/10 px-2 py-0.5 text-[10px] font-bold text-amber">Food</span></td>
+                  <td class="px-3 py-3 text-muted">21 May 2026</td>
+                  <td class="px-3 py-3">
+                    <span class="flex items-center gap-2">
+                      <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full bg-mint text-[9px] font-bold text-white">M</span>
+                      Mina
+                    </span>
+                  </td>
+                  <td class="px-3 py-3 text-right text-muted tabular-nums">£240.00</td>
+                  <td class="px-3 py-3 text-right font-extrabold tabular-nums text-violet">£80.00</td>
+                  <td class="px-5 py-3">
+                    <span class="flex justify-end gap-1">
+                      <button type="button" aria-label="Edit group-dinner expense" class="grid h-7 w-7 place-items-center rounded-md text-muted hover:bg-slate-100"><i data-lucide="pencil" class="h-3.5 w-3.5" aria-hidden="true"></i></button>
+                      <button type="button" aria-label="Delete group-dinner expense" class="grid h-7 w-7 place-items-center rounded-md text-coral hover:bg-coral/10"><i data-lucide="trash-2" class="h-3.5 w-3.5" aria-hidden="true"></i></button>
+                    </span>
+                  </td>
+                </tr>
+                <tr class="transition hover:bg-shell/60">
+                  <td class="px-5 py-3">
+                    <b class="block">Louvre tickets</b>
+                    <small class="block text-[11px] text-muted">Skip-the-line × 3</small>
+                  </td>
+                  <td class="px-3 py-3"><span class="rounded-full bg-coral/10 px-2 py-0.5 text-[10px] font-bold text-coral">Activity</span></td>
+                  <td class="px-3 py-3 text-muted">19 May 2026</td>
+                  <td class="px-3 py-3">
+                    <span class="flex items-center gap-2">
+                      <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full bg-coral text-[9px] font-bold text-white">L</span>
+                      Luigi
+                    </span>
+                  </td>
+                  <td class="px-3 py-3 text-right text-muted tabular-nums">£165.00</td>
+                  <td class="px-3 py-3 text-right font-extrabold tabular-nums text-violet">£55.00</td>
+                  <td class="px-5 py-3">
+                    <span class="flex justify-end gap-1">
+                      <button type="button" aria-label="Edit Louvre expense" class="grid h-7 w-7 place-items-center rounded-md text-muted hover:bg-slate-100"><i data-lucide="pencil" class="h-3.5 w-3.5" aria-hidden="true"></i></button>
+                      <button type="button" aria-label="Delete Louvre expense" class="grid h-7 w-7 place-items-center rounded-md text-coral hover:bg-coral/10"><i data-lucide="trash-2" class="h-3.5 w-3.5" aria-hidden="true"></i></button>
+                    </span>
+                  </td>
+                </tr>
+                <tr class="transition hover:bg-shell/60">
+                  <td class="px-5 py-3">
+                    <b class="block">Metro passes</b>
+                    <small class="block text-[11px] text-muted">3-day pass × 3</small>
+                  </td>
+                  <td class="px-3 py-3"><span class="rounded-full bg-violet/10 px-2 py-0.5 text-[10px] font-bold text-violet">Transport</span></td>
+                  <td class="px-3 py-3 text-muted">18 May 2026</td>
+                  <td class="px-3 py-3">
+                    <span class="flex items-center gap-2">
+                      <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full bg-coral text-[9px] font-bold text-white">L</span>
+                      Luigi
+                    </span>
+                  </td>
+                  <td class="px-3 py-3 text-right text-muted tabular-nums">£270.00</td>
+                  <td class="px-3 py-3 text-right font-extrabold tabular-nums text-violet">£90.00</td>
+                  <td class="px-5 py-3">
+                    <span class="flex justify-end gap-1">
+                      <button type="button" aria-label="Edit metro expense" class="grid h-7 w-7 place-items-center rounded-md text-muted hover:bg-slate-100"><i data-lucide="pencil" class="h-3.5 w-3.5" aria-hidden="true"></i></button>
+                      <button type="button" aria-label="Delete metro expense" class="grid h-7 w-7 place-items-center rounded-md text-coral hover:bg-coral/10"><i data-lucide="trash-2" class="h-3.5 w-3.5" aria-hidden="true"></i></button>
+                    </span>
+                  </td>
+                </tr>
+                <tr class="transition hover:bg-shell/60">
+                  <td class="px-5 py-3">
+                    <b class="block">Hotel — 3 nights</b>
+                    <small class="block text-[11px] text-muted">Hôtel du Nord</small>
+                  </td>
+                  <td class="px-3 py-3"><span class="rounded-full bg-ocean/10 px-2 py-0.5 text-[10px] font-bold text-ocean">Accommodation</span></td>
+                  <td class="px-3 py-3 text-muted">18 May 2026</td>
+                  <td class="px-3 py-3">
+                    <span class="flex items-center gap-2">
+                      <span aria-hidden="true" class="grid h-6 w-6 place-items-center rounded-full bg-violet text-[9px] font-bold text-white">A</span>
+                      Alex
+                    </span>
+                  </td>
+                  <td class="px-3 py-3 text-right text-muted tabular-nums">£270.00</td>
+                  <td class="px-3 py-3 text-right font-extrabold tabular-nums text-violet">£90.00</td>
+                  <td class="px-5 py-3">
+                    <span class="flex justify-end gap-1">
+                      <button type="button" aria-label="Edit Hotel expense" class="grid h-7 w-7 place-items-center rounded-md text-muted hover:bg-slate-100"><i data-lucide="pencil" class="h-3.5 w-3.5" aria-hidden="true"></i></button>
+                      <button type="button" aria-label="Delete Hotel expense" class="grid h-7 w-7 place-items-center rounded-md text-coral hover:bg-coral/10"><i data-lucide="trash-2" class="h-3.5 w-3.5" aria-hidden="true"></i></button>
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="bg-slate-50 text-[11px]">
+                  <td class="px-5 py-3 font-bold uppercase tracking-wider text-muted" colspan="3">Total</td>
+                  <td class="px-3 py-3"></td>
+                  <td class="px-3 py-3 text-right text-muted tabular-nums">£1,050.00</td>
+                  <td class="px-3 py-3 text-right font-extrabold text-violet tabular-nums">£350.00</td>
+                  <td class="px-5 py-3"></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB: Charts -->
+        <div id="tab-charts" role="tabpanel" aria-labelledby="tab-btn-charts" class="tab-panel p-5">
+          <div class="grid grid-cols-[260px_1fr] items-start gap-6 max-lg:grid-cols-1">
+            <!-- pie + legend together -->
+            <div>
+              <h3 class="mb-3 text-[13px] font-bold">By category</h3>
+              <div role="img" aria-label="Your share by category — Food £115 (33%), Accommodation £90 (26%), Transport £90 (26%), Activity £55 (16%). Your total £350." class="mx-auto grid h-44 w-44 place-items-center rounded-full bg-[conic-gradient(#B96D00_0_32.86%,#2C80F6_32.86%_58.57%,#5A2DF0_58.57%_84.29%,#D6394A_84.29%_100%)]">
+                <span aria-hidden="true" class="flex h-28 w-28 flex-col items-center justify-center rounded-full bg-white text-center">
+                  <b class="text-[18px] font-extrabold tabular-nums leading-none">£350</b>
+                  <small class="mt-1 text-[10px] font-semibold text-muted leading-none">your share</small>
+                </span>
+              </div>
+              <div class="mt-4 grid gap-2 text-[12px]">
+                <p class="flex items-center justify-between"><span class="flex items-center gap-2 text-muted"><i class="h-2.5 w-2.5 rounded-full bg-amber" aria-hidden="true"></i>Food</span><b class="text-ink tabular-nums">£115.00 · 33%</b></p>
+                <p class="flex items-center justify-between"><span class="flex items-center gap-2 text-muted"><i class="h-2.5 w-2.5 rounded-full bg-ocean" aria-hidden="true"></i>Accommodation</span><b class="text-ink tabular-nums">£90.00 · 26%</b></p>
+                <p class="flex items-center justify-between"><span class="flex items-center gap-2 text-muted"><i class="h-2.5 w-2.5 rounded-full bg-violet" aria-hidden="true"></i>Transport</span><b class="text-ink tabular-nums">£90.00 · 26%</b></p>
+                <p class="flex items-center justify-between"><span class="flex items-center gap-2 text-muted"><i class="h-2.5 w-2.5 rounded-full bg-coral" aria-hidden="true"></i>Activity</span><b class="text-ink tabular-nums">£55.00 · 16%</b></p>
+              </div>
+            </div>
+
+            <!-- spent by day -->
+            <div>
+              <h3 class="mb-3 text-[13px] font-bold">Your spent by day</h3>
+              <p class="mb-3 text-[11px] text-muted">Your share of each expense, stacked by category.</p>
+              <div role="img" aria-label="Your share by day — 18 May £180 (Accommodation £90, Transport £90), 19 May £55 (Activity), 20 May £0, 21 May £80 (Food), 22 May £35 (Food). Scale £0 to £200.">
+                <div class="grid grid-cols-[36px_1fr] gap-2 pt-2" aria-hidden="true">
+                  <!-- Y-axis -->
+                  <div class="relative h-36 text-right text-[9px] font-semibold leading-none text-muted">
+                    <span class="absolute right-0 top-0 -translate-y-1/2 tabular-nums">£200</span>
+                    <span class="absolute right-0 top-1/4 -translate-y-1/2 tabular-nums">£150</span>
+                    <span class="absolute right-0 top-2/4 -translate-y-1/2 tabular-nums">£100</span>
+                    <span class="absolute right-0 top-3/4 -translate-y-1/2 tabular-nums">£50</span>
+                    <span class="absolute right-0 bottom-0 translate-y-1/2 tabular-nums">£0</span>
+                  </div>
+                  <!-- Chart area -->
+                  <div class="relative h-36">
+                    <!-- Gridlines -->
+                    <div class="pointer-events-none absolute inset-0 flex flex-col justify-between">
+                      <span class="h-px bg-line"></span>
+                      <span class="h-px border-t border-dashed border-line"></span>
+                      <span class="h-px border-t border-dashed border-line"></span>
+                      <span class="h-px border-t border-dashed border-line"></span>
+                      <span class="h-px bg-line"></span>
+                    </div>
+                    <!-- Stacked bars: 18 May £180 (Accom £90 + Transport £90), 19 £55 (Activity), 20 £0, 21 £80 (Food), 22 £35 (Food) -->
+                    <div class="relative grid h-full grid-cols-5 items-end gap-3 px-1">
+                      <!-- 18 May -->
+                      <div class="flex flex-col-reverse overflow-hidden rounded-t-md" style="height:90%">
+                        <span class="block bg-ocean" style="height:50%"></span>
+                        <span class="block bg-violet" style="height:50%"></span>
+                      </div>
+                      <!-- 19 May -->
+                      <div class="flex flex-col-reverse overflow-hidden rounded-t-md" style="height:27.5%">
+                        <span class="block bg-coral" style="height:100%"></span>
+                      </div>
+                      <!-- 20 May -->
+                      <div></div>
+                      <!-- 21 May -->
+                      <div class="flex flex-col-reverse overflow-hidden rounded-t-md" style="height:40%">
+                        <span class="block bg-amber" style="height:100%"></span>
+                      </div>
+                      <!-- 22 May -->
+                      <div class="flex flex-col-reverse overflow-hidden rounded-t-md" style="height:17.5%">
+                        <span class="block bg-amber" style="height:100%"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Day labels -->
+                <div class="mt-1.5 grid grid-cols-[36px_1fr] gap-2" aria-hidden="true">
+                  <div></div>
+                  <div class="grid grid-cols-5 gap-3 px-1 text-center text-[10px] font-semibold text-muted">
+                    <span>18 May</span><span>19 May</span><span>20 May</span><span>21 May</span><span>22 May</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: Debts -->
+        <div id="tab-debts" role="tabpanel" aria-labelledby="tab-btn-debts" class="tab-panel p-5">
+          <div class="mb-3 flex items-center justify-between">
+            <h3 class="text-[13px] font-bold">Who owes who</h3>
+            <small class="text-[11px] text-muted">Settle these to clear Paris Trip.</small>
+          </div>
+          <div class="grid gap-2.5">
+            <div class="flex items-center justify-between rounded-xl border border-line bg-white p-3.5">
+              <div class="flex items-center gap-2.5">
+                <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-violet text-[12px] font-bold text-white shadow">A</span>
+                <b class="text-[12.5px]">Alex <span class="font-normal text-muted">(you)</span></b>
+                <i data-lucide="arrow-right" class="h-4 w-4 text-muted" aria-hidden="true"></i>
+                <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-coral text-[12px] font-bold text-white shadow">L</span>
+                <b class="text-[12.5px]">Luigi</b>
+              </div>
+              <div class="flex items-center gap-3">
+                <b class="text-[14px] text-coral tabular-nums">£20.00</b>
+                <a href="settle-up-luigi.html" aria-label="Settle up £20.00 with Luigi" class="inline-flex h-8 items-center gap-1.5 rounded-lg bg-coral px-3 text-[11px] font-bold text-white shadow-lift">
+                  <i data-lucide="credit-card" class="h-3 w-3" aria-hidden="true"></i> Settle up
+                </a>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between rounded-xl border border-line bg-white p-3.5">
+              <div class="flex items-center gap-2.5">
+                <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-mint text-[12px] font-bold text-white shadow">M</span>
+                <b class="text-[12.5px]">Mina</b>
+                <i data-lucide="arrow-right" class="h-4 w-4 text-muted" aria-hidden="true"></i>
+                <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-violet text-[12px] font-bold text-white shadow">A</span>
+                <b class="text-[12.5px]">Alex <span class="font-normal text-muted">(you)</span></b>
+              </div>
+              <div class="flex items-center gap-3">
+                <b class="text-[14px] text-mint tabular-nums">£45.00</b>
+                <a href="settle-up-mina.html" aria-label="Send reminder to Mina for £45.00" class="inline-flex h-8 items-center gap-1.5 rounded-lg border border-mint/40 bg-white px-3 text-[11px] font-bold text-mint">
+                  <i data-lucide="bell" class="h-3 w-3" aria-hidden="true"></i> Send reminder
+                </a>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between rounded-xl border border-line bg-white p-3.5">
+              <div class="flex items-center gap-2.5">
+                <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-mint text-[12px] font-bold text-white shadow">M</span>
+                <b class="text-[12.5px]">Mina</b>
+                <i data-lucide="arrow-right" class="h-4 w-4 text-muted" aria-hidden="true"></i>
+                <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-coral text-[12px] font-bold text-white shadow">L</span>
+                <b class="text-[12.5px]">Luigi</b>
+              </div>
+              <div class="flex items-center gap-3">
+                <b class="text-[14px] text-ink tabular-nums">£65.00</b>
+                <span class="inline-flex h-8 items-center gap-1.5 rounded-lg border border-line bg-white px-3 text-[11px] font-semibold text-muted" aria-label="Not involving you">
+                  <i data-lucide="info" class="h-3 w-3" aria-hidden="true"></i> Between others
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 grid grid-cols-3 gap-2 rounded-xl border border-line bg-shell/60 p-3 text-center text-[11px]">
+            <div>
+              <small class="block text-muted">You'll receive</small>
+              <p class="text-mint font-bold tabular-nums"><span class="sr-only">You'll receive: </span>+ £45.00</p>
+            </div>
+            <div>
+              <small class="block text-muted">You owe</small>
+              <p class="text-coral font-bold tabular-nums"><span class="sr-only">You owe: </span>− £20.00</p>
+            </div>
+            <div>
+              <small class="block text-muted">Your net</small>
+              <p class="text-mint font-bold tabular-nums"><span class="sr-only">Your net: </span>+ £25.00</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </main>
+  </div>
+
+  <script>
+    lucide.createIcons();
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        document.querySelectorAll('.tab-btn').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${tab}`));
+        lucide.createIcons();
+      });
+    });
+
+    (function () {
+      const card = document.getElementById('budget-card');
+      if (!card) return;
+      const SPENT = 350;
+      const fmt = n => '£' + n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const view = card.querySelector('[data-budget-view]');
+      const form = card.querySelector('[data-budget-form]');
+      const display = card.querySelector('[data-budget-display]');
+      const editBtn = card.querySelector('[data-budget-edit]');
+      const cancelBtn = card.querySelector('[data-budget-cancel]');
+      const input = card.querySelector('[data-budget-input]');
+      const remainingEl = document.querySelector('[data-budget-remaining]');
+      const pctEl = document.querySelector('[data-budget-pct]');
+      const barEl = document.querySelector('[data-budget-bar]');
+      const barTrack = document.querySelector('[data-budget-bar-track]');
+      const summaryEl = document.querySelector('[data-budget-summary]');
+      const headroomEl = document.querySelector('[data-budget-headroom]');
+      let budget = parseFloat((display.textContent || '').replace(/[^0-9.]/g, '')) || 0;
+
+      const openEdit = () => {
+        input.value = budget.toFixed(2);
+        view.classList.add('hidden');
+        form.classList.remove('hidden');
+        form.classList.add('flex');
+        input.focus();
+        input.select();
+      };
+      const closeEdit = () => {
+        form.classList.add('hidden');
+        form.classList.remove('flex');
+        view.classList.remove('hidden');
+        editBtn.focus();
+      };
+      const apply = () => {
+        const val = parseFloat(input.value);
+        if (!Number.isFinite(val) || val < 0) return;
+        budget = val;
+        display.textContent = fmt(budget);
+        const remaining = budget - SPENT;
+        const pct = budget > 0 ? Math.min(100, Math.round((SPENT / budget) * 100)) : 0;
+        if (remainingEl) remainingEl.textContent = fmt(remaining);
+        if (pctEl) pctEl.textContent = pct + '% used';
+        if (barEl) barEl.style.width = pct + '%';
+        if (barTrack) barTrack.setAttribute('aria-label', `Spent ${fmt(SPENT)} of ${fmt(budget)} — ${pct}% of budget used`);
+        if (summaryEl) summaryEl.textContent = fmt(budget);
+        if (headroomEl) {
+          const absDiff = fmt(Math.abs(remaining));
+          headroomEl.innerHTML = remaining >= 0
+            ? `You're <b class="text-ink tabular-nums">${absDiff}</b> under budget — comfortable headroom for the rest of the trip.`
+            : `You're <b class="text-ink tabular-nums">${absDiff}</b> over budget — review upcoming expenses.`;
+        }
+        closeEdit();
+      };
+
+      editBtn.addEventListener('click', openEdit);
+      cancelBtn.addEventListener('click', closeEdit);
+      form.addEventListener('submit', e => { e.preventDefault(); apply(); });
+      input.addEventListener('keydown', e => { if (e.key === 'Escape') { e.preventDefault(); closeEdit(); } });
+    })();
+  </script>
+</body>
+</html>

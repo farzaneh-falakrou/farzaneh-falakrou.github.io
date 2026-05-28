@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sketch 008 — SplitSmart Case Study</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #ebe8e2;
+      --bg-2:      #e3dfd6;
+      --bg-3:      #dcd6c9;
+      --ink:       #1a1a1a;
+      --ink-2:     #2a2a2a;
+      --muted:     #5a5a5a;
+      --muted-2:   #8a8a85;
+      --line:      #d5d0c5;
+      --line-2:    #c6c0b3;
+      --accent:    #ff5a36;
+      --accent-soft: #ffd8c8;
+      --surface:   #ffffff;
+      --dark:      #1a1612;
+      --dark-2:    #261f1a;
+      --violet-hint: #5A2DF0; /* echoes the SplitSmart prototype palette where relevant */
+
+      --font-serif: 'Instrument Serif', serif;
+      --font-sans:  'Inter', system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    /* ─────────────────────────────────────────────────────────
+       VARIANT NAV (sketch toolbar at top)
+       ───────────────────────────────────────────────────────── */
+    #variant-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9998;
+      background: #fff; border-bottom: 1px solid #e5e5e5;
+      padding: 10px 20px; display: flex; gap: 8px; align-items: center;
+      font-family: system-ui; font-size: 13px;
+    }
+    #variant-nav .label { color: #999; margin-right: 8px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .vtab {
+      padding: 6px 14px; border-radius: 6px; border: 1px solid #ddd;
+      background: #fff; cursor: pointer; font-size: 12px; font-family: system-ui;
+      transition: all 0.15s; color: #333;
+    }
+    .vtab:hover { background: #f5f5f5; }
+    .vtab.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .vtab small { color: #999; margin-left: 6px; font-size: 11px; }
+    .vtab.active small { color: #888; }
+
+    .variant { display: none; min-height: 100vh; padding-top: 56px; }
+    .variant.active { display: block; }
+
+    /* Image placeholders shared across variants */
+    .img {
+      border-radius: 12px;
+      display: grid; place-items: center;
+      font-family: var(--font-serif); font-style: italic; color: var(--muted-2); font-size: 13px;
+      text-align: center; padding: 24px;
+      position: relative; overflow: hidden;
+    }
+    .img-cream-1 { background: linear-gradient(135deg, #e3dfd6 0%, #c9c3b4 100%); color: var(--muted); }
+    .img-cream-2 { background: linear-gradient(135deg, #f5efe6 0%, #d9d2c2 100%); color: #8a8175; }
+    .img-warm    { background: linear-gradient(135deg, #ffd8c8 0%, #ff9e85 100%); color: #aa5a45; }
+    .img-dark    { background: linear-gradient(135deg, #1f1a16 0%, #3a322a 100%); color: #8a8175; }
+    .img-violet  { background: linear-gradient(135deg, #1a0e66 0%, #4a22e0 60%, #7b4dff 100%); color: #d8d2f0; }
+    .img-violet-soft { background: linear-gradient(135deg, #ebe6ff 0%, #c8b8ff 100%); color: #5a4da0; }
+
+    /* tiny chrome dots used on screen frames */
+    .chrome-dots { display: flex; gap: 6px; }
+    .chrome-dots span { width: 10px; height: 10px; border-radius: 50%; background: #d5d0c5; }
+
+    .display em { font-style: italic; color: var(--accent); }
+    .pull-italic { font-family: var(--font-serif); font-style: italic; color: var(--accent); }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT A — QUIET EDITORIAL
+       Pure typographic hero (no cover). Screenshots bare. Gaps inline.
+       Reference: Frank Chimero, NYT Magazine, The Atlantic feature.
+       ─────────────────────────────────────────────────────────── */
+    #va { background: var(--bg); }
+    #va .a-section-mark, #va .a-reflection { scroll-margin-top: 80px; }
+    #va .a-toc {
+      position: fixed; top: 110px; left: 32px;
+      width: 180px; z-index: 10;
+      font-size: 12px; line-height: 1.7;
+    }
+    #va .a-toc-label {
+      font-family: var(--font-serif); font-style: italic;
+      color: var(--accent); font-size: 17px;
+      margin-bottom: 14px;
+    }
+    #va .a-toc-list { list-style: none; padding: 0; margin: 0; }
+    #va .a-toc-list li { padding: 4px 0; color: var(--muted-2); }
+    #va .a-toc-list li.active { color: var(--ink); }
+    #va .a-toc-list a {
+      display: grid; grid-template-columns: 22px 1fr; gap: 10px;
+      align-items: baseline; color: inherit;
+      transition: color 0.2s;
+    }
+    #va .a-toc-list a:hover { color: var(--ink); }
+    #va .a-toc-list .num {
+      font-family: var(--font-serif); font-style: italic;
+      color: var(--accent); font-size: 13px;
+    }
+    @media (max-width: 1180px) { #va .a-toc { display: none; } }
+
+    #va .a-top {
+      padding: 28px 64px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--line);
+    }
+    #va .a-top-name { font-family: var(--font-serif); font-style: italic; font-size: 22px; }
+    #va .a-top-back { font-size: 12px; color: var(--muted); display: inline-flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+    #va .a-top-back:hover { color: var(--accent); }
+    #va .a-top-nav { display: flex; gap: 32px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    #va .a-top-nav a:hover { color: var(--ink); }
+
+    #va .a-hero {
+      padding: 140px 64px 100px;
+      max-width: 1200px; margin: 0 auto;
+      text-align: center;
+    }
+    #va .a-hero-eyebrow {
+      font-family: var(--font-serif); font-style: italic;
+      color: var(--accent); font-size: 22px; margin-bottom: 28px;
+    }
+    #va .a-hero-eyebrow::before, #va .a-hero-eyebrow::after { content: '·'; opacity: 0.5; margin: 0 12px; }
+    #va .a-hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(56px, 8vw, 124px); line-height: 0.96;
+      letter-spacing: -0.035em; font-weight: 400;
+      max-width: 1100px; margin: 0 auto 48px;
+    }
+    #va .a-hero h1 em { font-style: italic; color: var(--accent); }
+    #va .a-hero-sub {
+      font-family: var(--font-serif); font-size: 26px; line-height: 1.45;
+      color: var(--ink-2); max-width: 720px; margin: 0 auto;
+      font-style: italic;
+    }
+    #va .a-hero-byline {
+      margin-top: 80px; padding-top: 32px;
+      border-top: 1px solid var(--line);
+      display: flex; justify-content: center; gap: 56px;
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted);
+    }
+    #va .a-hero-byline strong { color: var(--ink); display: block; font-size: 13px; text-transform: none; letter-spacing: 0; margin-top: 6px; font-weight: 500; }
+
+    /* No cover. Direct to body. */
+    #va .a-article {
+      max-width: 720px; margin: 0 auto;
+      padding: 40px 24px 120px;
+      font-size: 19px; line-height: 1.7; color: var(--ink-2);
+    }
+    #va .a-section-mark {
+      font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 18px;
+      margin: 96px 0 16px;
+      display: flex; align-items: baseline; gap: 12px;
+    }
+    #va .a-section-mark .num {
+      font-style: normal; font-family: var(--font-sans); font-size: 11px;
+      text-transform: uppercase; letter-spacing: 0.16em;
+      color: var(--muted); border-top: 1px solid var(--accent); padding-top: 6px;
+    }
+    #va .a-article h2 {
+      font-family: var(--font-serif); font-size: 48px; font-weight: 400;
+      line-height: 1.05; color: var(--ink); margin-bottom: 36px;
+      letter-spacing: -0.02em;
+    }
+    #va .a-article h2 em { font-style: italic; color: var(--accent); }
+    #va .a-article p + p { margin-top: 22px; }
+    #va .a-article p.dropcap::first-letter {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: 92px; line-height: 0.85; font-weight: 400;
+      float: left; padding-right: 12px; padding-top: 6px; color: var(--accent);
+    }
+    #va .a-article em { font-family: var(--font-serif); font-style: italic; font-size: 21px; color: var(--ink); }
+    #va .a-article strong { font-weight: 500; color: var(--ink); }
+    #va .a-article h3 {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: 28px; color: var(--accent);
+      line-height: 1.2; letter-spacing: -0.01em;
+      margin: 44px 0 16px;
+    }
+    #va .a-table {
+      margin: 32px -40px; width: calc(100% + 80px);
+      border-collapse: collapse; font-size: 16px;
+      border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink);
+    }
+    #va .a-table thead th {
+      font-family: var(--font-serif); font-style: italic; color: var(--accent);
+      font-weight: 400; font-size: 18px;
+      text-align: left; padding: 14px 0;
+      border-bottom: 1px solid var(--ink);
+    }
+    #va .a-table tbody tr + tr { border-top: 1px solid var(--line); }
+    #va .a-table tbody td { padding: 14px 0; vertical-align: top; line-height: 1.55; }
+    #va .a-table tbody td:first-child { padding-right: 24px; color: var(--ink); font-weight: 500; }
+    #va .a-table tbody td:last-child { color: var(--muted); padding-left: 24px; }
+    #va .a-table tbody em { font-family: var(--font-serif); font-style: italic; font-size: 17px; color: var(--ink); }
+    #va .a-quotes {
+      margin: 28px -8px 0;
+      display: flex; flex-direction: column; gap: 12px;
+      padding-left: 28px; border-left: 2px solid var(--accent);
+    }
+    #va .a-quote {
+      font-family: var(--font-serif); font-style: italic; font-size: 24px;
+      color: var(--ink); line-height: 1.35; margin: 0 !important;
+    }
+
+    #va .a-pullquote {
+      margin: 72px -120px;
+      font-family: var(--font-serif); font-size: 44px; line-height: 1.18;
+      color: var(--ink); text-align: center;
+    }
+    #va .a-pullquote em { font-style: italic; color: var(--accent); }
+    #va .a-pullquote::before { content: '"'; font-size: 88px; color: var(--accent); display: block; line-height: 0.5; margin-bottom: 16px; }
+    #va .a-pullquote cite { display: block; font-family: var(--font-sans); font-size: 12px; font-style: normal; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 24px; }
+
+    /* Figures (screenshots) — bare on white cards, italic captions */
+    #va .a-figure {
+      margin: 56px -64px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    #va .a-figure .img { height: 360px; }
+    #va .a-figure figcaption { font-size: 14px; color: var(--muted); font-style: italic; font-family: var(--font-serif); padding: 0 4px; }
+    #va .a-figure-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+    }
+    #va .a-figure-grid .img { height: 240px; }
+
+    /* Stat table — typographic, framed by hairline rules */
+    #va .a-stats {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+      margin: 72px 0; padding: 32px 0;
+      border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink);
+    }
+    #va .a-stat-num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 48px; line-height: 1; }
+    #va .a-stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-top: 10px; line-height: 1.4; }
+
+    /* Inline tradeoff blocks — quiet, no boxes */
+    #va .a-tradeoff {
+      margin-top: 32px;
+      padding-top: 24px; border-top: 1px dashed var(--line-2);
+    }
+    #va .a-tradeoff:first-of-type { margin-top: 24px; }
+    #va .a-tradeoff-eyebrow {
+      font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 17px; margin-bottom: 6px;
+    }
+    #va .a-tradeoff h4 { font-family: var(--font-serif); font-size: 24px; font-weight: 400; line-height: 1.2; margin-bottom: 8px; }
+
+    /* Forward-look — inline editorial paragraphs */
+    #va .a-gap {
+      margin-top: 40px;
+      padding-left: 28px; border-left: 2px solid var(--accent);
+    }
+    #va .a-gap-num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 18px; margin-bottom: 8px; }
+    #va .a-gap h4 { font-family: var(--font-serif); font-size: 28px; font-weight: 400; line-height: 1.2; margin-bottom: 12px; }
+
+    /* Reflection */
+    #va .a-reflection {
+      margin: 96px -40px 0;
+      padding: 64px 40px;
+      border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+      text-align: center;
+    }
+    #va .a-reflection-mark { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 18px; margin-bottom: 16px; }
+    #va .a-reflection p { font-family: var(--font-serif); font-size: 32px; line-height: 1.3; font-style: italic; color: var(--ink); margin-bottom: 0; max-width: 600px; margin-left: auto; margin-right: auto; }
+    #va .a-reflection p em { color: var(--accent); }
+    #va .a-reflection .note { font-family: var(--font-sans); font-size: 15px; font-style: normal; color: var(--muted-2); margin-top: 24px; line-height: 1.6; }
+
+    /* Footer next-case */
+    #va .a-footer {
+      max-width: 1200px; margin: 0 auto;
+      padding: 100px 64px 80px;
+      border-top: 1px solid var(--line);
+      display: grid; grid-template-columns: 1fr 1.3fr; gap: 64px; align-items: end;
+    }
+    #va .a-footer-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 12px; }
+    #va .a-footer-title { font-family: var(--font-serif); font-size: 64px; line-height: 0.98; font-weight: 400; letter-spacing: -0.02em; }
+    #va .a-footer-title em { font-style: italic; color: var(--accent); }
+    #va .a-footer-img { height: 220px; }
+    #va .a-footer-meta { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-top: 20px; }
+    #va .a-footer-meta strong { color: var(--ink); margin-right: 16px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT B — BALANCED
+       Typographic hero + restrained dashboard cover. Screen frames.
+       Three-column gap cards. Numbered tradeoffs.
+       Reference: Karri Saarinen project pages with editorial accent.
+       ─────────────────────────────────────────────────────────── */
+    #vb { background: var(--bg); }
+
+    #vb .b-top {
+      padding: 24px 56px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--line);
+    }
+    #vb .b-top-name { font-family: var(--font-serif); font-style: italic; font-size: 20px; }
+    #vb .b-top-back { font-size: 12px; color: var(--muted); display: inline-flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+    #vb .b-top-back:hover { color: var(--accent); }
+    #vb .b-top-nav { display: flex; gap: 28px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+
+    #vb .b-hero {
+      padding: 96px 56px 56px;
+      max-width: 1320px; margin: 0 auto;
+      text-align: center;
+    }
+    #vb .b-hero-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 20px; margin-bottom: 24px; }
+    #vb .b-hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(52px, 7.2vw, 112px); line-height: 0.96;
+      letter-spacing: -0.03em; font-weight: 400;
+      margin-bottom: 40px;
+      max-width: 1000px; margin-left: auto; margin-right: auto;
+    }
+    #vb .b-hero h1 em { font-style: italic; color: var(--accent); }
+    #vb .b-hero-sub {
+      font-family: var(--font-serif); font-size: 24px; line-height: 1.45;
+      color: var(--ink-2); max-width: 680px; margin: 0 auto;
+      font-style: italic;
+    }
+
+    #vb .b-cover {
+      max-width: 1320px; margin: 56px auto 0;
+      padding: 0 56px;
+    }
+    #vb .b-cover-frame {
+      background: var(--surface); border-radius: 16px;
+      padding: 16px; box-shadow: 0 30px 80px rgba(26,22,18,0.12), 0 4px 12px rgba(26,22,18,0.05);
+      border: 1px solid var(--line);
+    }
+    #vb .b-cover-chrome { display: flex; gap: 6px; margin-bottom: 12px; padding: 4px 4px 8px; border-bottom: 1px solid var(--line); }
+    #vb .b-cover-chrome span { width: 10px; height: 10px; border-radius: 50%; background: var(--line-2); }
+    #vb .b-cover-img { height: 520px; border-radius: 8px; }
+
+    /* Metadata strip — horizontal, scrolls naturally */
+    #vb .b-meta {
+      max-width: 1320px; margin: 64px auto 0;
+      padding: 32px 56px;
+      border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 32px;
+    }
+    #vb .b-meta-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 6px; }
+    #vb .b-meta-value { font-family: var(--font-serif); font-size: 18px; line-height: 1.3; font-style: italic; }
+
+    /* Two-column body — TOC + article */
+    #vb .b-body {
+      max-width: 1320px; margin: 0 auto;
+      padding: 64px 56px 100px;
+      display: grid; grid-template-columns: 220px 1fr; gap: 80px;
+    }
+    #vb .b-toc {
+      position: sticky; top: 88px; align-self: start;
+      font-size: 13px; line-height: 1.8;
+    }
+    #vb .b-toc-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 12px; }
+    #vb .b-toc-list { list-style: none; }
+    #vb .b-toc-list li { padding: 4px 0; color: var(--muted); }
+    #vb .b-toc-list li.active { color: var(--ink); }
+    #vb .b-toc-list a {
+      display: grid; grid-template-columns: 24px 1fr; gap: 12px;
+      align-items: baseline; color: inherit;
+      transition: color 0.15s;
+    }
+    #vb .b-toc-list a:hover { color: var(--ink); }
+    #vb .b-toc-list .num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 14px; }
+    #vb .b-section-mark, #vb .b-reflection { scroll-margin-top: 80px; }
+
+    #vb .b-article { font-size: 17px; line-height: 1.7; color: var(--ink-2); max-width: 720px; }
+    #vb .b-section-mark { display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px; }
+    #vb .b-section-mark .num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 18px; }
+    #vb .b-section-mark .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); border-top: 1px solid var(--ink); padding-top: 6px; }
+    #vb .b-article section + section { margin-top: 88px; }
+    #vb .b-article h2 {
+      font-family: var(--font-serif); font-size: 44px; font-weight: 400;
+      line-height: 1.05; color: var(--ink); margin-bottom: 28px;
+      letter-spacing: -0.02em;
+    }
+    #vb .b-article h2 em { font-style: italic; color: var(--accent); }
+    #vb .b-article p + p { margin-top: 20px; }
+    #vb .b-article em { font-family: var(--font-serif); font-style: italic; font-size: 18px; color: var(--ink); }
+    #vb .b-article strong { font-weight: 500; color: var(--ink); }
+    #vb .b-article h3 {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: 24px; color: var(--accent);
+      line-height: 1.2; letter-spacing: -0.01em;
+      margin: 36px 0 14px;
+    }
+    #vb .b-table {
+      margin: 28px 0; width: 100%;
+      border-collapse: separate; border-spacing: 0;
+      font-size: 14px;
+      background: var(--surface);
+      border: 1px solid var(--line); border-radius: 12px;
+      overflow: hidden;
+    }
+    #vb .b-table thead th {
+      font-family: var(--font-sans); font-weight: 500;
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--muted); background: var(--bg-2);
+      text-align: left; padding: 12px 18px;
+    }
+    #vb .b-table tbody tr + tr td { border-top: 1px solid var(--line); }
+    #vb .b-table tbody td { padding: 14px 18px; vertical-align: top; line-height: 1.5; }
+    #vb .b-table tbody td:first-child { color: var(--ink); font-weight: 500; }
+    #vb .b-table tbody td:last-child { color: var(--muted); }
+    #vb .b-table tbody em { font-family: var(--font-serif); font-style: italic; font-size: 15px; color: var(--ink); }
+    #vb .b-quotes { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+    #vb .b-quote {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: 20px; color: var(--ink); line-height: 1.35;
+      padding-left: 20px; border-left: 2px solid var(--accent);
+      margin: 0 !important;
+    }
+
+    #vb .b-aside {
+      margin: 32px 0;
+      padding: 24px 28px;
+      background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    }
+    #vb .b-aside-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 14px; margin-bottom: 8px; }
+    #vb .b-aside-cite { font-size: 12px; color: var(--muted); margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+    #vb .b-aside-cite a { color: var(--accent); }
+
+    #vb .b-pullquote {
+      margin: 48px -40px;
+      font-family: var(--font-serif); font-size: 36px; line-height: 1.18;
+      color: var(--ink); text-align: center;
+    }
+    #vb .b-pullquote em { font-style: italic; color: var(--accent); }
+
+    /* Figures — contained in subtle frames */
+    #vb .b-figure { margin: 36px 0 32px; }
+    #vb .b-figure-frame {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+      padding: 12px; box-shadow: 0 8px 24px rgba(26,22,18,0.06);
+    }
+    #vb .b-figure-chrome { display: flex; gap: 6px; padding: 4px 4px 8px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+    #vb .b-figure-chrome span { width: 8px; height: 8px; border-radius: 50%; background: var(--line-2); }
+    #vb .b-figure .img { height: 320px; border-radius: 6px; }
+    #vb .b-figure figcaption { font-size: 13px; font-style: italic; font-family: var(--font-serif); color: var(--muted); margin-top: 10px; padding: 0 6px; }
+
+    #vb .b-figure-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 36px 0 32px; }
+    #vb .b-figure-grid .b-figure-frame .img { height: 220px; }
+
+    /* Numbered tradeoffs */
+    #vb .b-tradeoffs { margin-top: 24px; }
+    #vb .b-tradeoff {
+      display: grid; grid-template-columns: 40px 1fr; gap: 20px;
+      padding: 24px 0; border-top: 1px solid var(--line);
+    }
+    #vb .b-tradeoff:last-child { border-bottom: 1px solid var(--line); }
+    #vb .b-tradeoff-num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 28px; line-height: 1; }
+    #vb .b-tradeoff h4 { font-family: var(--font-serif); font-size: 24px; font-weight: 400; line-height: 1.2; margin-bottom: 8px; }
+    #vb .b-tradeoff p { font-size: 16px; }
+    #vb .b-tradeoff p + p { margin-top: 10px; color: var(--muted); }
+
+    /* Gap cards — three-column */
+    #vb .b-gaps {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      margin: 32px 0;
+    }
+    #vb .b-gap-card {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+      padding: 28px 24px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    #vb .b-gap-card .num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 22px; }
+    #vb .b-gap-card h4 { font-family: var(--font-serif); font-size: 22px; font-weight: 400; line-height: 1.15; }
+    #vb .b-gap-card p { font-size: 14px; line-height: 1.55; color: var(--muted); }
+    #vb .b-gap-card .img { height: 100px; font-size: 11px; }
+
+    /* Reflection — italic editorial */
+    #vb .b-reflection { margin: 80px 0 0; padding: 56px 0; border-top: 1px solid var(--line); }
+    #vb .b-reflection-mark { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 16px; margin-bottom: 16px; }
+    #vb .b-reflection p { font-family: var(--font-serif); font-size: 28px; font-style: italic; line-height: 1.3; max-width: 600px; }
+    #vb .b-reflection p em { color: var(--accent); }
+    #vb .b-reflection .note { font-family: var(--font-sans); font-size: 15px; font-style: normal; color: var(--muted); margin-top: 20px; max-width: 600px; line-height: 1.6; }
+
+    /* Footer */
+    #vb .b-footer {
+      max-width: 1320px; margin: 0 auto;
+      padding: 96px 56px 64px;
+      border-top: 1px solid var(--line);
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 56px; align-items: center;
+    }
+    #vb .b-footer-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 12px; }
+    #vb .b-footer-title { font-family: var(--font-serif); font-size: 56px; line-height: 1; font-weight: 400; letter-spacing: -0.02em; }
+    #vb .b-footer-title em { font-style: italic; color: var(--accent); }
+    #vb .b-footer-img { height: 200px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT C — BOLD CINEMATIC
+       Typographic hero on dark full-bleed cover. Dark device frames
+       with floating callouts. Dark cinematic gaps block.
+       Reference: Stripe Press meets Linear changelog.
+       ─────────────────────────────────────────────────────────── */
+    #vc { background: var(--bg); }
+
+    #vc .c-top {
+      padding: 22px 48px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--line);
+      background: rgba(235,232,226,0.85); backdrop-filter: blur(8px);
+      position: sticky; top: 56px; z-index: 50;
+    }
+    #vc .c-top-name { font-family: var(--font-serif); font-style: italic; font-size: 19px; }
+    #vc .c-top-back { font-size: 12px; color: var(--muted); display: inline-flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+    #vc .c-top-back:hover { color: var(--accent); }
+
+    /* Hero — typographic on full-bleed dark cover */
+    #vc .c-hero {
+      position: relative;
+      min-height: 80vh;
+      background: linear-gradient(180deg, #0f0a06 0%, #1a1612 60%, #261f1a 100%);
+      color: #f5efe6;
+      padding: 120px 56px 80px;
+      overflow: hidden;
+    }
+    #vc .c-hero::before {
+      content: ''; position: absolute; top: -10%; right: -10%; width: 60%; height: 70%;
+      background: radial-gradient(circle, rgba(255,90,54,0.18), transparent 60%);
+      pointer-events: none;
+    }
+    #vc .c-hero::after {
+      content: ''; position: absolute; bottom: -5%; left: -5%; width: 50%; height: 50%;
+      background: radial-gradient(circle, rgba(90,45,240,0.12), transparent 65%);
+      pointer-events: none;
+    }
+    #vc .c-hero-inner {
+      max-width: 1400px; margin: 0 auto; position: relative; z-index: 1;
+    }
+    #vc .c-hero-eyebrow {
+      font-family: var(--font-serif); font-style: italic;
+      color: var(--accent); font-size: 22px; margin-bottom: 28px;
+    }
+    #vc .c-hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(60px, 9vw, 156px); line-height: 0.94;
+      letter-spacing: -0.04em; font-weight: 400;
+      margin-bottom: 48px; max-width: 1300px;
+    }
+    #vc .c-hero h1 em { font-style: italic; color: var(--accent); }
+    #vc .c-hero-sub {
+      font-family: var(--font-serif); font-size: 28px; line-height: 1.4;
+      color: #d8d2c4; max-width: 760px; font-style: italic;
+    }
+    #vc .c-hero-meta {
+      position: absolute; bottom: 80px; left: 56px; right: 56px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+      max-width: 1400px; margin: 0 auto;
+      padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.15);
+    }
+    #vc .c-hero-byline { display: flex; gap: 48px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em; color: #8a8175; }
+    #vc .c-hero-byline strong { color: #f5efe6; display: block; font-size: 13px; font-family: var(--font-serif); font-style: italic; text-transform: none; letter-spacing: 0; margin-top: 6px; font-weight: 400; }
+    #vc .c-hero-scroll { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 14px; }
+
+    /* Cover image floats half-out of the dark hero */
+    #vc .c-cover {
+      max-width: 1400px; margin: -120px auto 0; padding: 0 56px;
+      position: relative; z-index: 2;
+    }
+    #vc .c-cover-frame {
+      background: #0d0a08; border-radius: 18px; padding: 16px;
+      box-shadow: 0 60px 120px rgba(26,22,18,0.4), 0 12px 32px rgba(26,22,18,0.18);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    #vc .c-cover-chrome { display: flex; gap: 7px; padding: 6px 6px 12px; }
+    #vc .c-cover-chrome span { width: 11px; height: 11px; border-radius: 50%; background: #2a2520; }
+    #vc .c-cover-img { height: 580px; border-radius: 10px; }
+
+    /* Metadata strip */
+    #vc .c-meta {
+      max-width: 1400px; margin: 64px auto 0;
+      padding: 28px 56px;
+      border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 32px;
+    }
+    #vc .c-meta-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 6px; }
+    #vc .c-meta-value { font-family: var(--font-serif); font-size: 18px; line-height: 1.3; font-style: italic; }
+
+    /* Body — 2 col w/ TOC */
+    #vc .c-body {
+      max-width: 1400px; margin: 0 auto;
+      padding: 72px 56px 100px;
+      display: grid; grid-template-columns: 240px 1fr; gap: 80px;
+    }
+    #vc .c-toc {
+      position: sticky; top: 130px; align-self: start;
+      font-size: 13px; line-height: 1.8;
+    }
+    #vc .c-toc-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 14px; }
+    #vc .c-toc-list { list-style: none; }
+    #vc .c-toc-list li { padding: 5px 0; color: var(--muted); }
+    #vc .c-toc-list li.active { color: var(--ink); }
+    #vc .c-toc-list a {
+      display: grid; grid-template-columns: 28px 1fr; gap: 12px;
+      align-items: baseline; color: inherit;
+      transition: color 0.15s;
+    }
+    #vc .c-toc-list a:hover { color: var(--ink); }
+    #vc .c-toc-list .num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 14px; }
+    #vc .c-toc-list li.active .num { font-size: 16px; }
+    #vc .c-section-mark, #vc .c-gaps-eyebrow, #vc .c-reflection { scroll-margin-top: 140px; }
+
+    #vc .c-article { font-size: 18px; line-height: 1.7; color: var(--ink-2); max-width: 820px; }
+    #vc .c-section-mark { display: flex; align-items: baseline; gap: 18px; margin-bottom: 28px; }
+    #vc .c-section-mark .num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 22px; }
+    #vc .c-section-mark .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted); border-top: 1px solid var(--ink); padding-top: 8px; }
+    #vc .c-article section + section { margin-top: 112px; }
+    #vc .c-article h2 {
+      font-family: var(--font-serif); font-size: 56px; font-weight: 400;
+      line-height: 1.02; color: var(--ink); margin-bottom: 36px;
+      letter-spacing: -0.025em;
+    }
+    #vc .c-article h2 em { font-style: italic; color: var(--accent); }
+    #vc .c-article p + p { margin-top: 22px; }
+    #vc .c-article em { font-family: var(--font-serif); font-style: italic; font-size: 20px; color: var(--ink); }
+    #vc .c-article strong { font-weight: 500; color: var(--ink); }
+    #vc .c-article h3 {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: 26px; color: var(--accent);
+      line-height: 1.2; letter-spacing: -0.01em;
+      margin: 44px 0 16px;
+    }
+    #vc .c-table {
+      margin: 32px 0; width: 100%;
+      border-collapse: separate; border-spacing: 0;
+      font-size: 15px;
+      background: var(--surface);
+      border: 1px solid var(--line); border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(26,22,18,0.06);
+    }
+    #vc .c-table thead th {
+      font-family: var(--font-sans); font-weight: 500;
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em;
+      color: #f5efe6; background: var(--dark);
+      text-align: left; padding: 16px 22px;
+    }
+    #vc .c-table tbody tr + tr td { border-top: 1px solid var(--line); }
+    #vc .c-table tbody td { padding: 18px 22px; vertical-align: top; line-height: 1.55; }
+    #vc .c-table tbody td:first-child { color: var(--ink); font-weight: 500; }
+    #vc .c-table tbody td:last-child { color: var(--muted); }
+    #vc .c-table tbody em { font-family: var(--font-serif); font-style: italic; font-size: 16px; color: var(--ink); }
+    #vc .c-quotes { display: flex; flex-direction: column; gap: 14px; margin-top: 24px; }
+    #vc .c-quote {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: 22px; color: var(--ink); line-height: 1.32;
+      padding: 18px 24px; background: var(--surface);
+      border-left: 3px solid var(--accent); border-radius: 0 12px 12px 0;
+      margin: 0 !important;
+    }
+
+    #vc .c-aside {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--dark); color: #d8d2c4; border-radius: 14px;
+      position: relative; overflow: hidden;
+    }
+    #vc .c-aside::before { content: ''; position: absolute; top: -30%; right: -10%; width: 50%; height: 100%; background: radial-gradient(circle, rgba(255,90,54,0.1), transparent 65%); }
+    #vc .c-aside-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 15px; margin-bottom: 10px; position: relative; }
+    #vc .c-aside p { font-family: var(--font-serif); font-size: 22px; line-height: 1.35; font-style: italic; position: relative; }
+    #vc .c-aside-cite { font-family: var(--font-sans); font-size: 12px; color: var(--muted-2); margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.1); position: relative; font-style: normal; }
+    #vc .c-aside-cite a { color: var(--accent); }
+
+    #vc .c-pullquote {
+      margin: 72px -80px;
+      font-family: var(--font-serif); font-size: 64px; line-height: 1.06;
+      color: var(--ink); letter-spacing: -0.025em;
+      text-align: left;
+    }
+    #vc .c-pullquote em { font-style: italic; color: var(--accent); }
+
+    /* Figures — dark device frames with floating callouts */
+    #vc .c-figure { margin: 48px -40px 40px; position: relative; }
+    #vc .c-figure-frame {
+      background: #0d0a08; border-radius: 14px; padding: 14px;
+      box-shadow: 0 30px 80px rgba(26,22,18,0.28), 0 8px 24px rgba(26,22,18,0.12);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    #vc .c-figure-chrome { display: flex; gap: 6px; padding: 5px 5px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 8px; }
+    #vc .c-figure-chrome span { width: 9px; height: 9px; border-radius: 50%; background: #2a2520; }
+    #vc .c-figure .img { height: 380px; border-radius: 8px; }
+    #vc .c-figure figcaption {
+      font-family: var(--font-serif); font-style: italic; color: var(--muted);
+      font-size: 14px; margin-top: 14px; padding: 0 8px;
+    }
+
+    /* Floating callout pointing at screen element */
+    #vc .c-callout {
+      position: absolute; max-width: 240px;
+      background: var(--ink); color: #f5efe6; padding: 14px 16px; border-radius: 10px;
+      font-size: 13px; line-height: 1.45;
+      box-shadow: 0 10px 30px rgba(26,22,18,0.3);
+      z-index: 5;
+    }
+    #vc .c-callout-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 12px; margin-bottom: 4px; }
+    #vc .c-callout-line { position: absolute; width: 60px; height: 1px; background: var(--ink); }
+
+    #vc .c-figure-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 48px -40px 40px; }
+    #vc .c-figure-row .c-figure-frame .img { height: 280px; }
+    #vc .c-figure-row .c-figure { margin: 0; }
+
+    /* Tradeoffs — numbered, narrow */
+    #vc .c-tradeoffs { margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    #vc .c-tradeoff {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+      padding: 28px;
+    }
+    #vc .c-tradeoff-num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 32px; line-height: 1; margin-bottom: 16px; }
+    #vc .c-tradeoff h4 { font-family: var(--font-serif); font-size: 22px; font-weight: 400; line-height: 1.18; margin-bottom: 12px; }
+    #vc .c-tradeoff p { font-size: 14px; color: var(--muted); line-height: 1.55; }
+    #vc .c-tradeoff p + p { margin-top: 10px; }
+    #vc .c-tradeoff p.choice { color: var(--ink); font-style: italic; font-family: var(--font-serif); font-size: 16px; }
+
+    /* GAPS — dark cinematic callout block, full-bleed within column */
+    #vc .c-gaps-block {
+      margin: 48px -80px 0;
+      background: var(--dark); color: #f5efe6;
+      padding: 80px 80px; border-radius: 18px;
+      position: relative; overflow: hidden;
+    }
+    #vc .c-gaps-block::before { content: ''; position: absolute; top: -20%; right: -10%; width: 50%; height: 80%; background: radial-gradient(circle, rgba(255,90,54,0.15), transparent 60%); }
+    #vc .c-gaps-block::after { content: ''; position: absolute; bottom: -20%; left: -10%; width: 40%; height: 80%; background: radial-gradient(circle, rgba(90,45,240,0.1), transparent 65%); }
+    #vc .c-gaps-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 18px; margin-bottom: 16px; position: relative; }
+    #vc .c-gaps-h2 { font-family: var(--font-serif); font-size: 56px; font-weight: 400; line-height: 1; letter-spacing: -0.025em; margin-bottom: 24px; position: relative; }
+    #vc .c-gaps-h2 em { font-style: italic; color: var(--accent); }
+    #vc .c-gaps-intro { font-family: var(--font-serif); font-style: italic; font-size: 22px; line-height: 1.4; color: #d8d2c4; max-width: 680px; margin-bottom: 56px; position: relative; }
+    #vc .c-gaps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; position: relative; }
+    #vc .c-gap-cinematic { display: flex; flex-direction: column; gap: 14px; }
+    #vc .c-gap-cinematic .num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 28px; }
+    #vc .c-gap-cinematic h4 { font-family: var(--font-serif); font-size: 28px; font-weight: 400; line-height: 1.12; color: #f5efe6; }
+    #vc .c-gap-cinematic p { font-size: 14px; line-height: 1.6; color: #b8b3a8; }
+
+    #vc .c-reflection {
+      margin: 96px 0 0; padding: 80px 0;
+      border-top: 1px solid var(--line);
+    }
+    #vc .c-reflection-mark { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 18px; margin-bottom: 20px; }
+    #vc .c-reflection p { font-family: var(--font-serif); font-size: 42px; font-style: italic; line-height: 1.18; color: var(--ink); max-width: 760px; letter-spacing: -0.015em; }
+    #vc .c-reflection p em { color: var(--accent); }
+    #vc .c-reflection .note { font-family: var(--font-sans); font-size: 16px; font-style: normal; color: var(--muted); margin-top: 24px; max-width: 640px; line-height: 1.6; }
+
+    /* Footer — Stripe-Press hero next-up */
+    #vc .c-footer {
+      background: var(--dark); color: #f5efe6;
+      padding: 100px 56px 64px;
+      position: relative; overflow: hidden;
+    }
+    #vc .c-footer::before { content: ''; position: absolute; top: 0; right: 0; width: 50%; height: 100%; background: radial-gradient(circle at 70% 30%, rgba(255,90,54,0.15), transparent 55%); }
+    #vc .c-footer-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.6fr; gap: 72px; align-items: end; position: relative; }
+    #vc .c-footer-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 14px; }
+    #vc .c-footer-title { font-family: var(--font-serif); font-size: 80px; line-height: 0.96; font-weight: 400; letter-spacing: -0.03em; }
+    #vc .c-footer-title em { font-style: italic; color: var(--accent); }
+    #vc .c-footer-img { height: 280px; }
+  </style>
+</head>
+<body>
+
+<!-- ──────────────────────────────────────────────────────────────
+     VARIANT NAV (sketch toolbar)
+     ────────────────────────────────────────────────────────────── -->
+<div id="variant-nav">
+  <span class="label">Sketch 008 · SplitSmart Case Study</span>
+  <button class="vtab active" data-v="va">A · Quiet editorial <small>(NYT Magazine)</small></button>
+  <button class="vtab" data-v="vb">B · Balanced <small>(Saarinen × editorial)</small></button>
+  <button class="vtab" data-v="vc">C · Bold cinematic <small>(Stripe Press × Linear)</small></button>
+  <span style="margin-left:auto; color:#999; font-size:11px;">Press 1/2/3 to switch</span>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     VARIANT A — QUIET EDITORIAL
+     ══════════════════════════════════════════════════════════════ -->
+<section id="va" class="variant active">
+
+  <header class="a-top">
+    <a class="a-top-back" href="#">← Index</a>
+    <a class="a-top-name" href="#"><em>Farzaneh Falakrou</em></a>
+    <nav class="a-top-nav">
+      <a href="#">Work</a><a href="#">About</a><a href="#">Notes</a>
+    </nav>
+  </header>
+
+  <aside class="a-toc" aria-label="Contents">
+    <div class="a-toc-label">Contents</div>
+    <ol class="a-toc-list">
+      <li class="active"><a href="#va-context"><span class="num">01</span> Context</a></li>
+      <li><a href="#va-research"><span class="num">02</span> Research</a></li>
+      <li><a href="#va-strategy"><span class="num">03</span> Strategy</a></li>
+      <li><a href="#va-execution"><span class="num">04</span> Design execution</a></li>
+      <li><a href="#va-tradeoffs"><span class="num">05</span> Tradeoffs</a></li>
+      <li><a href="#va-usability"><span class="num">06</span> Usability testing</a></li>
+      <li><a href="#va-forward"><span class="num">07</span> Forward look</a></li>
+      <li><a href="#va-reflection"><span class="num">08</span> Reflection</a></li>
+    </ol>
+  </aside>
+
+  <section class="a-hero">
+    <div class="a-hero-eyebrow">Case study · SplitSmart · 2026</div>
+    <h1>Splitting the bill is the easy part. The expensive part is <em>asking</em>.</h1>
+    <p class="a-hero-sub">Every expense-splitter on the market opens to a ledger. SplitSmart opens to a queue of decisions, and lets the system carry the social cost of the ask.</p>
+    <div class="a-hero-byline">
+      <div>Role<strong>Lead UX/UI Designer</strong></div>
+      <div>Year<strong>May 2026</strong></div>
+      <div>Timeline<strong>4-week design sprint</strong></div>
+      <div>Type<strong>Concept · self-directed</strong></div>
+    </div>
+  </section>
+
+  <article class="a-article">
+
+    <div class="a-section-mark" id="va-context"><span class="num">Section 01</span> Context</div>
+    <h2>Every app shows a ledger. We refused.</h2>
+    <p class="dropcap">Open Splitwise. Open Tricount. Open Settle Up. Open Venmo Groups. Four different products, four different brands — but the first screen you see is the same screen: a running list of who owes whom. The expense-splitter category, almost without exception, treats itself as <em>a ledger you maintain</em>. Settlement is a button you press on a row. The act of asking is your problem.</p>
+    <p>Splitwise has reminders. Venmo has notifications. Tricount has bar charts. None of them lead with the action. The home view is the math — and the math, it turns out, was never the part people couldn't do.</p>
+
+    <p class="a-pullquote">A settle-up app that doesn't lead with <em>settlement</em>.<cite>— Splitwise feedback forum, 2018-2024 (paraphrased from years of unresolved requests)</cite></p>
+
+    <p>What SplitSmart asks is this: if the math isn't the bottleneck, what is? Pull on that thread and you find a quieter problem hiding underneath. The reason a £20 dinner debt lingers for six weeks isn't because anyone forgot. It's because somebody has to <em>bring it up</em>, and bringing it up costs more than £20.</p>
+
+    <div class="a-section-mark" id="va-research"><span class="num">Section 02</span> Research</div>
+    <h2>The social cost of <em>asking</em>.</h2>
+    <p>I approached this in two phases: desk research to understand the behavioral landscape, then competitive analysis to map where existing products fail to act on it.</p>
+
+    <h3>Behavioral literature.</h3>
+    <p>Angulo, Goldstein, and Norton's 2024 <em>Journal of Consumer Psychology</em> paper — "Friendship Fallout and Bailout Backlash" — runs six studies on what happens when friends lend each other money. The most uncomfortable finding: lenders develop a sense of <em>"deserved oversight"</em> over how the borrowed money is spent, and that resentment persists <strong>even after full repayment</strong>. The act of lending corrupts the relationship in a way the receipt doesn't undo.</p>
+    <p>Underneath that, Flynn and Bohns (2008) found people underestimate by roughly fifty percent how willing others are to say yes to a direct request. We overweight the cost of "no" and underweight the cost of staying quiet. So we stay quiet. And the £20 sits.</p>
+
+    <p class="a-pullquote">Lending corrupts the relationship in a way the receipt doesn't undo.<cite>— Angulo, Goldstein & Norton, J. Consumer Psychology, 2024</cite></p>
+
+    <h3>Competitive analysis.</h3>
+    <p>I audited four apps — Splitwise, Tricount, Settle Up, Venmo Groups — mapping their first-screen information hierarchy, the tap depth required to send a reminder, and where <em>"settle up"</em> appeared in the navigation. In every case, the primary action (settlement) was buried under the secondary concern (the ledger). Reminders lived in settings menus or notification drawers, not the home view.</p>
+
+    <h3>Synthesis.</h3>
+    <p><em>Asking is the part of the system where social value is destroyed, and asking is what every existing app makes the user do.</em> The design opportunity was to make the system do the asking instead — and make that feel automatic rather than nagging.</p>
+
+    <div class="a-section-mark" id="va-strategy"><span class="num">Section 03</span> Strategy</div>
+    <h2>Home is a queue. Ledger is a drill-down.</h2>
+    <p>One structural decision flows through everything else: <strong>the home view is the queue of pending decisions, not the record of past ones.</strong> Net position lives top-left as a single number ("am I up or down?"). Action queue lives top-right as a list of one-button asks. Cleared relationships move off the page — there is a separate "Settled" lane that hides them once they're resolved. The ledger of who-paid-for-what still exists, but it lives a click deeper, inside a group.</p>
+    <p>Every other surface inherits the inversion. The Friends page is unresolved relationships, one button each. The group detail page has a dedicated <em>Debts</em> tab. The Settle Up screen leads with the simplest path to clearance ("two transfers and you're clear"), not with a ledger to scroll. Even Add Expense, which is just a form, shows you <em>"You'll get back £80.00"</em> in real time — the data-entry flow is settlement-shaped, not record-shaped.</p>
+
+    <figure class="a-figure">
+      <div class="img img-cream-1" style="height: 460px;">Dashboard · Net position card (top-left) + Needs your attention queue (top-right) + Settled drawer (right)</div>
+      <figcaption>The home view is the queue. The two cards above the fold answer "am I up or down?" and "what do I do next?" — in that order, in three seconds.</figcaption>
+    </figure>
+
+    <div class="a-section-mark" id="va-execution"><span class="num">Section 04</span> Design execution</div>
+    <h2>What the screens actually do.</h2>
+    <p><em>Am I up or down? Three seconds.</em> The dashboard's top-left card is a violet gradient that just says <strong>+£25 — you're ahead across active groups</strong>. No chart, no breakdown above the fold. The reader who has thirty seconds gets a single answer and goes back to their life. The reader who has more can scroll into the spending widgets underneath.</p>
+
+    <figure class="a-figure a-figure-grid">
+      <div><div class="img img-warm">"Needs your attention" card · coral Settle up + outlined Send reminder buttons inline</div></div>
+      <div><div class="img img-cream-2">Friends list · unresolved relationships, one action button each, Settled tags separated</div></div>
+    </figure>
+
+    <p><em>The reminder is a primary action.</em> "Send reminder" is not a button you find in a settings menu. It is the second-most-prominent control on the dashboard, mint-outlined, inline with the row that owes you. Settlement is the verb of this app; the design refuses to bury it.</p>
+
+    <figure class="a-figure">
+      <div class="img img-violet-soft" style="height: 380px;">Settle Up screen · "We've worked out the simplest way... two transfers and you're clear."</div>
+      <figcaption>The Settle Up screen is the debt-simplification algorithm presented as a page, not an answer. Splitwise has the same math; it's buried two levels deep.</figcaption>
+    </figure>
+
+    <p><em>Even data-entry is settlement-shaped.</em> The Add Expense form has a right rail that updates as you type: per-person share, total paid, <em>"You'll get back £80.00"</em>. The form's job is not to record an event — it is to forecast what the event means for your position.</p>
+
+    <div class="a-section-mark" id="va-tradeoffs"><span class="num">Section 05</span> Tradeoffs</div>
+    <h2>The choices, and the ones we didn't make.</h2>
+
+    <div class="a-tradeoff">
+      <div class="a-tradeoff-eyebrow">The tradeoff —</div>
+      <h4>Keep the personal-finance widgets, or cut them?</h4>
+      <p>The dashboard has a Monthly Spend chart, a By-Category donut, and a Spending-over-Time bar chart. These are off-thesis — they are personal-finance affordances, not settlement ones. A purer version would cut them. I kept them because the unfamiliarity tax of a settlement-only dashboard is real, and the chart panels read as "this is also a real fintech app" to a first-time user. <em>It's a compromise I can defend without pretending it isn't one.</em></p>
+    </div>
+
+    <div class="a-tradeoff">
+      <div class="a-tradeoff-eyebrow">The tradeoff —</div>
+      <h4>Show the reminder message, or just the button?</h4>
+      <p>The thesis says the system absorbs the social cost of the ask. The button exists in three places; the <em>message</em> — what the friend actually receives — wasn't designed in this round. I'm calling that out in section 07 rather than hand-waving past it. It's the single highest-leverage thing this design hasn't done yet.</p>
+    </div>
+
+    <div class="a-section-mark" id="va-usability"><span class="num">Section 06</span> Usability testing</div>
+    <h2>Putting it in front of <em>users</em>.</h2>
+    <p>The prototype was tested with five participants who regularly split expenses with friends or roommates. Each session lasted around ten minutes — small sample, but the signals were directionally consistent.</p>
+
+    <table class="a-table">
+      <thead>
+        <tr><th>Finding</th><th>Result</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Time to answer "am I up or down?"</td><td>~3 seconds, on average</td></tr>
+        <tr><td>Reached "Send reminder" in two taps</td><td>5 of 5 participants</td></tr>
+        <tr><td>Ledger rows on the home view</td><td>0 — noted as <em>"cleaner"</em> and <em>"less overwhelming"</em></td></tr>
+        <tr><td>Taps to start a settlement</td><td>1 — described as <em>"straightforward and lightweight"</em></td></tr>
+      </tbody>
+    </table>
+
+    <p>All five completed the primary tasks with no drop-off and minimal confusion. One participant initially looked for the reminder action on the balance card rather than inside the action queue — a navigation assumption worth addressing in the next iteration.</p>
+
+    <h3>Selected reactions.</h3>
+    <div class="a-quotes">
+      <p class="a-quote">"Feels calmer than Splitwise."</p>
+      <p class="a-quote">"Reduced mental math."</p>
+      <p class="a-quote">"Focuses on actions instead of history."</p>
+    </div>
+
+    <div class="a-section-mark" id="va-forward"><span class="num">Section 07</span> Where this doesn't go far enough yet</div>
+    <h2>The three things this design still owes you.</h2>
+    <p>If I'm honest about what this artifact does and doesn't prove, there are three gaps I'd want to close before calling this a real product.</p>
+
+    <div class="a-gap">
+      <div class="a-gap-num">Gap 01 —</div>
+      <h4>The reminder copy isn't designed.</h4>
+      <p>The thesis's strongest claim is <em>the system carries the social cost of the ask</em>. The button exists in at least three places. The message — what the friend receives — does not. Until the reminder is written in a voice that reads as a system event rather than a personal request, the design is one half of the argument. The next version designs the modal, the inbox card, and the tone variants.</p>
+    </div>
+
+    <div class="a-gap">
+      <div class="a-gap-num">Gap 02 —</div>
+      <h4>Personal-finance widgets dilute the focus.</h4>
+      <p>The Monthly Spend chart, the By-Category donut, the Spending-over-Time bars — these are conventional dashboard moves and they are slightly off-thesis. A purer version of this design either cuts them or reframes them as group-shared spending (not personal habits). I kept them in this iteration as a familiarity scaffold. The next iteration interrogates whether they still belong.</p>
+    </div>
+
+    <div class="a-gap">
+      <div class="a-gap-num">Gap 03 —</div>
+      <h4>No edge or dispute states.</h4>
+      <p>Every screen is the happy path. There is no "I paid Luigi in cash, just mark it cleared." There is no "Mina disputed the dinner split, she only had the salad." There is no orphaned-debt state for a friend who leaves the group. For an app whose thesis is about the <em>social contract</em>, the contract's edges are exactly where the design will earn or lose trust. That's the most important next round.</p>
+    </div>
+
+    <div class="a-reflection" id="va-reflection">
+      <div class="a-reflection-mark">A note ·</div>
+      <p>The math was always there. What I learned designing this was that almost <em>every</em> friction in shared finance is downstream of a single moment — and you can either design for that moment or pretend it doesn't exist.</p>
+      <div class="note">SplitSmart is a concept project. It hasn't shipped, it hasn't tested with real users, and the metrics in this case study describe what the design argues, not what it has measured. The artifact is the argument.</div>
+    </div>
+
+  </article>
+
+  <footer class="a-footer">
+    <div>
+      <div class="a-footer-eyebrow">Next case study</div>
+      <h3 class="a-footer-title">A redesign that didn't <em>need</em> a redesign.</h3>
+      <div class="a-footer-meta"><strong>Moodle Redesign</strong> · Education · 2025</div>
+    </div>
+    <div class="img img-cream-2 a-footer-img">Next case study cover</div>
+  </footer>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     VARIANT B — BALANCED
+     ══════════════════════════════════════════════════════════════ -->
+<section id="vb" class="variant">
+
+  <header class="b-top">
+    <a class="b-top-back" href="#">← Index</a>
+    <a class="b-top-name" href="#"><em>Farzaneh Falakrou</em></a>
+    <nav class="b-top-nav">
+      <a href="#">Work</a><a href="#">About</a><a href="#">Notes</a>
+    </nav>
+  </header>
+
+  <section class="b-hero">
+    <div class="b-hero-eyebrow">Case study · SplitSmart · 2026</div>
+    <h1>Splitting the bill is the easy part. The expensive part is <em>asking</em>.</h1>
+    <p class="b-hero-sub">Every expense-splitter opens to a ledger. SplitSmart opens to a queue of decisions, and lets the system carry the social cost of the ask.</p>
+  </section>
+
+  <div class="b-cover">
+    <div class="b-cover-frame">
+      <div class="b-cover-chrome"><span></span><span></span><span></span></div>
+      <div class="img img-violet-soft b-cover-img">SplitSmart dashboard · full view · Net position + Needs your attention + Insights + Settled</div>
+    </div>
+  </div>
+
+  <section class="b-meta">
+    <div><div class="b-meta-label">Role</div><div class="b-meta-value">Lead UX/UI Designer</div></div>
+    <div><div class="b-meta-label">Team</div><div class="b-meta-value">Solo · concept project</div></div>
+    <div><div class="b-meta-label">Duration</div><div class="b-meta-value">4-week sprint</div></div>
+    <div><div class="b-meta-label">Industry</div><div class="b-meta-value">Fintech · social finance</div></div>
+    <div><div class="b-meta-label">Year</div><div class="b-meta-value">May 2026</div></div>
+    <div><div class="b-meta-label">Type</div><div class="b-meta-value">Concept · self-directed</div></div>
+  </section>
+
+  <div class="b-body">
+    <aside class="b-toc">
+      <div class="b-toc-label">Contents</div>
+      <ol class="b-toc-list">
+        <li class="active"><a href="#vb-context"><span class="num">01</span> Context</a></li>
+        <li><a href="#vb-research"><span class="num">02</span> Research</a></li>
+        <li><a href="#vb-strategy"><span class="num">03</span> Strategy</a></li>
+        <li><a href="#vb-execution"><span class="num">04</span> Design execution</a></li>
+        <li><a href="#vb-tradeoffs"><span class="num">05</span> Tradeoffs</a></li>
+        <li><a href="#vb-usability"><span class="num">06</span> Usability testing</a></li>
+        <li><a href="#vb-forward"><span class="num">07</span> Forward look</a></li>
+        <li><a href="#vb-reflection"><span class="num">08</span> Reflection</a></li>
+      </ol>
+    </aside>
+
+    <article class="b-article">
+
+      <section>
+        <div class="b-section-mark" id="vb-context"><span class="num">01</span><span class="label">Context</span></div>
+        <h2>Every app shows a ledger. We refused.</h2>
+        <p>Open Splitwise, Tricount, Settle Up, Venmo Groups. Four different products. The first screen you see is the same screen: a list of who owes whom. The expense-splitter category, almost without exception, treats itself as <em>a ledger you maintain</em>. Settlement is a button on a row. The act of asking is your problem.</p>
+        <p>Splitwise has reminders. Venmo has notifications. Tricount has bar charts. None of them lead with the action. The home view is the math — and the math, it turns out, was never the part people couldn't do.</p>
+        <div class="b-aside">
+          <div class="b-aside-eyebrow">Field note —</div>
+          <p>Splitwise's own feedback forum has a 2018 request, still open in 2024, asking for automated reminders. The manual one-friend-at-a-time button has been the workflow for six years.</p>
+          <div class="b-aside-cite">feedback.splitwise.com · public forum, accessed 2026-05</div>
+        </div>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="vb-research"><span class="num">02</span><span class="label">Research</span></div>
+        <h2>The social cost of <em>asking</em>.</h2>
+        <p>I approached this in two phases: desk research to understand the behavioral landscape, then competitive analysis to map where existing products fail to act on it.</p>
+
+        <h3>Behavioral literature.</h3>
+        <p>The 2024 <em>Journal of Consumer Psychology</em> paper by Angulo, Goldstein, and Norton runs six studies on what happens when friends lend each other money. Lenders develop a sense of <em>"deserved oversight"</em> over how borrowed money is spent. The resentment persists <strong>even after full repayment</strong>. The act of lending corrupts the relationship in a way the receipt doesn't undo.</p>
+        <p>Flynn and Bohns (2008) found people underestimate by about fifty percent how likely others are to say yes to a direct request. We overweight the cost of "no" and underweight the cost of staying quiet. So we stay quiet. And the £20 sits.</p>
+        <div class="b-aside">
+          <div class="b-aside-eyebrow">Source —</div>
+          <p>Angulo, Goldstein & Norton (2024), "Friendship Fallout and Bailout Backlash." <em>Journal of Consumer Psychology.</em> Supporting: Flynn & Bohns (2008), <em>JPSP</em>; Prelec & Loewenstein (1998), <em>Marketing Science.</em></p>
+          <div class="b-aside-cite">Applied as analogical inference, not tested finding — no app-mediated study yet. <a href="#">Notes →</a></div>
+        </div>
+
+        <h3>Competitive analysis.</h3>
+        <p>I audited four apps — Splitwise, Tricount, Settle Up, Venmo Groups — mapping their first-screen information hierarchy, the tap depth required to send a reminder, and where <em>"settle up"</em> appeared in the navigation. In every case, the primary action (settlement) was buried under the secondary concern (the ledger). Reminders lived in settings menus or notification drawers, not the home view.</p>
+
+        <h3>Synthesis.</h3>
+        <p><em>Asking is the part of the system where social value is destroyed, and asking is what every existing app makes the user do.</em> The design opportunity was to make the system do the asking instead — and make that feel automatic rather than nagging.</p>
+      </section>
+
+      <p class="b-pullquote">Asking is where social value is destroyed. <em>Asking is what every existing app makes the user do.</em></p>
+
+      <section>
+        <div class="b-section-mark" id="vb-strategy"><span class="num">03</span><span class="label">Strategy</span></div>
+        <h2>Home is a queue. Ledger is a drill-down.</h2>
+        <p>One structural decision flows through everything else: <strong>the home view is the queue of pending decisions, not the record of past ones.</strong> Net position lives top-left as a single number. Action queue lives top-right as a list of one-button asks. Cleared relationships move out of the active view; the ledger of who-paid-for-what lives a click deeper, inside a group.</p>
+        <p>Every other surface inherits the inversion. Friends becomes a list of unresolved relationships, one button each. Group detail has a dedicated <em>Debts</em> tab. Settle Up leads with the simplest path to clearance — <em>"two transfers and you're clear"</em> — not with a ledger to scroll. Add Expense's right rail shows <em>"You'll get back £80.00"</em> in real time. The data-entry flow is settlement-shaped.</p>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="vb-execution"><span class="num">04</span><span class="label">Design execution</span></div>
+        <h2>What the screens actually do.</h2>
+        <p><em>Am I up or down? Three seconds.</em> The dashboard's top-left card is a violet gradient that just says <strong>+£25 — you're ahead across active groups</strong>. The reader who has thirty seconds gets a single answer.</p>
+
+        <figure class="b-figure">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <div class="img img-violet-soft">Dashboard · top half · Net position + Needs your attention card with inline Settle up + Send reminder CTAs</div>
+          </div>
+          <figcaption>Above the fold: the answer ("am I up or down?") and the action queue ("what do I do next?"). No ledger.</figcaption>
+        </figure>
+
+        <p><em>The reminder is a primary action.</em> "Send reminder" is mint-outlined, inline with the row that owes you. Three taps away from the dashboard's first screen. Settlement is the verb of this app; the design refuses to bury it.</p>
+
+        <div class="b-figure-grid">
+          <figure class="b-figure">
+            <div class="b-figure-frame">
+              <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+              <div class="img img-warm">Friends · unresolved relationships, one action button each, Settled tags separated</div>
+            </div>
+            <figcaption>Friends list. Cleared relationships get a Settled tag and move down the page.</figcaption>
+          </figure>
+          <figure class="b-figure">
+            <div class="b-figure-frame">
+              <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+              <div class="img img-cream-2">Group detail · Debts tab · "Who owes who" with Settle up and Send reminder rows</div>
+            </div>
+            <figcaption>Group detail has its own Debts tab — a first-class view, not a sub-screen.</figcaption>
+          </figure>
+        </div>
+
+        <p><em>"Two transfers and you're clear."</em> The Settle Up screen is debt-simplification presented as a page. Splitwise has the same math. It's two clicks deeper.</p>
+
+        <figure class="b-figure">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <div class="img img-violet-soft">Settle Up · Net balance card + "You'll receive" + "You owe" with Request payment / Pay back CTAs</div>
+          </div>
+          <figcaption>Settlement is a page in its own right, not the answer to a query.</figcaption>
+        </figure>
+
+        <p><em>Even data-entry is settlement-shaped.</em> The Add Expense form's right rail forecasts what the expense means for your position. <em>"You'll get back £80.00"</em> updates as you type. The form's job is not to record an event — it is to forecast what the event means.</p>
+
+        <figure class="b-figure">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <div class="img img-cream-1">Add Expense · form left, live "Split equally / Each person pays / You'll get back" rail right</div>
+          </div>
+          <figcaption>The right rail makes data entry feel like forecasting.</figcaption>
+        </figure>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="vb-tradeoffs"><span class="num">05</span><span class="label">Tradeoffs</span></div>
+        <h2>The choices, and the ones we didn't make.</h2>
+
+        <div class="b-tradeoffs">
+          <div class="b-tradeoff">
+            <div class="b-tradeoff-num">01</div>
+            <div>
+              <h4>Keep the personal-finance widgets, or cut them?</h4>
+              <p>The Monthly Spend chart, By-Category donut, and Spending-over-Time bars are off-thesis. They are personal-finance affordances, not settlement ones.</p>
+              <p>I kept them because the unfamiliarity tax of a settlement-only dashboard is real. They read as "this is also a real fintech app" to a first-time user. <em>A compromise I can defend without pretending it isn't one.</em></p>
+            </div>
+          </div>
+
+          <div class="b-tradeoff">
+            <div class="b-tradeoff-num">02</div>
+            <div>
+              <h4>Show the reminder message, or just the button?</h4>
+              <p>The thesis says the system absorbs the social cost. The button exists in three places. The message — what the friend actually receives — was not designed in this round.</p>
+              <p>I'm calling it out in section 07 rather than hand-waving past it. It's the highest-leverage thing this design hasn't done yet.</p>
+            </div>
+          </div>
+
+          <div class="b-tradeoff">
+            <div class="b-tradeoff-num">03</div>
+            <div>
+              <h4>Lead with debt simplification, or lead with the queue?</h4>
+              <p>Settle Up's algorithm ("two transfers and you're clear") is genuinely useful. We considered making it the home view.</p>
+              <p>The queue won. Debt simplification answers <em>"what's the shortest path to zero?"</em> The queue answers <em>"what should I do today?"</em> The second question is what gets opened five times a day.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="vb-usability"><span class="num">06</span><span class="label">Usability testing</span></div>
+        <h2>Putting it in front of <em>users</em>.</h2>
+        <p>The prototype was tested with five participants who regularly split expenses with friends or roommates. Each session lasted around ten minutes — small sample, but the signals were directionally consistent.</p>
+
+        <table class="b-table">
+          <thead>
+            <tr><th>Finding</th><th>Result</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Time to answer "am I up or down?"</td><td>~3 seconds, on average</td></tr>
+            <tr><td>Reached "Send reminder" in two taps</td><td>5 of 5 participants</td></tr>
+            <tr><td>Ledger rows on the home view</td><td>0 — noted as <em>"cleaner"</em> and <em>"less overwhelming"</em></td></tr>
+            <tr><td>Taps to start a settlement</td><td>1 — described as <em>"straightforward and lightweight"</em></td></tr>
+          </tbody>
+        </table>
+
+        <p>All five completed the primary tasks with no drop-off and minimal confusion. One participant initially looked for the reminder action on the balance card rather than inside the action queue — a navigation assumption worth addressing in the next iteration.</p>
+
+        <h3>Selected reactions.</h3>
+        <div class="b-quotes">
+          <p class="b-quote">"Feels calmer than Splitwise."</p>
+          <p class="b-quote">"Reduced mental math."</p>
+          <p class="b-quote">"Focuses on actions instead of history."</p>
+        </div>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="vb-forward"><span class="num">07</span><span class="label">Forward look</span></div>
+        <h2>Where this design doesn't go far enough <em>yet</em>.</h2>
+        <p>If I'm honest about what this artifact proves and what it doesn't, there are three gaps to close before this becomes a real product.</p>
+
+        <div class="b-gaps">
+          <div class="b-gap-card">
+            <div class="num">Gap 01</div>
+            <h4>The reminder copy isn't designed.</h4>
+            <p>The button exists in three places. The message — what the friend receives — does not. Until the reminder reads as a system event rather than a personal request, the design is one half of the argument.</p>
+            <div class="img img-cream-2">Reminder modal · sketch placeholder</div>
+          </div>
+          <div class="b-gap-card">
+            <div class="num">Gap 02</div>
+            <h4>Personal-finance widgets dilute the focus.</h4>
+            <p>The Monthly Spend chart and By-Category donut are conventional dashboard moves and slightly off-thesis. The next iteration either cuts them or reframes them as group-shared spending, not personal habits.</p>
+            <div class="img img-cream-2">Dashboard · widgets removed · sketch placeholder</div>
+          </div>
+          <div class="b-gap-card">
+            <div class="num">Gap 03</div>
+            <h4>No edge or dispute states.</h4>
+            <p>Every screen is the happy path. "I paid Luigi in cash." "Mina disputed the dinner split." "Luigi left the group with an open balance." For a design about the social contract, the contract's edges are where it earns trust.</p>
+            <div class="img img-cream-2">Dispute resolution · sketch placeholder</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="b-reflection" id="vb-reflection">
+        <div class="b-reflection-mark">A note ·</div>
+        <p>Almost <em>every</em> friction in shared finance is downstream of a single moment — and you can either design for that moment or pretend it doesn't exist.</p>
+        <div class="note">SplitSmart is a concept project. It hasn't shipped, it hasn't tested with real users at scale, and the language in this case study describes what the design argues, not what it has measured. The artifact is the argument.</div>
+      </section>
+
+    </article>
+  </div>
+
+  <footer class="b-footer">
+    <div>
+      <div class="b-footer-eyebrow">Next case study</div>
+      <h3 class="b-footer-title">A redesign that didn't <em>need</em> a redesign.</h3>
+    </div>
+    <div class="img img-cream-2 b-footer-img">Moodle Redesign · Education · 2025</div>
+  </footer>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     VARIANT C — BOLD CINEMATIC
+     ══════════════════════════════════════════════════════════════ -->
+<section id="vc" class="variant">
+
+  <header class="c-top">
+    <a class="c-top-back" href="#">← Index</a>
+    <a class="c-top-name" href="#"><em>Farzaneh Falakrou</em></a>
+    <span style="font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">SplitSmart · 2026</span>
+  </header>
+
+  <section class="c-hero">
+    <div class="c-hero-inner">
+      <div class="c-hero-eyebrow">Case study · 01 of 06</div>
+      <h1>Splitting the bill is the easy part. The expensive part is <em>asking</em>.</h1>
+      <p class="c-hero-sub">Every expense-splitter on the market opens to a ledger. SplitSmart opens to a queue of decisions, and lets the system carry the social cost of the ask.</p>
+      <div class="c-hero-meta">
+        <div class="c-hero-byline">
+          <div>Role<strong>Lead UX/UI</strong></div>
+          <div>Timeline<strong>4-week sprint</strong></div>
+          <div>Year<strong>May 2026</strong></div>
+          <div>Type<strong>Concept</strong></div>
+        </div>
+        <div class="c-hero-scroll">scroll for the argument ↓</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="c-cover">
+    <div class="c-cover-frame">
+      <div class="c-cover-chrome"><span></span><span></span><span></span></div>
+      <div class="img img-violet c-cover-img">SplitSmart dashboard · the full view · Net position + Needs your attention + Insights + Groups + Settled</div>
+    </div>
+  </div>
+
+  <section class="c-meta">
+    <div><div class="c-meta-label">Role</div><div class="c-meta-value">Lead UX/UI Designer</div></div>
+    <div><div class="c-meta-label">Team</div><div class="c-meta-value">Solo · concept</div></div>
+    <div><div class="c-meta-label">Duration</div><div class="c-meta-value">4-week sprint</div></div>
+    <div><div class="c-meta-label">Industry</div><div class="c-meta-value">Fintech · social</div></div>
+    <div><div class="c-meta-label">Year</div><div class="c-meta-value">May 2026</div></div>
+    <div><div class="c-meta-label">Type</div><div class="c-meta-value">Self-directed</div></div>
+  </section>
+
+  <div class="c-body">
+    <aside class="c-toc">
+      <div class="c-toc-label">Contents</div>
+      <ol class="c-toc-list">
+        <li class="active"><a href="#vc-context"><span class="num">01</span> Context</a></li>
+        <li><a href="#vc-research"><span class="num">02</span> Research</a></li>
+        <li><a href="#vc-strategy"><span class="num">03</span> Strategy</a></li>
+        <li><a href="#vc-execution"><span class="num">04</span> Execution</a></li>
+        <li><a href="#vc-tradeoffs"><span class="num">05</span> Tradeoffs</a></li>
+        <li><a href="#vc-usability"><span class="num">06</span> Usability testing</a></li>
+        <li><a href="#vc-forward"><span class="num">07</span> Forward look</a></li>
+        <li><a href="#vc-reflection"><span class="num">08</span> Reflection</a></li>
+      </ol>
+    </aside>
+
+    <article class="c-article">
+
+      <section>
+        <div class="c-section-mark" id="vc-context"><span class="num">01</span><span class="label">Context</span></div>
+        <h2>Every app shows a ledger. We refused.</h2>
+        <p>Open Splitwise, Tricount, Settle Up, Venmo Groups. Four different products. The first screen is the same screen: a list of who owes whom. The expense-splitter category, almost without exception, treats itself as <em>a ledger you maintain</em>. Settlement is a button on a row. The act of asking is your problem.</p>
+        <p>Splitwise has reminders. Venmo has notifications. Tricount has bar charts. None of them lead with the action. The home view is the math — and the math, it turns out, was never the part people couldn't do.</p>
+
+        <div class="c-aside">
+          <div class="c-aside-eyebrow">Field note —</div>
+          <p>Splitwise's feedback forum has a 2018 request — still open in 2024 — asking for automated reminders. The manual one-friend-at-a-time button has been the workflow for six years.</p>
+          <div class="c-aside-cite">feedback.splitwise.com · accessed 2026-05</div>
+        </div>
+      </section>
+
+      <p class="c-pullquote">A settle-up app that doesn't lead with <em>settlement</em>.</p>
+
+      <section>
+        <div class="c-section-mark" id="vc-research"><span class="num">02</span><span class="label">Research</span></div>
+        <h2>The social cost of <em>asking</em>.</h2>
+        <p>I approached this in two phases: desk research to understand the behavioral landscape, then competitive analysis to map where existing products fail to act on it.</p>
+
+        <h3>Behavioral literature.</h3>
+        <p>The 2024 <em>Journal of Consumer Psychology</em> paper by Angulo, Goldstein, and Norton runs six studies on what happens when friends lend each other money. Lenders develop a sense of <em>"deserved oversight"</em> over how borrowed money is spent. The resentment persists <strong>even after full repayment</strong>. Lending corrupts the relationship in a way the receipt doesn't undo.</p>
+        <p>Flynn and Bohns (2008): people underestimate by about fifty percent how likely others are to say yes to a direct request. We overweight the cost of "no" and underweight the cost of staying quiet. So we stay quiet. The £20 sits.</p>
+
+        <div class="c-aside">
+          <div class="c-aside-eyebrow">Source —</div>
+          <p>Angulo, Goldstein & Norton (2024), "Friendship Fallout and Bailout Backlash." <em>J. Consumer Psychology.</em> Supporting: Flynn & Bohns (2008); Prelec & Loewenstein (1998).</p>
+          <div class="c-aside-cite">Applied as analogical inference, not tested finding. <a href="#">Notes →</a></div>
+        </div>
+
+        <h3>Competitive analysis.</h3>
+        <p>I audited four apps — Splitwise, Tricount, Settle Up, Venmo Groups — mapping their first-screen information hierarchy, the tap depth required to send a reminder, and where <em>"settle up"</em> appeared in the navigation. In every case, the primary action (settlement) was buried under the secondary concern (the ledger). Reminders lived in settings menus or notification drawers, not the home view.</p>
+
+        <h3>Synthesis.</h3>
+        <p><em>Asking is the part of the system where social value is destroyed, and asking is what every existing app makes the user do.</em> The design opportunity was to make the system do the asking instead — and make that feel automatic rather than nagging.</p>
+      </section>
+
+      <section>
+        <div class="c-section-mark" id="vc-strategy"><span class="num">03</span><span class="label">Strategy</span></div>
+        <h2>Home is a queue. Ledger is a drill-down.</h2>
+        <p>One structural decision flows through everything else: <strong>the home view is the queue of pending decisions, not the record of past ones.</strong> Net position lives top-left as a single number. Action queue lives top-right as a list of one-button asks. The ledger of who-paid-for-what lives a click deeper, inside a group.</p>
+        <p>Every other surface inherits the inversion. Friends is a list of unresolved relationships, one button each. Group detail has a dedicated <em>Debts</em> tab. Settle Up leads with the shortest path to clearance. Add Expense's right rail shows what you'll get back, in real time. The data-entry flow is settlement-shaped, not record-shaped.</p>
+      </section>
+
+      <section>
+        <div class="c-section-mark" id="vc-execution"><span class="num">04</span><span class="label">Execution</span></div>
+        <h2>What the screens actually do.</h2>
+        <p><em>Am I up or down? Three seconds.</em> The dashboard's top-left card is a violet gradient that just says <strong>+£25 — you're ahead across active groups</strong>. The reader with thirty seconds gets a single answer and leaves.</p>
+
+        <figure class="c-figure">
+          <div class="c-figure-frame">
+            <div class="c-figure-chrome"><span></span><span></span><span></span></div>
+            <div class="img img-violet" style="height: 420px;">Dashboard · Net position card + Needs your attention queue with Settle up + Send reminder CTAs</div>
+          </div>
+          <div class="c-callout" style="top: 60px; right: -40px;">
+            <div class="c-callout-eyebrow">Net position</div>
+            +£25 · the one answer the reader came for, in three seconds.
+          </div>
+          <div class="c-callout" style="bottom: 80px; left: -40px;">
+            <div class="c-callout-eyebrow">Needs your attention</div>
+            Settle up · Send reminder. Two of the highest-friction acts in social finance, presented as primary CTAs.
+          </div>
+          <figcaption>Above the fold: the answer and the action queue. The ledger lives a click deeper.</figcaption>
+        </figure>
+
+        <p><em>The reminder is a primary action.</em> The Send reminder button is mint-outlined, inline with the row that owes you. Three taps from the dashboard's first screen. Settlement is the verb of this app; the design refuses to bury it.</p>
+
+        <div class="c-figure-row">
+          <figure class="c-figure">
+            <div class="c-figure-frame">
+              <div class="c-figure-chrome"><span></span><span></span><span></span></div>
+              <div class="img img-violet">Friends list · −£20 you owe + Pay back · +£45 owes you + Send reminder · Settled tag</div>
+            </div>
+            <figcaption>Friends list. Three relationship states, one button each.</figcaption>
+          </figure>
+          <figure class="c-figure">
+            <div class="c-figure-frame">
+              <div class="c-figure-chrome"><span></span><span></span><span></span></div>
+              <div class="img img-violet">Group detail · Debts tab · "Who owes who" rows with Settle up / Send reminder</div>
+            </div>
+            <figcaption>Group detail's Debts tab is its own first-class view.</figcaption>
+          </figure>
+        </div>
+
+        <p><em>"Two transfers and you're clear."</em> Settle Up is debt-simplification presented as a page. Same math as Splitwise. Two clicks shallower.</p>
+
+        <figure class="c-figure">
+          <div class="c-figure-frame">
+            <div class="c-figure-chrome"><span></span><span></span><span></span></div>
+            <div class="img img-violet" style="height: 360px;">Settle Up · Net balance "+£25" hero + "You'll receive £45" + "You owe £20" with Request payment / Pay back CTAs</div>
+          </div>
+          <div class="c-callout" style="top: 40px; right: -40px;">
+            <div class="c-callout-eyebrow">"Two transfers and you're clear"</div>
+            The simplification algorithm gets its own page. Splitwise buries it.
+          </div>
+          <figcaption>Settlement is a page in its own right, not the answer to a query.</figcaption>
+        </figure>
+
+        <p><em>Even data-entry is settlement-shaped.</em> The Add Expense form's right rail forecasts what the expense means for your position. <em>"You'll get back £80.00"</em> updates as you type.</p>
+
+        <figure class="c-figure">
+          <div class="c-figure-frame">
+            <div class="c-figure-chrome"><span></span><span></span><span></span></div>
+            <div class="img img-violet" style="height: 340px;">Add Expense · form fields left, live Split-equally + Summary + "You'll get back £80" rail right</div>
+          </div>
+          <figcaption>The right rail makes data entry feel like forecasting, not record-keeping.</figcaption>
+        </figure>
+      </section>
+
+      <section>
+        <div class="c-section-mark" id="vc-tradeoffs"><span class="num">05</span><span class="label">Tradeoffs</span></div>
+        <h2>The choices, and the ones we didn't make.</h2>
+
+        <div class="c-tradeoffs">
+          <div class="c-tradeoff">
+            <div class="c-tradeoff-num">01</div>
+            <h4>Keep the personal-finance widgets, or cut them?</h4>
+            <p class="choice">Kept. Off-thesis but defensible.</p>
+            <p>Monthly Spend, By-Category, Spending-over-Time. These are personal-finance affordances, not settlement ones. A purer version cuts them. I kept them because the unfamiliarity tax of a settlement-only dashboard is real.</p>
+          </div>
+
+          <div class="c-tradeoff">
+            <div class="c-tradeoff-num">02</div>
+            <h4>Show the reminder message, or just the button?</h4>
+            <p class="choice">Button only. Honest gap.</p>
+            <p>The button exists in three places. The message — what the friend receives — was not designed in this round. It's the highest-leverage thing this design hasn't done. Section 07 names it.</p>
+          </div>
+
+          <div class="c-tradeoff">
+            <div class="c-tradeoff-num">03</div>
+            <h4>Lead with simplification, or with the queue?</h4>
+            <p class="choice">Queue. Five-times-a-day question wins.</p>
+            <p>Simplification answers <em>"shortest path to zero?"</em> The queue answers <em>"what should I do today?"</em> The second question is what gets opened five times a day.</p>
+          </div>
+
+          <div class="c-tradeoff">
+            <div class="c-tradeoff-num">04</div>
+            <h4>One reminder voice, or tunable tone?</h4>
+            <p class="choice">Single system voice. Default to neutral.</p>
+            <p>Tunable tone (gentle / direct / firm) puts the choice back on the asker. That defeats the thesis. A single neutral system voice is what makes the system carry the cost.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="c-section-mark" id="vc-usability"><span class="num">06</span><span class="label">Usability testing</span></div>
+        <h2>Putting it in front of <em>users</em>.</h2>
+        <p>The prototype was tested with five participants who regularly split expenses with friends or roommates. Each session lasted around ten minutes — small sample, but the signals were directionally consistent.</p>
+
+        <table class="c-table">
+          <thead>
+            <tr><th>Finding</th><th>Result</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Time to answer "am I up or down?"</td><td>~3 seconds, on average</td></tr>
+            <tr><td>Reached "Send reminder" in two taps</td><td>5 of 5 participants</td></tr>
+            <tr><td>Ledger rows on the home view</td><td>0 — noted as <em>"cleaner"</em> and <em>"less overwhelming"</em></td></tr>
+            <tr><td>Taps to start a settlement</td><td>1 — described as <em>"straightforward and lightweight"</em></td></tr>
+          </tbody>
+        </table>
+
+        <p>All five completed the primary tasks with no drop-off and minimal confusion. One participant initially looked for the reminder action on the balance card rather than inside the action queue — a navigation assumption worth addressing in the next iteration.</p>
+
+        <h3>Selected reactions.</h3>
+        <div class="c-quotes">
+          <p class="c-quote">"Feels calmer than Splitwise."</p>
+          <p class="c-quote">"Reduced mental math."</p>
+          <p class="c-quote">"Focuses on actions instead of history."</p>
+        </div>
+      </section>
+
+      <section>
+        <div class="c-gaps-block">
+          <div class="c-gaps-eyebrow" id="vc-forward">Section 07 · Forward look</div>
+          <h2 class="c-gaps-h2">Where this design doesn't go far enough <em>yet</em>.</h2>
+          <p class="c-gaps-intro">Three gaps before this becomes a real product. Each is the most important next iteration for its surface.</p>
+          <div class="c-gaps-grid">
+            <div class="c-gap-cinematic">
+              <div class="num">Gap 01</div>
+              <h4>The reminder copy isn't designed.</h4>
+              <p>The button exists in three places. The message — what the friend receives — does not. Until the reminder reads as a system event rather than a personal request, the design is one half of the argument.</p>
+            </div>
+            <div class="c-gap-cinematic">
+              <div class="num">Gap 02</div>
+              <h4>Personal-finance widgets dilute the focus.</h4>
+              <p>Monthly Spend, By-Category, Spending-over-Time. Conventional, slightly off-thesis. The next iteration either cuts them or reframes them as group-shared spending, not personal habits.</p>
+            </div>
+            <div class="c-gap-cinematic">
+              <div class="num">Gap 03</div>
+              <h4>No edge or dispute states.</h4>
+              <p>Every screen is the happy path. "Paid in cash." "Disputed the split." "Left the group with an open balance." For a design about the social contract, the edges are where it earns trust.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="c-reflection" id="vc-reflection">
+        <div class="c-reflection-mark">A note ·</div>
+        <p>Almost <em>every</em> friction in shared finance is downstream of a single moment — and you can either design for that moment or pretend it doesn't exist.</p>
+        <div class="note">SplitSmart is a concept project. It hasn't shipped, it hasn't tested at scale, and the language here describes what the design argues, not what it has measured. The artifact is the argument.</div>
+      </section>
+
+    </article>
+  </div>
+
+  <footer class="c-footer">
+    <div class="c-footer-inner">
+      <div>
+        <div class="c-footer-eyebrow">Next case study</div>
+        <h3 class="c-footer-title">A redesign that didn't <em>need</em> a redesign.</h3>
+      </div>
+      <div class="img img-dark c-footer-img">Moodle Redesign · Education · 2025</div>
+    </div>
+  </footer>
+</section>
+
+
+<!-- ──────────────────────────────────────────────────────────────
+     VARIANT SWITCHER + KEYBOARD
+     ────────────────────────────────────────────────────────────── -->
+<script>
+  const tabs = document.querySelectorAll('.vtab');
+  const variants = document.querySelectorAll('.variant');
+  function show(v) {
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.v === v));
+    variants.forEach(s => s.classList.toggle('active', s.id === v));
+    document.querySelectorAll('.a-toc').forEach(el => { el.style.display = (v === 'va') ? '' : 'none'; });
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+  tabs.forEach(t => t.addEventListener('click', () => show(t.dataset.v)));
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === '1') show('va');
+    if (e.key === '2') show('vb');
+    if (e.key === '3') show('vc');
+  });
+
+  // Scrollspy: highlight the TOC item for the section in view
+  function setupScrollspy(prefix) {
+    const tocLinks = [...document.querySelectorAll('a[href^="#' + prefix + '-"]')];
+    if (!tocLinks.length) return;
+    const targets = tocLinks
+      .map(a => document.getElementById(a.getAttribute('href').slice(1)))
+      .filter(Boolean);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          tocLinks.forEach(a => {
+            a.closest('li').classList.toggle('active', a.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    }, { rootMargin: '-100px 0px -65% 0px', threshold: 0 });
+    targets.forEach(el => observer.observe(el));
+  }
+  setupScrollspy('va');
+  setupScrollspy('vb');
+  setupScrollspy('vc');
+
+  // Hide A's fixed TOC if A is not the initial active variant
+  if (!document.getElementById('va').classList.contains('active')) {
+    document.querySelectorAll('.a-toc').forEach(el => el.style.display = 'none');
+  }
+</script>
+
+</body>
+</html>
