@@ -136,7 +136,7 @@
             <p class="mt-0.5 text-[11px] text-muted">Composition of May spending.</p>
           </div>
           <div class="grid grid-cols-[140px_1fr] items-center gap-5 max-md:grid-cols-1 max-md:justify-items-center">
-            <div role="img" aria-label="Paris Trip 67% (£350), Home Bills 27% (£144), Work Lunch 6% (£30). Total £524." class="grid h-[140px] w-[140px] place-items-center rounded-full bg-[conic-gradient(#5A2DF0_0_67%,#22D3EE_67%_94%,#B96D00_94%_100%)]">
+            <div role="img" aria-label="Paris Trip 67% (£350), Home Bills 27% (£144), Work Lunch 6% (£30). Total £524." class="grid h-[140px] w-[140px] place-items-center rounded-full bg-[conic-gradient(#5A2DF0_0_67%,#8E6BFF_67%_94%,#C5B3FF_94%_100%)]">
               <span aria-hidden="true" class="flex h-[88px] w-[88px] flex-col items-center justify-center rounded-full bg-white text-center shadow-soft">
                 <b class="text-[18px] font-extrabold tabular-nums leading-none">£524</b>
                 <small class="mt-0.5 text-[9px] font-semibold text-muted leading-none">May spend</small>
@@ -147,23 +147,23 @@
                 <i class="h-2.5 w-2.5 rounded-sm" style="background:#5A2DF0" aria-hidden="true"></i>
                 <span class="min-w-0">
                   <b class="block truncate text-[12.5px]">Paris Trip</b>
-                  <small class="block text-[10.5px] text-muted">67% · 4 expenses</small>
+                  <small class="block text-[10.5px] text-muted">67%</small>
                 </span>
                 <b class="tabular-nums">£350</b>
               </a>
               <a href="group-detail.html" class="grid grid-cols-[10px_1fr_auto] items-center gap-2 rounded-md py-1 px-1 -mx-1 transition hover:bg-shell">
-                <i class="h-2.5 w-2.5 rounded-sm" style="background:#22D3EE" aria-hidden="true"></i>
+                <i class="h-2.5 w-2.5 rounded-sm" style="background:#8E6BFF" aria-hidden="true"></i>
                 <span class="min-w-0">
                   <b class="block truncate text-[12.5px]">Home Bills</b>
-                  <small class="block text-[10.5px] text-muted">27% · 3 expenses</small>
+                  <small class="block text-[10.5px] text-muted">27%</small>
                 </span>
                 <b class="tabular-nums">£144</b>
               </a>
               <a href="group-detail.html" class="grid grid-cols-[10px_1fr_auto] items-center gap-2 rounded-md py-1 px-1 -mx-1 transition hover:bg-shell">
-                <i class="h-2.5 w-2.5 rounded-sm" style="background:#B96D00" aria-hidden="true"></i>
+                <i class="h-2.5 w-2.5 rounded-sm" style="background:#C5B3FF" aria-hidden="true"></i>
                 <span class="min-w-0">
                   <b class="block truncate text-[12.5px]">Work Lunch</b>
-                  <small class="block text-[10.5px] text-muted">6% · 2 expenses</small>
+                  <small class="block text-[10.5px] text-muted">6%</small>
                 </span>
                 <b class="tabular-nums">£30</b>
               </a>
@@ -218,6 +218,93 @@
         </article>
       </section>
 
+      <!-- 12-MONTH HISTORY -->
+      <section class="mb-5">
+        <article class="rounded-2xl border border-line bg-white p-5 shadow-soft">
+          <div class="mb-4 flex items-start justify-between gap-3 flex-wrap">
+            <div>
+              <h2 class="text-[14px] font-bold">12-month history</h2>
+              <p class="mt-0.5 text-[11px] text-muted">Your share per month vs £700 cap. Coral = over cap.</p>
+            </div>
+            <div class="flex items-center gap-3 text-[11px]">
+              <span class="flex items-center gap-1.5"><i class="h-2.5 w-2.5 rounded-sm bg-violet" aria-hidden="true"></i><span class="text-muted">Under cap</span></span>
+              <span class="flex items-center gap-1.5"><i class="h-2.5 w-2.5 rounded-sm bg-coral" aria-hidden="true"></i><span class="text-muted">Over cap</span></span>
+              <span class="flex items-center gap-1.5"><span class="block h-0 w-4 border-t-2 border-dashed border-ink/60" aria-hidden="true"></span><span class="text-muted">£700 cap</span></span>
+            </div>
+          </div>
+          <div role="img" aria-label="12-month history of your share vs £700 cap: Jun 2025 £480, Jul £720 over, Aug £540, Sep £610, Oct £690, Nov £820 over, Dec £880 over, Jan 2026 £410, Feb £530, Mar £645, Apr £590, May £524 (current).">
+            <div class="grid grid-cols-[44px_1fr] gap-2">
+              <!-- Y-axis -->
+              <div class="relative h-44 text-right text-[9px] font-semibold leading-none text-muted">
+                <span class="absolute right-0 top-0 -translate-y-1/2 tabular-nums">£1000</span>
+                <span class="absolute right-0 top-[30%] -translate-y-1/2 tabular-nums text-ink/70">£700</span>
+                <span class="absolute right-0 top-2/4 -translate-y-1/2 tabular-nums">£500</span>
+                <span class="absolute right-0 bottom-0 translate-y-1/2 tabular-nums">£0</span>
+              </div>
+              <!-- Chart area -->
+              <div class="relative h-44">
+                <!-- Gridlines -->
+                <div class="pointer-events-none absolute inset-0 flex flex-col justify-between">
+                  <span class="h-px bg-line"></span>
+                  <span class="h-px border-t border-dashed border-line"></span>
+                  <span class="h-px bg-line"></span>
+                </div>
+                <!-- Cap line at 70% from top -->
+                <span class="pointer-events-none absolute left-0 right-0 border-t-2 border-dashed border-ink/60" style="top:30%"></span>
+                <span class="pointer-events-none absolute right-0 -translate-y-full text-[9px] font-bold text-ink/70 bg-white px-1" style="top:30%">cap</span>
+                <!-- Bars: 12 months -->
+                <div class="relative grid h-full grid-cols-12 items-end gap-5 px-3">
+                  <!-- Jun 480 (48%) -->
+                  <div class="group relative flex h-full flex-col justify-end"><span class="block w-full rounded-t-md bg-violet/80 hover:bg-violet transition" style="height:48%" title="Jun 2025 — £480"></span></div>
+                  <!-- Jul 720 over (72%) -->
+                  <div class="group relative flex h-full flex-col justify-end"><span class="block w-full rounded-t-md bg-coral/80 hover:bg-coral transition" style="height:72%" title="Jul 2025 — £720 (over)"></span></div>
+                  <!-- Aug 540 -->
+                  <div class="group relative flex h-full flex-col justify-end"><span class="block w-full rounded-t-md bg-violet/80 hover:bg-violet transition" style="height:54%" title="Aug 2025 — £540"></span></div>
+                  <!-- Sep 610 -->
+                  <div class="group relative flex h-full flex-col justify-end"><span class="block w-full rounded-t-md bg-violet/80 hover:bg-violet transition" style="height:61%" title="Sep 2025 — £610"></span></div>
+                  <!-- Oct 690 -->
+                  <div class="group relative flex h-full flex-col justify-end"><span class="block w-full rounded-t-md bg-violet/80 hover:bg-violet transition" style="height:69%" title="Oct 2025 — £690"></span></div>
+                  <!-- Nov 820 over -->
+                  <div class="group relative flex h-full flex-col justify-end"><span class="block w-full rounded-t-md bg-coral/80 hover:bg-coral transition" style="height:82%" title="Nov 2025 — £820 (over)"></span></div>
+                  <!-- Dec 880 over -->
+                  <div class="group relative flex h-full flex-col justify-end"><span class="block w-full rounded-t-md bg-coral/80 hover:bg-coral transition" style="height:88%" title="Dec 2025 — £880 (over)"></span></div>
+                  <!-- Jan 410 -->
+                  <div class="group relative flex h-full flex-col justify-end"><span class="block w-full rounded-t-md bg-violet/80 hover:bg-violet transition" style="height:41%" title="Jan 2026 — £410"></span></div>
+                  <!-- Feb 530 -->
+                  <div class="group relative flex h-full flex-col justify-end"><span class="block w-full rounded-t-md bg-violet/80 hover:bg-violet transition" style="height:53%" title="Feb 2026 — £530"></span></div>
+                  <!-- Mar 645 -->
+                  <div class="group relative flex h-full flex-col justify-end"><span class="block w-full rounded-t-md bg-violet/80 hover:bg-violet transition" style="height:64.5%" title="Mar 2026 — £645"></span></div>
+                  <!-- Apr 590 -->
+                  <div class="group relative flex h-full flex-col justify-end"><span class="block w-full rounded-t-md bg-violet/80 hover:bg-violet transition" style="height:59%" title="Apr 2026 — £590"></span></div>
+                  <!-- May 524 (current, ring) -->
+                  <div class="group relative flex h-full flex-col justify-end">
+                    <span class="block w-full rounded-t-md bg-violet ring-2 ring-violet/30 ring-offset-2 ring-offset-white transition" style="height:52.4%" title="May 2026 — £524 (current)"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Month labels + amounts -->
+            <div class="mt-2 grid grid-cols-[44px_1fr] gap-2">
+              <div></div>
+              <div class="grid grid-cols-12 gap-5 px-3 text-center text-[9.5px] font-semibold text-muted tabular-nums">
+                <span><span class="block">Jun</span><span class="block text-[9px] text-muted/80">480</span></span>
+                <span><span class="block text-coral">Jul</span><span class="block text-[9px] text-coral/90">720</span></span>
+                <span><span class="block">Aug</span><span class="block text-[9px] text-muted/80">540</span></span>
+                <span><span class="block">Sep</span><span class="block text-[9px] text-muted/80">610</span></span>
+                <span><span class="block">Oct</span><span class="block text-[9px] text-muted/80">690</span></span>
+                <span><span class="block text-coral">Nov</span><span class="block text-[9px] text-coral/90">820</span></span>
+                <span><span class="block text-coral">Dec</span><span class="block text-[9px] text-coral/90">880</span></span>
+                <span><span class="block">Jan</span><span class="block text-[9px] text-muted/80">410</span></span>
+                <span><span class="block">Feb</span><span class="block text-[9px] text-muted/80">530</span></span>
+                <span><span class="block">Mar</span><span class="block text-[9px] text-muted/80">645</span></span>
+                <span><span class="block">Apr</span><span class="block text-[9px] text-muted/80">590</span></span>
+                <span><span class="block text-ink">May</span><span class="block text-[9px] text-violet">524</span></span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
       <!-- EXPENSE LIST -->
       <section>
         <article class="rounded-2xl border border-line bg-white p-5 shadow-soft">
@@ -251,78 +338,78 @@
                 <tr class="transition hover:bg-shell/60">
                   <td class="px-3 py-2.5"><b>Coffee meeting</b></td>
                   <td class="px-3 py-2.5 text-muted">Work Lunch</td>
-                  <td class="px-3 py-2.5"><span class="rounded-full bg-shell px-2 py-0.5 text-[10px] font-semibold text-ink">Food</span></td>
+                  <td class="px-3 py-2.5"><span class="rounded-full px-2 py-0.5 text-[10px] font-semibold" style="background:rgba(90,45,240,0.14);color:#5A2DF0">Food</span></td>
                   <td class="px-3 py-2.5 text-muted">23 May</td>
-                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums">£15.00</td>
+                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums text-violet">£15.00</td>
                 </tr>
                 <tr class="transition hover:bg-shell/60">
                   <td class="px-3 py-2.5"><b>Dinner at Le Meurice</b></td>
                   <td class="px-3 py-2.5 text-muted">Paris Trip</td>
-                  <td class="px-3 py-2.5"><span class="rounded-full bg-shell px-2 py-0.5 text-[10px] font-semibold text-ink">Food</span></td>
+                  <td class="px-3 py-2.5"><span class="rounded-full px-2 py-0.5 text-[10px] font-semibold" style="background:rgba(90,45,240,0.14);color:#5A2DF0">Food</span></td>
                   <td class="px-3 py-2.5 text-muted">22 May</td>
-                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums">£35.00</td>
+                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums text-violet">£35.00</td>
                 </tr>
                 <tr class="transition hover:bg-shell/60">
                   <td class="px-3 py-2.5"><b>Group dinner — day 2</b></td>
                   <td class="px-3 py-2.5 text-muted">Paris Trip</td>
-                  <td class="px-3 py-2.5"><span class="rounded-full bg-shell px-2 py-0.5 text-[10px] font-semibold text-ink">Food</span></td>
+                  <td class="px-3 py-2.5"><span class="rounded-full px-2 py-0.5 text-[10px] font-semibold" style="background:rgba(90,45,240,0.14);color:#5A2DF0">Food</span></td>
                   <td class="px-3 py-2.5 text-muted">21 May</td>
-                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums">£80.00</td>
+                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums text-violet">£80.00</td>
                 </tr>
                 <tr class="transition hover:bg-shell/60">
                   <td class="px-3 py-2.5"><b>Grocery shopping</b></td>
                   <td class="px-3 py-2.5 text-muted">Home Bills</td>
-                  <td class="px-3 py-2.5"><span class="rounded-full bg-shell px-2 py-0.5 text-[10px] font-semibold text-ink">Other</span></td>
+                  <td class="px-3 py-2.5"><span class="rounded-full px-2 py-0.5 text-[10px] font-semibold" style="background:rgba(123,77,255,0.16);color:#5A2DF0">Other</span></td>
                   <td class="px-3 py-2.5 text-muted">20 May</td>
-                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums">£28.00</td>
+                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums text-violet">£28.00</td>
                 </tr>
                 <tr class="transition hover:bg-shell/60">
                   <td class="px-3 py-2.5"><b>Louvre tickets</b></td>
                   <td class="px-3 py-2.5 text-muted">Paris Trip</td>
-                  <td class="px-3 py-2.5"><span class="rounded-full bg-shell px-2 py-0.5 text-[10px] font-semibold text-ink">Activity</span></td>
+                  <td class="px-3 py-2.5"><span class="rounded-full px-2 py-0.5 text-[10px] font-semibold" style="background:rgba(226,215,255,0.55);color:#5A2DF0">Activity</span></td>
                   <td class="px-3 py-2.5 text-muted">19 May</td>
-                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums">£55.00</td>
+                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums text-violet">£55.00</td>
                 </tr>
                 <tr class="transition hover:bg-shell/60">
                   <td class="px-3 py-2.5"><b>Metro passes</b></td>
                   <td class="px-3 py-2.5 text-muted">Paris Trip</td>
-                  <td class="px-3 py-2.5"><span class="rounded-full bg-shell px-2 py-0.5 text-[10px] font-semibold text-ink">Transport</span></td>
+                  <td class="px-3 py-2.5"><span class="rounded-full px-2 py-0.5 text-[10px] font-semibold" style="background:rgba(197,179,255,0.30);color:#5A2DF0">Transport</span></td>
                   <td class="px-3 py-2.5 text-muted">18 May</td>
-                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums">£90.00</td>
+                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums text-violet">£90.00</td>
                 </tr>
                 <tr class="transition hover:bg-shell/60">
                   <td class="px-3 py-2.5"><b>Hotel — 3 nights</b></td>
                   <td class="px-3 py-2.5 text-muted">Paris Trip</td>
-                  <td class="px-3 py-2.5"><span class="rounded-full bg-shell px-2 py-0.5 text-[10px] font-semibold text-ink">Accommodation</span></td>
+                  <td class="px-3 py-2.5"><span class="rounded-full px-2 py-0.5 text-[10px] font-semibold" style="background:rgba(164,133,255,0.22);color:#5A2DF0">Accommodation</span></td>
                   <td class="px-3 py-2.5 text-muted">18 May</td>
-                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums">£90.00</td>
+                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums text-violet">£90.00</td>
                 </tr>
                 <tr class="transition hover:bg-shell/60">
                   <td class="px-3 py-2.5"><b>Electricity bill</b></td>
                   <td class="px-3 py-2.5 text-muted">Home Bills</td>
-                  <td class="px-3 py-2.5"><span class="rounded-full bg-shell px-2 py-0.5 text-[10px] font-semibold text-ink">Other</span></td>
+                  <td class="px-3 py-2.5"><span class="rounded-full px-2 py-0.5 text-[10px] font-semibold" style="background:rgba(123,77,255,0.16);color:#5A2DF0">Other</span></td>
                   <td class="px-3 py-2.5 text-muted">12 May</td>
-                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums">£68.00</td>
+                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums text-violet">£68.00</td>
                 </tr>
                 <tr class="transition hover:bg-shell/60">
                   <td class="px-3 py-2.5"><b>Internet</b></td>
                   <td class="px-3 py-2.5 text-muted">Home Bills</td>
-                  <td class="px-3 py-2.5"><span class="rounded-full bg-shell px-2 py-0.5 text-[10px] font-semibold text-ink">Other</span></td>
+                  <td class="px-3 py-2.5"><span class="rounded-full px-2 py-0.5 text-[10px] font-semibold" style="background:rgba(123,77,255,0.16);color:#5A2DF0">Other</span></td>
                   <td class="px-3 py-2.5 text-muted">8 May</td>
-                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums">£48.00</td>
+                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums text-violet">£48.00</td>
                 </tr>
                 <tr class="transition hover:bg-shell/60">
                   <td class="px-3 py-2.5"><b>Team lunch</b></td>
                   <td class="px-3 py-2.5 text-muted">Work Lunch</td>
-                  <td class="px-3 py-2.5"><span class="rounded-full bg-shell px-2 py-0.5 text-[10px] font-semibold text-ink">Food</span></td>
+                  <td class="px-3 py-2.5"><span class="rounded-full px-2 py-0.5 text-[10px] font-semibold" style="background:rgba(90,45,240,0.14);color:#5A2DF0">Food</span></td>
                   <td class="px-3 py-2.5 text-muted">5 May</td>
-                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums">£15.00</td>
+                  <td class="px-3 py-2.5 text-right font-semibold tabular-nums text-violet">£15.00</td>
                 </tr>
               </tbody>
               <tfoot>
                 <tr class="bg-shell text-[12px]">
                   <td class="px-3 py-3 font-bold uppercase tracking-wider text-muted" colspan="4">May total</td>
-                  <td class="px-3 py-3 text-right font-extrabold text-violet tabular-nums">£524.00</td>
+                  <td class="px-3 py-3 text-right font-extrabold tabular-nums text-violet">£524.00</td>
                 </tr>
               </tfoot>
             </table>

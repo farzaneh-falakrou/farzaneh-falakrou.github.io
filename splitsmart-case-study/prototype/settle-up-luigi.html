@@ -86,90 +86,62 @@
         </div>
       </header>
 
-      <div class="mx-auto grid max-w-2xl gap-4">
-        <!-- net banner -->
-        <div class="rounded-2xl border border-line bg-white p-5 shadow-soft">
-          <div class="grid grid-cols-[44px_1fr] items-center gap-3 rounded-xl bg-shell p-4">
-            <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-ocean text-[15px] font-bold text-white shadow-soft border-2 border-white">L</span>
-            <span>
-              <small class="block text-[11px] font-semibold text-muted">You owe Luigi</small>
-              <p class="text-[28px] font-extrabold leading-none text-coral tabular-nums"><span class="sr-only">You owe: </span>£20.00</p>
-              <span class="mt-1 block text-[11px] text-muted">from Paris Trip</span>
-            </span>
-          </div>
-          <div class="mt-3 flex items-center justify-between gap-2">
-            <button type="button" aria-label="Settle up £20.00 with Luigi" class="btn-coral inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg text-[12px] font-bold text-white">
-              <i data-lucide="credit-card" class="h-3.5 w-3.5" aria-hidden="true"></i> Settle up £20.00
-            </button>
-            <button type="button" aria-label="Mark £20.00 paid to Luigi" class="text-[12px] font-semibold text-violet underline-offset-2 hover:underline px-2">
-              Mark as paid
-            </button>
-          </div>
-        </div>
-
-        <!-- per-group breakdown (collapsible) -->
-        <section aria-label="Balance by group" class="grid gap-2">
-          <div class="flex items-baseline justify-between">
-            <h2 class="text-[13px] font-bold">How it adds up</h2>
-            <small class="text-[11px] text-muted">Tap a group to see the line items.</small>
-          </div>
-
-          <!-- Paris Trip -->
-          <details class="overflow-hidden rounded-xl border border-line bg-white shadow-soft">
-            <summary class="grid grid-cols-[36px_1fr_auto_16px] items-center gap-3 p-3.5">
-              <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-lg bg-cyan/15 text-cyan"><i data-lucide="plane" class="h-4 w-4"></i></span>
-              <span class="min-w-0">
-                <b class="block text-[13px]">Paris Trip</b>
-                <small class="block text-[11px] text-muted">4 shared expenses</small>
-              </span>
-              <b class="text-[14px] text-coral tabular-nums">− £20.00</b>
-              <i data-lucide="chevron-down" class="chev h-4 w-4 text-muted transition-transform" aria-hidden="true"></i>
-            </summary>
-            <div class="border-t border-line bg-shell/40 p-3">
-              <ol class="grid gap-2">
-                <li class="grid grid-cols-[1fr_auto] gap-2 rounded-lg bg-white border border-line p-2.5">
-                  <span class="min-w-0">
-                    <b class="block truncate text-[12px]">Hotel — 3 nights</b>
-                    <small class="block text-[10.5px] text-muted">You paid £270 · 18 May</small>
-                  </span>
-                  <b class="self-center whitespace-nowrap text-[11.5px] text-mint tabular-nums">+ £90.00</b>
-                </li>
-                <li class="grid grid-cols-[1fr_auto] gap-2 rounded-lg bg-white border border-line p-2.5">
-                  <span class="min-w-0">
-                    <b class="block truncate text-[12px]">Metro passes</b>
-                    <small class="block text-[10.5px] text-muted">Luigi paid £270 · 18 May</small>
-                  </span>
-                  <b class="self-center whitespace-nowrap text-[11.5px] text-coral tabular-nums">− £90.00</b>
-                </li>
-                <li class="grid grid-cols-[1fr_auto] gap-2 rounded-lg bg-white border border-line p-2.5">
-                  <span class="min-w-0">
-                    <b class="block truncate text-[12px]">Louvre tickets</b>
-                    <small class="block text-[10.5px] text-muted">Luigi paid £165 · 19 May</small>
-                  </span>
-                  <b class="self-center whitespace-nowrap text-[11.5px] text-coral tabular-nums">− £55.00</b>
-                </li>
-                <li class="grid grid-cols-[1fr_auto] gap-2 rounded-lg bg-white border border-line p-2.5">
-                  <span class="min-w-0">
-                    <b class="block truncate text-[12px]">Dinner at Le Meurice</b>
-                    <small class="block text-[10.5px] text-muted">You paid £105 · 22 May</small>
-                  </span>
-                  <b class="self-center whitespace-nowrap text-[11.5px] text-mint tabular-nums">+ £35.00</b>
-                </li>
-              </ol>
-              <div class="mt-2 flex items-center justify-between border-t border-line pt-2">
-                <small class="text-[11px] font-semibold text-muted">Paris Trip subtotal</small>
-                <b class="text-[12px] text-coral tabular-nums">− £20.00</b>
+      <article class="rounded-2xl border border-line bg-white p-6 shadow-soft">
+        <div class="grid grid-cols-2 gap-8 max-lg:grid-cols-1 max-lg:gap-6">
+          <!-- LEFT: action -->
+          <div>
+            <div class="flex items-center gap-3">
+              <span aria-hidden="true" class="grid h-14 w-14 place-items-center rounded-full bg-ocean text-[18px] font-bold text-white shadow border-2 border-white">L</span>
+              <div>
+                <b class="block text-[18px]">Luigi</b>
+                <small class="text-[11px] text-muted">net from Paris Trip</small>
               </div>
             </div>
-          </details>
-
-          <!-- Grand total -->
-          <div class="flex items-center justify-between rounded-xl bg-violet/5 px-3.5 py-3">
-            <b class="text-[12.5px]">Net with Luigi</b>
-            <b class="text-[16px] text-coral tabular-nums">− £20.00</b>
+            <p class="mt-5 text-[10px] font-bold uppercase tracking-wider text-muted">You owe</p>
+            <p class="text-[40px] font-extrabold text-coral tabular-nums leading-none"><span class="sr-only">You owe: </span>£20.00</p>
+            <div class="mt-6">
+              <button type="button" aria-label="Pay £20.00 to Luigi with Apple Pay" class="btn-violet inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl text-[14px] font-bold text-white">
+                <i data-lucide="apple" class="h-4 w-4" aria-hidden="true"></i> Pay £20.00 with Apple Pay
+              </button>
+              <p class="mt-3 text-center text-[10.5px] font-semibold uppercase tracking-wider text-muted">or pay with</p>
+              <div class="mt-2 grid grid-cols-3 gap-2">
+                <button type="button" aria-label="Pay £20.00 to Luigi with Google Pay" class="inline-flex h-10 items-center justify-center gap-1.5 rounded-lg border border-line bg-white text-[12px] font-bold text-ink hover:bg-shell">
+                  <i data-lucide="smartphone" class="h-3.5 w-3.5" aria-hidden="true"></i> Google Pay
+                </button>
+                <button type="button" aria-label="Pay £20.00 to Luigi by bank transfer" class="inline-flex h-10 items-center justify-center gap-1.5 rounded-lg border border-line bg-white text-[12px] font-bold text-ink hover:bg-shell">
+                  <i data-lucide="landmark" class="h-3.5 w-3.5" aria-hidden="true"></i> Bank
+                </button>
+                <button type="button" aria-label="Pay £20.00 to Luigi with PayPal" class="inline-flex h-10 items-center justify-center gap-1.5 rounded-lg border border-line bg-white text-[12px] font-bold text-ink hover:bg-shell">
+                  <i data-lucide="circle-dollar-sign" class="h-3.5 w-3.5" aria-hidden="true"></i> PayPal
+                </button>
+              </div>
+              <div class="mt-4 text-center">
+                <button type="button" aria-label="Log £20.00 paid manually" class="text-[11.5px] font-semibold text-muted underline-offset-2 hover:underline">
+                  Already paid another way? Log it manually
+                </button>
+              </div>
+            </div>
           </div>
-        </section>
-      </div>
+          <!-- RIGHT: breakdown -->
+          <div>
+            <h2 class="text-[13px] font-bold">How it adds up</h2>
+            <p class="mt-0.5 text-[11px] text-muted">Per-group balance with Luigi.</p>
+            <div class="mt-3 grid gap-2">
+              <div class="rounded-xl border border-coral/20 bg-coral/[0.04] p-3.5">
+                <div class="flex items-center justify-between">
+                  <b class="text-[13px]">Paris Trip</b>
+                  <b class="text-[13.5px] text-coral tabular-nums">− £20.00</b>
+                </div>
+                <small class="block text-[11px] text-muted mt-0.5">You owe Luigi, from Metro + Louvre − Hotel + Dinner shares</small>
+              </div>
+              <div class="mt-1 flex items-center justify-between border-t border-dashed border-line pt-3">
+                <b class="text-[12.5px]">Net balance</b>
+                <b class="text-[16px] text-coral tabular-nums">− £20.00</b>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
 
     </main>
   </div>
