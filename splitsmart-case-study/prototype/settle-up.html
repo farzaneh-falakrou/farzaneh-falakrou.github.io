@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SplitSmart — Settle Up</title>
+  <title>SplitSmart — Settle up</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -43,7 +43,7 @@
       </a>
       <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.18em] text-white/55 max-lg:hidden">Menu</p>
       <nav aria-label="Primary" class="grid gap-0.5 max-lg:grid-cols-4">
-        <a href="dashboard.html" aria-current="page" class="nav-active flex items-center gap-2.5 rounded-lg bg-violet px-3 py-2 text-[13px] font-semibold text-white">
+        <a href="dashboard.html" class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium text-white/80 transition hover:bg-white/10 hover:text-white">
           <i data-lucide="layout-grid" class="h-4 w-4" aria-hidden="true"></i> Overview
         </a>
         <a href="groups.html" class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium text-white/80 transition hover:bg-white/10 hover:text-white">
@@ -51,6 +51,9 @@
         </a>
         <a href="friends.html" class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium text-white/80 transition hover:bg-white/10 hover:text-white">
           <i data-lucide="user-round" class="h-4 w-4" aria-hidden="true"></i> Friends
+        </a>
+        <a href="settle-up.html" aria-current="page" class="nav-active flex items-center gap-2.5 rounded-lg bg-violet px-3 py-2 text-[13px] font-semibold text-white">
+          <i data-lucide="scale" class="h-4 w-4" aria-hidden="true"></i> Settle up
         </a>
         <a href="budget.html" class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium text-white/80 transition hover:bg-white/10 hover:text-white">
           <i data-lucide="wallet" class="h-4 w-4" aria-hidden="true"></i> Budget
@@ -78,7 +81,7 @@
           <i data-lucide="arrow-left" class="h-4 w-4" aria-hidden="true"></i>
         </a>
         <div>
-          <h1 class="text-[26px] font-extrabold tracking-tight leading-tight">Settle Up</h1>
+          <h1 class="text-[26px] font-extrabold tracking-tight leading-tight">Settle up</h1>
           <p class="mt-0.5 text-[13px] text-muted">Simple payment summary</p>
         </div>
       </header>
@@ -96,14 +99,15 @@
         <div class="grid grid-cols-2 gap-4 max-md:grid-cols-1">
           <!-- You'll receive -->
           <article class="rounded-2xl border border-mint/20 bg-mint/[0.04] p-4">
-            <div class="mb-3 flex items-center justify-between">
+            <div class="mb-1 flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <span aria-hidden="true" class="grid h-7 w-7 place-items-center rounded-full bg-mint/10 text-mint"><i data-lucide="arrow-down-left" class="h-4 w-4"></i></span>
                 <h2 class="text-[13px] font-bold">You'll receive</h2>
               </div>
               <b class="text-[13px] text-mint tabular-nums">£30.00</b>
             </div>
-            <a href="settle-up-mina.html" class="flex items-center justify-between rounded-lg bg-white border border-mint/15 p-3 transition hover:bg-mint/[0.04]">
+            <p class="mb-3 text-[10.5px] text-muted/80 italic">Tap a row to remind one person.</p>
+            <a href="settle-up-mina.html" class="flex items-center justify-between gap-3 rounded-lg bg-white border border-mint/15 p-3 transition hover:bg-mint/[0.04]">
               <span class="flex items-center gap-2.5">
                 <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-full bg-mint text-[12px] font-bold text-white">M</span>
                 <span>
@@ -111,23 +115,27 @@
                   <small class="block text-[11px] text-muted">Paris + Work Lunch</small>
                 </span>
               </span>
-              <b class="text-[13px] text-mint tabular-nums">£30.00</b>
+              <span class="flex items-center gap-1.5">
+                <b class="text-[14px] text-mint tabular-nums">£30.00</b>
+                <i data-lucide="chevron-right" class="h-4 w-4 text-mint/60" aria-hidden="true"></i>
+              </span>
             </a>
-            <button type="button" aria-label="Send reminder to Mina for £30.00" class="btn-violet mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg text-[12px] font-bold text-white">
-              <i data-lucide="bell" class="h-3.5 w-3.5" aria-hidden="true"></i> Send reminder
+            <button type="button" aria-label="Send reminder to everyone you're owed by" class="mt-3 inline-flex h-10 w-full items-center justify-center rounded-lg border border-mint/40 bg-white text-[12.5px] font-bold text-mint hover:bg-mint/10">
+              Remind all
             </button>
           </article>
 
           <!-- You owe -->
           <article class="rounded-2xl border border-coral/20 bg-coral/[0.04] p-4">
-            <div class="mb-3 flex items-center justify-between">
+            <div class="mb-1 flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <span aria-hidden="true" class="grid h-7 w-7 place-items-center rounded-full bg-coral/10 text-coral"><i data-lucide="arrow-up-right" class="h-4 w-4"></i></span>
                 <h2 class="text-[13px] font-bold">You owe</h2>
               </div>
               <b class="text-[13px] text-coral tabular-nums">£20.00</b>
             </div>
-            <a href="settle-up-luigi.html" class="flex items-center justify-between rounded-lg bg-white border border-coral/15 p-3 transition hover:bg-coral/[0.04]">
+            <p class="mb-3 text-[10.5px] text-muted/80 italic">Tap a row to pay one person.</p>
+            <a href="settle-up-luigi.html" class="flex items-center justify-between gap-3 rounded-lg bg-white border border-coral/15 p-3 transition hover:bg-coral/[0.04]">
               <span class="flex items-center gap-2.5">
                 <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-full bg-ocean text-[12px] font-bold text-white">L</span>
                 <span>
@@ -135,10 +143,13 @@
                   <small class="block text-[11px] text-muted">Paris</small>
                 </span>
               </span>
-              <b class="text-[13px] text-coral tabular-nums">£20.00</b>
+              <span class="flex items-center gap-1.5">
+                <b class="text-[14px] text-coral tabular-nums">£20.00</b>
+                <i data-lucide="chevron-right" class="h-4 w-4 text-coral/60" aria-hidden="true"></i>
+              </span>
             </a>
-            <button type="button" aria-label="Pay £20.00 to Luigi with Apple Pay" class="btn-violet mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg text-[12px] font-bold text-white">
-              <i data-lucide="apple" class="h-4 w-4" aria-hidden="true"></i> Pay with Apple Pay
+            <button type="button" aria-label="Pay everyone you owe at once" class="btn-violet mt-3 inline-flex h-10 w-full items-center justify-center rounded-lg text-[12.5px] font-bold text-white">
+              Pay all
             </button>
           </article>
         </div>
