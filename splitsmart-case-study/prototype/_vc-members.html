@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VC — Members card variants</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    html { font-size: 14px; }
+    body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; background:#F5F7FB; }
+    .panel { border:1px solid #E1E6F0; background:#fff; border-radius:1rem; padding:1.25rem; box-shadow: 0 1px 2px rgba(10,14,45,0.04), 0 12px 32px -8px rgba(10,14,45,0.10); }
+    .label { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#5A2DF0; }
+  </style>
+</head>
+<body class="p-8 text-ink">
+  <header class="mx-auto mb-8 max-w-7xl">
+    <h1 class="text-[24px] font-extrabold tracking-tight">Members card — 5 variants</h1>
+    <p class="mt-1 text-[13px] text-muted">Paris Trip · Alex (you), Mina, Luigi · totals: Alex paid £350, Mina £240, Luigi £435 (£1,025)</p>
+  </header>
+
+  <div class="mx-auto grid max-w-7xl grid-cols-2 gap-6 max-lg:grid-cols-1">
+
+    <!-- 1. Contribution bar -->
+    <section>
+      <p class="label mb-2">Option 1 — Contribution bar</p>
+      <article class="panel">
+        <div class="mb-3 flex items-center justify-between">
+          <h2 class="text-[14px] font-bold">Members</h2>
+          <button class="inline-flex h-8 items-center gap-1.5 rounded-lg border border-line bg-white px-2.5 text-[11px] font-semibold text-violet">
+            <i data-lucide="plus" class="h-3 w-3"></i> Invite
+          </button>
+        </div>
+        <p class="mb-2 text-[11px] text-muted">Who paid what · of £1,025 total</p>
+        <div class="flex h-3 w-full overflow-hidden rounded-full">
+          <div style="width:34%" class="bg-violet"></div>
+          <div style="width:23%" class="bg-mint"></div>
+          <div style="width:43%" class="bg-ocean"></div>
+        </div>
+        <div class="mt-3 grid gap-1.5">
+          <p class="flex items-center justify-between text-[12px]"><span class="flex items-center gap-2"><span class="grid h-6 w-6 place-items-center rounded-full bg-violet text-[10px] font-bold text-white">A</span> Alex <span class="text-muted">(you)</span></span><b class="tabular-nums">£350 · 34%</b></p>
+          <p class="flex items-center justify-between text-[12px]"><span class="flex items-center gap-2"><span class="grid h-6 w-6 place-items-center rounded-full bg-mint text-[10px] font-bold text-white">M</span> Mina</span><b class="tabular-nums">£240 · 23%</b></p>
+          <p class="flex items-center justify-between text-[12px]"><span class="flex items-center gap-2"><span class="grid h-6 w-6 place-items-center rounded-full bg-ocean text-[10px] font-bold text-white">L</span> Luigi</span><b class="tabular-nums">£435 · 43%</b></p>
+        </div>
+      </article>
+      <p class="mt-2 text-[12px] text-muted">Shows the "load" each person is carrying. Re-uses the segment-bar idiom from Groups.</p>
+    </section>
+
+    <!-- 2. Avatar list rows -->
+    <section>
+      <p class="label mb-2">Option 2 — Roster list</p>
+      <article class="panel">
+        <div class="mb-3 flex items-center justify-between">
+          <h2 class="text-[14px] font-bold">Members</h2>
+          <button class="inline-flex h-8 items-center gap-1.5 rounded-lg border border-line bg-white px-2.5 text-[11px] font-semibold text-violet">
+            <i data-lucide="plus" class="h-3 w-3"></i> Invite
+          </button>
+        </div>
+        <div class="grid gap-2">
+          <div class="flex items-center gap-3 rounded-lg border border-line p-2.5">
+            <span class="grid h-9 w-9 place-items-center rounded-full bg-violet text-[12px] font-bold text-white">A</span>
+            <span class="min-w-0 flex-1">
+              <b class="block text-[12.5px]">Alex <span class="font-normal text-muted">(you)</span></b>
+              <small class="block text-[11px] text-muted">paid £350 · 2 expenses</small>
+            </span>
+          </div>
+          <div class="flex items-center gap-3 rounded-lg border border-line p-2.5">
+            <span class="grid h-9 w-9 place-items-center rounded-full bg-mint text-[12px] font-bold text-white">M</span>
+            <span class="min-w-0 flex-1">
+              <b class="block text-[12.5px]">Mina</b>
+              <small class="block text-[11px] text-muted">paid £240 · 1 expense</small>
+            </span>
+          </div>
+          <div class="flex items-center gap-3 rounded-lg border border-line p-2.5">
+            <span class="grid h-9 w-9 place-items-center rounded-full bg-ocean text-[12px] font-bold text-white">L</span>
+            <span class="min-w-0 flex-1">
+              <b class="block text-[12.5px]">Luigi</b>
+              <small class="block text-[11px] text-muted">paid £435 · 2 expenses</small>
+            </span>
+          </div>
+        </div>
+      </article>
+      <p class="mt-2 text-[12px] text-muted">Data-dense roster. Same per-row pattern as Recent activity / Who-owes-whom.</p>
+    </section>
+
+    <!-- 3. Compact chip strip -->
+    <section>
+      <p class="label mb-2">Option 3 — Compact chip strip</p>
+      <article class="panel">
+        <div class="mb-3 flex items-center justify-between">
+          <h2 class="text-[14px] font-bold">Members</h2>
+          <button class="inline-flex h-8 items-center gap-1.5 rounded-lg border border-line bg-white px-2.5 text-[11px] font-semibold text-violet">
+            <i data-lucide="plus" class="h-3 w-3"></i> Invite
+          </button>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="flex -space-x-2">
+            <span class="grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-violet text-[12px] font-bold text-white shadow">A</span>
+            <span class="grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-mint text-[12px] font-bold text-white shadow">M</span>
+            <span class="grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-ocean text-[12px] font-bold text-white shadow">L</span>
+          </div>
+          <span class="ml-2 text-[12px] text-muted">3 members · all active</span>
+        </div>
+        <p class="mt-3 text-[11px] text-muted">Frees vertical space — pairs well with a wider "Who owes whom" panel.</p>
+      </article>
+      <p class="mt-2 text-[12px] text-muted">Smallest footprint. Group page reclaims room for something more useful.</p>
+    </section>
+
+    <!-- 4. Activity sparkline per member -->
+    <section>
+      <p class="label mb-2">Option 4 — Per-member sparkline</p>
+      <article class="panel">
+        <div class="mb-3 flex items-center justify-between">
+          <h2 class="text-[14px] font-bold">Members</h2>
+          <button class="inline-flex h-8 items-center gap-1.5 rounded-lg border border-line bg-white px-2.5 text-[11px] font-semibold text-violet">
+            <i data-lucide="plus" class="h-3 w-3"></i> Invite
+          </button>
+        </div>
+        <div class="grid gap-2.5">
+          <div class="flex items-center gap-3">
+            <span class="grid h-8 w-8 place-items-center rounded-full bg-violet text-[11px] font-bold text-white">A</span>
+            <span class="min-w-0 flex-1">
+              <div class="flex items-end justify-between"><b class="text-[12px]">Alex</b><b class="text-[11px] tabular-nums text-muted">£350</b></div>
+              <div class="mt-1 grid grid-cols-5 items-end gap-1 h-6">
+                <span class="bg-violet/70 rounded-sm" style="height:90%"></span>
+                <span class="bg-violet/10 rounded-sm" style="height:6%"></span>
+                <span class="bg-violet/10 rounded-sm" style="height:6%"></span>
+                <span class="bg-violet/10 rounded-sm" style="height:6%"></span>
+                <span class="bg-violet/70 rounded-sm" style="height:35%"></span>
+              </div>
+            </span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="grid h-8 w-8 place-items-center rounded-full bg-mint text-[11px] font-bold text-white">M</span>
+            <span class="min-w-0 flex-1">
+              <div class="flex items-end justify-between"><b class="text-[12px]">Mina</b><b class="text-[11px] tabular-nums text-muted">£240</b></div>
+              <div class="mt-1 grid grid-cols-5 items-end gap-1 h-6">
+                <span class="bg-mint/10 rounded-sm" style="height:6%"></span>
+                <span class="bg-mint/10 rounded-sm" style="height:6%"></span>
+                <span class="bg-mint/10 rounded-sm" style="height:6%"></span>
+                <span class="bg-mint/70 rounded-sm" style="height:80%"></span>
+                <span class="bg-mint/10 rounded-sm" style="height:6%"></span>
+              </div>
+            </span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="grid h-8 w-8 place-items-center rounded-full bg-ocean text-[11px] font-bold text-white">L</span>
+            <span class="min-w-0 flex-1">
+              <div class="flex items-end justify-between"><b class="text-[12px]">Luigi</b><b class="text-[11px] tabular-nums text-muted">£435</b></div>
+              <div class="mt-1 grid grid-cols-5 items-end gap-1 h-6">
+                <span class="bg-ocean/70 rounded-sm" style="height:100%"></span>
+                <span class="bg-ocean/70 rounded-sm" style="height:30%"></span>
+                <span class="bg-ocean/10 rounded-sm" style="height:6%"></span>
+                <span class="bg-ocean/10 rounded-sm" style="height:6%"></span>
+                <span class="bg-ocean/10 rounded-sm" style="height:6%"></span>
+              </div>
+            </span>
+          </div>
+        </div>
+      </article>
+      <p class="mt-2 text-[12px] text-muted">Rich, but for 3 people it may be more chart than insight.</p>
+    </section>
+
+    <!-- 5. Drop the card -->
+    <section class="lg:col-span-2">
+      <p class="label mb-2">Option 5 — Drop Members card</p>
+      <article class="panel">
+        <p class="text-[13px]">Members already appear in the <b>Expenses table</b> (Paid by column) and the <b>Who-owes-whom</b> rows. Give that panel the full width:</p>
+        <div class="mt-4 rounded-2xl border border-line bg-shell/40 p-5">
+          <div class="mb-3 flex items-center justify-between">
+            <div>
+              <h3 class="text-[14px] font-bold">Who owes whom</h3>
+              <p class="text-[11px] text-muted">In Paris Trip — informational; settle from the Settle Up page.</p>
+            </div>
+            <div class="flex -space-x-2">
+              <span class="grid h-7 w-7 place-items-center rounded-full border-2 border-white bg-violet text-[10px] font-bold text-white shadow">A</span>
+              <span class="grid h-7 w-7 place-items-center rounded-full border-2 border-white bg-mint text-[10px] font-bold text-white shadow">M</span>
+              <span class="grid h-7 w-7 place-items-center rounded-full border-2 border-white bg-ocean text-[10px] font-bold text-white shadow">L</span>
+            </div>
+          </div>
+          <div class="grid gap-2">
+            <div class="flex items-center justify-between rounded-lg border border-line bg-white p-3">
+              <div class="flex items-center gap-2.5"><span class="grid h-8 w-8 place-items-center rounded-full bg-mint text-[11px] font-bold text-white">M</span><b class="text-[12px]">Mina</b><i data-lucide="arrow-right" class="h-3.5 w-3.5 text-muted"></i><span class="grid h-8 w-8 place-items-center rounded-full bg-violet text-[11px] font-bold text-white">A</span><b class="text-[12px]">You</b></div>
+              <b class="text-[13px] text-mint tabular-nums">£45.00</b>
+            </div>
+            <div class="flex items-center justify-between rounded-lg border border-line bg-white p-3">
+              <div class="flex items-center gap-2.5"><span class="grid h-8 w-8 place-items-center rounded-full bg-violet text-[11px] font-bold text-white">A</span><b class="text-[12px]">You</b><i data-lucide="arrow-right" class="h-3.5 w-3.5 text-muted"></i><span class="grid h-8 w-8 place-items-center rounded-full bg-ocean text-[11px] font-bold text-white">L</span><b class="text-[12px]">Luigi</b></div>
+              <b class="text-[13px] text-coral tabular-nums">£20.00</b>
+            </div>
+          </div>
+        </div>
+      </article>
+      <p class="mt-2 text-[12px] text-muted">Cleanest. Members chip-stack moves to the panel header as a small "who's in" indicator.</p>
+    </section>
+
+  </div>
+
+  <script>lucide.createIcons();</script>
+</body>
+</html>

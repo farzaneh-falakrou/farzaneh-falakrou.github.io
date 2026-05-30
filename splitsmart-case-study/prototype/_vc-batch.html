@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VC — Batch settle shortcuts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    html { font-size: 14px; }
+    body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; background:#F5F7FB; }
+    .panel { border:1px solid #E1E6F0; background:#fff; border-radius:1rem; padding:1.25rem; box-shadow: 0 1px 2px rgba(10,14,45,0.04), 0 12px 32px -8px rgba(10,14,45,0.10); }
+    .label { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#5A2DF0; }
+    .btn-violet { background: linear-gradient(180deg, #6B3DF5, #5A2DF0); color:white; box-shadow: 0 8px 20px -6px rgba(90,45,240,0.55), inset 0 1px 0 rgba(255,255,255,0.22); }
+  </style>
+</head>
+<body class="p-8 text-ink">
+  <header class="mx-auto mb-8 max-w-6xl">
+    <h1 class="text-[24px] font-extrabold tracking-tight">Settle Up — batch shortcuts</h1>
+    <p class="mt-1 text-[13px] text-muted">Scaled-up scenario: Mina +£30 · Fari +£18 (to receive) · Luigi -£20 · John -£12 (to owe). Net +£16.</p>
+  </header>
+
+  <div class="mx-auto grid max-w-6xl gap-8">
+
+    <!-- OPTION A: top banner -->
+    <section>
+      <p class="label mb-2">Option A — Top banner with both batch buttons</p>
+      <article class="panel">
+        <div class="mb-4 grid grid-cols-[1fr_auto] items-center gap-3 rounded-xl bg-shell p-4">
+          <span><small class="block text-[11px] font-semibold text-muted">Net balance</small><p class="text-[28px] font-extrabold leading-none text-mint tabular-nums">+£16.00</p></span>
+          <span class="text-right text-[11px] text-muted">Four transfers<br>to clear everything.</span>
+        </div>
+        <!-- batch banner -->
+        <div class="mb-4 grid grid-cols-[1fr_auto_auto] items-center gap-3 rounded-xl border border-violet/20 bg-violet/[0.04] p-3">
+          <div><b class="block text-[12.5px]">Settle everyone in one go</b><small class="text-[11px] text-muted">2 to pay · 2 to remind</small></div>
+          <button class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-line bg-white px-3 text-[11.5px] font-bold text-ink hover:bg-shell"><i data-lucide="bell" class="h-3.5 w-3.5"></i> Send all reminders</button>
+          <button class="btn-violet inline-flex h-9 items-center gap-1.5 rounded-lg px-3 text-[11.5px] font-bold"><i data-lucide="apple" class="h-3.5 w-3.5"></i> Pay all £32</button>
+        </div>
+        <div class="grid grid-cols-2 gap-4 max-md:grid-cols-1">
+          <article class="rounded-2xl border border-mint/20 bg-mint/[0.04] p-4">
+            <div class="mb-3 flex items-center justify-between"><b class="text-[13px]">You'll receive</b><b class="text-[13px] text-mint tabular-nums">£48.00</b></div>
+            <div class="grid gap-2">
+              <div class="flex items-center justify-between rounded-lg bg-white border border-mint/15 p-2.5"><span class="flex items-center gap-2"><span class="grid h-8 w-8 place-items-center rounded-full bg-mint text-[11px] font-bold text-white">M</span><b class="text-[12px]">Mina</b></span><b class="text-[12.5px] text-mint tabular-nums">£30.00</b></div>
+              <div class="flex items-center justify-between rounded-lg bg-white border border-mint/15 p-2.5"><span class="flex items-center gap-2"><span class="grid h-8 w-8 place-items-center rounded-full bg-ocean text-[11px] font-bold text-white">F</span><b class="text-[12px]">Fari</b></span><b class="text-[12.5px] text-mint tabular-nums">£18.00</b></div>
+            </div>
+          </article>
+          <article class="rounded-2xl border border-coral/20 bg-coral/[0.04] p-4">
+            <div class="mb-3 flex items-center justify-between"><b class="text-[13px]">You owe</b><b class="text-[13px] text-coral tabular-nums">£32.00</b></div>
+            <div class="grid gap-2">
+              <div class="flex items-center justify-between rounded-lg bg-white border border-coral/15 p-2.5"><span class="flex items-center gap-2"><span class="grid h-8 w-8 place-items-center rounded-full bg-ocean text-[11px] font-bold text-white">L</span><b class="text-[12px]">Luigi</b></span><b class="text-[12.5px] text-coral tabular-nums">£20.00</b></div>
+              <div class="flex items-center justify-between rounded-lg bg-white border border-coral/15 p-2.5"><span class="flex items-center gap-2"><span class="grid h-8 w-8 place-items-center rounded-full bg-violet text-[11px] font-bold text-white">J</span><b class="text-[12px]">John</b></span><b class="text-[12.5px] text-coral tabular-nums">£12.00</b></div>
+            </div>
+          </article>
+        </div>
+      </article>
+      <p class="mt-2 text-[12px] text-muted">Most discoverable — clearly framed as "settle everyone." Adds a row of UI above the cards.</p>
+    </section>
+
+    <!-- OPTION B: inline in card headers -->
+    <section>
+      <p class="label mb-2">Option B — Inline batch button in each card header</p>
+      <article class="panel">
+        <div class="mb-4 grid grid-cols-[1fr_auto] items-center gap-3 rounded-xl bg-shell p-4">
+          <span><small class="block text-[11px] font-semibold text-muted">Net balance</small><p class="text-[28px] font-extrabold leading-none text-mint tabular-nums">+£16.00</p></span>
+          <span class="text-right text-[11px] text-muted">Four transfers<br>to clear everything.</span>
+        </div>
+        <div class="grid grid-cols-2 gap-4 max-md:grid-cols-1">
+          <article class="rounded-2xl border border-mint/20 bg-mint/[0.04] p-4">
+            <div class="mb-3 flex items-center justify-between">
+              <div class="flex items-center gap-2"><b class="text-[13px]">You'll receive</b><b class="text-[12px] text-mint tabular-nums">£48.00</b></div>
+              <button class="inline-flex h-7 items-center gap-1 rounded-md border border-mint/40 bg-white px-2 text-[10.5px] font-bold text-mint"><i data-lucide="bell" class="h-3 w-3"></i> Remind all</button>
+            </div>
+            <div class="grid gap-2">
+              <div class="flex items-center justify-between rounded-lg bg-white border border-mint/15 p-2.5"><span class="flex items-center gap-2"><span class="grid h-8 w-8 place-items-center rounded-full bg-mint text-[11px] font-bold text-white">M</span><b class="text-[12px]">Mina</b></span><b class="text-[12.5px] text-mint tabular-nums">£30.00</b></div>
+              <div class="flex items-center justify-between rounded-lg bg-white border border-mint/15 p-2.5"><span class="flex items-center gap-2"><span class="grid h-8 w-8 place-items-center rounded-full bg-ocean text-[11px] font-bold text-white">F</span><b class="text-[12px]">Fari</b></span><b class="text-[12.5px] text-mint tabular-nums">£18.00</b></div>
+            </div>
+          </article>
+          <article class="rounded-2xl border border-coral/20 bg-coral/[0.04] p-4">
+            <div class="mb-3 flex items-center justify-between">
+              <div class="flex items-center gap-2"><b class="text-[13px]">You owe</b><b class="text-[12px] text-coral tabular-nums">£32.00</b></div>
+              <button class="btn-violet inline-flex h-7 items-center gap-1 rounded-md px-2 text-[10.5px] font-bold"><i data-lucide="apple" class="h-3 w-3"></i> Pay all £32</button>
+            </div>
+            <div class="grid gap-2">
+              <div class="flex items-center justify-between rounded-lg bg-white border border-coral/15 p-2.5"><span class="flex items-center gap-2"><span class="grid h-8 w-8 place-items-center rounded-full bg-ocean text-[11px] font-bold text-white">L</span><b class="text-[12px]">Luigi</b></span><b class="text-[12.5px] text-coral tabular-nums">£20.00</b></div>
+              <div class="flex items-center justify-between rounded-lg bg-white border border-coral/15 p-2.5"><span class="flex items-center gap-2"><span class="grid h-8 w-8 place-items-center rounded-full bg-violet text-[11px] font-bold text-white">J</span><b class="text-[12px]">John</b></span><b class="text-[12.5px] text-coral tabular-nums">£12.00</b></div>
+            </div>
+          </article>
+        </div>
+      </article>
+      <p class="mt-2 text-[12px] text-muted">Compact — batch action lives with the column it controls. No extra row. Auto-hides when the column has just one row.</p>
+    </section>
+
+    <!-- OPTION C: sticky footer strip -->
+    <section>
+      <p class="label mb-2">Option C — Sticky footer strip</p>
+      <article class="panel relative pb-20">
+        <div class="mb-4 grid grid-cols-[1fr_auto] items-center gap-3 rounded-xl bg-shell p-4">
+          <span><small class="block text-[11px] font-semibold text-muted">Net balance</small><p class="text-[28px] font-extrabold leading-none text-mint tabular-nums">+£16.00</p></span>
+          <span class="text-right text-[11px] text-muted">Four transfers<br>to clear everything.</span>
+        </div>
+        <div class="grid grid-cols-2 gap-4 max-md:grid-cols-1">
+          <article class="rounded-2xl border border-mint/20 bg-mint/[0.04] p-4">
+            <div class="mb-3 flex items-center justify-between"><b class="text-[13px]">You'll receive</b><b class="text-[13px] text-mint tabular-nums">£48.00</b></div>
+            <div class="grid gap-2">
+              <div class="flex items-center justify-between rounded-lg bg-white border border-mint/15 p-2.5"><span class="flex items-center gap-2"><span class="grid h-8 w-8 place-items-center rounded-full bg-mint text-[11px] font-bold text-white">M</span><b class="text-[12px]">Mina</b></span><b class="text-[12.5px] text-mint tabular-nums">£30.00</b></div>
+              <div class="flex items-center justify-between rounded-lg bg-white border border-mint/15 p-2.5"><span class="flex items-center gap-2"><span class="grid h-8 w-8 place-items-center rounded-full bg-ocean text-[11px] font-bold text-white">F</span><b class="text-[12px]">Fari</b></span><b class="text-[12.5px] text-mint tabular-nums">£18.00</b></div>
+            </div>
+          </article>
+          <article class="rounded-2xl border border-coral/20 bg-coral/[0.04] p-4">
+            <div class="mb-3 flex items-center justify-between"><b class="text-[13px]">You owe</b><b class="text-[13px] text-coral tabular-nums">£32.00</b></div>
+            <div class="grid gap-2">
+              <div class="flex items-center justify-between rounded-lg bg-white border border-coral/15 p-2.5"><span class="flex items-center gap-2"><span class="grid h-8 w-8 place-items-center rounded-full bg-ocean text-[11px] font-bold text-white">L</span><b class="text-[12px]">Luigi</b></span><b class="text-[12.5px] text-coral tabular-nums">£20.00</b></div>
+              <div class="flex items-center justify-between rounded-lg bg-white border border-coral/15 p-2.5"><span class="flex items-center gap-2"><span class="grid h-8 w-8 place-items-center rounded-full bg-violet text-[11px] font-bold text-white">J</span><b class="text-[12px]">John</b></span><b class="text-[12.5px] text-coral tabular-nums">£12.00</b></div>
+            </div>
+          </article>
+        </div>
+        <!-- sticky footer -->
+        <div class="absolute inset-x-4 bottom-4 flex items-center justify-between gap-3 rounded-xl border border-line bg-white p-3 shadow-lg">
+          <small class="text-[11px] text-muted"><b class="text-ink">Settle everyone:</b> 2 to pay · 2 to remind</small>
+          <div class="flex gap-2">
+            <button class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-line bg-white px-3 text-[11.5px] font-bold text-ink hover:bg-shell"><i data-lucide="bell" class="h-3.5 w-3.5"></i> Remind all</button>
+            <button class="btn-violet inline-flex h-9 items-center gap-1.5 rounded-lg px-3 text-[11.5px] font-bold"><i data-lucide="apple" class="h-3.5 w-3.5"></i> Pay all £32</button>
+          </div>
+        </div>
+      </article>
+      <p class="mt-2 text-[12px] text-muted">Always-present action bar. Doesn't compete with the cards. Adds permanent screen real estate.</p>
+    </section>
+
+  </div>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

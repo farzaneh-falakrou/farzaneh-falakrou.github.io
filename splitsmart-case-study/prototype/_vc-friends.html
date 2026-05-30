@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VC — Friends page redesign</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    html { font-size: 14px; }
+    body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; background:#F5F7FB; }
+    .panel { border:1px solid #E1E6F0; background:#fff; border-radius:1rem; padding:1.25rem; box-shadow: 0 1px 2px rgba(10,14,45,0.04), 0 12px 32px -8px rgba(10,14,45,0.10); }
+    .label { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#5A2DF0; }
+    .btn-violet { background: linear-gradient(180deg, #6B3DF5, #5A2DF0); color:white; box-shadow: 0 8px 20px -6px rgba(90,45,240,0.55), inset 0 1px 0 rgba(255,255,255,0.22); }
+  </style>
+</head>
+<body class="p-8 text-ink">
+  <header class="mx-auto mb-8 max-w-6xl">
+    <h1 class="text-[24px] font-extrabold tracking-tight">Friends page — 4 variants</h1>
+    <p class="mt-1 text-[13px] text-muted">Goal: friends ≠ a duplicate of Settle Up. Strip the per-row action buttons; add roster-only value.</p>
+  </header>
+
+  <div class="mx-auto grid max-w-6xl gap-8">
+
+    <!-- OPTION A: pure roster, balance only -->
+    <section>
+      <p class="label mb-2">Option A — Pure roster, balance only</p>
+      <div class="panel">
+        <div class="mb-4 flex items-center justify-between">
+          <div><b class="block text-[16px]">Friends</b><small class="text-[11px] text-muted">3 people · 2 with open balance</small></div>
+          <button class="btn-violet inline-flex h-9 items-center gap-1.5 rounded-lg px-3.5 text-[12px] font-bold"><i data-lucide="plus" class="h-3.5 w-3.5"></i> New friend</button>
+        </div>
+        <div class="grid gap-3">
+          <a href="#" class="grid grid-cols-[56px_1fr_auto_24px] items-center gap-4 rounded-2xl border border-line bg-coral/5 p-4 hover:shadow-lg">
+            <span class="grid h-12 w-12 place-items-center rounded-full bg-ocean text-[16px] font-bold text-white shadow">L</span>
+            <span><b class="block text-[15px]">Luigi</b><small class="block text-[11px] text-muted">Last active 2 days ago</small></span>
+            <span class="grid text-right"><b class="text-[18px] text-coral tabular-nums">£20.00</b><small class="text-[11px] text-muted">you owe</small></span>
+            <i data-lucide="chevron-right" class="h-4 w-4 text-muted"></i>
+          </a>
+          <a href="#" class="grid grid-cols-[56px_1fr_auto_24px] items-center gap-4 rounded-2xl border border-line bg-mint/5 p-4 hover:shadow-lg">
+            <span class="grid h-12 w-12 place-items-center rounded-full bg-mint text-[16px] font-bold text-white shadow">M</span>
+            <span><b class="block text-[15px]">Mina</b><small class="block text-[11px] text-muted">Last active 1 day ago</small></span>
+            <span class="grid text-right"><b class="text-[18px] text-mint tabular-nums">£30.00</b><small class="text-[11px] text-muted">owes you</small></span>
+            <i data-lucide="chevron-right" class="h-4 w-4 text-muted"></i>
+          </a>
+          <a href="#" class="grid grid-cols-[56px_1fr_auto_24px] items-center gap-4 rounded-2xl border border-line bg-white p-4 hover:shadow-lg">
+            <span class="grid h-12 w-12 place-items-center rounded-full bg-ocean text-[16px] font-bold text-white shadow">F</span>
+            <span><b class="block text-[15px]">Fari</b><small class="block text-[11px] text-muted">All clear · last active 5 days ago</small></span>
+            <span class="inline-flex items-center gap-1 rounded-md bg-mint/10 px-2.5 py-1 text-[12px] font-semibold text-mint"><i data-lucide="check" class="h-3.5 w-3.5"></i> Settled</span>
+            <i data-lucide="chevron-right" class="h-4 w-4 text-muted"></i>
+          </a>
+        </div>
+      </div>
+      <p class="mt-2 text-[12px] text-muted">Minimal change. Strip Settle/Remind buttons. Rows become tappable cards routing to per-friend page.</p>
+    </section>
+
+    <!-- OPTION B: roster + shared-groups meta -->
+    <section>
+      <p class="label mb-2">Option B — Roster + shared-groups meta line</p>
+      <div class="panel">
+        <div class="mb-4 flex items-center justify-between">
+          <div><b class="block text-[16px]">Friends</b><small class="text-[11px] text-muted">3 people</small></div>
+          <button class="btn-violet inline-flex h-9 items-center gap-1.5 rounded-lg px-3.5 text-[12px] font-bold"><i data-lucide="plus" class="h-3.5 w-3.5"></i> New friend</button>
+        </div>
+        <div class="grid gap-3">
+          <a href="#" class="grid grid-cols-[56px_1fr_auto_24px] items-center gap-4 rounded-2xl border border-line bg-coral/5 p-4 hover:shadow-lg">
+            <span class="grid h-12 w-12 place-items-center rounded-full bg-ocean text-[16px] font-bold text-white shadow">L</span>
+            <span>
+              <b class="block text-[15px]">Luigi</b>
+              <small class="block text-[11px] text-muted">Shared in <b class="text-ink">Paris Trip</b> · last expense Metro passes</small>
+            </span>
+            <span class="grid text-right"><b class="text-[18px] text-coral tabular-nums">£20.00</b><small class="text-[11px] text-muted">you owe</small></span>
+            <i data-lucide="chevron-right" class="h-4 w-4 text-muted"></i>
+          </a>
+          <a href="#" class="grid grid-cols-[56px_1fr_auto_24px] items-center gap-4 rounded-2xl border border-line bg-mint/5 p-4 hover:shadow-lg">
+            <span class="grid h-12 w-12 place-items-center rounded-full bg-mint text-[16px] font-bold text-white shadow">M</span>
+            <span>
+              <b class="block text-[15px]">Mina</b>
+              <small class="block text-[11px] text-muted">Shared in <b class="text-ink">Paris Trip · Work Lunch</b> · last expense Team lunch</small>
+            </span>
+            <span class="grid text-right"><b class="text-[18px] text-mint tabular-nums">£30.00</b><small class="text-[11px] text-muted">owes you</small></span>
+            <i data-lucide="chevron-right" class="h-4 w-4 text-muted"></i>
+          </a>
+          <a href="#" class="grid grid-cols-[56px_1fr_auto_24px] items-center gap-4 rounded-2xl border border-line bg-white p-4 hover:shadow-lg">
+            <span class="grid h-12 w-12 place-items-center rounded-full bg-ocean text-[16px] font-bold text-white shadow">F</span>
+            <span>
+              <b class="block text-[15px]">Fari</b>
+              <small class="block text-[11px] text-muted">Shared in <b class="text-ink">Home Bills</b> · all clear</small>
+            </span>
+            <span class="inline-flex items-center gap-1 rounded-md bg-mint/10 px-2.5 py-1 text-[12px] font-semibold text-mint"><i data-lucide="check" class="h-3.5 w-3.5"></i> Settled</span>
+            <i data-lucide="chevron-right" class="h-4 w-4 text-muted"></i>
+          </a>
+        </div>
+      </div>
+      <p class="mt-2 text-[12px] text-muted">Adds the unique value Friends should have: who you share which groups with + most-recent shared expense. Roster-y, not transactional.</p>
+    </section>
+
+    <!-- OPTION C: grouped sections -->
+    <section>
+      <p class="label mb-2">Option C — Sectioned: With balance | All clear</p>
+      <div class="panel">
+        <div class="mb-4 flex items-center justify-between">
+          <div><b class="block text-[16px]">Friends</b></div>
+          <button class="btn-violet inline-flex h-9 items-center gap-1.5 rounded-lg px-3.5 text-[12px] font-bold"><i data-lucide="plus" class="h-3.5 w-3.5"></i> New friend</button>
+        </div>
+        <p class="label mb-2 text-muted">With balance (2)</p>
+        <div class="grid gap-2 mb-5">
+          <a href="#" class="grid grid-cols-[44px_1fr_auto] items-center gap-3 rounded-xl border border-line bg-coral/5 p-3">
+            <span class="grid h-10 w-10 place-items-center rounded-full bg-ocean text-[13px] font-bold text-white shadow">L</span>
+            <span><b class="block text-[13px]">Luigi</b><small class="text-[11px] text-muted">Paris Trip</small></span>
+            <span class="grid text-right"><b class="text-[14px] text-coral tabular-nums">£20.00</b><small class="text-[10.5px] text-muted">you owe</small></span>
+          </a>
+          <a href="#" class="grid grid-cols-[44px_1fr_auto] items-center gap-3 rounded-xl border border-line bg-mint/5 p-3">
+            <span class="grid h-10 w-10 place-items-center rounded-full bg-mint text-[13px] font-bold text-white shadow">M</span>
+            <span><b class="block text-[13px]">Mina</b><small class="text-[11px] text-muted">Paris Trip · Work Lunch</small></span>
+            <span class="grid text-right"><b class="text-[14px] text-mint tabular-nums">£30.00</b><small class="text-[10.5px] text-muted">owes you</small></span>
+          </a>
+        </div>
+        <p class="label mb-2 text-muted">All clear (1)</p>
+        <div class="grid gap-2">
+          <a href="#" class="grid grid-cols-[44px_1fr_auto] items-center gap-3 rounded-xl border border-line bg-white p-3">
+            <span class="grid h-10 w-10 place-items-center rounded-full bg-ocean text-[13px] font-bold text-white shadow">F</span>
+            <span><b class="block text-[13px]">Fari</b><small class="text-[11px] text-muted">Home Bills · last active 5d ago</small></span>
+            <span class="inline-flex items-center gap-1 rounded-md bg-mint/10 px-2 py-0.5 text-[11px] font-semibold text-mint"><i data-lucide="check" class="h-3 w-3"></i> Settled</span>
+          </a>
+        </div>
+      </div>
+      <p class="mt-2 text-[12px] text-muted">Explicit grouping. The "with balance" section answers "who do I have money matters with?" the "all clear" reassures.</p>
+    </section>
+
+    <!-- OPTION D: avatar tiles grid -->
+    <section>
+      <p class="label mb-2">Option D — Avatar tile grid (relationship-first)</p>
+      <div class="panel">
+        <div class="mb-4 flex items-center justify-between">
+          <div><b class="block text-[16px]">Friends</b><small class="text-[11px] text-muted">Tap a friend to see history</small></div>
+          <button class="btn-violet inline-flex h-9 items-center gap-1.5 rounded-lg px-3.5 text-[12px] font-bold"><i data-lucide="plus" class="h-3.5 w-3.5"></i> New friend</button>
+        </div>
+        <div class="grid grid-cols-3 gap-3 max-md:grid-cols-1">
+          <a href="#" class="rounded-2xl border border-line bg-coral/5 p-5 text-center hover:shadow-lg">
+            <span class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-ocean text-[20px] font-bold text-white shadow ring-4 ring-white">L</span>
+            <b class="mt-3 block text-[15px]">Luigi</b>
+            <p class="text-[18px] font-extrabold text-coral tabular-nums">£20.00</p>
+            <small class="text-[10.5px] text-muted">you owe · Paris Trip</small>
+          </a>
+          <a href="#" class="rounded-2xl border border-line bg-mint/5 p-5 text-center hover:shadow-lg">
+            <span class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-mint text-[20px] font-bold text-white shadow ring-4 ring-white">M</span>
+            <b class="mt-3 block text-[15px]">Mina</b>
+            <p class="text-[18px] font-extrabold text-mint tabular-nums">£30.00</p>
+            <small class="text-[10.5px] text-muted">owes you · 2 groups</small>
+          </a>
+          <a href="#" class="rounded-2xl border border-line bg-white p-5 text-center hover:shadow-lg">
+            <span class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-ocean text-[20px] font-bold text-white shadow ring-4 ring-white">F</span>
+            <b class="mt-3 block text-[15px]">Fari</b>
+            <p class="text-[12px] font-semibold text-mint mt-1.5">All clear</p>
+            <small class="text-[10.5px] text-muted">Home Bills</small>
+          </a>
+        </div>
+      </div>
+      <p class="mt-2 text-[12px] text-muted">Yearbook feel. Best when friends list is short (3-12). Falls apart with 30+.</p>
+    </section>
+
+  </div>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
