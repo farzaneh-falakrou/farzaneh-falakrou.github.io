@@ -841,54 +841,60 @@
     <p>Shared expenses are still your expenses. A Paris Trip costs the group £700. But it costs <em>you</em> £233. That number belongs in your personal budget, not only in the group ledger.</p>
     <p><strong>Layer 1 — Shared expense management.</strong><br>Split costs, track group balances, settle debts, send reminders.</p>
     <p><strong>Layer 2 — Personal budget intelligence.</strong><br>A dedicated Budget screen that:</p>
-    <p>— Isolates your share of costs across all active groups<br>— Tracks your total spend against a monthly cap you set<br>— Forecasts where you will end the month at your current daily spend rate</p>
+    <p>— Isolates your share of costs across all active groups<br>— Tracks your total spend against a monthly cap you set<br>— Shows whether your daily pace keeps you under cap — your average spend per day against what the cap allows</p>
     <p>These two layers are not separate features — they are the same financial reality seen from two angles: the group's ledger and your personal budget.</p>
 
     <figure class="a-figure">
-      <img src="splitsmart-home-sketch.png" alt="Home screen wireframe — net position, action queue, budget per group" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
+      <img src="../visuals/splitsmart-home-sketch.png" alt="Home screen wireframe — net position, action queue, budget per group" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
       <figcaption>Home screen — Layer 1 (balance, action queue) and Layer 2 (budget per group) in one view.</figcaption>
     </figure>
 
     <figure class="a-figure">
-      <img src="splitsmart-budget-sketch.png" alt="Budget screen wireframe — personal cap, month history, spending breakdown" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
+      <img src="../visuals/splitsmart-budget-sketch.png" alt="Budget screen wireframe — personal cap, month history, spending breakdown" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
       <figcaption>Budget screen — Layer 2: personal cap, month-by-month history, and which group costs most.</figcaption>
     </figure>
 
     <div class="a-section-mark" id="va-ia"><span class="num">04</span> Information architecture</div>
-    <p>Before moving to high fidelity, I mapped the full app hierarchy: every screen, how they connect, and where key actions live. This made it possible to validate the two-layer structure — shared and personal — before committing to interface work, and to confirm that the Budget screen could sit as a peer to the Dashboard rather than buried inside it.</p>
+    <p>Before moving to high fidelity, I mapped the full app hierarchy: every screen, how they connect, and where key actions live. This made it possible to validate the two-layer structure — shared and personal — before committing to interface work, and to confirm that the Budget screen could sit as a peer to the Overview / Dashboard rather than buried inside it.</p>
 
     <figure class="a-figure">
-      <img src="splitsmart-ia.png" alt="Information architecture diagram — SplitSmart hierarchy with Dashboard, Overview, Budget, Groups, Friends and their detail screens" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
-      <figcaption>The information architecture — Budget screen as a peer to Dashboard, not buried inside it. Settle Up branches from Friends, consolidating across all shared groups.</figcaption>
+      <img src="../visuals/splitsmart-ia.png" alt="Information architecture diagram — SplitSmart hierarchy with Overview, Budget, Groups, Settle up and their detail screens" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
+      <figcaption>The information architecture — Budget screen as a peer to Overview / Dashboard, not buried inside it. Settle up consolidates balances by person across all shared groups.</figcaption>
     </figure>
 
     <div class="a-section-mark" id="va-decisions"><span class="num">05</span> Design decisions</div>
     <h2>What each screen had to <em>prove</em>.</h2>
-    <h3>Dashboard — action next to position</h3>
+    <h3>Overview / Dashboard — action next to position</h3>
     <p>The core decision was to place a balance and its settle action in the same view. When the next step is already visible, the user does not need to decide where to go — they simply act.</p>
 
     <figure class="a-figure">
-      <div class="img img-cream-1" style="height: 440px;">Dashboard · Net position card + Needs your attention queue with inline Settle up</div>
-      <figcaption>The Dashboard — balance and settle action in a single view.</figcaption>
+      <img src="../visuals/app-dashboard.png" alt="Overview screen — overall balance with amounts owed and owed to you, debts across all groups with inline settle, spending over time, by-category breakdown, and groups list" style="width: 100%; height: auto; display: block; border-radius: 12px;">
+      <figcaption>The Overview / Dashboard — balance and settle action in a single view.</figcaption>
     </figure>
 
     <h3>Budget screen — personal, not group</h3>
-    <p>Rather than showing group totals, the Budget screen translates shared expenses into a personal financial picture: your share, your cap, your forecast.</p>
+    <p>Rather than showing group totals, the Budget screen translates shared expenses into a personal financial picture: your share, your cap, your pace against it.</p>
 
     <figure class="a-figure">
-      <div class="img img-warm" style="height: 400px;">Budget screen · your share across all groups + monthly cap + month-end forecast</div>
-      <figcaption>The Budget screen — shared expenses translated into a personal financial picture.</figcaption>
+      <img src="../visuals/budget1.png" alt="Budget screen — this-month total against the monthly cap with daily pacing, and by-group and by-category breakdowns of the month's spend" style="width: 100%; height: auto; display: block; border-radius: 12px;">
+      <img src="../visuals/budget2.png" alt="Budget screen — 12-month history of your share against the £700 cap, and a line-by-line ledger of this month's expenses" style="width: 100%; height: auto; display: block; border-radius: 12px; margin-top: 14px;">
+      <figcaption>The Budget screen — shared expenses translated into a personal financial picture: your share against a monthly cap, where each group and category lands, your spend against the cap over 12 months, and every expense line by line.</figcaption>
     </figure>
 
-    <h3>Friends page — unresolved first</h3>
-    <p>Relationships are ordered by what needs attention, not by recency. Unresolved balances surface at the top.</p>
+    <h3>Settle up — consolidated by person</h3>
+    <p>Balances are grouped by person across every group, not group by group, and ordered by what needs action. What you owe and what you're owed sit side by side with the fewest transfers to clear them; already-settled people drop to an <em>all clear</em> list at the bottom.</p>
+
+    <figure class="a-figure">
+      <img src="../visuals/app-settle-up.png" alt="Settle up screen — net balance across all friends, with amounts you'll receive and amounts you owe consolidated by person across groups, the minimum number of transfers to clear them, and an all-clear list of settled people" style="width: 100%; height: auto; display: block; border-radius: 12px;">
+      <figcaption>The Settle up page — balances consolidated by person, ordered by what needs action.</figcaption>
+    </figure>
 
     <h3>Groups page — remaining, not spent</h3>
     <p>The decision was to surface how much budget each group has remaining, not just how much it has spent. <em>Remaining is actionable. Spent is history.</em></p>
 
-    <figure class="a-figure a-figure-grid">
-      <div><div class="img img-cream-2">Friends · relationships ordered by what needs attention</div></div>
-      <div><div class="img img-cream-1">Groups · each card leads with budget remaining</div></div>
+    <figure class="a-figure">
+      <img src="../visuals/app-groups.png" alt="Groups screen — each group card leads with budget remaining, alongside total spent and members" style="width: 100%; height: auto; display: block; border-radius: 12px;">
+      <figcaption>The Groups page — each card leads with budget remaining.</figcaption>
     </figure>
 
     <div class="a-section-mark" id="va-testing"><span class="num">06</span> Usability testing</div>
@@ -985,7 +991,7 @@
   <div class="b-cover">
     <div class="b-cover-frame">
       <div class="b-cover-chrome"><span></span><span></span><span></span></div>
-      <div class="img img-violet-soft b-cover-img">SplitSmart · Dashboard and Budget screen</div>
+      <div class="img img-violet-soft b-cover-img">SplitSmart · Overview / Dashboard and Budget screen</div>
     </div>
   </div>
 
@@ -1039,27 +1045,27 @@
         <p>Shared expenses are still your expenses. A Paris Trip costs the group £700. But it costs <em>you</em> £233. That number belongs in your personal budget, not only in the group ledger.</p>
         <p><strong>Layer 1 — Shared expense management.</strong><br>Split costs, track group balances, settle debts, send reminders.</p>
         <p><strong>Layer 2 — Personal budget intelligence.</strong><br>A dedicated Budget screen that:</p>
-        <p>— Isolates your share of costs across all active groups<br>— Tracks your total spend against a monthly cap you set<br>— Forecasts where you will end the month at your current daily spend rate</p>
+        <p>— Isolates your share of costs across all active groups<br>— Tracks your total spend against a monthly cap you set<br>— Shows whether your daily pace keeps you under cap — your average spend per day against what the cap allows</p>
         <p>These two layers are not separate features — they are the same financial reality seen from two angles: the group's ledger and your personal budget.</p>
 
         <figure class="b-figure">
-          <img src="splitsmart-home-sketch.png" alt="Home screen wireframe — net position, action queue, budget per group" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
+          <img src="../visuals/splitsmart-home-sketch.png" alt="Home screen wireframe — net position, action queue, budget per group" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
           <figcaption>Home screen — Layer 1 (balance, action queue) and Layer 2 (budget per group) in one view.</figcaption>
         </figure>
 
         <figure class="b-figure">
-          <img src="splitsmart-budget-sketch.png" alt="Budget screen wireframe — personal cap, month history, spending breakdown" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
+          <img src="../visuals/splitsmart-budget-sketch.png" alt="Budget screen wireframe — personal cap, month history, spending breakdown" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
           <figcaption>Budget screen — Layer 2: personal cap, month-by-month history, and which group costs most.</figcaption>
         </figure>
       </section>
 
       <section>
         <div class="b-section-mark" id="vb-ia"><span class="num">04</span><span class="label">Information architecture</span></div>
-        <p>Before moving to high fidelity, I mapped the full app hierarchy: every screen, how they connect, and where key actions live. This made it possible to validate the two-layer structure — shared and personal — before committing to interface work, and to confirm that the Budget screen could sit as a peer to the Dashboard rather than buried inside it.</p>
+        <p>Before moving to high fidelity, I mapped the full app hierarchy: every screen, how they connect, and where key actions live. This made it possible to validate the two-layer structure — shared and personal — before committing to interface work, and to confirm that the Budget screen could sit as a peer to the Overview / Dashboard rather than buried inside it.</p>
 
         <figure class="b-figure">
-          <img src="splitsmart-ia.png" alt="Information architecture diagram — SplitSmart hierarchy with Dashboard, Overview, Budget, Groups, Friends and their detail screens" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
-          <figcaption>The information architecture — Budget screen as a peer to Dashboard, not buried inside it. Settle Up branches from Friends, consolidating across all shared groups.</figcaption>
+          <img src="../visuals/splitsmart-ia.png" alt="Information architecture diagram — SplitSmart hierarchy with Overview, Budget, Groups, Settle up and their detail screens" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
+          <figcaption>The information architecture — Budget screen as a peer to Overview / Dashboard, not buried inside it. Settle up consolidates balances by person across all shared groups.</figcaption>
         </figure>
       </section>
 
@@ -1067,50 +1073,50 @@
         <div class="b-section-mark" id="vb-decisions"><span class="num">05</span><span class="label">Design decisions</span></div>
         <h2>What each screen had to <em>prove</em>.</h2>
 
-        <h3>Dashboard — action next to position</h3>
+        <h3>Overview / Dashboard — action next to position</h3>
         <p>The core decision was to place a balance and its settle action in the same view. When the next step is already visible, the user does not need to decide where to go — they simply act.</p>
 
         <figure class="b-figure">
           <div class="b-figure-frame">
             <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-            <div class="img img-violet-soft">Dashboard · Net position + Needs your attention queue with inline Settle up</div>
+            <img src="../visuals/app-dashboard.png" alt="Overview screen — overall balance with amounts owed and owed to you, debts across all groups with inline settle, spending over time, by-category breakdown, and groups list" style="width: 100%; height: auto; display: block; border-radius: 6px;">
           </div>
-          <figcaption>The Dashboard — balance and settle action in a single view.</figcaption>
+          <figcaption>The Overview / Dashboard — balance and settle action in a single view.</figcaption>
         </figure>
 
         <h3>Budget screen — personal, not group</h3>
-        <p>Rather than showing group totals, the Budget screen translates shared expenses into a personal financial picture: your share, your cap, your forecast.</p>
+        <p>Rather than showing group totals, the Budget screen translates shared expenses into a personal financial picture: your share, your cap, your pace against it.</p>
 
         <figure class="b-figure">
           <div class="b-figure-frame">
             <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-            <div class="img img-violet-soft">Budget screen · your share across all groups + monthly cap + month-end forecast</div>
+            <img src="../visuals/budget1.png" alt="Budget screen — this-month total against the monthly cap with daily pacing, and by-group and by-category breakdowns of the month's spend" style="width: 100%; height: auto; display: block; border-radius: 6px;">
+            <img src="../visuals/budget2.png" alt="Budget screen — 12-month history of your share against the £700 cap, and a line-by-line ledger of this month's expenses" style="width: 100%; height: auto; display: block; border-radius: 6px; margin-top: 8px;">
           </div>
-          <figcaption>The Budget screen — shared expenses translated into a personal financial picture.</figcaption>
+          <figcaption>The Budget screen — shared expenses translated into a personal financial picture: your share against a monthly cap, where each group and category lands, your spend against the cap over 12 months, and every expense line by line.</figcaption>
         </figure>
 
-        <h3>Friends page — unresolved first</h3>
-        <p>Relationships are ordered by what needs attention, not by recency. Unresolved balances surface at the top.</p>
+        <h3>Settle up — consolidated by person</h3>
+        <p>Balances are grouped by person across every group, not group by group, and ordered by what needs action. What you owe and what you're owed sit side by side with the fewest transfers to clear them; already-settled people drop to an <em>all clear</em> list at the bottom.</p>
+
+        <figure class="b-figure">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="../visuals/app-settle-up.png" alt="Settle up screen — net balance across all friends, with amounts you'll receive and amounts you owe consolidated by person across groups, the minimum number of transfers to clear them, and an all-clear list of settled people" style="width: 100%; height: auto; display: block; border-radius: 6px;">
+          </div>
+          <figcaption>The Settle up page — balances consolidated by person, ordered by what needs action.</figcaption>
+        </figure>
 
         <h3>Groups page — remaining, not spent</h3>
         <p>The decision was to surface how much budget each group has remaining, not just how much it has spent. <em>Remaining is actionable. Spent is history.</em></p>
 
-        <div class="b-figure-grid">
-          <figure class="b-figure">
-            <div class="b-figure-frame">
-              <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-              <div class="img img-warm">Friends · relationships ordered by what needs attention</div>
-            </div>
-            <figcaption>Friends — ordered by what needs attention.</figcaption>
-          </figure>
-          <figure class="b-figure">
-            <div class="b-figure-frame">
-              <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-              <div class="img img-cream-2">Groups · each card leads with budget remaining</div>
-            </div>
-            <figcaption>Groups — each card leads with budget remaining.</figcaption>
-          </figure>
-        </div>
+        <figure class="b-figure">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="../visuals/app-groups.png" alt="Groups screen — each group card leads with budget remaining, alongside total spent and members" style="width: 100%; height: auto; display: block; border-radius: 6px;">
+          </div>
+          <figcaption>The Groups page — each card leads with budget remaining.</figcaption>
+        </figure>
       </section>
 
       <section>
@@ -1227,7 +1233,7 @@
   <div class="c-cover">
     <div class="c-cover-frame">
       <div class="c-cover-chrome"><span></span><span></span><span></span></div>
-      <div class="img img-violet c-cover-img">SplitSmart · Dashboard and Budget screen</div>
+      <div class="img img-violet c-cover-img">SplitSmart · Overview / Dashboard and Budget screen</div>
     </div>
   </div>
 
@@ -1275,27 +1281,27 @@
         <p>Shared expenses are still your expenses. A Paris Trip costs the group £700. But it costs <em>you</em> £233. That number belongs in your personal budget, not only in the group ledger.</p>
         <p><strong>Layer 1 — Shared expense management.</strong><br>Split costs, track group balances, settle debts, send reminders.</p>
         <p><strong>Layer 2 — Personal budget intelligence.</strong><br>A dedicated Budget screen that:</p>
-        <p>— Isolates your share of costs across all active groups<br>— Tracks your total spend against a monthly cap you set<br>— Forecasts where you will end the month at your current daily spend rate</p>
+        <p>— Isolates your share of costs across all active groups<br>— Tracks your total spend against a monthly cap you set<br>— Shows whether your daily pace keeps you under cap — your average spend per day against what the cap allows</p>
         <p>These two layers are not separate features — they are the same financial reality seen from two angles: the group's ledger and your personal budget.</p>
 
         <figure class="c-figure">
-          <img src="splitsmart-home-sketch.png" alt="Home screen wireframe — net position, action queue, budget per group" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
+          <img src="../visuals/splitsmart-home-sketch.png" alt="Home screen wireframe — net position, action queue, budget per group" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
           <figcaption>Home screen — Layer 1 (balance, action queue) and Layer 2 (budget per group) in one view.</figcaption>
         </figure>
 
         <figure class="c-figure">
-          <img src="splitsmart-budget-sketch.png" alt="Budget screen wireframe — personal cap, month history, spending breakdown" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
+          <img src="../visuals/splitsmart-budget-sketch.png" alt="Budget screen wireframe — personal cap, month history, spending breakdown" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
           <figcaption>Budget screen — Layer 2: personal cap, month-by-month history, and which group costs most.</figcaption>
         </figure>
       </section>
 
       <section>
         <div class="c-section-mark" id="vc-ia"><span class="num">04</span><span class="label">Information architecture</span></div>
-        <p>Before moving to high fidelity, I mapped the full app hierarchy: every screen, how they connect, and where key actions live. This made it possible to validate the two-layer structure — shared and personal — before committing to interface work, and to confirm that the Budget screen could sit as a peer to the Dashboard rather than buried inside it.</p>
+        <p>Before moving to high fidelity, I mapped the full app hierarchy: every screen, how they connect, and where key actions live. This made it possible to validate the two-layer structure — shared and personal — before committing to interface work, and to confirm that the Budget screen could sit as a peer to the Overview / Dashboard rather than buried inside it.</p>
 
         <figure class="c-figure">
-          <img src="splitsmart-ia.png" alt="Information architecture diagram — SplitSmart hierarchy with Dashboard, Overview, Budget, Groups, Friends and their detail screens" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
-          <figcaption>The information architecture — Budget screen as a peer to Dashboard, not buried inside it. Settle Up branches from Friends, consolidating across all shared groups.</figcaption>
+          <img src="../visuals/splitsmart-ia.png" alt="Information architecture diagram — SplitSmart hierarchy with Overview, Budget, Groups, Settle up and their detail screens" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
+          <figcaption>The information architecture — Budget screen as a peer to Overview / Dashboard, not buried inside it. Settle up consolidates balances by person across all shared groups.</figcaption>
         </figure>
       </section>
 
@@ -1303,58 +1309,58 @@
         <div class="c-section-mark" id="vc-decisions"><span class="num">05</span><span class="label">Design decisions</span></div>
         <h2>What each screen had to <em>prove</em>.</h2>
 
-        <h3>Dashboard — action next to position</h3>
+        <h3>Overview / Dashboard — action next to position</h3>
         <p>The core decision was to place a balance and its settle action in the same view. When the next step is already visible, the user does not need to decide where to go — they simply act.</p>
 
         <figure class="c-figure">
           <div class="c-figure-frame">
             <div class="c-figure-chrome"><span></span><span></span><span></span></div>
-            <div class="img img-violet" style="height: 420px;">Dashboard · Net position card + Needs your attention queue with Settle up</div>
+            <img src="../visuals/app-dashboard.png" alt="Overview screen — overall balance with amounts owed and owed to you, debts across all groups with inline settle, spending over time, by-category breakdown, and groups list" style="width: 100%; height: auto; display: block; border-radius: 8px;">
           </div>
           <div class="c-callout" style="top: 60px; right: -40px;">
             <div class="c-callout-eyebrow">Action next to position</div>
             Balance and settle action in the same view — the user simply acts.
           </div>
-          <figcaption>The Dashboard — balance and settle action in a single view.</figcaption>
+          <figcaption>The Overview / Dashboard — balance and settle action in a single view.</figcaption>
         </figure>
 
         <h3>Budget screen — personal, not group</h3>
-        <p>Rather than showing group totals, the Budget screen translates shared expenses into a personal financial picture: your share, your cap, your forecast.</p>
+        <p>Rather than showing group totals, the Budget screen translates shared expenses into a personal financial picture: your share, your cap, your pace against it.</p>
 
         <figure class="c-figure">
           <div class="c-figure-frame">
             <div class="c-figure-chrome"><span></span><span></span><span></span></div>
-            <div class="img img-violet" style="height: 400px;">Budget screen · your share across all groups + monthly cap + month-end forecast</div>
+            <img src="../visuals/budget1.png" alt="Budget screen — this-month total against the monthly cap with daily pacing, and by-group and by-category breakdowns of the month's spend" style="width: 100%; height: auto; display: block; border-radius: 8px;">
+            <img src="../visuals/budget2.png" alt="Budget screen — 12-month history of your share against the £700 cap, and a line-by-line ledger of this month's expenses" style="width: 100%; height: auto; display: block; border-radius: 8px; margin-top: 8px;">
           </div>
           <div class="c-callout" style="top: 40px; right: -40px;">
             <div class="c-callout-eyebrow">Layer 2</div>
-            Your share, your cap, your forecast — a personal financial picture.
+            Your share, your cap, your pace against it — a personal financial picture.
           </div>
           <figcaption>The Budget screen — shared expenses translated into a personal financial picture.</figcaption>
         </figure>
 
-        <h3>Friends page — unresolved first</h3>
-        <p>Relationships are ordered by what needs attention, not by recency. Unresolved balances surface at the top.</p>
+        <h3>Settle up — consolidated by person</h3>
+        <p>Balances are grouped by person across every group, not group by group, and ordered by what needs action. What you owe and what you're owed sit side by side with the fewest transfers to clear them; already-settled people drop to an <em>all clear</em> list at the bottom.</p>
+
+        <figure class="c-figure">
+          <div class="c-figure-frame">
+            <div class="c-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="../visuals/app-settle-up.png" alt="Settle up screen — net balance across all friends, with amounts you'll receive and amounts you owe consolidated by person across groups, the minimum number of transfers to clear them, and an all-clear list of settled people" style="width: 100%; height: auto; display: block; border-radius: 8px;">
+          </div>
+          <figcaption>The Settle up page — balances consolidated by person, ordered by what needs action.</figcaption>
+        </figure>
 
         <h3>Groups page — remaining, not spent</h3>
         <p>The decision was to surface how much budget each group has remaining, not just how much it has spent. <em>Remaining is actionable. Spent is history.</em></p>
 
-        <div class="c-figure-row">
-          <figure class="c-figure">
-            <div class="c-figure-frame">
-              <div class="c-figure-chrome"><span></span><span></span><span></span></div>
-              <div class="img img-violet">Friends · relationships ordered by what needs attention</div>
-            </div>
-            <figcaption>Friends — ordered by what needs attention.</figcaption>
-          </figure>
-          <figure class="c-figure">
-            <div class="c-figure-frame">
-              <div class="c-figure-chrome"><span></span><span></span><span></span></div>
-              <div class="img img-violet">Groups · each card leads with budget remaining</div>
-            </div>
-            <figcaption>Groups — each card leads with budget remaining.</figcaption>
-          </figure>
-        </div>
+        <figure class="c-figure">
+          <div class="c-figure-frame">
+            <div class="c-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="../visuals/app-groups.png" alt="Groups screen — each group card leads with budget remaining, alongside total spent and members" style="width: 100%; height: auto; display: block; border-radius: 8px;">
+          </div>
+          <figcaption>The Groups page — each card leads with budget remaining.</figcaption>
+        </figure>
       </section>
 
       <section>

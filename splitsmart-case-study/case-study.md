@@ -40,7 +40,7 @@ A dedicated Budget screen that:
 
 — Isolates your share of costs across all active groups
 — Tracks your total spend against a monthly cap you set
-— Forecasts where you will end the month at your current daily spend rate
+— Shows whether your daily pace keeps you under cap — your average spend per day against what the cap allows
 
 These two layers are not separate features — they are the same financial reality seen from two angles: the group's ledger and your personal budget.
 
@@ -48,23 +48,23 @@ These two layers are not separate features — they are the same financial reali
 
 ## INFORMATION ARCHITECTURE
 
-Before moving to high fidelity, I mapped the full app hierarchy: every screen, how they connect, and where key actions live. This made it possible to validate the two-layer structure — shared and personal — before committing to interface work, and to confirm that the Budget screen could sit as a peer to the Dashboard rather than buried inside it.
+Before moving to high fidelity, I mapped the full app hierarchy: every screen, how they connect, and where key actions live. This made it possible to validate the two-layer structure — shared and personal — before committing to interface work, and to confirm that the Budget screen could sit as a peer to the Overview / Dashboard rather than buried inside it.
 
 ---
 
 ## DESIGN DECISIONS
 
-### Dashboard — action next to position
+### Overview / Dashboard — action next to position
 
 The core decision was to place a balance and its settle action in the same view. When the next step is already visible, the user does not need to decide where to go — they simply act.
 
 ### Budget screen — personal, not group
 
-Rather than showing group totals, the Budget screen translates shared expenses into a personal financial picture: your share, your cap, your forecast.
+Rather than showing group totals, the Budget screen translates shared expenses into a personal financial picture: your share, your cap, your pace against it.
 
-### Friends page — unresolved first
+### Settle up — consolidated by person
 
-Relationships are ordered by what needs attention, not by recency. Unresolved balances surface at the top.
+Balances are grouped by person across every group, not group by group, and ordered by what needs action. What you owe and what you're owed sit side by side with the fewest transfers to clear them; already-settled people drop to an *all clear* list at the bottom.
 
 ### Groups page — remaining, not spent
 
