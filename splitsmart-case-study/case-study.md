@@ -76,31 +76,30 @@ The decision was to surface how much budget each group has remaining, not just h
 
 *5 participants · 10 minutes each · unmoderated*
 
-| Task | Result |
+| Metric | Result |
 |---|---|
 | Average time to identify balance | ~4 seconds |
 | Average taps to settle a balance | 1–2 taps |
 | Task completion rate | 100% |
 | Participants needing assistance | 0 of 5 |
 | Understood budget status immediately | 4 of 5 |
-| Expected to settle across all groups at once | 3 of 5 |
+| Expected to settle everyone at once | 3 of 5 |
 
 All five participants completed primary tasks with no major navigation issues. Balance, settlement, and budget status were understood quickly across the board.
 
-**Key finding:** Three participants expected to settle with a person across all groups at once, rather than group by group. This showed the settle flow conflicted with users' natural mental model — they think in terms of *who* they owe, not *which group* the debt belongs to. This finding directly drove the redesign of the Settle Up screen.
+**Key finding:** Three of five participants expected to clear everything in one pass — settling all the people they owed at once — rather than opening each balance and paying it one by one. They thought in terms of *who* they owe and wanted a single action to settle up, not a debt-at-a-time flow. This directly drove the redesign of the Settle up screen.
 
 **Open question:** One participant expected the settle action directly on the balance card, one tap earlier than the current flow allows. This wasn't addressed in the redesign and remains a potential improvement.
 
-> "I expected to settle with one person across all groups at once."
+> "I expected to settle everyone at once, not one by one."
 > "I can immediately tell what I actually spent."
-> "The budget makes shared expenses easier to understand."
 > "Feels simpler than other expense-splitting apps."
 
 ---
 
 ## REDESIGN: SETTLE UP FLOW
 
-Based on the testing findings, I redesigned the Settle Up screen to reflect how users naturally expected the feature to behave. Rather than settling one group at a time, the redesigned flow shows the minimum number of transfers required to clear all outstanding debts across all groups — consolidating by person, not by group.
+Based on the testing findings, I redesigned Settle up so people could settle everyone at once instead of working through debts one at a time. Pay all and Remind all now clear every balance across all groups in a single move, in the fewest transfers — and a single row still settles one person on its own.
 
 ---
 
@@ -118,4 +117,4 @@ The app assumes a single currency throughout. For international group trips — 
 
 ## CONCLUSION
 
-SplitSmart is built on the idea that users don't want to hold two mental models at once — the group's ledger and their own budget. The app brings those together in a single view, so shared expenses land where they actually belong: in your personal financial picture.
+SplitSmart is built on the idea that you shouldn't have to juggle the group's ledger and your own budget separately. The app ties them together, so shared expenses land where they actually belong: in your personal financial picture.

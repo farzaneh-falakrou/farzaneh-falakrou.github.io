@@ -885,8 +885,8 @@
     <p>Balances are grouped by person across every group, not group by group, and ordered by what needs action. What you owe and what you're owed sit side by side with the fewest transfers to clear them; already-settled people drop to an <em>all clear</em> list at the bottom.</p>
 
     <figure class="a-figure">
-      <img src="../visuals/app-settle-up.png" alt="Settle up screen — net balance across all friends, with amounts you'll receive and amounts you owe consolidated by person across groups, the minimum number of transfers to clear them, and an all-clear list of settled people" style="width: 100%; height: auto; display: block; border-radius: 12px;">
-      <figcaption>The Settle up page — balances consolidated by person, ordered by what needs action.</figcaption>
+      <img src="../visuals/app-friends.png" alt="Per-person balances screen — each person carries one balance consolidated across all shared groups: what you owe or are owed, with settle up or send reminder inline, and settled people marked all clear" style="width: 100%; height: auto; display: block; border-radius: 12px;">
+      <figcaption>Balances consolidated by person — what you owe and what you're owed, with settle up or send reminder right from the row.</figcaption>
     </figure>
 
     <h3>Groups page — remaining, not spent</h3>
@@ -903,7 +903,7 @@
 
     <table class="a-table">
       <thead>
-        <tr><th>Task</th><th>Result</th></tr>
+        <tr><th>Metric</th><th>Result</th></tr>
       </thead>
       <tbody>
         <tr><td>Average time to identify balance</td><td>~4 seconds</td></tr>
@@ -911,29 +911,28 @@
         <tr><td>Task completion rate</td><td>100%</td></tr>
         <tr><td>Participants needing assistance</td><td>0 of 5</td></tr>
         <tr><td>Understood budget status immediately</td><td>4 of 5</td></tr>
-        <tr><td>Expected to settle across all groups at once</td><td>3 of 5</td></tr>
+        <tr><td>Expected to settle everyone at once</td><td>3 of 5</td></tr>
       </tbody>
     </table>
 
     <p>All five participants completed primary tasks with no major navigation issues. Balance, settlement, and budget status were understood quickly across the board.</p>
 
-    <p><strong>Key finding:</strong> Three participants expected to settle with a person across all groups at once, rather than group by group. This showed the settle flow conflicted with users' natural mental model — they think in terms of <em>who</em> they owe, not <em>which group</em> the debt belongs to. This finding directly drove the redesign of the Settle Up screen.</p>
+    <p><strong>Key finding:</strong> Three of five participants expected to clear everything in one pass — settling all the people they owed at once — rather than opening each balance and paying it one by one. They thought in terms of <em>who</em> they owe and wanted a single action to settle up, not a debt-at-a-time flow. This directly drove the redesign of the Settle up screen.</p>
 
     <p><strong>Open question:</strong> One participant expected the settle action directly on the balance card, one tap earlier than the current flow allows. This wasn't addressed in the redesign and remains a potential improvement.</p>
 
     <div class="a-quotes">
-      <p class="a-quote">"I expected to settle with one person across all groups at once."</p>
+      <p class="a-quote">"I expected to settle everyone at once, not one by one."</p>
       <p class="a-quote">"I can immediately tell what I actually spent."</p>
-      <p class="a-quote">"The budget makes shared expenses easier to understand."</p>
       <p class="a-quote">"Feels simpler than other expense-splitting apps."</p>
     </div>
 
     <div class="a-section-mark" id="va-redesign"><span class="num">07</span> Settle Up redesign</div>
-    <p>Based on the testing findings, I redesigned the Settle Up screen to reflect how users naturally expected the feature to behave. Rather than settling one group at a time, the redesigned flow shows the minimum number of transfers required to clear all outstanding debts across all groups — consolidating by person, not by group.</p>
+    <p>Based on the testing findings, I redesigned Settle up so people could settle everyone at once instead of working through debts one at a time. Pay all and Remind all now clear every balance across all groups in a single move, in the fewest transfers — and a single row still settles one person on its own.</p>
 
     <figure class="a-figure">
-      <div class="img img-warm" style="height: 380px;">Settle Up · redesigned · minimum transfers to clear all debts, consolidated by person</div>
-      <figcaption>The rebuilt Settle Up — consolidating by person, not by group.</figcaption>
+      <img src="../visuals/app-settle-up.png" alt="Redesigned Settle up screen — net balance with amounts to receive and amounts owed consolidated by person across groups, Remind all and Pay all to clear everything in the minimum number of transfers, and an all-clear list of settled people" style="width: 100%; height: auto; display: block; border-radius: 12px;">
+      <figcaption>The rebuilt Settle up — Pay all or Remind all clears every balance in the fewest transfers.</figcaption>
     </figure>
 
     <div class="a-section-mark" id="va-gaps"><span class="num">08</span> Gaps and tradeoffs</div>
@@ -952,7 +951,7 @@
 
     <div class="a-reflection" id="va-conclusion">
       <div class="a-reflection-mark">09 · Conclusion</div>
-      <p>SplitSmart is built on the idea that users don't want to hold two mental models at once — the group's ledger and their own budget. The app brings those together in a single view, so shared expenses land where they actually belong: in your personal financial picture.</p>
+      <p>SplitSmart is built on the idea that you shouldn't have to juggle the group's ledger and your own budget separately. The app ties them together, so shared expenses land where they actually belong: in your personal financial picture.</p>
       <div class="note">SplitSmart is a self-directed concept project. It has not shipped; the usability test was small, and the language here describes what the design argues, not what it has measured at scale.</div>
     </div>
 
@@ -1102,9 +1101,9 @@
         <figure class="b-figure">
           <div class="b-figure-frame">
             <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-            <img src="../visuals/app-settle-up.png" alt="Settle up screen — net balance across all friends, with amounts you'll receive and amounts you owe consolidated by person across groups, the minimum number of transfers to clear them, and an all-clear list of settled people" style="width: 100%; height: auto; display: block; border-radius: 6px;">
+            <img src="../visuals/app-friends.png" alt="Per-person balances screen — each person carries one balance consolidated across all shared groups: what you owe or are owed, with settle up or send reminder inline, and settled people marked all clear" style="width: 100%; height: auto; display: block; border-radius: 6px;">
           </div>
-          <figcaption>The Settle up page — balances consolidated by person, ordered by what needs action.</figcaption>
+          <figcaption>Balances consolidated by person — what you owe and what you're owed, with settle up or send reminder right from the row.</figcaption>
         </figure>
 
         <h3>Groups page — remaining, not spent</h3>
@@ -1126,7 +1125,7 @@
 
         <table class="b-table">
           <thead>
-            <tr><th>Task</th><th>Result</th></tr>
+            <tr><th>Metric</th><th>Result</th></tr>
           </thead>
           <tbody>
             <tr><td>Average time to identify balance</td><td>~4 seconds</td></tr>
@@ -1134,35 +1133,34 @@
             <tr><td>Task completion rate</td><td>100%</td></tr>
             <tr><td>Participants needing assistance</td><td>0 of 5</td></tr>
             <tr><td>Understood budget status immediately</td><td>4 of 5</td></tr>
-            <tr><td>Expected to settle across all groups at once</td><td>3 of 5</td></tr>
+            <tr><td>Expected to settle everyone at once</td><td>3 of 5</td></tr>
           </tbody>
         </table>
 
         <p>All five participants completed primary tasks with no major navigation issues. Balance, settlement, and budget status were understood quickly across the board.</p>
 
-        <p><strong>Key finding:</strong> Three participants expected to settle with a person across all groups at once, rather than group by group. This showed the settle flow conflicted with users' natural mental model — they think in terms of <em>who</em> they owe, not <em>which group</em> the debt belongs to. This finding directly drove the redesign of the Settle Up screen.</p>
+        <p><strong>Key finding:</strong> Three of five participants expected to clear everything in one pass — settling all the people they owed at once — rather than opening each balance and paying it one by one. They thought in terms of <em>who</em> they owe and wanted a single action to settle up, not a debt-at-a-time flow. This directly drove the redesign of the Settle up screen.</p>
 
         <p><strong>Open question:</strong> One participant expected the settle action directly on the balance card, one tap earlier than the current flow allows. This wasn't addressed in the redesign and remains a potential improvement.</p>
 
         <h3>Selected reactions.</h3>
         <div class="b-quotes">
-          <p class="b-quote">"I expected to settle with one person across all groups at once."</p>
+          <p class="b-quote">"I expected to settle everyone at once, not one by one."</p>
           <p class="b-quote">"I can immediately tell what I actually spent."</p>
-          <p class="b-quote">"The budget makes shared expenses easier to understand."</p>
           <p class="b-quote">"Feels simpler than other expense-splitting apps."</p>
         </div>
       </section>
 
       <section>
         <div class="b-section-mark" id="vb-redesign"><span class="num">07</span><span class="label">Settle Up redesign</span></div>
-        <p>Based on the testing findings, I redesigned the Settle Up screen to reflect how users naturally expected the feature to behave. Rather than settling one group at a time, the redesigned flow shows the minimum number of transfers required to clear all outstanding debts across all groups — consolidating by person, not by group.</p>
+        <p>Based on the testing findings, I redesigned Settle up so people could settle everyone at once instead of working through debts one at a time. Pay all and Remind all now clear every balance across all groups in a single move, in the fewest transfers — and a single row still settles one person on its own.</p>
 
         <figure class="b-figure">
           <div class="b-figure-frame">
             <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-            <div class="img img-violet-soft">Settle Up · redesigned · minimum transfers to clear all debts, consolidated by person</div>
+            <img src="../visuals/app-settle-up.png" alt="Redesigned Settle up screen — net balance with amounts to receive and amounts owed consolidated by person across groups, Remind all and Pay all to clear everything in the minimum number of transfers, and an all-clear list of settled people" style="width: 100%; height: auto; display: block; border-radius: 6px;">
           </div>
-          <figcaption>The rebuilt Settle Up — consolidating by person, not by group.</figcaption>
+          <figcaption>The rebuilt Settle up — Pay all or Remind all clears every balance in the fewest transfers.</figcaption>
         </figure>
       </section>
 
@@ -1185,7 +1183,7 @@
 
       <section class="b-reflection" id="vb-conclusion">
         <div class="b-reflection-mark">09 · Conclusion</div>
-        <p>SplitSmart is built on the idea that users don't want to hold two mental models at once — the group's ledger and their own budget. The app brings those together in a single view, so shared expenses land where they actually belong: in your personal financial picture.</p>
+        <p>SplitSmart is built on the idea that you shouldn't have to juggle the group's ledger and your own budget separately. The app ties them together, so shared expenses land where they actually belong: in your personal financial picture.</p>
         <div class="note">SplitSmart is a self-directed concept project. It has not shipped, the usability test was small, and the language here describes what the design argues, not what it has measured at scale.</div>
       </section>
 
@@ -1346,9 +1344,9 @@
         <figure class="c-figure">
           <div class="c-figure-frame">
             <div class="c-figure-chrome"><span></span><span></span><span></span></div>
-            <img src="../visuals/app-settle-up.png" alt="Settle up screen — net balance across all friends, with amounts you'll receive and amounts you owe consolidated by person across groups, the minimum number of transfers to clear them, and an all-clear list of settled people" style="width: 100%; height: auto; display: block; border-radius: 8px;">
+            <img src="../visuals/app-friends.png" alt="Per-person balances screen — each person carries one balance consolidated across all shared groups: what you owe or are owed, with settle up or send reminder inline, and settled people marked all clear" style="width: 100%; height: auto; display: block; border-radius: 8px;">
           </div>
-          <figcaption>The Settle up page — balances consolidated by person, ordered by what needs action.</figcaption>
+          <figcaption>Balances consolidated by person — what you owe and what you're owed, with settle up or send reminder right from the row.</figcaption>
         </figure>
 
         <h3>Groups page — remaining, not spent</h3>
@@ -1370,7 +1368,7 @@
 
         <table class="c-table">
           <thead>
-            <tr><th>Task</th><th>Result</th></tr>
+            <tr><th>Metric</th><th>Result</th></tr>
           </thead>
           <tbody>
             <tr><td>Average time to identify balance</td><td>~4 seconds</td></tr>
@@ -1378,39 +1376,38 @@
             <tr><td>Task completion rate</td><td>100%</td></tr>
             <tr><td>Participants needing assistance</td><td>0 of 5</td></tr>
             <tr><td>Understood budget status immediately</td><td>4 of 5</td></tr>
-            <tr><td>Expected to settle across all groups at once</td><td>3 of 5</td></tr>
+            <tr><td>Expected to settle everyone at once</td><td>3 of 5</td></tr>
           </tbody>
         </table>
 
         <p>All five participants completed primary tasks with no major navigation issues. Balance, settlement, and budget status were understood quickly across the board.</p>
 
-        <p><strong>Key finding:</strong> Three participants expected to settle with a person across all groups at once, rather than group by group. This showed the settle flow conflicted with users' natural mental model — they think in terms of <em>who</em> they owe, not <em>which group</em> the debt belongs to. This finding directly drove the redesign of the Settle Up screen.</p>
+        <p><strong>Key finding:</strong> Three of five participants expected to clear everything in one pass — settling all the people they owed at once — rather than opening each balance and paying it one by one. They thought in terms of <em>who</em> they owe and wanted a single action to settle up, not a debt-at-a-time flow. This directly drove the redesign of the Settle up screen.</p>
 
         <p><strong>Open question:</strong> One participant expected the settle action directly on the balance card, one tap earlier than the current flow allows. This wasn't addressed in the redesign and remains a potential improvement.</p>
 
         <h3>Selected reactions.</h3>
         <div class="c-quotes">
-          <p class="c-quote">"I expected to settle with one person across all groups at once."</p>
+          <p class="c-quote">"I expected to settle everyone at once, not one by one."</p>
           <p class="c-quote">"I can immediately tell what I actually spent."</p>
-          <p class="c-quote">"The budget makes shared expenses easier to understand."</p>
           <p class="c-quote">"Feels simpler than other expense-splitting apps."</p>
         </div>
       </section>
 
       <section>
         <div class="c-section-mark" id="vc-redesign"><span class="num">07</span><span class="label">Settle Up redesign</span></div>
-        <p>Based on the testing findings, I redesigned the Settle Up screen to reflect how users naturally expected the feature to behave. Rather than settling one group at a time, the redesigned flow shows the minimum number of transfers required to clear all outstanding debts across all groups — consolidating by person, not by group.</p>
+        <p>Based on the testing findings, I redesigned Settle up so people could settle everyone at once instead of working through debts one at a time. Pay all and Remind all now clear every balance across all groups in a single move, in the fewest transfers — and a single row still settles one person on its own.</p>
 
         <figure class="c-figure">
           <div class="c-figure-frame">
             <div class="c-figure-chrome"><span></span><span></span><span></span></div>
-            <div class="img img-violet" style="height: 360px;">Settle Up · redesigned · minimum transfers to clear all debts, consolidated by person</div>
+            <img src="../visuals/app-settle-up.png" alt="Redesigned Settle up screen — net balance with amounts to receive and amounts owed consolidated by person across groups, Remind all and Pay all to clear everything in the minimum number of transfers, and an all-clear list of settled people" style="width: 100%; height: auto; display: block; border-radius: 8px;">
           </div>
           <div class="c-callout" style="top: 40px; right: -40px;">
             <div class="c-callout-eyebrow">Consolidated by person</div>
             The minimum set of transfers across every group — the test's strongest finding, built.
           </div>
-          <figcaption>The rebuilt Settle Up — consolidating by person, not by group.</figcaption>
+          <figcaption>The rebuilt Settle up — Pay all or Remind all clears every balance in the fewest transfers.</figcaption>
         </figure>
       </section>
 
@@ -1435,7 +1432,7 @@
 
       <section class="c-reflection" id="vc-conclusion">
         <div class="c-reflection-mark">09 · Conclusion</div>
-        <p>SplitSmart is built on the idea that users don't want to hold two mental models at once — the group's ledger and their own budget. The app brings those together in a single view, so shared expenses land where they actually belong: in your personal financial picture.</p>
+        <p>SplitSmart is built on the idea that you shouldn't have to juggle the group's ledger and your own budget separately. The app ties them together, so shared expenses land where they actually belong: in your personal financial picture.</p>
         <div class="note">SplitSmart is a self-directed concept project. It has not shipped, the usability test was small, and the language here describes what the design argues, not what it has measured at scale.</div>
       </section>
 
