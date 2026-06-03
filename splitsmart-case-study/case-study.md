@@ -2,7 +2,7 @@
 
 # SplitSmart
 
-**Role** Lead UX/UI Designer · **Timeline** 4-week design sprint — May 2026 · **Type** Concept · Self-directed
+**Role** Sole UX/UI Designer · **Team** Team of 4 · **Timeline** 4-week design phase — May 2026 · **Type** Product
 
 ---
 
@@ -30,7 +30,7 @@ Splitwise's own support forums surfaced this last gap repeatedly, with users req
 
 ### Two layers. One app.
 
-Shared expenses are still your expenses. A Paris Trip costs the group £700. But it costs *you* £233. That number belongs in your personal budget, not only in the group ledger.
+Shared expenses are still your expenses. A Paris Trip costs the group £1,050. But it costs *you* £350. That number belongs in your personal budget, not only in the group ledger.
 
 **Layer 1 — Shared expense management.**
 Split costs, track group balances, settle debts, send reminders.
@@ -103,7 +103,7 @@ Based on the testing findings, I redesigned Settle up so people could settle eve
 
 ---
 
-## GAPS AND TRADEOFFS
+## GAPS AND LIMITATIONS
 
 ### Gap 1 — No percentage-based or weighted splits
 
