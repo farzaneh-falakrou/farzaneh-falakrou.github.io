@@ -42,6 +42,22 @@ Icons and UI elements share one rounded-corner language across the app, with the
 
 ---
 
+## THE SCREENS
+
+### Onboarding to search
+
+A short onboarding flow introduces the app before dropping the buyer into search. From there, users see both listings and a map on the same screen — scrolling listings with a swipe-up gesture, or tapping into the map to search visually. A hamburger menu and filter controls sit alongside search so buyers can narrow results without leaving the flow.
+
+### Favourite & Compare
+
+Saved listings aren't just a bookmark list — selecting two properties opens a side-by-side comparison across size, price, facilities, and energy usage. This is the app's core decision-making tool: instead of holding two listings in memory while scrolling back and forth, the buyer sees them side by side.
+
+### Property Info & Contacts
+
+The property detail screen surfaces everything — visual and written — a buyer needs to decide and act, with a direct path to contacting an agent and a confirmation once that message is sent.
+
+---
+
 ## GAPS AND LIMITATIONS
 
 _TBD_
