@@ -72,4 +72,6 @@ The user research brief covered user needs but not the competitive landscape, so
 
 ## CONCLUSION
 
-_TBD_
+Homelon simplifies real estate search by putting comparison at the center of the decision, not buried behind separate listing pages. Working under a tight deadline meant prioritizing ruthlessly — a single cohesive moodboard early on kept the design language consistent across every screen without requiring extra iteration later.
+
+The clearest next steps are usability testing across a range of abilities, and extending the watermelon-themed iconography started with the location pin across the rest of the icon set.
