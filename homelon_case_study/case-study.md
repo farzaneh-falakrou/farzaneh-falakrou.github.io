@@ -66,7 +66,7 @@ The short project timeline meant focus stayed on UI design; no usability testing
 
 ### Gap 2 — Research handed off without competitive context
 
-The user research brief covered user needs but not the competitive landscape, so the competitive audit and user-flow prioritization were self-directed rather than part of the original research scope. This filled the gap for this project, but a fuller research phase would strengthen future iterations.
+Competitive positioning wasn't part of the original research scope, so the competitive audit and user-flow prioritization were self-directed rather than handed to me ready-made. This filled the gap for this project, but a fuller research phase would strengthen future iterations.
 
 ---
 
@@ -74,4 +74,4 @@ The user research brief covered user needs but not the competitive landscape, so
 
 Homelon simplifies real estate search by putting comparison at the center of the decision, not buried behind separate listing pages. Working under a tight deadline meant prioritizing ruthlessly — a single cohesive moodboard early on kept the design language consistent across every screen without requiring extra iteration later.
 
-The clearest next steps are usability testing across a range of abilities, and extending the watermelon-themed iconography started with the location pin across the rest of the icon set.
+The clearest next steps are laid out above — validating the design with real buyers and rounding out the visual language it started with.
