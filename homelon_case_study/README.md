@@ -38,12 +38,15 @@ homelon_case_study/
 ├── README.md              ← you are here (status + index)
 ├── case-study.md          ← CANONICAL writeup (skeleton — fill from source)
 ├── LOG.md                 ← running record of decisions / done / deferred / open questions
-└── screens/               ← design reference screenshots (Landing, Onboarding, Search,
-                              Compare, Dashboard, Filter, Favourites, Info, Confirmation, …)
+├── screens/               ← design reference screenshots (Landing, Onboarding, Search,
+│                             Compare, Dashboard, Filter, Favourites, Info, Confirmation, …)
+├── website_page/          ← case-study page sketch (single variant: Balanced / B)
+│   ├── index.html
+│   └── README.md
+└── visuals/               ← 12 curated screenshot copies for the webpage sketch
 ```
 
-> **Not built yet** (add when work starts): `website_page/` (the case-study page sketch),
-> `visuals/` (hand sketches / IA), `prototype/` (live reference pages), canonical source PDF.
+> **Not built yet** (add when work starts): `prototype/` (live reference pages), canonical source PDF.
 
 ---
 
