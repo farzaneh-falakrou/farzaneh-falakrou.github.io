@@ -155,6 +155,38 @@
     #hb .b-figure figcaption { font-size: 13px; font-style: italic; font-family: var(--font-serif); color: var(--muted); margin-top: 10px; padding: 0 6px; }
 
     #hb .b-figure-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 36px 0 32px; }
+
+    /* Gap cards — two-column (Homelon has 2 gaps) */
+    #hb .b-gaps {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+      margin: 32px 0; max-width: 600px;
+    }
+    #hb .b-gap-card {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+      padding: 28px 24px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    #hb .b-gap-card .num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 22px; }
+    #hb .b-gap-card h4 { font-family: var(--font-serif); font-size: 22px; font-weight: 400; line-height: 1.15; }
+    #hb .b-gap-card p { font-size: 14px; line-height: 1.55; color: var(--muted); }
+
+    /* Reflection — italic editorial */
+    #hb .b-reflection { margin: 80px 0 0; padding: 56px 0; border-top: 1px solid var(--line); }
+    #hb .b-reflection-mark { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 16px; margin-bottom: 16px; }
+    #hb .b-reflection p { font-family: var(--font-serif); font-size: 28px; font-style: italic; line-height: 1.3; max-width: 600px; }
+    #hb .b-reflection .note { font-family: var(--font-sans); font-size: 15px; font-style: normal; color: var(--muted); margin-top: 20px; max-width: 600px; line-height: 1.6; }
+
+    /* Footer */
+    #hb .b-footer {
+      max-width: 1320px; margin: 0 auto;
+      padding: 96px 56px 64px;
+      border-top: 1px solid var(--line);
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 56px; align-items: center;
+    }
+    #hb .b-footer-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 12px; }
+    #hb .b-footer-title { font-family: var(--font-serif); font-size: 56px; line-height: 1; font-weight: 400; letter-spacing: -0.02em; }
+    #hb .b-footer-title em { font-style: italic; color: var(--accent); }
+    #hb .b-footer-img { height: 200px; }
   </style>
 </head>
 <body>
@@ -245,3 +277,158 @@
           <figcaption>The style guide in context — watermelon palette and rounded corners carried through the dashboard.</figcaption>
         </figure>
       </section>
+
+      <section>
+        <div class="b-section-mark" id="hb-screens"><span class="num">05</span><span class="label">The screens</span></div>
+        <h2>Comparison, <em>close</em> at hand.</h2>
+
+        <h3>Onboarding to search</h3>
+        <p>A short onboarding flow introduces the app before dropping the buyer into search. From there, users see both listings and a map on the same screen — scrolling listings with a swipe-up gesture, or tapping into the map to search visually. A hamburger menu and filter controls sit alongside search so buyers can narrow results without leaving the flow.</p>
+
+        <div class="b-figure-grid">
+          <figure class="b-figure">
+            <div class="b-figure-frame">
+              <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+              <img src="../visuals/homelon-onboarding.png" alt="Homelon onboarding screen">
+            </div>
+            <figcaption>Onboarding.</figcaption>
+          </figure>
+          <figure class="b-figure">
+            <div class="b-figure-frame">
+              <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+              <img src="../visuals/homelon-search.png" alt="Homelon search screen with listings and map">
+            </div>
+            <figcaption>Search — listings and map in one view.</figcaption>
+          </figure>
+          <figure class="b-figure">
+            <div class="b-figure-frame">
+              <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+              <img src="../visuals/homelon-menu.png" alt="Homelon hamburger menu">
+            </div>
+            <figcaption>Navigation menu.</figcaption>
+          </figure>
+          <figure class="b-figure">
+            <div class="b-figure-frame">
+              <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+              <img src="../visuals/homelon-filter.png" alt="Homelon filter screen">
+            </div>
+            <figcaption>Filter controls alongside search.</figcaption>
+          </figure>
+        </div>
+
+        <h3>Favourite &amp; Compare</h3>
+        <p>Saved listings aren't just a bookmark list — selecting two properties opens a side-by-side comparison across size, price, facilities, and energy usage. This is the app's core decision-making tool: instead of holding two listings in memory while scrolling back and forth, the buyer sees them side by side.</p>
+
+        <div class="b-figure-grid">
+          <figure class="b-figure">
+            <div class="b-figure-frame">
+              <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+              <img src="../visuals/homelon-favourites.png" alt="Homelon favourites screen with saved listings">
+            </div>
+            <figcaption>Saved listings.</figcaption>
+          </figure>
+          <figure class="b-figure">
+            <div class="b-figure-frame">
+              <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+              <img src="../visuals/homelon-compare-01.png" alt="Homelon side-by-side property comparison, first view">
+            </div>
+            <figcaption>Comparing two properties side by side.</figcaption>
+          </figure>
+        </div>
+
+        <figure class="b-figure">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="../visuals/homelon-compare-02.png" alt="Homelon side-by-side property comparison, second view">
+          </div>
+          <figcaption>Comparison across size, price, facilities, and energy usage.</figcaption>
+        </figure>
+
+        <h3>Property Info &amp; Contacts</h3>
+        <p>The property detail screen surfaces everything — visual and written — a buyer needs to decide and act, with a direct path to contacting an agent and a confirmation once that message is sent.</p>
+
+        <div class="b-figure-grid">
+          <figure class="b-figure">
+            <div class="b-figure-frame">
+              <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+              <img src="../visuals/homelon-property-info.png" alt="Homelon property detail screen">
+            </div>
+            <figcaption>Property details.</figcaption>
+          </figure>
+          <figure class="b-figure">
+            <div class="b-figure-frame">
+              <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+              <img src="../visuals/homelon-send-message.png" alt="Homelon send message to agent screen">
+            </div>
+            <figcaption>Contacting the agent.</figcaption>
+          </figure>
+        </div>
+
+        <figure class="b-figure">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="../visuals/homelon-confirmation.png" alt="Homelon confirmation screen after sending a message">
+          </div>
+          <figcaption>Confirmation once the message is sent.</figcaption>
+        </figure>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="hb-gaps"><span class="num">06</span><span class="label">Gaps and limitations</span></div>
+
+        <div class="b-gaps">
+          <div class="b-gap-card">
+            <div class="num">Gap 01</div>
+            <h4>No usability testing.</h4>
+            <p>The short project timeline meant focus stayed on UI design; no usability testing was conducted. Testing with users of varying abilities and disabilities — including accessibility-focused testing — remains the clearest next step before this design could be validated with real buyers.</p>
+          </div>
+          <div class="b-gap-card">
+            <div class="num">Gap 02</div>
+            <h4>Research handed off without competitive context.</h4>
+            <p>Competitive positioning wasn't part of the original research scope, so the competitive audit and user-flow prioritization were self-directed rather than handed to me ready-made. This filled the gap for this project, but a fuller research phase would strengthen future iterations.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="b-reflection" id="hb-conclusion">
+        <div class="b-reflection-mark">07 · Conclusion</div>
+        <p>Homelon simplifies real estate search by putting comparison at the center of the decision, not buried behind separate listing pages.</p>
+        <p class="note">Working under a tight deadline meant prioritizing ruthlessly — a single cohesive moodboard early on kept the design language consistent across every screen without requiring extra iteration later. The clearest next steps are laid out above — validating the design with real buyers and rounding out the visual language it started with.</p>
+      </section>
+
+    </article>
+  </div>
+
+  <footer class="b-footer">
+    <div>
+      <div class="b-footer-eyebrow">Next case study</div>
+      <h3 class="b-footer-title">A boutique redesign that let the brand do the <em>talking</em>.</h3>
+    </div>
+    <div class="img-cream-2 b-footer-img">Top-notch Beauty · Brand & Web · 2023</div>
+  </footer>
+</section>
+
+<script>
+  // Scrollspy: highlight the TOC item for the section in view
+  (function () {
+    const tocLinks = [...document.querySelectorAll('a[href^="#hb-"]')];
+    if (!tocLinks.length) return;
+    const targets = tocLinks
+      .map(a => document.getElementById(a.getAttribute('href').slice(1)))
+      .filter(Boolean);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          tocLinks.forEach(a => {
+            a.closest('li').classList.toggle('active', a.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    }, { rootMargin: '-100px 0px -65% 0px', threshold: 0 });
+    targets.forEach(el => observer.observe(el));
+  })();
+</script>
+
+</body>
+</html>
