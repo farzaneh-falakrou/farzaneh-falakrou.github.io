@@ -60,7 +60,13 @@ The property detail screen surfaces everything — visual and written — a buye
 
 ## GAPS AND LIMITATIONS
 
-_TBD_
+### Gap 1 — No usability testing
+
+The short project timeline meant focus stayed on UI design; no usability testing was conducted. Testing with users of varying abilities and disabilities — including accessibility-focused testing — remains the clearest next step before this design could be validated with real buyers.
+
+### Gap 2 — Research handed off without competitive context
+
+The user research brief covered user needs but not the competitive landscape, so the competitive audit and user-flow prioritization were self-directed rather than part of the original research scope. This filled the gap for this project, but a fuller research phase would strengthen future iterations.
 
 ---
 
