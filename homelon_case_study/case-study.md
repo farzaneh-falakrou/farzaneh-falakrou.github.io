@@ -16,7 +16,7 @@ Today's real estate apps overwhelm new buyers with dense listings and unclear na
 
 ## COMPETITIVE AUDIT
 
-_TBD_
+The user research brief covered user needs but skipped competitive analysis. I audited three apps — Trulia, ImmoScout, and Zoopla — to understand market conventions and identify the essential functions a real estate app needs before designing the user flow.
 
 ---
 
