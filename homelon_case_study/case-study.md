@@ -20,6 +20,12 @@ The user research brief covered user needs but skipped competitive analysis. I a
 
 ---
 
+## USER STORIES & FLOWS
+
+From the user stories I was given, I prioritized the ones most critical to the real estate use case, using the competitive audit to judge relevance. I then mapped those stories into user flows — the steps a buyer takes to reach each goal — highlighting the key features in light green to make them easy to spot.
+
+---
+
 ## STRATEGY
 
 _TBD_
