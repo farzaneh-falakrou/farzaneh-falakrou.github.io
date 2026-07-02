@@ -26,31 +26,7 @@ From the user stories I was given, I prioritized the ones most critical to the r
 
 ---
 
-## STRATEGY
-
-_TBD_
-
----
-
-## INFORMATION ARCHITECTURE
-
-_TBD_
-
----
-
 ## DESIGN DECISIONS
-
-_TBD_
-
----
-
-## USABILITY TESTING
-
-_TBD_
-
----
-
-## REDESIGN
 
 _TBD_
 
