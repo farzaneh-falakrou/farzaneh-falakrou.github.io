@@ -99,6 +99,62 @@
     }
     #hb .b-meta-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 6px; }
     #hb .b-meta-value { font-family: var(--font-serif); font-size: 18px; line-height: 1.3; font-style: italic; }
+
+    /* Two-column body — TOC + article */
+    #hb .b-body {
+      max-width: 1320px; margin: 0 auto;
+      padding: 64px 56px 100px;
+      display: grid; grid-template-columns: 220px 1fr; gap: 80px;
+    }
+    #hb .b-toc {
+      position: sticky; top: 88px; align-self: start;
+      font-size: 13px; line-height: 1.8;
+    }
+    #hb .b-toc-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 12px; }
+    #hb .b-toc-list { list-style: none; }
+    #hb .b-toc-list li { padding: 4px 0; color: var(--muted); }
+    #hb .b-toc-list li.active { color: var(--ink); }
+    #hb .b-toc-list a {
+      display: grid; grid-template-columns: 24px 1fr; gap: 12px;
+      align-items: baseline; color: inherit;
+      transition: color 0.15s;
+    }
+    #hb .b-toc-list a:hover { color: var(--ink); }
+    #hb .b-toc-list .num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 14px; }
+    #hb .b-section-mark, #hb .b-reflection { scroll-margin-top: 80px; }
+
+    #hb .b-article { font-size: 17px; line-height: 1.7; color: var(--ink-2); max-width: 720px; }
+    #hb .b-section-mark { display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px; }
+    #hb .b-section-mark .num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 18px; }
+    #hb .b-section-mark .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); border-top: 1px solid var(--ink); padding-top: 6px; }
+    #hb .b-article section + section { margin-top: 88px; }
+    #hb .b-article h2 {
+      font-family: var(--font-serif); font-size: 44px; font-weight: 400;
+      line-height: 1.05; color: var(--ink); margin-bottom: 28px;
+      letter-spacing: -0.02em;
+    }
+    #hb .b-article h2 em { font-style: italic; color: var(--accent); }
+    #hb .b-article p + p { margin-top: 20px; }
+    #hb .b-article strong { font-weight: 500; color: var(--ink); }
+    #hb .b-article h3 {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: 24px; color: var(--accent);
+      line-height: 1.2; letter-spacing: -0.01em;
+      margin: 36px 0 14px;
+    }
+
+    /* Figures — contained in subtle frames */
+    #hb .b-figure { margin: 36px 0 32px; }
+    #hb .b-figure-frame {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+      padding: 12px; box-shadow: 0 8px 24px rgba(26,22,18,0.06);
+    }
+    #hb .b-figure-chrome { display: flex; gap: 6px; padding: 4px 4px 8px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+    #hb .b-figure-chrome span { width: 8px; height: 8px; border-radius: 50%; background: var(--line-2); }
+    #hb .b-figure-frame img { width: 100%; height: auto; display: block; border-radius: 6px; }
+    #hb .b-figure figcaption { font-size: 13px; font-style: italic; font-family: var(--font-serif); color: var(--muted); margin-top: 10px; padding: 0 6px; }
+
+    #hb .b-figure-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 36px 0 32px; }
   </style>
 </head>
 <body>
@@ -135,3 +191,57 @@
     <div><div class="b-meta-label">Timeline</div><div class="b-meta-value">2023 · short design phase</div></div>
     <div><div class="b-meta-label">Type</div><div class="b-meta-value">TBD</div></div>
   </section>
+
+  <div class="b-body">
+    <aside class="b-toc">
+      <div class="b-toc-label">Contents</div>
+      <ol class="b-toc-list">
+        <li class="active"><a href="#hb-problem"><span class="num">01</span> The problem</a></li>
+        <li><a href="#hb-audit"><span class="num">02</span> Competitive audit</a></li>
+        <li><a href="#hb-stories"><span class="num">03</span> User stories &amp; flows</a></li>
+        <li><a href="#hb-decisions"><span class="num">04</span> Design decisions</a></li>
+        <li><a href="#hb-screens"><span class="num">05</span> The screens</a></li>
+        <li><a href="#hb-gaps"><span class="num">06</span> Gaps and limitations</a></li>
+        <li><a href="#hb-conclusion"><span class="num">07</span> Conclusion</a></li>
+      </ol>
+    </aside>
+
+    <article class="b-article">
+
+      <section>
+        <div class="b-section-mark" id="hb-problem"><span class="num">01</span><span class="label">The problem</span></div>
+        <h2>Real estate listings drown new buyers in <em>information</em>.</h2>
+        <p>Today's real estate apps overwhelm new buyers with dense listings and unclear navigation, making it hard to sift through options efficiently. Homelon's goal is to help first-time buyers make informed, financially confident decisions by simplifying how listings are presented and compared.</p>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="hb-audit"><span class="num">02</span><span class="label">Competitive audit</span></div>
+        <p>The user research brief covered user needs but skipped competitive analysis. I audited three apps — Trulia, ImmoScout, and Zoopla — to understand market conventions and identify the essential functions a real estate app needs before designing the user flow.</p>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="hb-stories"><span class="num">03</span><span class="label">User stories &amp; flows</span></div>
+        <p>From the user stories I was given, I prioritized the ones most critical to the real estate use case, using the competitive audit to judge relevance. I then mapped those stories into user flows — the steps a buyer takes to reach each goal — highlighting the key features in light green to make them easy to spot.</p>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="hb-decisions"><span class="num">04</span><span class="label">Design decisions</span></div>
+        <h2>What each screen had to <em>prove</em>.</h2>
+
+        <h3>Wireframes to high-fidelity</h3>
+        <p>Low-fidelity wireframes established core functionality first. Mid-fidelity passes tested layout, visual hierarchy, and spacing before I locked the style guide and moved to high-fidelity screens.</p>
+
+        <h3>Watermelon palette</h3>
+        <p>The palette pairs Sea Turtle Green — nature, stability — with Coral/Watermelon Red — energy, ambition — balanced by Charcoal for professionalism. Together, green and red strike a deliberate balance between <strong>stability and excitement</strong>: reassuring enough for a financial decision, energetic enough to feel like progress toward a goal.</p>
+
+        <h3>Rounded, consistent, real</h3>
+        <p>Icons and UI elements share one rounded-corner language across the app, with the location icon pulling directly from the watermelon palette. Photography avoids polished studio shots in favor of natural daylight and real settings — landscapes, plants — to keep the app feeling <strong>trustworthy and approachable</strong> rather than staged.</p>
+
+        <figure class="b-figure">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="../visuals/homelon-dashboard.png" alt="Homelon dashboard screen showing the watermelon palette and rounded UI language in context">
+          </div>
+          <figcaption>The style guide in context — watermelon palette and rounded corners carried through the dashboard.</figcaption>
+        </figure>
+      </section>
