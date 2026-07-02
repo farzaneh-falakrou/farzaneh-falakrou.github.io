@@ -28,7 +28,17 @@ From the user stories I was given, I prioritized the ones most critical to the r
 
 ## DESIGN DECISIONS
 
-_TBD_
+### Wireframes to high-fidelity
+
+Low-fidelity wireframes established core functionality first. Mid-fidelity passes tested layout, visual hierarchy, and spacing before I locked the style guide and moved to high-fidelity screens.
+
+### Watermelon palette
+
+The palette pairs Sea Turtle Green — nature, stability — with Coral/Watermelon Red — energy, ambition — balanced by Charcoal for professionalism. Together, green and red strike a deliberate balance between **stability and excitement**: reassuring enough for a financial decision, energetic enough to feel like progress toward a goal.
+
+### Rounded, consistent, real
+
+Icons and UI elements share one rounded-corner language across the app, with the location icon pulling directly from the watermelon palette. Photography avoids polished studio shots in favor of natural daylight and real settings — landscapes, plants — to keep the app feeling **trustworthy and approachable** rather than staged.
 
 ---
 
