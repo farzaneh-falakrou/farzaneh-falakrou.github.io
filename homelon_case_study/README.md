@@ -17,17 +17,17 @@ _Skeleton created 2026-06-05, mirroring the SplitSmart case-study structure._
 |---|---|
 | **Thesis** | Real estate listings drown new buyers in information — Homelon cuts through it with a comparison-first search flow. |
 | **Canonical voice** | `case-study.md` — rewritten 2026-07-02 from `legacy/homelon.html` (sole text source) |
-| **Sketch** | none yet — no `website_page/index.html` (Phase 2, not started) |
+| **Sketch** | `website_page/index.html` — single variant (Balanced / B), `winner: null` — mirrors SplitSmart's own unfinished Phase 2 |
 | **Open decisions** | Role/Team/Type metadata fields unconfirmed (see `case-study.md` header) |
-| **Next build step** | Phase 2 — design and build the case-study webpage (own brainstorm/spec cycle) |
+| **Next build step** | Phase 3 — rebuild key screens as live HTML/Tailwind prototype pages (own brainstorm/spec cycle) |
 
 ### The thesis
 
 > Real estate listings drown new buyers in information — Homelon cuts through it with a comparison-first search flow.
 
-- **Phase 1 (done)** — content rewrite, this file's sibling `case-study.md`.
-- **Phase 2 (next)** — case-study webpage build.
-- **Phase 3 (after)** — rebuild key screens (search, favourites/compare, property info, onboarding, etc.) as live HTML/Tailwind prototype pages, replacing static screenshots as the design reference.
+- **Phase 1 (done)** — content rewrite, `case-study.md`.
+- **Phase 2 (done)** — case-study webpage sketch, `website_page/index.html` (single variant, `winner: null`).
+- **Phase 3 (next)** — rebuild key screens (search, favourites/compare, property info, onboarding, etc.) as live HTML/Tailwind prototype pages, replacing static screenshots as the design reference.
 
 ---
 
