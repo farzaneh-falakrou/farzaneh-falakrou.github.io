@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homelon — Case Study</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #ebe8e2;
+      --bg-2:      #e3dfd6;
+      --bg-3:      #dcd6c9;
+      --ink:       #1a1a1a;
+      --ink-2:     #2a2a2a;
+      --muted:     #5a5a5a;
+      --muted-2:   #8a8a85;
+      --line:      #d5d0c5;
+      --line-2:    #c6c0b3;
+      --accent:    #b8533f;
+      --accent-soft: #f0d9c9;
+      --surface:   #ffffff;
+
+      --font-serif: 'Instrument Serif', serif;
+      --font-sans:  'Inter', system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    .img-cream-2 { background: linear-gradient(135deg, #f5efe6 0%, #d9d2c2 100%); color: #8a8175; border-radius: 12px; display: grid; place-items: center; font-family: var(--font-serif); font-style: italic; font-size: 13px; text-align: center; padding: 24px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT B — BALANCED (Homelon)
+       Same locked template as splitsmart-case-study/website_page/index.html's
+       #vb block, retargeted: #hb prefix, watermelon-muted accent, real screenshots.
+       ─────────────────────────────────────────────────────────── */
+    #hb { background: var(--bg); }
+
+    #hb .b-top {
+      padding: 24px 56px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--line);
+    }
+    #hb .b-top-name { font-family: var(--font-serif); font-style: italic; font-size: 20px; }
+    #hb .b-top-back { font-size: 12px; color: var(--muted); display: inline-flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+    #hb .b-top-back:hover { color: var(--accent); }
+    #hb .b-top-nav { display: flex; gap: 28px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+
+    #hb .b-hero {
+      padding: 96px 56px 56px;
+      max-width: 1320px; margin: 0 auto;
+      text-align: center;
+    }
+    #hb .b-hero-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 20px; margin-bottom: 24px; }
+    #hb .b-hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(52px, 7.2vw, 112px); line-height: 0.96;
+      letter-spacing: -0.03em; font-weight: 400;
+      margin-bottom: 40px;
+      max-width: 1000px; margin-left: auto; margin-right: auto;
+    }
+    #hb .b-hero h1 em { font-style: italic; color: var(--accent); }
+    #hb .b-hero-sub {
+      font-family: var(--font-serif); font-size: 24px; line-height: 1.45;
+      color: var(--ink-2); max-width: 680px; margin: 0 auto;
+      font-style: italic;
+    }
+
+    #hb .b-cover {
+      max-width: 1320px; margin: 56px auto 0;
+      padding: 0 56px;
+    }
+    #hb .b-cover-frame {
+      background: var(--surface); border-radius: 16px;
+      padding: 16px; box-shadow: 0 30px 80px rgba(26,22,18,0.12), 0 4px 12px rgba(26,22,18,0.05);
+      border: 1px solid var(--line);
+    }
+    #hb .b-cover-chrome { display: flex; gap: 6px; margin-bottom: 12px; padding: 4px 4px 8px; border-bottom: 1px solid var(--line); }
+    #hb .b-cover-chrome span { width: 10px; height: 10px; border-radius: 50%; background: var(--line-2); }
+    #hb .b-cover-img { width: 100%; height: auto; display: block; border-radius: 8px; }
+
+    /* Metadata strip — 4 fields (Role, Team, Timeline, Type) */
+    #hb .b-meta {
+      max-width: 1320px; margin: 64px auto 0;
+      padding: 32px 56px;
+      border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+    }
+    #hb .b-meta-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 6px; }
+    #hb .b-meta-value { font-family: var(--font-serif); font-size: 18px; line-height: 1.3; font-style: italic; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════
+     VARIANT B — BALANCED (Homelon)
+     ══════════════════════════════════════════════════════════════ -->
+<section id="hb">
+
+  <header class="b-top">
+    <a class="b-top-back" href="#">← Index</a>
+    <a class="b-top-name" href="#"><em>Farzaneh Falakrou</em></a>
+    <nav class="b-top-nav">
+      <a href="#">Work</a><a href="#">About</a><a href="#">Notes</a>
+    </nav>
+  </header>
+
+  <section class="b-hero">
+    <div class="b-hero-eyebrow">Case study · Homelon · 2026</div>
+    <h1>Real estate listings bury buyers in information. Homelon leads with <em>comparison</em>.</h1>
+    <p class="b-hero-sub">Today's real estate apps overwhelm new buyers with dense listings and unclear navigation. Homelon puts side-by-side comparison at the center of the decision, helping first-time buyers move from overwhelmed to confident.</p>
+  </section>
+
+  <div class="b-cover">
+    <div class="b-cover-frame">
+      <div class="b-cover-chrome"><span></span><span></span><span></span></div>
+      <img class="b-cover-img" src="../visuals/homelon-landing.png" alt="Homelon landing screen — listings and map view">
+    </div>
+  </div>
+
+  <section class="b-meta">
+    <div><div class="b-meta-label">Role</div><div class="b-meta-value">TBD</div></div>
+    <div><div class="b-meta-label">Team</div><div class="b-meta-value">TBD</div></div>
+    <div><div class="b-meta-label">Timeline</div><div class="b-meta-value">2023 · short design phase</div></div>
+    <div><div class="b-meta-label">Type</div><div class="b-meta-value">TBD</div></div>
+  </section>
