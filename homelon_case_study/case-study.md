@@ -20,9 +20,25 @@ The user research brief covered user needs but skipped competitive analysis. I a
 
 ---
 
-## USER STORIES & FLOWS
+## USER STORIES
 
-From the user stories I was given, I prioritized the ones most critical to the real estate use case, using the competitive audit to judge relevance. I then mapped those stories into user flows — the steps a buyer takes to reach each goal — highlighting the key features in light green to make them easy to spot.
+From the user stories I was given, I prioritized the ones most critical to the real estate use case, using the competitive audit to judge relevance.
+
+---
+
+## USER FLOWS
+
+After learning about what users need and studying the competition, the main features for the app became clear. Using this understanding, I created user flows to map out the steps users need to take to reach their goals. To make it easier to spot the key features of the app, I've used a light green color to highlight them.
+
+---
+
+## STRATEGY
+
+### Not more listings. Better comparison.
+
+Adding more filters or denser listings would only add to the noise this project set out to cut through. What a buyer actually needs when choosing between two similar properties isn't another search refinement — it's the ability to hold both properties side by side and see where they differ.
+
+That reframes the design problem: the job isn't to show more information, it's to help a buyer make an informed, financially confident decision by simplifying how listings are presented and compared. Every screen decision that follows — from the onboarding flow down to the comparison table — is in service of that one idea.
 
 ---
 
@@ -40,6 +56,10 @@ The palette pairs Sea Turtle Green — nature, stability — with Coral/Watermel
 
 Icons and UI elements share one rounded-corner language across the app, with the location icon pulling directly from the watermelon palette. Photography avoids polished studio shots in favor of natural daylight and real settings — landscapes, plants — to keep the app feeling **trustworthy and approachable** rather than staged.
 
+### One mark, two lockups
+
+The logo keeps the same rounded, filled shapes everywhere it appears, but isn't one fixed lockup — a compact icon-only mark runs inside the app itself, sized to a 32px grid, while the full wordmark carries the same shapes onto the website and tablet, where there's room for it.
+
 ---
 
 ## THE SCREENS
@@ -50,7 +70,7 @@ A short onboarding flow introduces the app before dropping the buyer into search
 
 ### Favourite & Compare
 
-Saved listings aren't just a bookmark list — selecting two properties opens a side-by-side comparison across size, price, facilities, and energy usage. This is the app's core decision-making tool: instead of holding two listings in memory while scrolling back and forth, the buyer sees them side by side.
+Saved listings aren't just a bookmark list. Selecting properties in Favourites drops the buyer into a multi-select mode — pick two or more, then compare them directly, across size, build year, and local factors like schools, shops, and traffic. Tabs for About, Energy, and Cost let the comparison go deeper on demand. This is the app's core decision-making tool: instead of holding two listings in memory while scrolling back and forth, the buyer sees them side by side.
 
 ### Property Info & Contacts
 
