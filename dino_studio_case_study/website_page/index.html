@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dino Studio — Case Study</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #ebe8e2;
+      --bg-2:      #e3dfd6;
+      --bg-3:      #dcd6c9;
+      --ink:       #1a1a1a;
+      --ink-2:     #2a2a2a;
+      --muted:     #5a5a5a;
+      --muted-2:   #8a8a85;
+      --line:      #d5d0c5;
+      --line-2:    #c6c0b3;
+      --accent:    #ff5a36;
+      --accent-soft: #ffd8c8;
+      --surface:   #ffffff;
+
+      --font-serif: 'Instrument Serif', serif;
+      --font-sans:  'Inter', system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    .img-cream-2 { background: linear-gradient(135deg, #f5efe6 0%, #d9d2c2 100%); color: #8a8175; border-radius: 12px; display: grid; place-items: center; font-family: var(--font-serif); font-style: italic; font-size: 13px; text-align: center; padding: 24px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT B — BALANCED (Dino Studio)
+       Same locked template as splitsmart-case-study/website_page/index.html's
+       #vb block, retargeted: #db prefix, same orange accent palette, real screenshots.
+       ─────────────────────────────────────────────────────────── */
+    #db { background: var(--bg); }
+
+    #db .b-top {
+      padding: 24px 56px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--line);
+    }
+    #db .b-top-name { font-family: var(--font-serif); font-style: italic; font-size: 20px; }
+    #db .b-top-back { font-size: 12px; color: var(--muted); display: inline-flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+    #db .b-top-back:hover { color: var(--accent); }
+    #db .b-top-nav { display: flex; gap: 28px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+
+    #db .b-hero {
+      padding: 96px 56px 56px;
+      max-width: 1320px; margin: 0 auto;
+      text-align: center;
+    }
+    #db .b-hero-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 20px; margin-bottom: 24px; }
+    #db .b-hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(52px, 7.2vw, 112px); line-height: 0.96;
+      letter-spacing: -0.03em; font-weight: 400;
+      margin-bottom: 40px;
+      max-width: 1000px; margin-left: auto; margin-right: auto;
+    }
+    #db .b-hero h1 em { font-style: italic; color: var(--accent); }
+    #db .b-hero-sub {
+      font-family: var(--font-serif); font-size: 24px; line-height: 1.45;
+      color: var(--ink-2); max-width: 680px; margin: 0 auto;
+      font-style: italic;
+    }
+
+    #db .b-cover {
+      max-width: 1320px; margin: 56px auto 0;
+      padding: 0 56px;
+    }
+    #db .b-cover-frame {
+      background: var(--surface); border-radius: 16px;
+      padding: 16px; box-shadow: 0 30px 80px rgba(26,22,18,0.12), 0 4px 12px rgba(26,22,18,0.05);
+      border: 1px solid var(--line);
+    }
+    #db .b-cover-chrome { display: flex; gap: 6px; margin-bottom: 12px; padding: 4px 4px 8px; border-bottom: 1px solid var(--line); }
+    #db .b-cover-chrome span { width: 10px; height: 10px; border-radius: 50%; background: var(--line-2); }
+
+    /* Metadata strip */
+    #db .b-meta {
+      max-width: 1320px; margin: 64px auto 0;
+      padding: 32px 56px;
+      border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+    }
+    #db .b-meta-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 6px; }
+    #db .b-meta-value { font-family: var(--font-serif); font-size: 18px; line-height: 1.3; font-style: italic; }
+
+    /* Two-column body — TOC + article */
+    #db .b-body {
+      max-width: 1320px; margin: 0 auto;
+      padding: 64px 56px 100px;
+      display: grid; grid-template-columns: 220px 1fr; gap: 80px;
+    }
+    #db .b-toc {
+      position: sticky; top: 88px; align-self: start;
+      font-size: 13px; line-height: 1.8;
+    }
+    #db .b-toc-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 12px; }
+    #db .b-toc-list { list-style: none; }
+    #db .b-toc-list li { padding: 4px 0; color: var(--muted); }
+    #db .b-toc-list li.active { color: var(--ink); }
+    #db .b-toc-list a {
+      display: grid; grid-template-columns: 24px 1fr; gap: 12px;
+      align-items: baseline; color: inherit;
+      transition: color 0.15s;
+    }
+    #db .b-toc-list a:hover { color: var(--ink); }
+    #db .b-toc-list .num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 14px; }
+    #db .b-section-mark, #db .b-reflection { scroll-margin-top: 80px; }
+
+    #db .b-article { font-size: 17px; line-height: 1.7; color: var(--ink-2); max-width: 720px; }
+    #db .b-section-mark { display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px; }
+    #db .b-section-mark .num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 18px; }
+    #db .b-section-mark .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); border-top: 1px solid var(--ink); padding-top: 6px; }
+    #db .b-article section + section { margin-top: 88px; }
+    #db .b-article h2 {
+      font-family: var(--font-serif); font-size: 44px; font-weight: 400;
+      line-height: 1.05; color: var(--ink); margin-bottom: 28px;
+      letter-spacing: -0.02em;
+    }
+    #db .b-article h2 em { font-style: italic; color: var(--accent); }
+    #db .b-article p + p { margin-top: 20px; }
+    #db .b-article em { font-family: var(--font-serif); font-style: italic; font-size: 18px; color: var(--ink); }
+    #db .b-article strong { font-weight: 500; color: var(--ink); }
+    #db .b-article h3 {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: 24px; color: var(--accent);
+      line-height: 1.2; letter-spacing: -0.01em;
+      margin: 36px 0 14px;
+    }
+
+    /* Figures — contained in subtle browser-chrome frames */
+    #db .b-figure { margin: 36px 0 32px; }
+    #db .b-figure-frame {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+      padding: 12px; box-shadow: 0 8px 24px rgba(26,22,18,0.06);
+    }
+    #db .b-figure-chrome { display: flex; gap: 6px; padding: 4px 4px 8px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+    #db .b-figure-chrome span { width: 8px; height: 8px; border-radius: 50%; background: var(--line-2); }
+    #db .b-figure img { width: 100%; height: auto; display: block; border-radius: 6px; }
+    #db .b-figure figcaption { font-size: 13px; font-style: italic; font-family: var(--font-serif); color: var(--muted); margin-top: 10px; padding: 0 6px; }
+
+    /* Compact — caps a low-resolution source image at its native size instead of stretching it full-width */
+    #db .b-figure-compact { max-width: 380px; margin-left: auto; margin-right: auto; }
+
+    /* Video — responsive 16:9 embed in place of a static image */
+    #db .b-figure-video { position: relative; width: 100%; padding-top: 56.25%; border-radius: 6px; overflow: hidden; background: var(--bg-3); }
+    #db .b-figure-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+    /* MVP / extras lists */
+    #db .b-reqs { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 28px 0; }
+    #db .b-reqs h4 { font-family: var(--font-serif); font-style: italic; font-size: 18px; color: var(--ink); margin-bottom: 10px; }
+    #db .b-reqs ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    #db .b-reqs li { font-size: 15px; padding-left: 18px; position: relative; }
+    #db .b-reqs li::before { content: '—'; position: absolute; left: 0; color: var(--accent); }
+
+    /* Gap cards — two-column */
+    #db .b-gaps {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+      margin: 32px 0; max-width: 600px;
+    }
+    #db .b-gap-card {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+      padding: 28px 24px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    #db .b-gap-card .num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 22px; }
+    #db .b-gap-card h4 { font-family: var(--font-serif); font-size: 22px; font-weight: 400; line-height: 1.15; }
+    #db .b-gap-card p { font-size: 14px; line-height: 1.55; color: var(--muted); }
+
+    /* Reflection — italic editorial */
+    #db .b-reflection { margin: 80px 0 0; padding: 56px 0; border-top: 1px solid var(--line); }
+    #db .b-reflection-mark { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 16px; margin-bottom: 16px; }
+    #db .b-reflection p { font-family: var(--font-serif); font-size: 28px; font-style: italic; line-height: 1.3; max-width: 600px; }
+    #db .b-reflection .note { font-family: var(--font-sans); font-size: 15px; font-style: normal; color: var(--muted); margin-top: 20px; max-width: 600px; line-height: 1.6; }
+
+    /* Footer */
+    #db .b-footer {
+      max-width: 1320px; margin: 0 auto;
+      padding: 96px 56px 64px;
+      border-top: 1px solid var(--line);
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 56px; align-items: center;
+    }
+    #db .b-footer-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 12px; }
+    #db .b-footer-title { font-family: var(--font-serif); font-size: 56px; line-height: 1; font-weight: 400; letter-spacing: -0.02em; }
+    #db .b-footer-title em { font-style: italic; color: var(--accent); }
+    #db .b-footer-img { height: 200px; }
+
+    /* ═══════════════ Responsive ═══════════════ */
+    @media (max-width: 1100px) {
+      #db .b-body { grid-template-columns: 1fr; gap: 32px; padding: 48px 32px 80px; }
+      #db .b-toc { position: static; padding-bottom: 28px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+      #db .b-toc-list { columns: 2; column-gap: 24px; }
+    }
+
+    @media (max-width: 900px) {
+      #db .b-hero { padding: 80px 32px 48px; }
+      #db .b-cover { padding: 0 32px; }
+    }
+
+    @media (max-width: 700px) {
+      #db .b-top { padding: 16px 20px; }
+      #db .b-top-name { font-size: 16px; }
+      #db .b-top-back span { display: none; }
+      #db .b-top-nav { gap: 14px; font-size: 10px; }
+
+      #db .b-hero { padding: 56px 20px 40px; }
+      #db .b-hero-eyebrow { font-size: 16px; margin-bottom: 16px; }
+      #db .b-hero h1 { margin-bottom: 24px; }
+      #db .b-hero-sub { font-size: 18px; }
+
+      #db .b-cover { padding: 0 20px; }
+
+      #db .b-meta { grid-template-columns: repeat(2, 1fr); padding: 24px 20px; gap: 20px 16px; margin-top: 40px; }
+
+      #db .b-body { padding: 40px 20px 64px; }
+      #db .b-toc-list { columns: 1; }
+      #db .b-article h2 { font-size: 32px; }
+      #db .b-article section + section { margin-top: 64px; }
+
+      #db .b-reqs { grid-template-columns: 1fr; gap: 20px; }
+
+      #db .b-gaps { grid-template-columns: 1fr; max-width: 100%; }
+
+      #db .b-reflection p { font-size: 22px; }
+
+      #db .b-footer { grid-template-columns: 1fr; gap: 28px; padding: 64px 20px 48px; }
+      #db .b-footer-title { font-size: 36px; }
+      #db .b-footer-img { height: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════
+     VARIANT B — BALANCED (Dino Studio)
+     ══════════════════════════════════════════════════════════════ -->
+<section id="db">
+
+  <header class="b-top">
+    <a class="b-top-back" href="#">← <span>Index</span></a>
+    <a class="b-top-name" href="#"><em>Farzaneh Falakrou</em></a>
+    <nav class="b-top-nav">
+      <a href="#">Work</a><a href="#">About</a><a href="#">Notes</a>
+    </nav>
+  </header>
+
+  <section class="b-hero">
+    <div class="b-hero-eyebrow">Case study · Dino Studio · 2026</div>
+    <h1>A museum's worth of dinosaur data. One scroll to explore <em>all</em> of it.</h1>
+    <p class="b-hero-sub">A six-week team project to turn a dense National History Museum dataset into a single-page app that's as informative for a paleontology student as it is fun for a curious kid — without the data ever feeling like a spreadsheet.</p>
+  </section>
+
+  <div class="b-cover">
+    <img src="../visuals/dino-cover.png" alt="Dino Studio shown on desktop and mobile — latest news, search, and world map" style="width: 100%; height: auto; display: block; border-radius: 8px;">
+  </div>
+
+  <section class="b-meta">
+    <div><div class="b-meta-label">Role</div><div class="b-meta-value">Lead Designer (sole designer)</div></div>
+    <div><div class="b-meta-label">Team</div><div class="b-meta-value">4 developers + 1 voyage guide</div></div>
+    <div><div class="b-meta-label">Timeline</div><div class="b-meta-value">6-week Chingu voyage</div></div>
+    <div><div class="b-meta-label">Type</div><div class="b-meta-value">Team project</div></div>
+  </section>
+
+  <div class="b-body">
+    <aside class="b-toc">
+      <div class="b-toc-label">Contents</div>
+      <ol class="b-toc-list">
+        <li class="active"><a href="#db-problem"><span class="num">01</span> The problem</a></li>
+        <li><a href="#db-audit"><span class="num">02</span> Competitive audit</a></li>
+        <li><a href="#db-strategy"><span class="num">03</span> Strategy</a></li>
+        <li><a href="#db-ia"><span class="num">04</span> Information architecture</a></li>
+        <li><a href="#db-testing"><span class="num">05</span> Usability testing</a></li>
+        <li><a href="#db-technical"><span class="num">06</span> Technical problems</a></li>
+        <li><a href="#db-result"><span class="num">07</span> High-fidelity &amp; result</a></li>
+        <li><a href="#db-gaps"><span class="num">08</span> Gaps and limitations</a></li>
+        <li><a href="#db-conclusion"><span class="num">09</span> Conclusion</a></li>
+      </ol>
+    </aside>
+
+    <article class="b-article">
+
+      <section>
+        <div class="b-section-mark" id="db-problem"><span class="num">01</span><span class="label">The problem</span></div>
+        <h2>A dataset this large is easy to make <em>overwhelming</em>.</h2>
+        <p>The brief was to turn a National History Museum dataset — hundreds of dinosaurs, their diet, habitat, taxonomy, and discovery history — into a single-page web app people would actually want to explore. The hard part wasn't the content, it was the volume: presenting that much information in a way that stayed informative <em>and</em> entertaining, stayed responsive across devices, and didn't fall over under its own data.</p>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="db-audit"><span class="num">02</span><span class="label">Competitive audit</span></div>
+        <p>I reviewed the two obvious references — National Geographic Kids and Dinosaur Database — to see how they handled the same kind of content. Both leaned heavily into a children's audience: bright, saturated colors and animated dinosaur illustrations.</p>
+        <p>That didn't match what we had to work with. Our dataset came with its own illustrations, and they were far more serious in tone — detailed, black-and-white, closer to a museum plate than a cartoon. Rather than force the dataset into a kids'-app look, I designed for <strong>both audiences at once</strong>: keeping the serious illustrations, and pairing them with a bright, pastel palette that kept the app approachable without undercutting the material.</p>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="db-strategy"><span class="num">03</span><span class="label">Strategy</span></div>
+        <h2>Six weeks. <em>One</em> MoSCoW board.</h2>
+        <p>With six weeks on the clock, the team moved straight into gathering and prioritizing requirements using MoSCoW — there wasn't room to explore every possible feature, only the ones that mattered most.</p>
+
+        <figure class="b-figure">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="../visuals/dino-moscow.png" alt="MoSCoW prioritization board — Must have, Should have, Could have, and Won't have sticky notes for Dino Studio features">
+          </div>
+          <figcaption>Must, Should, Could, Won't — the requirements board that shaped the six sprints.</figcaption>
+        </figure>
+
+        <p><strong>Must have:</strong> search component, diet chart, dinosaur display, interactive dinosaur gallery, accessibility features, location map, type chart.<br>
+        <strong>Should have:</strong> dinosaur details view, advanced search filters, a responsive experience across devices.<br>
+        <strong>Could have:</strong> community forums, news about recent dinosaur discoveries.<br>
+        <strong>Won't have (this round):</strong> comprehensive educational modules, social sharing integration, gamification elements like badges and leaderboards.</p>
+
+        <p>That prioritization set the shape of six sprints: kickoff and a shared vision statement, then defining MVP priority features; setting up the backlog, low-fidelity wireframes, and the team's GitHub workflow; three sprints of design, development, and testing before deploying to production; and a final sprint to close out the project and fix last-minute bugs.</p>
+
+        <p>Every design decision after this point had to serve the Must-have list first — the tone decision from the audit became the throughline that let a search bar, a world map, a taxonomy tree, and a news feed all read as one coherent product instead of five bolted-together features.</p>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="db-ia"><span class="num">04</span><span class="label">Information architecture</span></div>
+        <p>I sketched low-fidelity wireframes and user stories early, before any visual design, to pin down the core flows — searching or filtering by name, country, weight, diet, and length; browsing dinosaurs by location on a world map; and drilling into a single dinosaur's full detail view. Getting this structure agreed with the team first meant the later visual and technical work had a stable shape to build against.</p>
+
+        <figure class="b-figure">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="../visuals/dino-lofi.png" alt="Low-fidelity wireframes and hand-drawn user flows for search, filtering, and the world map">
+          </div>
+          <figcaption>Low-fidelity sketches — pinning down search, filters, and the map before any visual design.</figcaption>
+        </figure>
+
+        <p>To move quickly against the deadline, I used Google Looker Studio to rapidly prototype how the dataset's diet and type breakdowns could be visualized. It let me show the team a working version of the charts almost immediately, which kick-started the rest of the interactive dashboard.</p>
+
+        <figure class="b-figure">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <div class="b-figure-video">
+              <iframe src="https://player.vimeo.com/video/959470985?badge=0&amp;autopause=0&amp;quality_selector=1&amp;player_id=0&amp;app_id=58479&amp;autoplay=1&amp;loop=1&amp;controls=0" title="Looker Studio prototype of the dinosaur diet and type distribution charts" frameborder="0" allow="autoplay; picture-in-picture" sandbox="allow-same-origin allow-scripts allow-pointer-lock allow-forms"></iframe>
+            </div>
+          </div>
+          <figcaption>Diet and type breakdowns, prototyped in Looker Studio before being built into the app.</figcaption>
+        </figure>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="db-testing"><span class="num">05</span><span class="label">Usability testing</span></div>
+        <p>I ran two rounds of usability testing with five potential users, refining the design between rounds based on their feedback. It's worth being upfront that this was lighter-touch than later projects: no formal metrics were tracked, and the sessions were used mainly to catch confusing flows and adjust layout and hierarchy before locking the high-fidelity design.</p>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="db-technical"><span class="num">06</span><span class="label">Technical problems</span></div>
+        <h2>Simplify until it's <em>legible</em>.</h2>
+
+        <h3>1. Taxonomy visualization</h3>
+        <p>The taxonomy data was more complex than expected — rendered in full, it produced a very deep evolutionary tree that would have overwhelmed rather than informed the user. Instead of showing the whole tree for every dinosaur, I simplified the visualization to highlight only the branches relevant to the dinosaur currently selected.</p>
+
+        <figure class="b-figure">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="../visuals/dino-taxonomy.gif" alt="Simplified taxonomy tree highlighting only the branches relevant to the selected dinosaur">
+          </div>
+          <figcaption>The taxonomy tree simplified to the branches relevant to the selected dinosaur.</figcaption>
+        </figure>
+
+        <h3>2. Map visualization</h3>
+        <p>The dataset only recorded country-level location data. A literal pin per dinosaur would have piled multiple dinosaurs on top of each other in the same country, making individual dinosaurs impossible to select. I used a choropleth map instead — highlighting the density of dinosaurs per country — paired with a scrolling carousel listing the dinosaurs themselves, a simple way to pick one without needing a precise pin to click.</p>
+
+        <figure class="b-figure">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="../visuals/dino-map.gif" alt="Choropleth map showing dinosaur density by country, with a scrolling carousel for selecting individual dinosaurs">
+          </div>
+          <figcaption>Country-level density on the map, with a scrolling carousel to select an individual dinosaur.</figcaption>
+        </figure>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="db-result"><span class="num">07</span><span class="label">High-fidelity &amp; result</span></div>
+        <h2>Everything, on <em>one</em> scroll.</h2>
+        <p>After two rounds of usability testing and iterative refinement of the main issues, I moved to the high-fidelity design and the team built and shipped it.</p>
+        <p>Dino Studio shipped as a single-page, all-in-one learning tool for dinosaur enthusiasts of any age — search, map, taxonomy, and detail views, plus a news feed, all reachable by scrolling rather than navigating between pages. Interactive modules cover dinosaur history, evolution, habitat, and taxonomy without ever asking the user to leave the page they landed on.</p>
+
+        <figure class="b-figure">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="../visuals/dino-result.png" alt="Full shipped page — news feed, search and map, charts, and the dinosaur detail view in one continuous scroll">
+          </div>
+          <figcaption>The shipped page, top to bottom — news, search and map, charts, and detail view in one scroll.</figcaption>
+        </figure>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="db-gaps"><span class="num">08</span><span class="label">Gaps and limitations</span></div>
+
+        <div class="b-gaps">
+          <div class="b-gap-card">
+            <div class="num">Gap 01</div>
+            <h4>Content freshness.</h4>
+            <p>The site launched with a fixed dataset and a placeholder news feed. Keeping the app relevant over time would mean regularly adding new content — blog posts, educational articles, quizzes — rather than treating launch as the finish line.</p>
+          </div>
+          <div class="b-gap-card">
+            <div class="num">Gap 02</div>
+            <h4>No personalization.</h4>
+            <p>Every visitor sees the same experience regardless of what they've searched or viewed before. Tailoring content and features to a visitor's interactions and preferences remains an open direction the six-week timeline didn't allow for.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="b-reflection" id="db-conclusion">
+        <div class="b-reflection-mark">09 · Conclusion</div>
+        <p>Dino Studio proves that a genuinely large, serious dataset doesn't have to be traded off against being approachable.</p>
+        <p class="note">The hardest part was never the content itself — it was presenting a vast amount of information on a single page without overwhelming the user, and building interactive visualizations, like the map and the charts, that stayed easy to interpret as the data got denser. Solving that taught me how to visualize complex data and design a dashboard that presents many things at once, and how to adapt quickly when a first solution — a full taxonomy tree, a pin-per-dinosaur map — didn't hold up against how complex the data actually was.</p>
+      </section>
+
+    </article>
+  </div>
+
+  <footer class="b-footer">
+    <div>
+      <div class="b-footer-eyebrow">Next case study</div>
+      <h3 class="b-footer-title">Real estate listings bury buyers in <em>information</em>.</h3>
+    </div>
+    <div class="img-cream-2 b-footer-img">Homelon · Real Estate · 2026</div>
+  </footer>
+</section>
+
+<script>
+  // Scrollspy: highlight the TOC item for the last section whose marker has passed the offset line.
+  (function () {
+    const tocLinks = [...document.querySelectorAll('a[href^="#db-"]')];
+    if (!tocLinks.length) return;
+    const targets = tocLinks
+      .map(a => ({ link: a, el: document.getElementById(a.getAttribute('href').slice(1)) }))
+      .filter(t => t.el);
+    const OFFSET = 140;
+    let ticking = false;
+    function update() {
+      ticking = false;
+      let current = targets[0];
+      for (const t of targets) {
+        if (t.el.getBoundingClientRect().top <= OFFSET) current = t;
+        else break;
+      }
+      tocLinks.forEach(a => a.closest('li').classList.toggle('active', a === current.link));
+    }
+    function onScroll() {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  })();
+</script>
+
+</body>
+</html>
