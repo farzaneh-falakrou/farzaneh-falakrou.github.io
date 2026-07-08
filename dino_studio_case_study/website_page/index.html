@@ -302,14 +302,14 @@
 
       <section>
         <div class="b-section-mark" id="db-audit"><span class="num">02</span><span class="label">Competitive audit</span></div>
-        <p>I reviewed the two obvious references — National Geographic Kids and Dinosaur Database — to see how they handled the same kind of content. Both leaned heavily into a children's audience: bright, saturated colors and animated dinosaur illustrations.</p>
-        <p>That didn't match what we had to work with. Our dataset came with its own illustrations, and they were far more serious in tone — detailed, black-and-white, closer to a museum plate than a cartoon. Rather than force the dataset into a kids'-app look, I designed for <strong>both audiences at once</strong>: keeping the serious illustrations, and pairing them with a bright, pastel palette that kept the app approachable without undercutting the material.</p>
+        <p>I reviewed two references: <strong>National Geographic Kids</strong>, built for casual browsing — bright cards, games, and videos, but no search, no habitat or taxonomy detail, no sense of where a species actually lived. And <strong>Dinosaur Database</strong>, built as a research tool — real search and filters by period, region, diet, and type, plus an interactive globe, but no designed visual identity.</p>
+        <p>That gap became the brief: I committed to the structure Dinosaur Database proved mattered — search, a location map, and diet and type charts.</p>
       </section>
 
       <section>
         <div class="b-section-mark" id="db-strategy"><span class="num">03</span><span class="label">Strategy</span></div>
         <h2>Six weeks. <em>One</em> MoSCoW board.</h2>
-        <p>With six weeks on the clock, the team moved straight into gathering and prioritizing requirements using MoSCoW — there wasn't room to explore every possible feature, only the ones that mattered most.</p>
+        <p>Based on the competitive analysis and the MVP goals, we prioritized the product requirements using the MoSCoW framework. Since there wasn't enough time to implement every possible feature, we focused on the ones that delivered the most value.</p>
 
         <figure class="b-figure">
           <div class="b-figure-frame">
@@ -319,26 +319,36 @@
           <figcaption>Must, Should, Could, Won't — the requirements board that shaped the six sprints.</figcaption>
         </figure>
 
-        <p><strong>Must have:</strong> search component, diet chart, dinosaur display, interactive dinosaur gallery, accessibility features, location map, type chart.<br>
-        <strong>Should have:</strong> dinosaur details view, advanced search filters, a responsive experience across devices.<br>
-        <strong>Could have:</strong> community forums, news about recent dinosaur discoveries.<br>
-        <strong>Won't have (this round):</strong> comprehensive educational modules, social sharing integration, gamification elements like badges and leaderboards.</p>
+        <p>This prioritization shaped the project's six sprints. We began with project kickoff and establishing a shared vision statement, followed by defining the MVP and prioritizing key features. Next, we set up the product backlog, created low-fidelity wireframes, and established the team's GitHub workflow. The following three sprints focused on design, development, testing, and deployment to production. The final sprint was dedicated to project wrap-up, bug fixes, and final refinements before launch.</p>
 
-        <p>That prioritization set the shape of six sprints: kickoff and a shared vision statement, then defining MVP priority features; setting up the backlog, low-fidelity wireframes, and the team's GitHub workflow; three sprints of design, development, and testing before deploying to production; and a final sprint to close out the project and fix last-minute bugs.</p>
-
-        <p>Every design decision after this point had to serve the Must-have list first — the tone decision from the audit became the throughline that let a search bar, a world map, a taxonomy tree, and a news feed all read as one coherent product instead of five bolted-together features.</p>
       </section>
 
       <section>
         <div class="b-section-mark" id="db-ia"><span class="num">04</span><span class="label">Information architecture</span></div>
         <p>I sketched low-fidelity wireframes and user stories early, before any visual design, to pin down the core flows — searching or filtering by name, country, weight, diet, and length; browsing dinosaurs by location on a world map; and drilling into a single dinosaur's full detail view. Getting this structure agreed with the team first meant the later visual and technical work had a stable shape to build against.</p>
 
-        <figure class="b-figure">
+        <figure class="b-figure b-figure-compact">
           <div class="b-figure-frame">
             <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-            <img src="../visuals/dino-lofi.png" alt="Low-fidelity wireframes and hand-drawn user flows for search, filtering, and the world map">
+            <img src="../visuals/dino-user-story-01.png" alt="Hand-drawn wireframe of an interactive world map with a search panel, pinned to a user story about discovery locations">
           </div>
-          <figcaption>Low-fidelity sketches — pinning down search, filters, and the map before any visual design.</figcaption>
+          <figcaption>"As a user, I can explore an interactive map displaying the locations where dinosaurs have been discovered."</figcaption>
+        </figure>
+
+        <figure class="b-figure b-figure-compact">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="../visuals/dino-user-story-02.png" alt="Hand-drawn wireframe of toggleable diet and type charts, pinned to a user story about visualizing distributions">
+          </div>
+          <figcaption>"As user, I can toggle between different charts to visualize the distribution of dinosaur diets and types."</figcaption>
+        </figure>
+
+        <figure class="b-figure b-figure-compact">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="../visuals/dino-user-story-03.png" alt="Hand-drawn wireframe of a news feed layout, pinned to a user story about recent dinosaur discoveries">
+          </div>
+          <figcaption>"As a user, I want to follow news about recent dinosaur discoveries to stay updated with the latest in paleontology."</figcaption>
         </figure>
 
         <p>To move quickly against the deadline, I used Google Looker Studio to rapidly prototype how the dataset's diet and type breakdowns could be visualized. It let me show the team a working version of the charts almost immediately, which kick-started the rest of the interactive dashboard.</p>
