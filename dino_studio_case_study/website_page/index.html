@@ -156,6 +156,27 @@
 
     /* Compact — caps a low-resolution source image at its native size instead of stretching it full-width */
     #db .b-figure-compact { max-width: 380px; margin-left: auto; margin-right: auto; }
+    #db .b-figure-row { display: flex; gap: 20px; margin: 36px 0 32px; }
+    #db .b-figure-row .b-figure { flex: 1; margin: 0; min-width: 0; }
+    @media (max-width: 640px) { #db .b-figure-row { flex-direction: column; } }
+
+    /* Annotated figures — image + editable text callouts connected by leader lines.
+       The browser-chrome frame wraps only the image; notes live outside it as plain text. */
+    #db .b-annotated { margin: 36px 0 32px; }
+    #db .b-annotated-row { display: flex; align-items: stretch; gap: 24px; }
+    #db .b-annotated-img { flex: 1 1 auto; min-width: 0; position: relative; }
+    #db .b-annotated-img .b-figure-frame { margin: 0; }
+    #db .b-annotated-notes { position: relative; flex: 0 0 auto; width: 190px; }
+    #db .b-note { position: absolute; left: 0; right: 0; transform: translateY(-50%); display: flex; align-items: center; gap: 8px; }
+    #db .b-note-line { flex: 0 0 16px; height: 1px; background: var(--line-2); position: relative; }
+    #db .b-note-line::before { content: ''; position: absolute; left: -1px; top: -2px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+    #db .b-note-text { font-size: 12px; line-height: 1.4; color: var(--muted); }
+    #db .b-annotated figcaption { font-size: 13px; font-style: italic; font-family: var(--font-serif); color: var(--muted); margin-top: 16px; padding: 0 6px; }
+    @media (max-width: 640px) {
+      #db .b-annotated-row { flex-direction: column; }
+      #db .b-annotated-notes { width: 100%; min-height: 0; }
+      #db .b-note { position: static; transform: none; padding: 6px 0; }
+    }
 
     /* Video — responsive 16:9 embed in place of a static image */
     #db .b-figure-video { position: relative; width: 100%; padding-top: 56.25%; border-radius: 6px; overflow: hidden; background: var(--bg-3); }
@@ -283,12 +304,13 @@
         <li class="active"><a href="#db-problem"><span class="num">01</span> The problem</a></li>
         <li><a href="#db-audit"><span class="num">02</span> Competitive audit</a></li>
         <li><a href="#db-strategy"><span class="num">03</span> Strategy</a></li>
-        <li><a href="#db-ia"><span class="num">04</span> Information architecture</a></li>
-        <li><a href="#db-testing"><span class="num">05</span> Usability testing</a></li>
-        <li><a href="#db-technical"><span class="num">06</span> Technical problems</a></li>
-        <li><a href="#db-result"><span class="num">07</span> High-fidelity &amp; result</a></li>
-        <li><a href="#db-gaps"><span class="num">08</span> Gaps and limitations</a></li>
-        <li><a href="#db-conclusion"><span class="num">09</span> Conclusion</a></li>
+        <li><a href="#db-ia"><span class="num">04</span> Wireframes &amp; user stories</a></li>
+        <li><a href="#db-prototyping"><span class="num">05</span> Prototyping</a></li>
+        <li><a href="#db-testing"><span class="num">06</span> Usability testing</a></li>
+        <li><a href="#db-technical"><span class="num">07</span> Technical problems</a></li>
+        <li><a href="#db-result"><span class="num">08</span> High-fidelity &amp; result</a></li>
+        <li><a href="#db-gaps"><span class="num">09</span> Gaps and limitations</a></li>
+        <li><a href="#db-conclusion"><span class="num">10</span> Conclusion</a></li>
       </ol>
     </aside>
 
@@ -324,33 +346,30 @@
       </section>
 
       <section>
-        <div class="b-section-mark" id="db-ia"><span class="num">04</span><span class="label">Information architecture</span></div>
+        <div class="b-section-mark" id="db-ia"><span class="num">04</span><span class="label">Wireframes &amp; user stories</span></div>
         <p>I sketched low-fidelity wireframes and user stories early, before any visual design, to pin down the core flows — searching or filtering by name, country, weight, diet, and length; browsing dinosaurs by location on a world map; and drilling into a single dinosaur's full detail view. Getting this structure agreed with the team first meant the later visual and technical work had a stable shape to build against.</p>
 
-        <figure class="b-figure b-figure-compact">
-          <div class="b-figure-frame">
-            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-            <img src="../visuals/dino-user-story-01.png" alt="Hand-drawn wireframe of an interactive world map with a search panel, pinned to a user story about discovery locations">
-          </div>
-          <figcaption>"As a user, I can explore an interactive map displaying the locations where dinosaurs have been discovered."</figcaption>
-        </figure>
+        <div class="b-figure-row">
+          <figure class="b-figure">
+            <div class="b-figure-frame">
+              <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+              <img src="../visuals/dino-user-story-01.png" alt="Hand-drawn wireframe of an interactive world map with a search panel, pinned to a user story about discovery locations">
+            </div>
+            <figcaption>"As a user, I can explore an interactive map displaying the locations where dinosaurs have been discovered."</figcaption>
+          </figure>
 
-        <figure class="b-figure b-figure-compact">
-          <div class="b-figure-frame">
-            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-            <img src="../visuals/dino-user-story-02.png" alt="Hand-drawn wireframe of toggleable diet and type charts, pinned to a user story about visualizing distributions">
-          </div>
-          <figcaption>"As user, I can toggle between different charts to visualize the distribution of dinosaur diets and types."</figcaption>
-        </figure>
+          <figure class="b-figure">
+            <div class="b-figure-frame">
+              <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+              <img src="../visuals/dino-user-story-02.png" alt="Hand-drawn wireframe of toggleable diet and type charts, pinned to a user story about visualizing distributions">
+            </div>
+            <figcaption>"As user, I can toggle between different charts to visualize the distribution of dinosaur diets and types."</figcaption>
+          </figure>
+        </div>
+      </section>
 
-        <figure class="b-figure b-figure-compact">
-          <div class="b-figure-frame">
-            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-            <img src="../visuals/dino-user-story-03.png" alt="Hand-drawn wireframe of a news feed layout, pinned to a user story about recent dinosaur discoveries">
-          </div>
-          <figcaption>"As a user, I want to follow news about recent dinosaur discoveries to stay updated with the latest in paleontology."</figcaption>
-        </figure>
-
+      <section>
+        <div class="b-section-mark" id="db-prototyping"><span class="num">05</span><span class="label">Prototyping</span></div>
         <p>To move quickly against the deadline, I used Google Looker Studio to rapidly prototype how the dataset's diet and type breakdowns could be visualized. It let me show the team a working version of the charts almost immediately, which kick-started the rest of the interactive dashboard.</p>
 
         <figure class="b-figure">
@@ -365,12 +384,63 @@
       </section>
 
       <section>
-        <div class="b-section-mark" id="db-testing"><span class="num">05</span><span class="label">Usability testing</span></div>
+        <div class="b-section-mark" id="db-testing"><span class="num">06</span><span class="label">Usability testing</span></div>
         <p>I ran two rounds of usability testing with five potential users, refining the design between rounds based on their feedback. It's worth being upfront that this was lighter-touch than later projects: no formal metrics were tracked, and the sessions were used mainly to catch confusing flows and adjust layout and hierarchy before locking the high-fidelity design.</p>
+
+        <figure class="b-figure b-annotated">
+          <div class="b-annotated-row">
+            <div class="b-annotated-img">
+              <div class="b-figure-frame">
+                <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+                <img src="../visuals/dino-usability-01.png" alt="First-round usability testing wireframe of the search and dinosaur detail flows">
+              </div>
+            </div>
+            <div class="b-annotated-notes">
+              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.03)"><span class="b-note-line"></span><span class="b-note-text">The navigation menu blends into the page header, making it hard to see.</span></div>
+              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.25)"><span class="b-note-line"></span><span class="b-note-text">The search button isn't clearly labelled (e.g. "Submit").</span></div>
+              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.69)"><span class="b-note-line"></span><span class="b-note-text">The details section is text-heavy and overwhelming.</span></div>
+              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.85)"><span class="b-note-line"></span><span class="b-note-text">In the detail view, the left column is too empty while the right side has too much information.</span></div>
+            </div>
+          </div>
+          <figcaption>First round — the search button lacked a clear label, and the detail page felt text-heavy and unbalanced.</figcaption>
+        </figure>
+
+        <figure class="b-figure b-annotated">
+          <div class="b-annotated-row">
+            <div class="b-annotated-img">
+              <div class="b-figure-frame">
+                <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+                <img src="../visuals/dino-usability-02.png" alt="Second-round usability testing wireframe of the homepage, map, and search flows">
+              </div>
+            </div>
+            <div class="b-annotated-notes">
+              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.02)"><span class="b-note-line"></span><span class="b-note-text">There's no way to access favourited dinosaurs once they're saved.</span></div>
+              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.76)"><span class="b-note-line"></span><span class="b-note-text">It's difficult to choose an individual dinosaur from the map.</span></div>
+              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.88)"><span class="b-note-line"></span><span class="b-note-text">The map lacks a zoom feature to explore it interactively.</span></div>
+              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.94)"><span class="b-note-line"></span><span class="b-note-text">It's unclear what the "Show Charts" button does.</span></div>
+            </div>
+          </div>
+          <figcaption>Second round — favourited dinosaurs had no way to be revisited, and it was hard to pick an individual dinosaur from the map.</figcaption>
+        </figure>
+
+        <figure class="b-figure b-annotated">
+          <div class="b-annotated-row">
+            <div class="b-annotated-img">
+              <div class="b-figure-frame">
+                <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+                <img src="../visuals/dino-usability-03.png" alt="Dinosaur detail page wireframe showing the taxonomy tree and detail panel layout">
+              </div>
+            </div>
+            <div class="b-annotated-notes">
+              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.5)"><span class="b-note-line"></span><span class="b-note-text">The detail view appears once a user selects a dinosaur from the list or search.</span></div>
+            </div>
+          </div>
+          <figcaption>Clarifying when the dinosaur detail view appears.</figcaption>
+        </figure>
       </section>
 
       <section>
-        <div class="b-section-mark" id="db-technical"><span class="num">06</span><span class="label">Technical problems</span></div>
+        <div class="b-section-mark" id="db-technical"><span class="num">07</span><span class="label">Technical problems</span></div>
         <h2>Simplify until it's <em>legible</em>.</h2>
 
         <h3>1. Taxonomy visualization</h3>
@@ -397,7 +467,7 @@
       </section>
 
       <section>
-        <div class="b-section-mark" id="db-result"><span class="num">07</span><span class="label">High-fidelity &amp; result</span></div>
+        <div class="b-section-mark" id="db-result"><span class="num">08</span><span class="label">High-fidelity &amp; result</span></div>
         <h2>Everything, on <em>one</em> scroll.</h2>
         <p>After two rounds of usability testing and iterative refinement of the main issues, I moved to the high-fidelity design and the team built and shipped it.</p>
         <p>Dino Studio shipped as a single-page, all-in-one learning tool for dinosaur enthusiasts of any age — search, map, taxonomy, and detail views, plus a news feed, all reachable by scrolling rather than navigating between pages. Interactive modules cover dinosaur history, evolution, habitat, and taxonomy without ever asking the user to leave the page they landed on.</p>
@@ -412,7 +482,7 @@
       </section>
 
       <section>
-        <div class="b-section-mark" id="db-gaps"><span class="num">08</span><span class="label">Gaps and limitations</span></div>
+        <div class="b-section-mark" id="db-gaps"><span class="num">09</span><span class="label">Gaps and limitations</span></div>
 
         <div class="b-gaps">
           <div class="b-gap-card">
