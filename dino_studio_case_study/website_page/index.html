@@ -166,11 +166,11 @@
     #db .b-annotated-row { display: flex; align-items: stretch; gap: 24px; }
     #db .b-annotated-img { flex: 1 1 auto; min-width: 0; position: relative; }
     #db .b-annotated-img .b-figure-frame { margin: 0; }
-    #db .b-annotated-notes { position: relative; flex: 0 0 auto; width: 190px; }
+    #db .b-annotated-notes { position: relative; flex: 0 0 auto; width: 210px; }
     #db .b-note { position: absolute; left: 0; right: 0; transform: translateY(-50%); display: flex; align-items: center; gap: 8px; }
-    #db .b-note-line { flex: 0 0 16px; height: 1px; background: var(--line-2); position: relative; }
-    #db .b-note-line::before { content: ''; position: absolute; left: -1px; top: -2px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
-    #db .b-note-text { font-size: 12px; line-height: 1.4; color: var(--muted); }
+    #db .b-note-line { flex: 0 0 16px; height: 0; border-top: 1px solid var(--line-2); position: relative; }
+    #db .b-note-line::before { content: ''; position: absolute; left: -2px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--accent); }
+    #db .b-note-text { font-family: var(--font-serif); font-style: italic; font-size: 13px; line-height: 1.4; color: var(--muted); }
     #db .b-annotated figcaption { font-size: 13px; font-style: italic; font-family: var(--font-serif); color: var(--muted); margin-top: 16px; padding: 0 6px; }
     @media (max-width: 640px) {
       #db .b-annotated-row { flex-direction: column; }
@@ -287,7 +287,7 @@
   </section>
 
   <div class="b-cover">
-    <img src="../visuals/dino-cover.png" alt="Dino Studio shown on desktop and mobile — latest news, search, and world map" style="width: 100%; height: auto; display: block; border-radius: 8px;">
+    <img src="../visuals/dino-cover-devices.png" alt="Dino Studio shown on desktop and mobile — latest news, search, and world map" style="width: 100%; height: auto; display: block; border-radius: 8px;">
   </div>
 
   <section class="b-meta">
@@ -472,10 +472,21 @@
         <p>After two rounds of usability testing and iterative refinement of the main issues, I moved to the high-fidelity design and the team built and shipped it.</p>
         <p>Dino Studio shipped as a single-page, all-in-one learning tool for dinosaur enthusiasts of any age — search, map, taxonomy, and detail views, plus a news feed, all reachable by scrolling rather than navigating between pages. Interactive modules cover dinosaur history, evolution, habitat, and taxonomy without ever asking the user to leave the page they landed on.</p>
 
-        <figure class="b-figure">
-          <div class="b-figure-frame">
-            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-            <img src="../visuals/dino-result.png" alt="Full shipped page — news feed, search and map, charts, and the dinosaur detail view in one continuous scroll">
+        <figure class="b-figure b-annotated">
+          <div class="b-annotated-row">
+            <div class="b-annotated-img">
+              <div class="b-figure-frame">
+                <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+                <img src="../visuals/dino-result.png" alt="Full shipped page — news feed, search and map, charts, and the dinosaur detail view in one continuous scroll">
+              </div>
+            </div>
+            <div class="b-annotated-notes">
+              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.02)"><span class="b-note-line"></span><span class="b-note-text">Introduced a "Favourite" button in the nav, so users can access their saved dinosaurs.</span></div>
+              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.49)"><span class="b-note-line"></span><span class="b-note-text">Adapted the map into a choropleth, showing dinosaur density per country and syncing with the filters and list.</span></div>
+              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.59)"><span class="b-note-line"></span><span class="b-note-text">Added a scrollable dinosaur list for quickly picking one without hunting on the map.</span></div>
+              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.76)"><span class="b-note-line"></span><span class="b-note-text">Detail view appears once a dinosaur is selected from the list or search.</span></div>
+              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.89)"><span class="b-note-line"></span><span class="b-note-text">Taxonomy is shown as a tree chart for the selected dinosaur.</span></div>
+            </div>
           </div>
           <figcaption>The shipped page, top to bottom — news, search and map, charts, and detail view in one scroll.</figcaption>
         </figure>
