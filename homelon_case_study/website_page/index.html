@@ -27,7 +27,7 @@
       --font-sans:  'Inter', system-ui, sans-serif;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { width: 100%; overflow-x: hidden; }
+    body { width: 100%; }
     body {
       font-family: var(--font-sans);
       background: var(--bg);
@@ -392,8 +392,8 @@
         <li class="active"><a href="#hb-problem"><span class="num">01</span> The problem</a></li>
         <li><a href="#hb-audit"><span class="num">02</span> Competitive audit</a></li>
         <li><a href="#hb-stories"><span class="num">03</span> User stories</a></li>
-        <li><a href="#hb-flows"><span class="num">04</span> User flows</a></li>
-        <li><a href="#hb-strategy"><span class="num">05</span> Strategy</a></li>
+        <li><a href="#hb-strategy"><span class="num">04</span> Strategy</a></li>
+        <li><a href="#hb-flows"><span class="num">05</span> User flows</a></li>
         <li><a href="#hb-decisions"><span class="num">06</span> Design decisions</a></li>
         <li><a href="#hb-screens"><span class="num">07</span> The screens</a></li>
         <li><a href="#hb-gaps"><span class="num">08</span> Gaps and limitations</a></li>
@@ -415,7 +415,7 @@
 
         <figure class="b-figure b-figure-wide">
           <img src="../visuals/homelon-competitive-analysis.png" alt="Annotated audit of Trulia, a saved-listings app, and a saved-homes app, highlighting map filters, save/compare affordances, and listing card patterns">
-          <figcaption>Annotating map search, saved listings, and the compare affordance across the three apps audited.</figcaption>
+          <figcaption>The three apps audited, annotated.</figcaption>
         </figure>
       </section>
 
@@ -424,29 +424,28 @@
         <p>From the user stories I was given, I prioritized the ones most critical to the real estate use case, using the competitive audit to judge relevance.</p>
 
         <div class="b-stories">
-          <div class="b-story-card"><div class="b-story-avatar"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4 20c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg></div><div class="num">01</div><p>As a user, I want to create a profile containing all my <strong>property criteria</strong>, so that I get recommended results most relevant to me.</p></div>
-          <div class="b-story-card"><div class="b-story-avatar"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4 20c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg></div><div class="num">02</div><p>As a user, I want to be able to <strong>search</strong> &amp; <strong>filter properties</strong>, so that I can find good matches based on my needs.</p></div>
-          <div class="b-story-card"><div class="b-story-avatar"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4 20c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg></div><div class="num">03</div><p>As a user, I want to be able to save or <strong>mark properties</strong> I am interested in, so that I can easily revisit them.</p></div>
-          <div class="b-story-card"><div class="b-story-avatar"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4 20c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg></div><div class="num">04</div><p>As a user, I want to see how well a property meets my criteria or <strong>compares to other properties</strong>, so that I can refine my options.</p></div>
-          <div class="b-story-card"><div class="b-story-avatar"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4 20c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg></div><div class="num">05</div><p>As a user, I want to be able to <strong>contact</strong> the right people if I am interested in viewing a property, so that I can schedule a viewing.</p></div>
+          <div class="b-story-card"><div class="b-story-avatar"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4 20c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg></div><div class="num">01</div><p>As a user, I want to <strong>search</strong> &amp; <strong>filter properties</strong>, so that I can find good matches based on my needs.</p></div>
+          <div class="b-story-card"><div class="b-story-avatar"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4 20c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg></div><div class="num">02</div><p>As a user, I want to save or <strong>mark properties</strong> I am interested in, so that I can easily revisit them.</p></div>
+          <div class="b-story-card"><div class="b-story-avatar"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4 20c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg></div><div class="num">03</div><p>As a user, I want to <strong>compare properties</strong> side by side, so that I can refine my options.</p></div>
+          <div class="b-story-card"><div class="b-story-avatar"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4 20c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg></div><div class="num">04</div><p>As a user, I want to <strong>contact</strong> the right people, so that I can schedule a viewing.</p></div>
         </div>
       </section>
 
       <section>
-        <div class="b-section-mark" id="hb-flows"><span class="num">04</span><span class="label">User flows</span></div>
+        <div class="b-section-mark" id="hb-strategy"><span class="num">04</span><span class="label">Strategy</span></div>
+        <h2>Not more listings. <em>Better comparison.</em></h2>
+        <p>Adding more filters or denser listings would only add to the noise this project set out to cut through. What a buyer actually needs when choosing between two similar properties isn't another search refinement — it's the ability to hold both properties side by side and see where they differ.</p>
+        <p>That reframes the design problem: the job isn't to show more information, it's to help a buyer make an <strong>informed, financially confident decision</strong> by simplifying how listings are presented and compared. Every screen decision that follows — from the onboarding flow down to the comparison table — is in service of that one idea.</p>
+      </section>
+
+      <section>
+        <div class="b-section-mark" id="hb-flows"><span class="num">05</span><span class="label">User flows</span></div>
         <p>After learning about what users need and studying the competition, the main features for the app became clear. Using this understanding, I created user flows to map out the steps users need to take to reach their goals. To make it easier to spot the key features of the app, I've used a light green color to highlight them.</p>
 
         <figure class="b-figure b-figure-wide">
           <img src="../visuals/homelon-userflows.svg" alt="User flow diagram mapping search, save, compare, and contact-agent paths, with key features highlighted in green">
-          <figcaption>Search, save, compare, and contact — mapped end to end, with the features that matter most in green.</figcaption>
+          <figcaption>The four flows, mapped end to end.</figcaption>
         </figure>
-      </section>
-
-      <section>
-        <div class="b-section-mark" id="hb-strategy"><span class="num">05</span><span class="label">Strategy</span></div>
-        <h2>Not more listings. <em>Better comparison.</em></h2>
-        <p>Adding more filters or denser listings would only add to the noise this project set out to cut through. What a buyer actually needs when choosing between two similar properties isn't another search refinement — it's the ability to hold both properties side by side and see where they differ.</p>
-        <p>That reframes the design problem: the job isn't to show more information, it's to help a buyer make an <strong>informed, financially confident decision</strong> by simplifying how listings are presented and compared. Every screen decision that follows — from the onboarding flow down to the comparison table — is in service of that one idea.</p>
       </section>
 
       <section>
@@ -454,11 +453,11 @@
         <h2>What each screen had to <em>prove</em>.</h2>
 
         <h3>Wireframes to high-fidelity</h3>
-        <p>Low-fidelity wireframes established core functionality first. Mid-fidelity passes tested layout, visual hierarchy, and spacing before I locked the style guide and moved to high-fidelity screens.</p>
+        <p>Based on the user flow, I started with low-fidelity wireframes to nail down the app's fundamental functionality. Mid-fidelity passes then tested layout, visual hierarchy, and spacing. From there, I defined the style guide and moved into high-fidelity screens.</p>
 
         <figure class="b-figure b-figure-wide">
           <img src="../visuals/homelon-wireframes.png" alt="Property detail screen progressing from a hand-drawn low-fidelity sketch, to a greyscale mid-fidelity layout, to the final high-fidelity Berlin Retreat screen">
-          <figcaption>Low to high fidelity, one screen at a time — sketch, layout, then the real content and imagery.</figcaption>
+          <figcaption>Sketch to final screen.</figcaption>
         </figure>
 
         <h3>Watermelon palette</h3>
@@ -466,7 +465,7 @@
 
         <figure class="b-figure b-figure-wide">
           <img src="../visuals/homelon-colors.png" alt="Homelon colour palette: Sea Turtle Green, Coral Red, white, and charcoal as primary colours, with Aqua Squeeze, Misty Rose, light grey, and star dust as supporting tints">
-          <figcaption>Primary colours and their supporting tints, with the hex and RGB values locked for implementation.</figcaption>
+          <figcaption>Palette and tints, with values locked for implementation.</figcaption>
         </figure>
 
         <h3>Rounded, consistent, real</h3>
@@ -485,7 +484,7 @@
               </div>
             </div>
           </div>
-          <figcaption>The style guide in context — watermelon palette and rounded corners carried through the dashboard.</figcaption>
+          <figcaption>The style guide in context.</figcaption>
         </figure>
 
         <h3>One mark, two lockups</h3>
@@ -496,7 +495,7 @@
             <img src="../visuals/homelon-logo-icon.png" alt="Compact icon-only mark, sized to a 32px grid, for use inside the app">
             <img src="../visuals/homelon-logo-wordmark.png" alt="Full wordmark lockup at 144px, for the website and tablet">
           </div>
-          <figcaption>The compact icon mark for the app, and the full wordmark for the website and tablet.</figcaption>
+          <figcaption>Icon mark and wordmark.</figcaption>
         </figure>
       </section>
 
