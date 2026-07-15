@@ -28,8 +28,7 @@
       --font-sans:  'Inter', system-ui, sans-serif;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { overflow-x: hidden; }
-    body { width: 100%; overflow-x: hidden; }
+    body { width: 100%; }
     body {
       font-family: var(--font-sans);
       background: var(--bg);
@@ -87,7 +86,7 @@
 
     #hb .b-cover-body { display: flex; justify-content: center; }
 
-    /* Hero cover — search and map screens on laptop and tablet */
+    /* Hero cover — search and map screens on laptop, tablet, and iPhone */
     #hb .b-cover-image { width: 100%; max-width: 1100px; height: auto; display: block; }
 
     /* iPhone frame — devices.css (picturepan2/devices.css, MIT), scaled to fit our layout */
@@ -176,7 +175,7 @@
     #hb .b-toc-list .num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 14px; }
     #hb .b-section-mark, #hb .b-reflection { scroll-margin-top: 80px; }
 
-    #hb .b-article { font-size: 17px; line-height: 1.7; color: var(--ink-2); max-width: 720px; }
+    #hb .b-article { font-size: 17px; line-height: 1.7; color: var(--ink-2); max-width: 720px; overflow-x: hidden; }
     #hb .b-section-mark { display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px; }
     #hb .b-section-mark .num { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 18px; }
     #hb .b-section-mark .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); border-top: 1px solid var(--ink); padding-top: 6px; }
@@ -224,6 +223,7 @@
 
     /* Wide process artifacts — finished graphics (wireframes, colour grid, competitive audit), not phone screens */
     #hb .b-figure-wide img { width: 100%; height: auto; display: block; border-radius: 10px; }
+    #hb .b-figure-wide img.b-moodboard-img { border-top-left-radius: 0; }
 
     /* Logo spec — two tightly-cropped groups (in-app sizes, website/tablet sizes) side by side instead of one sprawling sheet */
     #hb .b-logo-spec { display: flex; align-items: center; gap: 40px; }
@@ -371,7 +371,7 @@
 
   <div class="b-cover">
     <div class="b-cover-body">
-      <img class="b-cover-image" src="../visuals/homelon-laptop-tablet.png" alt="Homelon search and map screens shown on laptop and tablet">
+      <img class="b-cover-image" src="../visuals/homelon-laptop-tablet-phone.png" alt="Homelon search and map screens shown on laptop, tablet, and iPhone">
     </div>
   </div>
 
@@ -460,7 +460,7 @@
         <p>The moodboard set the emotional target before any interface work started — Coral/Watermelon Red for energy and ambition, Sea Turtle Green for stability and growth, and Charcoal for professionalism. Every colour and shape decision that followed traces back to this board.</p>
 
         <figure class="b-figure b-figure-wide">
-          <img src="../visuals/homelon-moodboard.png" alt="Homelon moodboard — watermelon-inspired imagery pairing coral red, sea turtle green, and charcoal with natural, homely photography">
+          <img class="b-moodboard-img" src="../visuals/homelon-moodboard.png" alt="Homelon moodboard — watermelon-inspired imagery pairing coral red, sea turtle green, and charcoal with natural, homely photography">
           <figcaption>The moodboard behind the palette.</figcaption>
         </figure>
 
@@ -614,13 +614,13 @@
         <div class="b-gaps">
           <div class="b-gap-card">
             <div class="num">Gap 01</div>
-            <h4>No usability testing.</h4>
-            <p>The short project timeline meant focus stayed on UI design; no usability testing was conducted. Testing with users of varying abilities and disabilities — including accessibility-focused testing — remains the clearest next step before this design could be validated with real buyers.</p>
+            <h4>Challenges</h4>
+            <p>The project's duration was short, requiring me to focus primarily on the UI aspect of the app. Despite being given the user research, I conducted additional research into competitor apps and user flow — vital for a thorough understanding of requirements and for refining the UI to meet the project's needs.</p>
           </div>
           <div class="b-gap-card">
             <div class="num">Gap 02</div>
-            <h4>Research handed off without competitive context.</h4>
-            <p>Competitive positioning wasn't part of the original research scope, so the competitive audit and user-flow prioritization were self-directed rather than handed to me ready-made. This filled the gap for this project, but a fuller research phase would strengthen future iterations.</p>
+            <h4>Future Steps</h4>
+            <p>I plan to conduct usability testing with people of varying abilities and disabilities, which can provide valuable insight into the experience for a diverse range of users. I'd also design icons that align with the watermelon theme, similar to the location pin, to further emphasize the app's branding.</p>
           </div>
         </div>
       </section>
