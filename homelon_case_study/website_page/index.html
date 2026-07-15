@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devices.css@0.2.0/dist/devices.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   <style>
     :root {
       --bg:        #ebe8e2;
@@ -95,6 +96,50 @@
     #hb .phone-mock--grid { width: 195px; height: 395px; }
     #hb .phone-mock--grid .device { transform: scale(0.4556); }
 
+    /* Coverflow phone gallery — flat screenshot cards slide coverflow-style;
+       the bezel is a separate fixed overlay with a transparent screen hole,
+       so only whichever card is centered appears to sit inside a real phone. */
+    #hb .phone-mock--hero { width: 220px; height: 446px; }
+    #hb .phone-mock--hero .device { transform: scale(0.5140); }
+    #hb .phone-slider { margin: 36px 0 32px; }
+    #hb .phone-coverflow-wrap { position: relative; }
+    #hb .phone-coverflow { width: 100%; padding: 40px 0; overflow: visible; }
+    #hb .phone-coverflow .swiper-slide { width: 193px; display: flex; justify-content: center; }
+    #hb .phone-slide-img {
+      width: 193px; height: 417px; object-fit: cover; object-position: top;
+      border-radius: 20px; display: block;
+      box-shadow: 0 16px 30px rgba(26,22,18,0.2);
+    }
+    #hb .phone-bezel-overlay {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      z-index: 3; pointer-events: none;
+    }
+    #hb .phone-bezel-overlay .device-screen { background: transparent; }
+    /* A transparent child only reveals its opaque parent's own background —
+       to truly punch the screen area out of the bezel we mask the frame
+       itself down to a ring (border-box minus content-box). */
+    #hb .phone-bezel-overlay .device-frame {
+      -webkit-mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+      -webkit-mask-clip: border-box, content-box;
+      -webkit-mask-composite: xor;
+      mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+      mask-clip: border-box, content-box;
+      mask-composite: exclude;
+    }
+    #hb .phone-slider-nav {
+      flex: 0 0 40px; width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+      display: grid; place-items: center; cursor: pointer; font-size: 16px;
+      box-shadow: 0 4px 10px rgba(26,22,18,0.06); transition: background 0.15s, color 0.15s;
+    }
+    #hb .phone-slider-nav:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    #hb .phone-slider-nav.swiper-button-disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+    #hb .phone-slider-controls { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 4px; }
+    #hb .phone-slider-caption { font-size: 13px; font-style: italic; font-family: var(--font-serif); color: var(--muted); text-align: center; min-height: 18px; }
+    #hb .phone-slider .swiper-pagination { position: static; margin-top: 14px; display: flex; justify-content: center; gap: 6px; }
+    #hb .phone-slider .swiper-pagination-bullet { width: 6px; height: 6px; background: var(--line); opacity: 1; margin: 0; }
+    #hb .phone-slider .swiper-pagination-bullet-active { background: var(--accent); }
+
     /* Metadata strip — 4 fields (Role, Team, Timeline, Type) */
     #hb .b-meta {
       max-width: 1320px; margin: 64px auto 0;
@@ -161,6 +206,18 @@
     }
     #hb .b-figure-grid .b-figure { flex: 0 0 auto; margin: 0; width: 195px; }
     #hb .b-figure-grid .b-figure figcaption { padding: 0; }
+
+    /* Carousel variant — stays within the 720px text column instead of breaking out, and scrolls horizontally when there are more screens than fit */
+    #hb .b-figure-carousel {
+      width: 100%; margin-left: 0; margin-right: 0;
+      justify-content: flex-start; flex-wrap: nowrap;
+      overflow-x: auto; scroll-snap-type: x proximity;
+      padding-bottom: 14px; scrollbar-width: thin;
+    }
+    #hb .b-figure-carousel .b-figure { scroll-snap-align: start; }
+    #hb .b-figure-carousel::-webkit-scrollbar { height: 6px; }
+    #hb .b-figure-carousel::-webkit-scrollbar-track { background: transparent; }
+    #hb .b-figure-carousel::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
 
     /* Wide process artifacts — finished graphics (wireframes, colour grid, competitive audit), not phone screens */
     #hb .b-figure-wide img { width: 100%; height: auto; display: block; border-radius: 10px; }
@@ -443,7 +500,7 @@
         <p>Buttons, inputs, toggles, and tabs all round to the same corner radius as the icons and logo, so no control on screen reads like it was borrowed from a different design system.</p>
 
         <figure class="b-figure b-figure-wide">
-          <img src="../visuals/homelon-ui-elements.png" alt="Homelon UI kit — buttons, inputs, toggles, checkboxes, tabs, sliders, dropdowns, and listing cards, all sharing rounded corners">
+          <img src="../visuals/homelon-ui-elements.png" alt="Homelon UI kit — buttons, top bars, tabs, steppers, toggles, checkboxes, range sliders, inputs, dropdowns, and search bars, all sharing rounded corners">
           <figcaption>Buttons, inputs, and cards, one shared corner radius.</figcaption>
         </figure>
       </section>
@@ -452,187 +509,99 @@
         <div class="b-section-mark" id="hb-screens"><span class="num">07</span><span class="label">The screens</span></div>
         <h2>Comparison, <em>close</em> at hand.</h2>
 
-        <h3>Onboarding to search</h3>
-        <p>A short onboarding flow introduces the app before dropping the buyer into search. From there, users see both listings and a map on the same screen — scrolling listings with a swipe-up gesture, or tapping into the map to search visually. A hamburger menu and filter controls sit alongside search so buyers can narrow results without leaving the flow.</p>
+        <h3>Search</h3>
+        <p>From the search screen, users see both listings and a map on the same screen — scrolling through listings with a swipe-up gesture or tapping into the map to search visually. A hamburger menu and filter controls sit alongside the search so buyers can narrow results without leaving the flow.</p>
 
-        <div class="b-figure-grid">
-          <figure class="b-figure">
-            <div class="b-figure-body">
-              <div class="phone-mock phone-mock--grid">
-                <div class="device device-iphone-x">
-                  <div class="device-frame"><img class="device-screen" src="../visuals/homelon-onboarding.png" alt="Homelon onboarding screen"></div>
-                  <div class="device-stripe"></div>
-                  <div class="device-header"></div>
-                  <div class="device-sensors"></div>
-                  <div class="device-btns"></div>
-                  <div class="device-power"></div>
-                </div>
+        <div class="phone-slider" data-phone-slider>
+          <div class="phone-coverflow-wrap">
+            <div class="swiper phone-coverflow">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide"><img class="phone-slide-img" src="../visuals/homelon-onboarding.png" alt="Homelon onboarding screen" data-caption="Onboarding."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="../visuals/homelon-search.png" alt="Homelon search screen with listings and map" data-caption="Search — listings and map in one view."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="../visuals/homelon-menu.png" alt="Homelon hamburger menu" data-caption="Navigation menu."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="../visuals/homelon-filter.png" alt="Homelon filter screen" data-caption="Filter controls alongside search."></div>
               </div>
             </div>
-            <figcaption>Onboarding.</figcaption>
-          </figure>
-          <figure class="b-figure">
-            <div class="b-figure-body">
-              <div class="phone-mock phone-mock--grid">
-                <div class="device device-iphone-x">
-                  <div class="device-frame"><img class="device-screen" src="../visuals/homelon-search.png" alt="Homelon search screen with listings and map"></div>
-                  <div class="device-stripe"></div>
-                  <div class="device-header"></div>
-                  <div class="device-sensors"></div>
-                  <div class="device-btns"></div>
-                  <div class="device-power"></div>
-                </div>
+            <div class="phone-mock phone-mock--hero phone-bezel-overlay" aria-hidden="true">
+              <div class="device device-iphone-x">
+                <div class="device-frame"><div class="device-screen"></div></div>
+                <div class="device-stripe"></div>
+                <div class="device-header"></div>
+                <div class="device-sensors"></div>
+                <div class="device-btns"></div>
+                <div class="device-power"></div>
               </div>
             </div>
-            <figcaption>Search — listings and map in one view.</figcaption>
-          </figure>
-          <figure class="b-figure">
-            <div class="b-figure-body">
-              <div class="phone-mock phone-mock--grid">
-                <div class="device device-iphone-x">
-                  <div class="device-frame"><img class="device-screen" src="../visuals/homelon-menu.png" alt="Homelon hamburger menu"></div>
-                  <div class="device-stripe"></div>
-                  <div class="device-header"></div>
-                  <div class="device-sensors"></div>
-                  <div class="device-btns"></div>
-                  <div class="device-power"></div>
-                </div>
-              </div>
-            </div>
-            <figcaption>Navigation menu.</figcaption>
-          </figure>
-          <figure class="b-figure">
-            <div class="b-figure-body">
-              <div class="phone-mock phone-mock--grid">
-                <div class="device device-iphone-x">
-                  <div class="device-frame"><img class="device-screen" src="../visuals/homelon-filter.png" alt="Homelon filter screen"></div>
-                  <div class="device-stripe"></div>
-                  <div class="device-header"></div>
-                  <div class="device-sensors"></div>
-                  <div class="device-btns"></div>
-                  <div class="device-power"></div>
-                </div>
-              </div>
-            </div>
-            <figcaption>Filter controls alongside search.</figcaption>
-          </figure>
+          </div>
+          <div class="phone-slider-controls">
+            <button type="button" class="phone-slider-nav" data-slider-prev aria-label="Previous screen">‹</button>
+            <div class="swiper-pagination"></div>
+            <button type="button" class="phone-slider-nav" data-slider-next aria-label="Next screen">›</button>
+          </div>
+          <p class="phone-slider-caption" data-slider-caption>Onboarding.</p>
         </div>
 
         <h3>Favourite &amp; Compare</h3>
         <p>Saved listings aren't just a bookmark list. Selecting properties in Favourites drops the buyer into a multi-select mode — pick two or more, then compare them directly, across size, build year, and local factors like schools, shops, and traffic. Tabs for About, Energy, and Cost let the comparison go deeper on demand. This is the app's core decision-making tool: instead of holding two listings in memory while scrolling back and forth, the buyer sees them side by side.</p>
 
-        <div class="b-figure-grid">
-          <figure class="b-figure">
-            <div class="b-figure-body">
-              <div class="phone-mock phone-mock--grid">
-                <div class="device device-iphone-x">
-                  <div class="device-frame"><img class="device-screen" src="../visuals/homelon-favourites.png" alt="Homelon favourites screen with saved listings"></div>
-                  <div class="device-stripe"></div>
-                  <div class="device-header"></div>
-                  <div class="device-sensors"></div>
-                  <div class="device-btns"></div>
-                  <div class="device-power"></div>
-                </div>
+        <div class="phone-slider" data-phone-slider>
+          <div class="phone-coverflow-wrap">
+            <div class="swiper phone-coverflow">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide"><img class="phone-slide-img" src="../visuals/homelon-favourites.png" alt="Homelon favourites screen with saved listings" data-caption="Saved listings."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="../visuals/homelon-compare-01.png" alt="Homelon favourites screen in multi-select mode, no properties chosen yet" data-caption="Entering multi-select to compare."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="../visuals/homelon-compare-02.png" alt="Homelon favourites screen with two properties selected, ready to compare" data-caption="Two properties selected."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="../visuals/homelon-compare-03.png" alt="Homelon comparison screen showing two properties side by side across size, build year, bedrooms, schools, shops, and traffic" data-caption="The comparison itself."></div>
               </div>
             </div>
-            <figcaption>Saved listings.</figcaption>
-          </figure>
-          <figure class="b-figure">
-            <div class="b-figure-body">
-              <div class="phone-mock phone-mock--grid">
-                <div class="device device-iphone-x">
-                  <div class="device-frame"><img class="device-screen" src="../visuals/homelon-compare-01.png" alt="Homelon favourites screen in multi-select mode, no properties chosen yet"></div>
-                  <div class="device-stripe"></div>
-                  <div class="device-header"></div>
-                  <div class="device-sensors"></div>
-                  <div class="device-btns"></div>
-                  <div class="device-power"></div>
-                </div>
+            <div class="phone-mock phone-mock--hero phone-bezel-overlay" aria-hidden="true">
+              <div class="device device-iphone-x">
+                <div class="device-frame"><div class="device-screen"></div></div>
+                <div class="device-stripe"></div>
+                <div class="device-header"></div>
+                <div class="device-sensors"></div>
+                <div class="device-btns"></div>
+                <div class="device-power"></div>
               </div>
             </div>
-            <figcaption>Entering multi-select to compare.</figcaption>
-          </figure>
-          <figure class="b-figure">
-            <div class="b-figure-body">
-              <div class="phone-mock phone-mock--grid">
-                <div class="device device-iphone-x">
-                  <div class="device-frame"><img class="device-screen" src="../visuals/homelon-compare-02.png" alt="Homelon favourites screen with two properties selected, ready to compare"></div>
-                  <div class="device-stripe"></div>
-                  <div class="device-header"></div>
-                  <div class="device-sensors"></div>
-                  <div class="device-btns"></div>
-                  <div class="device-power"></div>
-                </div>
-              </div>
-            </div>
-            <figcaption>Two properties selected.</figcaption>
-          </figure>
-          <figure class="b-figure">
-            <div class="b-figure-body">
-              <div class="phone-mock phone-mock--grid">
-                <div class="device device-iphone-x">
-                  <div class="device-frame"><img class="device-screen" src="../visuals/homelon-compare-03.png" alt="Homelon comparison screen showing two properties side by side across size, build year, bedrooms, schools, shops, and traffic"></div>
-                  <div class="device-stripe"></div>
-                  <div class="device-header"></div>
-                  <div class="device-sensors"></div>
-                  <div class="device-btns"></div>
-                  <div class="device-power"></div>
-                </div>
-              </div>
-            </div>
-            <figcaption>The comparison itself.</figcaption>
-          </figure>
+          </div>
+          <div class="phone-slider-controls">
+            <button type="button" class="phone-slider-nav" data-slider-prev aria-label="Previous screen">‹</button>
+            <div class="swiper-pagination"></div>
+            <button type="button" class="phone-slider-nav" data-slider-next aria-label="Next screen">›</button>
+          </div>
+          <p class="phone-slider-caption" data-slider-caption>Saved listings.</p>
         </div>
 
         <h3>Property Info &amp; Contacts</h3>
         <p>The property detail screen surfaces everything — visual and written — a buyer needs to decide and act, with a direct path to contacting an agent and a confirmation once that message is sent.</p>
 
-        <div class="b-figure-grid">
-          <figure class="b-figure">
-            <div class="b-figure-body">
-              <div class="phone-mock phone-mock--grid">
-                <div class="device device-iphone-x">
-                  <div class="device-frame"><img class="device-screen" src="../visuals/homelon-property-info.png" alt="Homelon property detail screen"></div>
-                  <div class="device-stripe"></div>
-                  <div class="device-header"></div>
-                  <div class="device-sensors"></div>
-                  <div class="device-btns"></div>
-                  <div class="device-power"></div>
-                </div>
+        <div class="phone-slider" data-phone-slider>
+          <div class="phone-coverflow-wrap">
+            <div class="swiper phone-coverflow">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide"><img class="phone-slide-img" src="../visuals/homelon-property-info.png" alt="Homelon property detail screen" data-caption="Property details."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="../visuals/homelon-send-message.png" alt="Homelon send message to agent screen" data-caption="Contacting the agent."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="../visuals/homelon-confirmation.png" alt="Homelon confirmation screen after sending a message" data-caption="Confirmation once sent."></div>
               </div>
             </div>
-            <figcaption>Property details.</figcaption>
-          </figure>
-          <figure class="b-figure">
-            <div class="b-figure-body">
-              <div class="phone-mock phone-mock--grid">
-                <div class="device device-iphone-x">
-                  <div class="device-frame"><img class="device-screen" src="../visuals/homelon-send-message.png" alt="Homelon send message to agent screen"></div>
-                  <div class="device-stripe"></div>
-                  <div class="device-header"></div>
-                  <div class="device-sensors"></div>
-                  <div class="device-btns"></div>
-                  <div class="device-power"></div>
-                </div>
+            <div class="phone-mock phone-mock--hero phone-bezel-overlay" aria-hidden="true">
+              <div class="device device-iphone-x">
+                <div class="device-frame"><div class="device-screen"></div></div>
+                <div class="device-stripe"></div>
+                <div class="device-header"></div>
+                <div class="device-sensors"></div>
+                <div class="device-btns"></div>
+                <div class="device-power"></div>
               </div>
             </div>
-            <figcaption>Contacting the agent.</figcaption>
-          </figure>
-          <figure class="b-figure">
-            <div class="b-figure-body">
-              <div class="phone-mock phone-mock--grid">
-                <div class="device device-iphone-x">
-                  <div class="device-frame"><img class="device-screen" src="../visuals/homelon-confirmation.png" alt="Homelon confirmation screen after sending a message"></div>
-                  <div class="device-stripe"></div>
-                  <div class="device-header"></div>
-                  <div class="device-sensors"></div>
-                  <div class="device-btns"></div>
-                  <div class="device-power"></div>
-                </div>
-              </div>
-            </div>
-            <figcaption>Confirmation once sent.</figcaption>
-          </figure>
+          </div>
+          <div class="phone-slider-controls">
+            <button type="button" class="phone-slider-nav" data-slider-prev aria-label="Previous screen">‹</button>
+            <div class="swiper-pagination"></div>
+            <button type="button" class="phone-slider-nav" data-slider-next aria-label="Next screen">›</button>
+          </div>
+          <p class="phone-slider-caption" data-slider-caption>Property details.</p>
         </div>
       </section>
 
@@ -671,7 +640,36 @@
   </footer>
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
+  // Coverflow phone gallery: only the centered screen sits inside the phone
+  // bezel (a fixed overlay with a transparent screen hole); the rest peek at
+  // the sides via Swiper's coverflow effect, iPod-gallery style.
+  (function () {
+    document.querySelectorAll('[data-phone-slider]').forEach(function (root) {
+      const caption = root.querySelector('[data-slider-caption]');
+      const swiper = new Swiper(root.querySelector('.phone-coverflow'), {
+        effect: 'coverflow',
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        speed: 450,
+        coverflowEffect: { rotate: 32, stretch: 0, depth: 180, modifier: 1, slideShadows: false },
+        pagination: { el: root.querySelector('.swiper-pagination'), clickable: true },
+        navigation: {
+          nextEl: root.querySelector('[data-slider-next]'),
+          prevEl: root.querySelector('[data-slider-prev]'),
+        },
+        on: {
+          slideChangeTransitionStart: function (sw) {
+            const img = sw.slides[sw.activeIndex].querySelector('img');
+            if (img && caption) caption.textContent = img.dataset.caption;
+          },
+        },
+      });
+    });
+  })();
+
   // Scrollspy: highlight the TOC item for the last section whose marker has passed the offset line.
   // (Distance-based rather than IntersectionObserver so short sections between tall ones never get skipped.)
   (function () {
