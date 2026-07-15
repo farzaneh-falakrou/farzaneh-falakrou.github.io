@@ -83,30 +83,15 @@
       padding: 0 56px;
     }
 
-    #hb .b-cover-body { display: flex; justify-content: center; padding: 40px 16px; }
+    #hb .b-cover-body { display: flex; justify-content: center; }
 
-    /* Hero collage — three screens telling the search → compare → decide story */
-    #hb .b-cover-collage { position: relative; display: flex; align-items: center; justify-content: center; }
-    #hb .b-cover-glow {
-      position: absolute; z-index: 0; left: 50%; top: 50%;
-      width: 620px; height: 620px; transform: translate(-50%, -50%);
-      background: radial-gradient(ellipse at center, var(--accent-soft) 0%, transparent 68%);
-      opacity: 0.8; filter: blur(6px);
-    }
-    #hb .collage-item { position: relative; }
-    #hb .collage-main { z-index: 2; }
-    #hb .collage-side { z-index: 1; opacity: 0.94; }
-    #hb .collage-left { margin-right: -66px; transform: rotate(-9deg) translateY(18px); }
-    #hb .collage-right { margin-left: -66px; transform: rotate(9deg) translateY(18px); }
+    /* Hero cover — search and map screens on laptop and tablet */
+    #hb .b-cover-image { width: 100%; max-width: 1100px; height: auto; display: block; }
 
     /* iPhone frame — devices.css (picturepan2/devices.css, MIT), scaled to fit our layout */
     #hb .phone-mock { position: relative; overflow: hidden; display: inline-block; filter: drop-shadow(0 20px 40px rgba(26,22,18,0.25)); }
     #hb .phone-mock .device { transform-origin: top left; }
     #hb .device-iphone-x .device-screen { object-fit: cover; object-position: top; }
-    #hb .phone-mock--cover { width: 296px; height: 600px; }
-    #hb .phone-mock--cover .device { transform: scale(0.6912); }
-    #hb .phone-mock--side { width: 227px; height: 460px; }
-    #hb .phone-mock--side .device { transform: scale(0.5300); }
     #hb .phone-mock--grid { width: 195px; height: 395px; }
     #hb .phone-mock--grid .device { transform: scale(0.4556); }
 
@@ -268,12 +253,6 @@
       #hb .b-hero-sub { font-size: 18px; }
 
       #hb .b-cover { padding: 0 20px; }
-      #hb .phone-mock--cover { width: 210px; height: 426px; }
-      #hb .phone-mock--cover .device { transform: scale(0.4907); }
-      #hb .phone-mock--side { width: 150px; height: 304px; }
-      #hb .phone-mock--side .device { transform: scale(0.3505); }
-      #hb .collage-left { margin-right: -36px; }
-      #hb .collage-right { margin-left: -36px; }
 
       #hb .b-meta { grid-template-columns: repeat(2, 1fr); padding: 24px 20px; gap: 20px 16px; margin-top: 40px; }
 
@@ -303,10 +282,6 @@
     }
 
     @media (max-width: 420px) {
-      #hb .collage-side { display: none; }
-      #hb .collage-left, #hb .collage-right { margin: 0; }
-      #hb .phone-mock--cover { width: 190px; height: 386px; }
-      #hb .phone-mock--cover .device { transform: scale(0.4439); }
       #hb .b-meta { grid-template-columns: 1fr 1fr; }
       #hb .b-top-nav { display: none; }
       #hb .b-top-name { font-size: 15px; }
@@ -336,45 +311,7 @@
 
   <div class="b-cover">
     <div class="b-cover-body">
-      <div class="b-cover-collage">
-        <div class="b-cover-glow"></div>
-        <div class="collage-item collage-side collage-left">
-          <div class="phone-mock phone-mock--side">
-            <div class="device device-iphone-x">
-              <div class="device-frame"><img class="device-screen" src="../visuals/homelon-search.png" alt="Homelon search screen — listings and map in one view"></div>
-              <div class="device-stripe"></div>
-              <div class="device-header"></div>
-              <div class="device-sensors"></div>
-              <div class="device-btns"></div>
-              <div class="device-power"></div>
-            </div>
-          </div>
-        </div>
-        <div class="collage-item collage-main">
-          <div class="phone-mock phone-mock--cover">
-            <div class="device device-iphone-x">
-              <div class="device-frame"><img class="device-screen" src="../visuals/homelon-compare-03.png" alt="Homelon comparison screen — two properties compared side by side"></div>
-              <div class="device-stripe"></div>
-              <div class="device-header"></div>
-              <div class="device-sensors"></div>
-              <div class="device-btns"></div>
-              <div class="device-power"></div>
-            </div>
-          </div>
-        </div>
-        <div class="collage-item collage-side collage-right">
-          <div class="phone-mock phone-mock--side">
-            <div class="device device-iphone-x">
-              <div class="device-frame"><img class="device-screen" src="../visuals/homelon-property-info.png" alt="Homelon property detail screen"></div>
-              <div class="device-stripe"></div>
-              <div class="device-header"></div>
-              <div class="device-sensors"></div>
-              <div class="device-btns"></div>
-              <div class="device-power"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <img class="b-cover-image" src="../visuals/homelon-laptop-tablet.png" alt="Homelon search and map screens shown on laptop and tablet">
     </div>
   </div>
 
