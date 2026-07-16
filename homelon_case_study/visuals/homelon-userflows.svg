@@ -6,82 +6,82 @@
 </defs>
 <circle cx="80" cy="150" r="46" fill="#2E7D5E"/>
 <text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="13" font-weight="600" fill="#fff"><tspan x="80" y="154.55">Start</tspan></text>
-<path d="M126,150 L196,150" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<path d="M126,150 L196,150" fill="none" stroke="#8a8578" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="196" y="120" width="160" height="60" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="15" font-weight="400" fill="#1a1a1a"><tspan x="276" y="155.25">Landing page</tspan></text>
-<path d="M356,150 L388,150 Q400,150 400,138 L400,82 Q400,70 412,70 L430,70" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
-<path d="M356,150 L388,150 Q400,150 400,162 L400,218 Q400,230 412,230 L430,230" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="15" font-weight="600" fill="#1a1a1a"><tspan x="276" y="155.25">Landing page</tspan></text>
+<path d="M356,150 L388,150 Q400,150 400,138 L400,82 Q400,70 412,70 L430,70" fill="none" stroke="#8a8578" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<path d="M356,150 L388,150 Q400,150 400,162 L400,218 Q400,230 412,230 L430,230" fill="none" stroke="#8a8578" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="430" y="40" width="150" height="60" rx="10" fill="#C8E6C9" stroke="#8FAE90" stroke-width="2.2"/>
 <text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="15" font-weight="600" fill="#1a1a1a"><tspan x="505" y="75.25">Sign In</tspan></text>
 <rect x="430" y="200" width="150" height="60" rx="10" fill="#C8E6C9" stroke="#8FAE90" stroke-width="2.2"/>
 <text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="15" font-weight="600" fill="#1a1a1a"><tspan x="505" y="235.25">Sign Up</tspan></text>
-<rect x="610" y="20" width="380" height="392" rx="14" fill="none" stroke="#CCCCCC" stroke-width="2.2" stroke-dasharray="10 7"/>
+<rect x="610" y="20" width="380" height="392" rx="14" fill="#FBF7EF" stroke="#CCCCCC" stroke-width="2.2" stroke-dasharray="10 7"/>
 <text text-anchor="start" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="13" font-weight="600" fill="#ff5a36"><tspan x="656" y="49.05">Task: Ability to Filter Results</tspan></text>
 <rect x="656" y="85" width="140" height="64" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#1a1a1a"><tspan x="726" y="113.875">Setup Property</tspan><tspan x="726" y="128.875">Initial Preferences</tspan></text>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="600" fill="#1a1a1a"><tspan x="726" y="113.875">Setup Property</tspan><tspan x="726" y="128.875">Initial Preferences</tspan></text>
 <path d="M796,117 L824,117" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="824" y="92" width="120" height="50" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#1a1a1a"><tspan x="884" y="121.375">Buy or Rent</tspan></text>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="600" fill="#1a1a1a"><tspan x="884" y="121.375">Buy or Rent</tspan></text>
 <rect x="824" y="172" width="120" height="50" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#1a1a1a"><tspan x="884" y="201.375">Location</tspan></text>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="600" fill="#1a1a1a"><tspan x="884" y="201.375">Location</tspan></text>
 <path d="M884,142 L884,172" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="824" y="252" width="120" height="50" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#1a1a1a"><tspan x="884" y="281.375">Price Range</tspan></text>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="600" fill="#1a1a1a"><tspan x="884" y="281.375">Price Range</tspan></text>
 <path d="M884,222 L884,252" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="824" y="332" width="120" height="50" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#1a1a1a"><tspan x="884" y="361.375">Land/Unit size</tspan></text>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="600" fill="#1a1a1a"><tspan x="884" y="361.375">Land/Unit size</tspan></text>
 <path d="M884,302 L884,332" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <path d="M580,230 L590,230 Q600,230 600,220 L600,122 Q600,117 605,117 L610,117" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="1020" y="120" width="170" height="60" rx="10" fill="#fff" stroke="#8a8578" stroke-width="2.2"/>
 <text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="16" font-weight="700" fill="#1a1a1a"><tspan x="1105" y="155.6">Feed</tspan></text>
-<path d="M550,40 L550,22 Q550,10 562,10 L1093,10 Q1105,10 1105,22 L1105,120" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
-<path d="M990,60 L990,128 Q990,140 1002,140 L1020,140" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
-<path d="M1105,180 L1105,222" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<path d="M550,40 L550,22 Q550,10 562,10 L1093,10 Q1105,10 1105,22 L1105,120" fill="none" stroke="#8a8578" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<path d="M990,60 L990,128 Q990,140 1002,140 L1020,140" fill="none" stroke="#8a8578" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<path d="M1105,180 L1105,222" fill="none" stroke="#8a8578" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <text text-anchor="start" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="600" fill="#ff5a36"><tspan x="1125" y="204.625">Task: Ability to search for a property</tspan></text>
 <rect x="1020" y="236" width="170" height="60" rx="10" fill="#C8E6C9" stroke="#8FAE90" stroke-width="2.2"/>
 <text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="13.5" font-weight="600" fill="#1a1a1a"><tspan x="1105" y="270.725">Search by Location</tspan></text>
-<path d="M1105,296 L1105,326" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<path d="M1105,296 L1105,326" fill="none" stroke="#8a8578" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="1020" y="326" width="170" height="60" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="15" font-weight="400" fill="#1a1a1a"><tspan x="1105" y="361.25">Search Results</tspan></text>
-<path d="M1105,386 L1105,416" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="15" font-weight="600" fill="#1a1a1a"><tspan x="1105" y="361.25">Search Results</tspan></text>
+<path d="M1105,386 L1105,416" fill="none" stroke="#8a8578" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="1020" y="416" width="170" height="60" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="15" font-weight="400" fill="#1a1a1a"><tspan x="1105" y="451.25">Select Listing</tspan></text>
-<path d="M1105,476 L1105,506" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="15" font-weight="600" fill="#1a1a1a"><tspan x="1105" y="451.25">Select Listing</tspan></text>
+<path d="M1105,476 L1105,506" fill="none" stroke="#8a8578" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="1020" y="506" width="170" height="60" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="15" font-weight="400" fill="#1a1a1a"><tspan x="1105" y="541.25">View Info</tspan></text>
-<path d="M1105,566 L1105,596" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="15" font-weight="600" fill="#1a1a1a"><tspan x="1105" y="541.25">View Info</tspan></text>
+<path d="M1105,566 L1105,596" fill="none" stroke="#8a8578" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="1020" y="596" width="170" height="60" rx="10" fill="#C8E6C9" stroke="#8FAE90" stroke-width="2.2"/>
 <text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="13.5" font-weight="600" fill="#1a1a1a"><tspan x="1105" y="630.725">Save to Favourites</tspan></text>
 <text text-anchor="start" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="11.5" font-weight="600" fill="#ff5a36"><tspan x="1220" y="515.775">Task: Ability to contact</tspan><tspan x="1220" y="529.775">real estate professional</tspan></text>
 <path d="M1190,536 L1238,536 Q1250,536 1250,548 L1250,614 Q1250,626 1238,626 L1220,626" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="1220" y="596" width="170" height="60" rx="10" fill="#C8E6C9" stroke="#8FAE90" stroke-width="2.2"/>
 <text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="13.5" font-weight="600" fill="#1a1a1a"><tspan x="1305" y="630.725">Send a Message</tspan></text>
-<rect x="1020" y="726" width="380" height="458" rx="14" fill="none" stroke="#CCCCCC" stroke-width="2.2" stroke-dasharray="10 7"/>
+<rect x="1020" y="726" width="380" height="458" rx="14" fill="#FBF7EF" stroke="#CCCCCC" stroke-width="2.2" stroke-dasharray="10 7"/>
 <text text-anchor="start" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="11.5" font-weight="600" fill="#ff5a36"><tspan x="1032" y="753.775">Task: Setting up user sign-in</tspan><tspan x="1032" y="767.775">property preferences profile</tspan></text>
 <rect x="1135" y="784" width="150" height="50" rx="10" fill="#C8E6C9" stroke="#8FAE90" stroke-width="2.2"/>
 <text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="13.5" font-weight="600" fill="#1a1a1a"><tspan x="1210" y="813.725">Filter</tspan></text>
 <path d="M1210,834 L1210,864" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="1032" y="864" width="170" height="50" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#1a1a1a"><tspan x="1117" y="893.375">Buy or Rent</tspan></text>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="600" fill="#1a1a1a"><tspan x="1117" y="893.375">Buy or Rent</tspan></text>
 <rect x="1032" y="944" width="170" height="50" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#1a1a1a"><tspan x="1117" y="973.375">Property type</tspan></text>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="600" fill="#1a1a1a"><tspan x="1117" y="973.375">Property type</tspan></text>
 <path d="M1117,914 L1117,944" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <rect x="1032" y="1024" width="170" height="50" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#1a1a1a"><tspan x="1117" y="1053.375">Location</tspan></text>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="600" fill="#1a1a1a"><tspan x="1117" y="1053.375">Location</tspan></text>
 <path d="M1117,994 L1117,1024" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <rect x="1032" y="1104" width="170" height="50" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#1a1a1a"><tspan x="1117" y="1133.375">Price Range</tspan></text>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="600" fill="#1a1a1a"><tspan x="1117" y="1133.375">Price Range</tspan></text>
 <path d="M1117,1074 L1117,1104" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <rect x="1218" y="864" width="170" height="50" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#1a1a1a"><tspan x="1303" y="893.375">Land/Unit size</tspan></text>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="600" fill="#1a1a1a"><tspan x="1303" y="893.375">Land/Unit size</tspan></text>
 <rect x="1218" y="944" width="170" height="50" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="11.5" font-weight="400" fill="#1a1a1a"><tspan x="1303" y="973.025">Number of bedrooms</tspan></text>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="11.5" font-weight="600" fill="#1a1a1a"><tspan x="1303" y="973.025">Number of bedrooms</tspan></text>
 <path d="M1303,914 L1303,944" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <rect x="1218" y="1024" width="170" height="50" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="11.5" font-weight="400" fill="#1a1a1a"><tspan x="1303" y="1053.025">Current availability</tspan></text>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="11.5" font-weight="600" fill="#1a1a1a"><tspan x="1303" y="1053.025">Current availability</tspan></text>
 <path d="M1303,994 L1303,1024" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <rect x="1218" y="1104" width="170" height="50" rx="10" fill="#fff" stroke="#CCCCCC" stroke-width="2.2"/>
-<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#1a1a1a"><tspan x="1303" y="1133.375">Facilities</tspan></text>
+<text text-anchor="middle" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="12.5" font-weight="600" fill="#1a1a1a"><tspan x="1303" y="1133.375">Facilities</tspan></text>
 <path d="M1303,1074 L1303,1104" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M1202,889 L1218,889" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M1202,1129 L1218,1129" fill="none" stroke="#B9B4A8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
