@@ -53,7 +53,7 @@
        Brand mark (top-left, sticky)
        ─────────────────────────────────────────────────────────── */
     .brand {
-      position: fixed; top: 60px; left: 40px; z-index: 60;
+      position: absolute; top: 40px; left: 80px; z-index: 60;
       font-family: var(--font-serif); font-style: italic; font-size: 22px;
       color: var(--ink);
       transition: color 0.3s;
@@ -360,13 +360,17 @@
 </head>
 <body>
 
-  <div class="ref-bar">
-    <h4>Sketch 006 · Full Home</h4>
-    <div class="ref">Stitched: Hero <small>003B</small> + Selected Work <small>004D</small> + About teaser + Contact CTA + Footer. Floating dock live with hide-on-scroll-down.</div>
-  </div>
-
   <!-- Brand mark -->
-  <div class="brand">Farzaneh</div>
+  <div class="brand">
+    <svg width="52" height="52" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="70" height="70" fill="none" stroke="currentColor" stroke-width="1"/>
+      <path d="M20 20 H50 V38 H62 V70 H20 Z" fill="currentColor"/>
+      <g stroke="#ff5a36" stroke-width="1.5">
+        <line x1="70" y1="14" x2="70" y2="22"/>
+        <line x1="66" y1="18" x2="74" y2="18"/>
+      </g>
+    </svg>
+  </div>
 
   <!-- Floating dock -->
   <nav class="dock" id="dock">
@@ -380,18 +384,18 @@
 
   <!-- ─────────── HERO ─────────── -->
   <section class="hero" id="hero">
-    <div class="hero-eyebrow"><span class="pulse-dot"></span>Product designer · Available May 2026</div>
+    <div class="hero-eyebrow"><span class="pulse-dot"></span>UX/UI Product Designer · Available May 2026</div>
     <h1>
-      I design <em>products</em><br>that <span class="underline-accent">feel right</span> —<br>not just look it.
+      I design <em>products</em><br>that <span class="underline-accent">feel right</span> —<br>not just look right.
     </h1>
     <div class="hero-sub">
       <div class="hero-sub-text">
-        Five years across EdTech, PropTech, and consumer. I obsess over <em>the small moments</em> that make products feel inevitable instead of assembled.
+        Six-plus years across architecture, urban planning, and product — 20+ projects shipped. I obsess over <em>the small moments</em> that make products feel inevitable instead of assembled.
       </div>
       <div class="hero-sub-meta">
-        <div><strong>Based in</strong> Tehran, IR</div>
+        <div><strong>Based in</strong> Berlin, DE</div>
         <div><strong>Currently</strong> open to senior in-house roles</div>
-        <div><strong>Recently shipped</strong> Moodle redesign · May 2024</div>
+        <div><strong>Recently shipped</strong> Homelon redesign · 2022</div>
       </div>
     </div>
   </section>
@@ -420,29 +424,29 @@
   <section class="work" id="work">
     <div class="work-head">
       <h2 class="work-title">Selected <em>work</em></h2>
-      <div class="work-meta">04 of 12 · view all →</div>
+      <div class="work-meta">04 of 04 · view all →</div>
     </div>
 
     <div class="work-grid">
       <article class="work-card" onclick="window.location='case-study.html'">
-        <div class="work-preview prev-1 prev-glow">moodle preview</div>
+        <div class="work-preview prev-1 prev-glow">splitsmart preview</div>
         <div class="work-body">
           <div>
             <div class="work-head-row">
               <span class="work-num">01.</span>
-              <span class="work-year">2024</span>
+              <span class="work-year">2026</span>
             </div>
-            <h3 class="work-name">Moodle <em>Redesign</em></h3>
-            <p class="work-desc">Rethinking the LMS for 800M+ students. The product had grown by accretion — <em>my job was to edit, not add</em>. Six months of research, three prototype rounds, one institutional rollout.</p>
+            <h3 class="work-name"><em>SplitSmart</em></h3>
+            <p class="work-desc">An expense-splitting app for people juggling multiple groups at once. Splitwise, Tricount, and Venmo Groups all show the group's side of the ledger — <em>none show what it costs you personally</em>.</p>
             <div class="work-tags">
-              <span class="work-tag">EdTech</span>
-              <span class="work-tag">UX Research</span>
               <span class="work-tag">Product</span>
+              <span class="work-tag">UX Research</span>
+              <span class="work-tag">Fintech</span>
             </div>
           </div>
           <div class="work-footer">
             <a class="work-cta">Read the case study <span class="work-cta-arr">↗</span></a>
-            <span class="work-stats">+34% sessions · 6 mo.</span>
+            <span class="work-stats">4-week design phase</span>
           </div>
         </div>
       </article>
@@ -456,16 +460,16 @@
               <span class="work-year">2023</span>
             </div>
             <h3 class="work-name"><em>Dino</em> Studio</h3>
-            <p class="work-desc">Brand identity and digital presence for a creative production studio. The brief was a logo; the output was a system. <em>Identity as architecture</em>, not as decoration.</p>
+            <p class="work-desc">A one-page app turning a National History Museum dataset — hundreds of dinosaurs, their diet, habitat, and discovery history — into something people would actually want to explore. <em>Serious illustrations, an approachable palette.</em></p>
             <div class="work-tags">
-              <span class="work-tag">Branding</span>
-              <span class="work-tag">Web</span>
-              <span class="work-tag">Identity</span>
+              <span class="work-tag">Web App</span>
+              <span class="work-tag">Information Design</span>
+              <span class="work-tag">Team Project</span>
             </div>
           </div>
           <div class="work-footer">
             <a class="work-cta">Read the case study <span class="work-cta-arr">↗</span></a>
-            <span class="work-stats">3 brand pillars · 12 components</span>
+            <span class="work-stats">6-week Chingu voyage</span>
           </div>
         </div>
       </article>
@@ -476,19 +480,18 @@
           <div>
             <div class="work-head-row">
               <span class="work-num">03.</span>
-              <span class="work-year">2023</span>
+              <span class="work-year">2022</span>
             </div>
-            <h3 class="work-name"><em>Top</em> Notch</h3>
-            <p class="work-desc">E-commerce checkout flow redesigned for clarity. 23% reduction in cart abandonment. The work was <em>less about persuasion</em> and more about removing the moments people had to think.</p>
+            <h3 class="work-name"><em>Top</em> Notch Beauty</h3>
+            <p class="work-desc">An app offering expert advice from makeup artists and dermatologists on cosmetics — <em>connecting people to the right guidance</em> instead of another product review feed.</p>
             <div class="work-tags">
-              <span class="work-tag">E-Commerce</span>
               <span class="work-tag">Product</span>
-              <span class="work-tag">Conversion</span>
+              <span class="work-tag">Mobile</span>
+              <span class="work-tag">Beauty</span>
             </div>
           </div>
           <div class="work-footer">
             <a class="work-cta">Read the case study <span class="work-cta-arr">↗</span></a>
-            <span class="work-stats">−23% abandonment</span>
           </div>
         </div>
       </article>
@@ -511,7 +514,6 @@
           </div>
           <div class="work-footer">
             <a class="work-cta">Read the case study <span class="work-cta-arr">↗</span></a>
-            <span class="work-stats">2× engagement</span>
           </div>
         </div>
       </article>
@@ -526,7 +528,7 @@
         <h2 class="about-title">I started as an <em>architect</em> —<br>which is to say I still<br>think in plans, sections,<br>and elevations.</h2>
         <div class="about-text">
           <p>Designing software felt like a natural extension of designing buildings: both are about shaping how people move through a space, both reward thinking in systems, and both fail in the same way — <em>when surface beauty hides a structure that doesn't hold</em>.</p>
-          <p>Today I lead product design work for institutional clients in EdTech, PropTech, and consumer. I write occasionally about the parts of the work that don't fit in a case study.</p>
+          <p>Today I work as a freelance product designer, carrying that leadership and systems thinking from architecture into user-centric digital products. I completed a UX/UI Specialization at CareerFoundry and have since led design and development across EdTech, PropTech, and consumer apps.</p>
         </div>
         <a class="about-link">
           More about me
@@ -536,29 +538,29 @@
       <aside class="about-side">
         <div class="about-side-block">
           <div class="about-side-label">Currently</div>
-          <div class="about-side-value">Lead Product Designer, Independent</div>
+          <div class="about-side-value">Freelance Product Designer, Berlin</div>
         </div>
         <div class="about-side-block">
           <div class="about-side-label">Previously</div>
           <div class="about-side-value small">
-            Senior Designer · Top Notch, 2022–23<br>
-            Designer · Homelon, 2021–22<br>
-            Architect · TFM Studio, 2017–20
+            Freelance Product Designer · Berlin, 2023–25<br>
+            Architecture & Urban Planning · Isfahan & Milan, 2015–22
           </div>
         </div>
         <div class="about-side-block">
           <div class="about-side-label">Tools</div>
           <div class="about-side-value small">
-            Figma · FigJam · Maze · Notion<br>
+            Figma · FigJam · Notion<br>
             HTML/CSS · React (light)<br>
             Photography · Pen & paper
           </div>
         </div>
         <div class="about-side-block">
-          <div class="about-side-label">Selected by</div>
+          <div class="about-side-label">Education</div>
           <div class="about-side-value small">
-            Awwwards (nominee) · 2023<br>
-            CSS Design Awards · 2022
+            UX/UI Specialization · CareerFoundry<br>
+            MSc Urban Planning · Politecnico di Milano<br>
+            B.Eng. Architecture · Azad University
           </div>
         </div>
       </aside>
@@ -570,14 +572,14 @@
     <div class="contact-inner">
       <div class="contact-eyebrow">— Let's talk</div>
       <h2 class="contact-title">Got a <em>problem</em> worth<br>thinking carefully about?</h2>
-      <a class="contact-cta" href="mailto:farzaneh@example.com">
-        farzaneh@example.com
+      <a class="contact-cta" href="mailto:farzaneh.falakrou@gmail.com">
+        farzaneh.falakrou@gmail.com
         <span class="contact-cta-arr">↗</span>
       </a>
       <div class="contact-alt">
-        <a href="#">↗ LinkedIn</a>
-        <a href="#">↗ Read.cv</a>
-        <a href="#">↗ Dribbble</a>
+        <a href="https://www.linkedin.com/in/farzaneh-falakrou/">↗ LinkedIn</a>
+        <a href="https://www.behance.net/farzanehfalakrou">↗ Behance</a>
+        <a href="https://github.com/farzaneh-falakrou">↗ GitHub</a>
         <a href="#">↗ Download CV</a>
       </div>
     </div>
@@ -599,20 +601,19 @@
       </div>
       <div class="footer-col">
         <div class="footer-col-label">Elsewhere</div>
-        <a href="#">LinkedIn</a><br>
-        <a href="#">Read.cv</a><br>
-        <a href="#">Dribbble</a><br>
-        <a href="#">Instagram</a>
+        <a href="https://www.linkedin.com/in/farzaneh-falakrou/">LinkedIn</a><br>
+        <a href="https://www.behance.net/farzanehfalakrou">Behance</a><br>
+        <a href="https://github.com/farzaneh-falakrou">GitHub</a>
       </div>
       <div class="footer-col">
         <div class="footer-col-label">Contact</div>
-        <a href="mailto:farzaneh@example.com">farzaneh@example.com</a><br>
+        <a href="mailto:farzaneh.falakrou@gmail.com">farzaneh.falakrou@gmail.com</a><br>
         <a href="#">Schedule a call ↗</a>
       </div>
     </div>
     <div class="footer-meta">
-      <span><span class="pulse-dot"></span>Last updated 15.05.2026</span>
-      <span>© Farzaneh Falakrou · Designed & built in Tehran</span>
+      <span><span class="pulse-dot"></span>Last updated 17.07.2026</span>
+      <span>© Farzaneh Falakrou · Designed & built in Berlin</span>
     </div>
   </footer>
 
