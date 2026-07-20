@@ -54,10 +54,12 @@
        ─────────────────────────────────────────────────────────── */
     .brand {
       position: absolute; top: 40px; left: 80px; z-index: 60;
+      display: flex; align-items: center; gap: 6px;
       font-family: var(--font-serif); font-style: italic; font-size: 22px;
       color: var(--ink);
       transition: color 0.3s;
     }
+    .brand svg { flex-shrink: 0; }
     body.dark-section .brand { color: var(--bg); }
 
     /* ───────────────────────────────────────────────────────────
@@ -370,6 +372,7 @@
         <line x1="66" y1="18" x2="74" y2="18"/>
       </g>
     </svg>
+    <span>Farzaneh Falakrou</span>
   </div>
 
   <!-- Floating dock -->
@@ -390,12 +393,12 @@
     </h1>
     <div class="hero-sub">
       <div class="hero-sub-text">
-        Six-plus years across architecture, urban planning, and product — 20+ projects shipped. I obsess over <em>the small moments</em> that make products feel inevitable instead of assembled.
+        I am a Product Designer with <em>6+ years</em> across architecture and digital products, focused on end-to-end web and mobile design. I move fast from concept to working prototype — using AI where it sharpens the process, not where it replaces the thinking.
       </div>
       <div class="hero-sub-meta">
         <div><strong>Based in</strong> Berlin, DE</div>
-        <div><strong>Currently</strong> open to senior in-house roles</div>
-        <div><strong>Recently shipped</strong> Homelon redesign · 2022</div>
+        <div><strong>Currently</strong> open to full-time roles</div>
+        <div><strong>Currently exploring</strong> AI-assisted design workflows</div>
       </div>
     </div>
   </section>
