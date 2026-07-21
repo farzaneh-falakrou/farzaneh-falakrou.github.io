@@ -170,7 +170,7 @@
     .work-card {
       background: var(--surface); border-radius: 24px;
       padding: 24px;
-      cursor: pointer; transition: all 0.25s;
+      transition: all 0.25s;
       display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px;
       align-items: stretch;
     }
@@ -178,6 +178,12 @@
     .work-card:nth-child(even) { grid-template-columns: 1fr 1.2fr; }
     .work-card:nth-child(even) .work-preview { order: 2; }
     .work-card:nth-child(even) .work-body { order: 1; }
+    @media (max-width: 900px) {
+      .work-card, .work-card:nth-child(even) { grid-template-columns: 1fr; }
+      .work-card:nth-child(even) .work-preview,
+      .work-card:nth-child(even) .work-body { order: initial; }
+      .work-card:hover { transform: none; }
+    }
     .work-preview {
       min-height: 320px; border-radius: 16px;
       display: grid; place-items: center;
@@ -387,12 +393,12 @@
 
   <!-- Floating dock -->
   <nav class="dock" id="dock">
-    <a class="active" data-anchor="hero">Home</a>
-    <a data-anchor="work">Work</a>
-    <a data-anchor="about">About</a>
-    <a data-anchor="contact">Contact</a>
+    <a class="active" href="#hero" data-anchor="hero">Home</a>
+    <a href="#work" data-anchor="work">Work</a>
+    <a href="#about" data-anchor="about">About</a>
+    <a href="#contact" data-anchor="contact">Contact</a>
     <div class="dock-sep"></div>
-    <a class="dock-cta"><span class="dock-cta-label">Get in touch</span> ↗</a>
+    <a class="dock-cta" href="#contact"><span class="dock-cta-label">Get in touch</span> ↗</a>
   </nav>
 
   <!-- ─────────── HERO ─────────── -->
@@ -440,7 +446,7 @@
     </div>
 
     <div class="work-grid">
-      <article class="work-card" onclick="window.location='case-study.html'">
+      <article class="work-card">
         <div class="work-preview prev-1 prev-glow"><img src="../../../splitsmart-case-study/visuals/mockup.png" alt="SplitSmart Overview shown on a MacBook"></div>
         <div class="work-body">
           <div>
@@ -457,13 +463,13 @@
             </div>
           </div>
           <div class="work-footer">
-            <a class="work-cta">Read the case study <span class="work-cta-arr">↗</span></a>
+            <a class="work-cta" href="../../../splitsmart-case-study/website_page/index.html">Read the case study <span class="work-cta-arr">↗</span></a>
             <span class="work-stats">4-week design phase</span>
           </div>
         </div>
       </article>
 
-      <article class="work-card" onclick="window.location='case-study.html'">
+      <article class="work-card">
         <div class="work-preview prev-2"><img src="../../../dino_studio_case_study/visuals/mac2.png" alt="Dino Studio app shown on a MacBook"></div>
         <div class="work-body">
           <div>
@@ -480,13 +486,13 @@
             </div>
           </div>
           <div class="work-footer">
-            <a class="work-cta">Read the case study <span class="work-cta-arr">↗</span></a>
+            <a class="work-cta" href="../../../dino_studio_case_study/website_page/index.html">Read the case study <span class="work-cta-arr">↗</span></a>
             <span class="work-stats">6-week Chingu voyage</span>
           </div>
         </div>
       </article>
 
-      <article class="work-card" onclick="window.location='case-study.html'">
+      <article class="work-card">
         <div class="work-preview prev-4"><img src="../../../homelon_case_study/visuals/mockup2.png" alt="Homelon map search shown on an iPhone"></div>
         <div class="work-body">
           <div>
@@ -503,7 +509,7 @@
             </div>
           </div>
           <div class="work-footer">
-            <a class="work-cta">Read the case study <span class="work-cta-arr">↗</span></a>
+            <a class="work-cta" href="../../../homelon_case_study/website_page/index.html">Read the case study <span class="work-cta-arr">↗</span></a>
             <span class="work-stats">2-month design phase</span>
           </div>
         </div>
