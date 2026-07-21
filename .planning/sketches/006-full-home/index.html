@@ -87,6 +87,16 @@
     .dock-cta { background: var(--accent); color: var(--ink); font-weight: 500; }
     .dock-cta:hover { background: #ffaa8a; color: var(--ink); }
 
+    @media (max-width: 600px) {
+      .dock { top: 76px; padding: 4px; gap: 0; max-width: calc(100vw - 24px); }
+      .dock a { padding: 8px 10px; font-size: 11px; white-space: nowrap; }
+      .dock-cta .dock-cta-label { display: none; }
+      .brand { top: 20px; left: 20px; font-size: 16px; }
+    }
+    @media (max-width: 380px) {
+      .dock a[data-anchor="about"], .dock a[data-anchor="contact"] { display: none; }
+    }
+
     /* ═══════════════════════════════════════════════════════════
        HERO
        ─────────────────────────────────────────────────────────── */
@@ -382,7 +392,7 @@
     <a data-anchor="about">About</a>
     <a data-anchor="contact">Contact</a>
     <div class="dock-sep"></div>
-    <a class="dock-cta">Get in touch ↗</a>
+    <a class="dock-cta"><span class="dock-cta-label">Get in touch</span> ↗</a>
   </nav>
 
   <!-- ─────────── HERO ─────────── -->
@@ -462,7 +472,7 @@
               <span class="work-year">2024</span>
             </div>
             <h3 class="work-name"><em>Dino</em> Studio</h3>
-            <p class="work-desc">A one-page app turning a National History Museum dataset — hundreds of dinosaurs, their diet, habitat, and discovery history — into something people would actually want to explore. <em>Serious illustrations, an approachable palette.</em></p>
+            <p class="work-desc">A one-page app turning a National History Museum dataset of hundreds of dinosaurs into something people actually want to explore. <em>A large, complex dataset made simple, clear, and easy to browse.</em></p>
             <div class="work-tags">
               <span class="work-tag">Web App</span>
               <span class="work-tag">Information Design</span>
@@ -485,7 +495,7 @@
               <span class="work-year">2023</span>
             </div>
             <h3 class="work-name"><em>Homelon</em></h3>
-            <p class="work-desc">Rental search platform for first-time renters — a population terrified by listings written for landlords. Notes on <em>designing for emotional state</em>, not just task.</p>
+            <p class="work-desc">Home search platform for first-time buyers — a population terrified by listings written for sellers. <em>A side-by-side comparison view that turns overwhelm into a confident decision.</em></p>
             <div class="work-tags">
               <span class="work-tag">Web App</span>
               <span class="work-tag">UI Design</span>
@@ -506,15 +516,13 @@
     <div class="about-head">— About</div>
     <div class="about-grid">
       <div>
-        <h2 class="about-title">I started as an <em>architect</em> —<br>which is to say I still<br>think in plans, sections,<br>and elevations.</h2>
+        <h2 class="about-title">I started as an <em>architect</em> —<br>which means I still<br>think in structure,<br>not just surface.</h2>
         <div class="about-text">
-          <p>Architecture taught me to design for how people actually move through a space, and to lead teams doing it. When I moved into product design, the same instinct carried over: user-centred solutions, not decoration — interfaces that hold up under real use, not just in a mockup.</p>
-          <p>My interest in UX started during a Service Design course at Politecnico di Milano, exploring where urban design, technology, and citizen engagement meet. I followed that into a UX/UI Specialization at CareerFoundry, then designed digital products end to end across EdTech, PropTech, and consumer apps.</p>
+          <p>Hi, I'm Farzaneh, a UX/UI Product Designer with a background in architecture.</p>
+          <p>Architecture taught me to design for how people actually move through a space, and to lead teams doing it. When I moved into product design, the same instinct carried over: user-centred solutions, not decoration, interfaces that hold up under real use, not just in a mockup.</p>
+          <p>My interest in UX started during a Service Design course at Politecnico di Milano, exploring where urban design, technology, and citizen engagement meet. I followed that into a UX/UI Specialization at CareerFoundry, then designed digital products end to end across EdTech, FinTech, and consumer apps.</p>
+          <p>Beyond product design, I'm really into art: I love spending time in galleries and museums. Art not only fascinates me but also influences my creative approach. When not immersed in design, you might catch me nurturing a small jungle of plants, cultivating a peaceful and artful haven within my space.</p>
         </div>
-        <a class="about-link">
-          More about me
-          <span class="about-link-arr">→</span>
-        </a>
       </div>
       <aside class="about-side">
         <div class="about-portrait">
@@ -527,8 +535,8 @@
         <div class="about-side-block">
           <div class="about-side-label">Previously</div>
           <div class="about-side-value small">
-            Freelance Product Designer · Berlin, 2023–25<br>
-            Architecture & Urban Planning · Isfahan & Milan, 2015–22
+            Freelance Product Designer · Berlin<br>
+            Architect & Urban Planner · Isfahan & Milan
           </div>
         </div>
         <div class="about-side-block">
