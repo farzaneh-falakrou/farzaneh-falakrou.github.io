@@ -63,6 +63,47 @@
     .display em { font-style: italic; color: var(--accent); }
     .pull-italic { font-family: var(--font-serif); font-style: italic; color: var(--accent); }
 
+    /* ───────────────────────────────────────────────────────────
+       Brand mark + floating dock nav (shared with homepage)
+       ─────────────────────────────────────────────────────────── */
+    .brand {
+      position: absolute; top: 40px; left: 80px; z-index: 60;
+      display: flex; align-items: center; gap: 6px;
+      font-family: var(--font-serif); font-style: italic; font-size: 22px;
+      color: var(--ink);
+    }
+    .dock {
+      position: fixed; top: 38px; left: 50%; transform: translateX(-50%);
+      z-index: 60;
+      background: rgba(26,26,26,0.92); backdrop-filter: blur(10px);
+      padding: 6px;
+      border-radius: 100px;
+      display: flex; gap: 2px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      transition: transform 0.3s ease;
+    }
+    .dock.hidden { transform: translate(-50%, -120px); }
+    .dock a {
+      padding: 10px 22px; font-size: 13px; color: #e8e5df;
+      border-radius: 100px; transition: all 0.15s;
+      display: flex; align-items: center; gap: 8px;
+      cursor: pointer;
+    }
+    .dock a:hover { background: #2a2a2a; color: var(--accent); }
+    .dock a.active { background: var(--accent); color: var(--ink); }
+    .dock-sep { width: 1px; background: #3a3a3a; margin: 6px 4px; }
+    .dock-cta { background: var(--accent); color: var(--ink); font-weight: 500; }
+    .dock-cta:hover { background: #ffaa8a; color: var(--ink); }
+    @media (max-width: 600px) {
+      .dock { top: 76px; padding: 4px; gap: 0; max-width: calc(100vw - 24px); }
+      .dock a { padding: 8px 10px; font-size: 11px; white-space: nowrap; }
+      .dock-cta .dock-cta-label { display: none; }
+      .brand { top: 20px; left: 20px; font-size: 16px; }
+    }
+    @media (max-width: 380px) {
+      .dock a[data-anchor="about"], .dock a[data-anchor="contact"] { display: none; }
+    }
+
     /* ═══════════════════════════════════════════════════════════
        VARIANT B — BALANCED
        Typographic hero + restrained dashboard cover. Screen frames.
@@ -71,18 +112,8 @@
        ─────────────────────────────────────────────────────────── */
     #vb { background: var(--bg); }
 
-    #vb .b-top {
-      padding: 24px 56px;
-      display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 1px solid var(--line);
-    }
-    #vb .b-top-name { font-family: var(--font-serif); font-style: italic; font-size: 20px; }
-    #vb .b-top-back { font-size: 12px; color: var(--muted); display: inline-flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
-    #vb .b-top-back:hover { color: var(--accent); }
-    #vb .b-top-nav { display: flex; gap: 28px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
-
     #vb .b-hero {
-      padding: 96px 56px 56px;
+      padding: 140px 56px 56px;
       max-width: 1320px; margin: 0 auto;
       text-align: center;
     }
@@ -278,13 +309,15 @@
      ══════════════════════════════════════════════════════════════ -->
 <section id="vb">
 
-  <header class="b-top">
-    <a class="b-top-back" href="#">← Index</a>
-    <a class="b-top-name" href="#"><em>Farzaneh Falakrou</em></a>
-    <nav class="b-top-nav">
-      <a href="#">Work</a><a href="#">About</a><a href="#">Notes</a>
-    </nav>
-  </header>
+  <div class="brand"><a href="../../.planning/sketches/006-full-home/index.html#hero" style="color:inherit;">Farzaneh Falakrou</a></div>
+  <nav class="dock" id="dock">
+    <a href="../../.planning/sketches/006-full-home/index.html#hero">Home</a>
+    <a href="../../.planning/sketches/006-full-home/index.html#work">Work</a>
+    <a href="../../.planning/sketches/006-full-home/index.html#about">About</a>
+    <a href="../../.planning/sketches/006-full-home/index.html#contact">Contact</a>
+    <div class="dock-sep"></div>
+    <a class="dock-cta" href="../../.planning/sketches/006-full-home/index.html#contact"><span class="dock-cta-label">Get in touch</span> ↗</a>
+  </nav>
 
   <section class="b-hero">
     <div class="b-hero-eyebrow">Case study · SplitSmart · 2026</div>
@@ -522,6 +555,18 @@
       });
     }, { rootMargin: '-100px 0px -65% 0px', threshold: 0 });
     targets.forEach(el => observer.observe(el));
+  })();
+
+  // Dock hide on scroll-down (shared with homepage)
+  (function() {
+    const dock = document.getElementById('dock');
+    let lastY = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y > lastY && y > 200) dock.classList.add('hidden');
+      else dock.classList.remove('hidden');
+      lastY = y;
+    });
   })();
 </script>
 
