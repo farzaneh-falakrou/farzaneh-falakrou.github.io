@@ -294,13 +294,17 @@
     #vb .b-reflection p em { color: var(--accent); }
     #vb .b-reflection .note { font-family: var(--font-sans); font-size: 15px; font-style: normal; color: var(--muted); margin-top: 20px; max-width: 600px; line-height: 1.6; }
 
-    /* Closing footer — shared dark CTA (matches homepage) */
-    .case-footer { background: var(--ink); color: var(--bg); padding: 120px 56px 100px; text-align: center; }
+    /* Closing footer — next case study, dark palette (matches homepage contact) */
+    .case-footer { background: var(--ink); color: var(--bg); padding: 120px 56px 40px; }
+    .case-footer-main {
+      max-width: 1320px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1.2fr; gap: 56px; align-items: center;
+    }
     .case-footer-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 20px; margin-bottom: 20px; }
     .case-footer-title {
-      font-family: var(--font-serif); font-size: clamp(32px, 5vw, 64px);
-      line-height: 1.1; font-weight: 400; letter-spacing: -0.02em;
-      max-width: 900px; margin: 0 auto 40px;
+      font-family: var(--font-serif); font-size: clamp(32px, 4vw, 52px);
+      line-height: 1.15; font-weight: 400; letter-spacing: -0.02em;
+      margin: 0 0 32px;
     }
     .case-footer-title em { font-style: italic; color: var(--accent); }
     .case-footer-cta {
@@ -310,14 +314,18 @@
       transition: all 0.15s;
     }
     .case-footer-cta:hover { background: var(--bg); }
+    .case-footer-preview { border-radius: 16px; overflow: hidden; background: rgba(235,232,226,0.06); }
+    .case-footer-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .case-footer-alt {
-      margin-top: 40px; display: flex; gap: 28px; justify-content: center;
-      flex-wrap: wrap; font-size: 13px; color: rgba(235,232,226,0.55);
+      max-width: 1320px; margin: 64px auto 0; padding-top: 40px; border-top: 1px solid rgba(235,232,226,0.15);
+      display: flex; gap: 28px; flex-wrap: wrap; font-size: 13px; color: rgba(235,232,226,0.55);
     }
     .case-footer-alt a:hover { color: var(--accent); }
-    @media (max-width: 600px) {
-      .case-footer { padding: 80px 24px 64px; }
-      .case-footer-alt { gap: 16px 24px; }
+    @media (max-width: 760px) {
+      .case-footer { padding: 80px 24px 40px; }
+      .case-footer-main { grid-template-columns: 1fr; gap: 32px; }
+      .case-footer-preview { order: -1; height: 220px; }
+      .case-footer-alt { gap: 16px 24px; margin-top: 48px; }
     }
 
     @media (max-width: 760px) {
@@ -556,9 +564,14 @@
 </section>
 
 <footer class="case-footer">
-  <div class="case-footer-eyebrow">— Next case study</div>
-  <h3 class="case-footer-title">A museum's worth of dinosaur data. One scroll to explore <em>all</em> of it.</h3>
-  <a class="case-footer-cta" href="../../dino_studio_case_study/website_page/index.html">View Dino Studio <span>↗</span></a>
+  <div class="case-footer-main">
+    <div>
+      <div class="case-footer-eyebrow">— Next case study</div>
+      <h3 class="case-footer-title">A museum's worth of dinosaur data. One scroll to explore <em>all</em> of it.</h3>
+      <a class="case-footer-cta" href="../../dino_studio_case_study/website_page/index.html">View Dino Studio <span>↗</span></a>
+    </div>
+    <div class="case-footer-preview"><img src="../../dino_studio_case_study/visuals/mac2.png" alt="Dino Studio app shown on a MacBook"></div>
+  </div>
   <div class="case-footer-alt">
     <a href="mailto:farzaneh.falakrou@gmail.com">farzaneh.falakrou@gmail.com</a>
     <a href="https://www.linkedin.com/in/farzaneh-falakrou/">LinkedIn</a>
