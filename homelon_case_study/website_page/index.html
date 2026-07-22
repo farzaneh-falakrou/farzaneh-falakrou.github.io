@@ -138,7 +138,7 @@
     #hb .phone-mock--hero { width: 220px; height: 446px; }
     #hb .phone-mock--hero .device { transform: scale(0.5140); }
     #hb .phone-slider { margin: 36px 0 32px; }
-    #hb .phone-coverflow-wrap { position: relative; overflow-x: clip; }
+    #hb .phone-coverflow-wrap { position: relative; }
     #hb .phone-coverflow { width: 100%; padding: 40px 0; overflow: visible; }
     #hb .phone-coverflow .swiper-slide { width: 193px; display: flex; justify-content: center; }
     #hb .phone-slide-img {
@@ -704,7 +704,6 @@
         slidesPerView: 'auto',
         speed: 450,
         coverflowEffect: { rotate: 32, stretch: 0, depth: 180, modifier: 1, slideShadows: false },
-        keyboard: { enabled: true },
         pagination: { el: root.querySelector('.swiper-pagination'), clickable: true },
         navigation: {
           nextEl: root.querySelector('[data-slider-next]'),
