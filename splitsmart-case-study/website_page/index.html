@@ -94,6 +94,11 @@
     .dock-sep { width: 1px; background: #3a3a3a; margin: 6px 4px; }
     .dock-cta { background: var(--accent); color: var(--ink); font-weight: 500; }
     .dock-cta:hover { background: #ffaa8a; color: var(--ink); }
+    @media (max-width: 960px) {
+      .dock a { padding: 8px 14px; font-size: 12px; }
+      .dock-cta { white-space: nowrap; }
+      .brand { font-size: 18px; left: 24px; }
+    }
     @media (max-width: 600px) {
       .dock { top: 76px; padding: 4px; gap: 0; max-width: calc(100vw - 24px); }
       .dock a { padding: 8px 10px; font-size: 11px; white-space: nowrap; }
@@ -289,17 +294,38 @@
     #vb .b-reflection p em { color: var(--accent); }
     #vb .b-reflection .note { font-family: var(--font-sans); font-size: 15px; font-style: normal; color: var(--muted); margin-top: 20px; max-width: 600px; line-height: 1.6; }
 
-    /* Footer */
-    #vb .b-footer {
-      max-width: 1320px; margin: 0 auto;
-      padding: 96px 56px 64px;
-      border-top: 1px solid var(--line);
-      display: grid; grid-template-columns: 1fr 1.4fr; gap: 56px; align-items: center;
+    /* Closing footer — shared dark CTA (matches homepage) */
+    .case-footer { background: var(--ink); color: var(--bg); padding: 120px 56px 100px; text-align: center; }
+    .case-footer-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 20px; margin-bottom: 20px; }
+    .case-footer-title {
+      font-family: var(--font-serif); font-size: clamp(32px, 5vw, 64px);
+      line-height: 1.1; font-weight: 400; letter-spacing: -0.02em;
+      max-width: 900px; margin: 0 auto 40px;
     }
-    #vb .b-footer-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 12px; }
-    #vb .b-footer-title { font-family: var(--font-serif); font-size: 56px; line-height: 1; font-weight: 400; letter-spacing: -0.02em; }
-    #vb .b-footer-title em { font-style: italic; color: var(--accent); font-size: inherit; }
-    #vb .b-footer-img { height: 200px; }
+    .case-footer-title em { font-style: italic; color: var(--accent); }
+    .case-footer-cta {
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 18px 36px; background: var(--accent); color: var(--ink);
+      border-radius: 100px; font-size: 15px; font-weight: 500;
+      transition: all 0.15s;
+    }
+    .case-footer-cta:hover { background: var(--bg); }
+    .case-footer-alt {
+      margin-top: 40px; display: flex; gap: 28px; justify-content: center;
+      flex-wrap: wrap; font-size: 13px; color: rgba(235,232,226,0.55);
+    }
+    .case-footer-alt a:hover { color: var(--accent); }
+    @media (max-width: 600px) {
+      .case-footer { padding: 80px 24px 64px; }
+      .case-footer-alt { gap: 16px 24px; }
+    }
+
+    @media (max-width: 760px) {
+      #vb .b-meta { grid-template-columns: repeat(2, 1fr); padding: 24px 24px; gap: 24px; }
+      #vb .b-body { grid-template-columns: 1fr; padding: 48px 24px 72px; gap: 40px; }
+      #vb .b-toc { position: static; }
+      #vb .b-gaps { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -527,14 +553,20 @@
     </article>
   </div>
 
-  <footer class="b-footer">
-    <div>
-      <div class="b-footer-eyebrow">Next case study</div>
-      <h3 class="b-footer-title">A redesign that didn't <em>need</em> a redesign.</h3>
-    </div>
-    <div class="img img-cream-2 b-footer-img">Moodle Redesign · Education · 2025</div>
-  </footer>
 </section>
+
+<footer class="case-footer">
+  <div class="case-footer-eyebrow">— Next case study</div>
+  <h3 class="case-footer-title">A museum's worth of dinosaur data. One scroll to explore <em>all</em> of it.</h3>
+  <a class="case-footer-cta" href="../../dino_studio_case_study/website_page/index.html">View Dino Studio <span>↗</span></a>
+  <div class="case-footer-alt">
+    <a href="mailto:farzaneh.falakrou@gmail.com">farzaneh.falakrou@gmail.com</a>
+    <a href="https://www.linkedin.com/in/farzaneh-falakrou/">LinkedIn</a>
+    <a href="https://www.behance.net/farzanehfalakrou">Behance</a>
+    <a href="https://github.com/farzaneh-falakrou">GitHub</a>
+    <a href="../../.planning/sketches/006-full-home/index.html#work">← Back to portfolio</a>
+  </div>
+</footer>
 
 <script>
   // Scrollspy: highlight the TOC item for the section in view

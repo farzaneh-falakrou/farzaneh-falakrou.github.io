@@ -87,6 +87,11 @@
     .dock-cta { background: var(--accent); color: var(--ink); font-weight: 500; }
     .dock-cta:hover { background: #ffaa8a; color: var(--ink); }
 
+    @media (max-width: 960px) {
+      .dock a { padding: 8px 14px; font-size: 12px; }
+      .dock-cta { white-space: nowrap; }
+      .brand { font-size: 18px; left: 24px; }
+    }
     @media (max-width: 600px) {
       .dock { top: 76px; padding: 4px; gap: 0; max-width: calc(100vw - 24px); }
       .dock a { padding: 8px 10px; font-size: 11px; white-space: nowrap; }
