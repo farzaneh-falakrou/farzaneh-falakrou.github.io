@@ -39,3 +39,5 @@ yarn-error.log*
 next-env.d.ts
 
 legacy/
+# local junk / archived scratch (screenshots, stale workspaces)
+_attic/
