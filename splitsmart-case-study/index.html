@@ -277,6 +277,7 @@
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
       margin: 32px 0;
     }
+    #vb .b-gaps--two { grid-template-columns: repeat(2, 1fr); max-width: 600px; }
     #vb .b-gap-card {
       background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
       padding: 28px 24px;
@@ -295,16 +296,16 @@
     #vb .b-reflection .note { font-family: var(--font-sans); font-size: 15px; font-style: normal; color: var(--muted); margin-top: 20px; max-width: 600px; line-height: 1.6; }
 
     /* Closing footer — next case study, dark palette (matches homepage contact) */
-    .case-footer { background: var(--ink); color: var(--bg); padding: 120px 56px 40px; }
+    .case-footer { background: var(--ink); color: var(--bg); padding: 140px 80px 100px; }
     .case-footer-main {
-      max-width: 1320px; margin: 0 auto;
-      display: grid; grid-template-columns: 1fr 1.2fr; gap: 56px; align-items: center;
+      max-width: 1200px; margin: 0 auto;
+      text-align: center;
     }
-    .case-footer-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 20px; margin-bottom: 20px; }
+    .case-footer-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 22px; margin-bottom: 24px; }
     .case-footer-title {
-      font-family: var(--font-serif); font-size: clamp(32px, 4vw, 52px);
-      line-height: 1.15; font-weight: 400; letter-spacing: -0.02em;
-      margin: 0 0 32px;
+      font-family: var(--font-serif); font-size: clamp(40px, 5.5vw, 72px);
+      line-height: 1.1; font-weight: 400; letter-spacing: -0.02em;
+      margin: 0 0 48px;
     }
     .case-footer-title em { font-style: italic; color: var(--accent); }
     .case-footer-cta {
@@ -314,25 +315,22 @@
       transition: all 0.15s;
     }
     .case-footer-cta:hover { background: var(--bg); }
-    .case-footer-preview { border-radius: 16px; overflow: hidden; background: rgba(235,232,226,0.06); }
-    .case-footer-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .case-footer-alt {
-      max-width: 1320px; margin: 64px auto 0; padding-top: 40px; border-top: 1px solid rgba(235,232,226,0.15);
-      display: flex; gap: 28px; flex-wrap: wrap; font-size: 13px; color: rgba(235,232,226,0.55);
+      max-width: 1200px; margin: 48px auto 0;
+      display: flex; gap: 32px; justify-content: center; flex-wrap: wrap;
+      font-size: 13px; color: rgba(235,232,226,0.55);
     }
     .case-footer-alt a:hover { color: var(--accent); }
     @media (max-width: 760px) {
-      .case-footer { padding: 80px 24px 40px; }
-      .case-footer-main { grid-template-columns: 1fr; gap: 32px; }
-      .case-footer-preview { order: -1; height: 220px; }
-      .case-footer-alt { gap: 16px 24px; margin-top: 48px; }
+      .case-footer { padding: 80px 24px 60px; }
+      .case-footer-alt { gap: 16px 24px; }
     }
 
     @media (max-width: 760px) {
       #vb .b-meta { grid-template-columns: repeat(2, 1fr); padding: 24px 24px; gap: 24px; }
       #vb .b-body { grid-template-columns: 1fr; padding: 48px 24px 72px; gap: 40px; }
       #vb .b-toc { position: static; }
-      #vb .b-gaps { grid-template-columns: 1fr; }
+      #vb .b-gaps { grid-template-columns: 1fr; max-width: 100%; }
     }
 
     @media (max-width: 640px) {
@@ -340,6 +338,7 @@
       #vb .b-hero-eyebrow { font-size: 16px; margin-bottom: 16px; }
       #vb .b-hero h1 { font-size: clamp(36px, 12vw, 56px); margin-bottom: 24px; }
       #vb .b-hero-sub { font-size: 18px; }
+      #vb .b-toc { display: none; }
     }
   </style>
 </head>
@@ -355,7 +354,6 @@
     <a href="../index.html#hero">Home</a>
     <a href="../index.html#work">Work</a>
     <a href="../index.html#about">About</a>
-    <a href="../index.html#contact">Contact</a>
     <div class="dock-sep"></div>
     <a class="dock-cta" href="../index.html#contact"><span class="dock-cta-label">Get in touch</span> ↗</a>
   </nav>
@@ -377,7 +375,7 @@
     <div><div class="b-meta-label">Role</div><div class="b-meta-value">Sole UX/UI Designer</div></div>
     <div><div class="b-meta-label">Team</div><div class="b-meta-value">Team of 4</div></div>
     <div><div class="b-meta-label">Date</div><div class="b-meta-value">May 2026</div></div>
-    <div><div class="b-meta-label">Timeline</div><div class="b-meta-value">4-week design phase</div></div>
+    <div><div class="b-meta-label">Timeline</div><div class="b-meta-value">2-month design phase</div></div>
     <div><div class="b-meta-label">Type</div><div class="b-meta-value">Product</div></div>
   </section>
 
@@ -546,7 +544,7 @@
       <section>
         <div class="b-section-mark" id="vb-gaps"><span class="num">08</span><span class="label">Gaps and limitations</span></div>
 
-        <div class="b-gaps" style="grid-template-columns: repeat(2, 1fr); max-width: 600px;">
+        <div class="b-gaps b-gaps--two">
           <div class="b-gap-card">
             <div class="num">Gap 01</div>
             <h4>No percentage-based or weighted splits.</h4>
@@ -572,12 +570,9 @@
 
 <footer class="case-footer">
   <div class="case-footer-main">
-    <div>
-      <div class="case-footer-eyebrow">— Next case study</div>
-      <h3 class="case-footer-title">A museum's worth of dinosaur data. One scroll to explore <em>all</em> of it.</h3>
-      <a class="case-footer-cta" href="../dino_studio_case_study/index.html">View Dino Studio <span>↗</span></a>
-    </div>
-    <div class="case-footer-preview"><img src="../dino_studio_case_study/visuals/mac2.png" alt="Dino Studio app shown on a MacBook"></div>
+    <div class="case-footer-eyebrow">— Next case study</div>
+    <h3 class="case-footer-title">A museum's worth of dinosaur data. One scroll to explore <em>all</em> of it.</h3>
+    <a class="case-footer-cta" href="../dino_studio_case_study/index.html">View Dino Studio <span>↗</span></a>
   </div>
   <div class="case-footer-alt">
     <a href="mailto:farzaneh.falakrou@gmail.com">farzaneh.falakrou@gmail.com</a>

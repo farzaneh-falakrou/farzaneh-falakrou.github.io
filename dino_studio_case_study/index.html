@@ -243,10 +243,25 @@
     #db .b-note-line::before { content: ''; position: absolute; left: -2px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--accent); }
     #db .b-note-text { font-family: var(--font-serif); font-style: italic; font-size: 13px; line-height: 1.4; color: var(--muted); }
     #db .b-annotated figcaption { font-size: 13px; font-style: italic; font-family: var(--font-serif); color: var(--muted); margin-top: 16px; padding: 0 6px; }
+    #db .b-pin {
+      display: none; position: absolute; top: 0; right: 10px; transform: translateY(-50%);
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--accent); color: #fff;
+      font-family: var(--font-sans); font-size: 12px; font-weight: 600;
+      align-items: center; justify-content: center;
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.85);
+      z-index: 2;
+    }
     @media (max-width: 640px) {
       #db .b-annotated-row { flex-direction: column; }
-      #db .b-annotated-notes { width: 100%; min-height: 0; }
+      #db .b-annotated-notes { width: 100%; min-height: 0; counter-reset: note; }
       #db .b-note { position: static; transform: none; padding: 6px 0; }
+      #db .b-note-line { display: none; }
+      #db .b-note-text::before {
+        counter-increment: note; content: counter(note) '. ';
+        color: var(--accent); font-weight: 600; font-style: normal;
+      }
+      #db .b-pin { display: flex; }
     }
 
     /* Video — responsive 16:9 embed in place of a static image */
@@ -281,16 +296,16 @@
     #db .b-reflection .note { font-family: var(--font-sans); font-size: 15px; font-style: normal; color: var(--muted); margin-top: 20px; max-width: 600px; line-height: 1.6; }
 
     /* Closing footer — next case study, dark palette (matches homepage contact) */
-    .case-footer { background: var(--ink); color: var(--bg); padding: 120px 56px 40px; }
+    .case-footer { background: var(--ink); color: var(--bg); padding: 140px 80px 100px; }
     .case-footer-main {
-      max-width: 1320px; margin: 0 auto;
-      display: grid; grid-template-columns: 1fr 1.2fr; gap: 56px; align-items: center;
+      max-width: 1200px; margin: 0 auto;
+      text-align: center;
     }
-    .case-footer-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 20px; margin-bottom: 20px; }
+    .case-footer-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 22px; margin-bottom: 24px; }
     .case-footer-title {
-      font-family: var(--font-serif); font-size: clamp(32px, 4vw, 52px);
-      line-height: 1.15; font-weight: 400; letter-spacing: -0.02em;
-      margin: 0 0 32px;
+      font-family: var(--font-serif); font-size: clamp(40px, 5.5vw, 72px);
+      line-height: 1.1; font-weight: 400; letter-spacing: -0.02em;
+      margin: 0 0 48px;
     }
     .case-footer-title em { font-style: italic; color: var(--accent); }
     .case-footer-cta {
@@ -300,18 +315,15 @@
       transition: all 0.15s;
     }
     .case-footer-cta:hover { background: var(--bg); }
-    .case-footer-preview { border-radius: 16px; overflow: hidden; background: rgba(235,232,226,0.06); }
-    .case-footer-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .case-footer-alt {
-      max-width: 1320px; margin: 64px auto 0; padding-top: 40px; border-top: 1px solid rgba(235,232,226,0.15);
-      display: flex; gap: 28px; flex-wrap: wrap; font-size: 13px; color: rgba(235,232,226,0.55);
+      max-width: 1200px; margin: 48px auto 0;
+      display: flex; gap: 32px; justify-content: center; flex-wrap: wrap;
+      font-size: 13px; color: rgba(235,232,226,0.55);
     }
     .case-footer-alt a:hover { color: var(--accent); }
     @media (max-width: 760px) {
-      .case-footer { padding: 80px 24px 40px; }
-      .case-footer-main { grid-template-columns: 1fr; gap: 32px; }
-      .case-footer-preview { order: -1; height: 220px; }
-      .case-footer-alt { gap: 16px 24px; margin-top: 48px; }
+      .case-footer { padding: 80px 24px 60px; }
+      .case-footer-alt { gap: 16px 24px; }
     }
 
     /* ═══════════════ Responsive ═══════════════ */
@@ -337,7 +349,7 @@
       #db .b-meta { grid-template-columns: repeat(2, 1fr); padding: 24px 20px; gap: 20px 16px; margin-top: 40px; }
 
       #db .b-body { padding: 40px 20px 64px; }
-      #db .b-toc-list { columns: 1; }
+      #db .b-toc { display: none; }
       #db .b-article h2 { font-size: 32px; }
       #db .b-article section + section { margin-top: 64px; }
 
@@ -361,7 +373,6 @@
     <a href="../index.html#hero">Home</a>
     <a href="../index.html#work">Work</a>
     <a href="../index.html#about">About</a>
-    <a href="../index.html#contact">Contact</a>
     <div class="dock-sep"></div>
     <a class="dock-cta" href="../index.html#contact"><span class="dock-cta-label">Get in touch</span> ↗</a>
   </nav>
@@ -500,6 +511,10 @@
                 <div class="b-figure-chrome"><span></span><span></span><span></span></div>
                 <img src="visuals/dino-usability-01.png" alt="First-round usability testing wireframe of the search and dinosaur detail flows">
               </div>
+              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.03)">1</span>
+              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.25)">2</span>
+              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.69)">3</span>
+              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.85)">4</span>
             </div>
             <div class="b-annotated-notes">
               <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.03)"><span class="b-note-line"></span><span class="b-note-text">The navigation menu blends into the page header, making it hard to see.</span></div>
@@ -522,6 +537,10 @@
                 <div class="b-figure-chrome"><span></span><span></span><span></span></div>
                 <img src="visuals/dino-usability-02.png" alt="Second-round usability testing wireframe of the homepage, map, and search flows">
               </div>
+              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.02)">1</span>
+              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.76)">2</span>
+              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.88)">3</span>
+              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.94)">4</span>
             </div>
             <div class="b-annotated-notes">
               <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.02)"><span class="b-note-line"></span><span class="b-note-text">There's no way to access favourited dinosaurs once they're saved.</span></div>
@@ -542,6 +561,7 @@
                 <div class="b-figure-chrome"><span></span><span></span><span></span></div>
                 <img src="visuals/dino-usability-03.png" alt="Dinosaur detail page wireframe showing the taxonomy tree and detail panel layout">
               </div>
+              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.5)">1</span>
             </div>
             <div class="b-annotated-notes">
               <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.5)"><span class="b-note-line"></span><span class="b-note-text">The taxonomy chart is crowded and confusing.</span></div>
@@ -591,6 +611,11 @@
                 <div class="b-figure-chrome"><span></span><span></span><span></span></div>
                 <img src="visuals/dino-result.png" alt="Full shipped page — news feed, search and map, charts, and the dinosaur detail view in one continuous scroll">
               </div>
+              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.02)">1</span>
+              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.49)">2</span>
+              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.59)">3</span>
+              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.76)">4</span>
+              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.89)">5</span>
             </div>
             <div class="b-annotated-notes">
               <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.02)"><span class="b-note-line"></span><span class="b-note-text">Introduced a "Favourite" button in the nav, so users can access their saved dinosaurs.</span></div>
@@ -634,12 +659,9 @@
 
 <footer class="case-footer">
   <div class="case-footer-main">
-    <div>
-      <div class="case-footer-eyebrow">— Next case study</div>
-      <h3 class="case-footer-title">Real estate listings bury buyers in <em>information</em>. Homelon leads with comparison.</h3>
-      <a class="case-footer-cta" href="../homelon_case_study/index.html">View Homelon <span>↗</span></a>
-    </div>
-    <div class="case-footer-preview"><img src="../homelon_case_study/visuals/mockup2.png" alt="Homelon map search shown on an iPhone"></div>
+    <div class="case-footer-eyebrow">— Next case study</div>
+    <h3 class="case-footer-title">Real estate listings bury buyers in <em>information</em>. Homelon leads with comparison.</h3>
+    <a class="case-footer-cta" href="../homelon_case_study/index.html">View Homelon <span>↗</span></a>
   </div>
   <div class="case-footer-alt">
     <a href="mailto:farzaneh.falakrou@gmail.com">farzaneh.falakrou@gmail.com</a>

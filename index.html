@@ -99,7 +99,7 @@
       .brand { top: 20px; left: 20px; font-size: 16px; }
     }
     @media (max-width: 380px) {
-      .dock a[data-anchor="about"], .dock a[data-anchor="contact"] { display: none; }
+      .dock a[data-anchor="about"] { display: none; }
     }
 
     /* ═══════════════════════════════════════════════════════════
@@ -178,8 +178,10 @@
       transition: all 0.25s;
       display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px;
       align-items: stretch;
+      position: relative; cursor: pointer;
     }
     .work-card:hover { transform: translateX(8px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+    .work-cta::after { content: ''; position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
     .work-card:nth-child(even) { grid-template-columns: 1fr 1.2fr; }
     .work-card:nth-child(even) .work-preview { order: 2; }
     .work-card:nth-child(even) .work-body { order: 1; }
@@ -335,21 +337,15 @@
     }
     .contact-title em { font-style: italic; color: var(--accent); }
     .contact-cta {
-      display: inline-flex; align-items: center; gap: 16px;
-      padding: 22px 42px;
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 18px 36px;
       background: var(--accent); color: var(--ink);
       border-radius: 100px;
-      font-size: 17px; font-weight: 500;
+      font-size: 15px; font-weight: 500;
       transition: all 0.15s;
     }
     .contact-cta:hover { background: var(--bg); color: var(--ink); }
-    .contact-cta-arr {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: var(--ink); color: var(--accent);
-      display: grid; place-items: center; font-size: 14px;
-      transition: all 0.15s;
-    }
-    .contact-cta:hover .contact-cta-arr { background: var(--accent); color: var(--ink); }
+    .contact-cta-arr { font-size: 15px; transition: all 0.15s; }
     .contact-alt {
       margin-top: 48px;
       display: flex; gap: 32px; justify-content: center;
@@ -400,7 +396,20 @@
       .hero-sub-text { font-size: 17px; }
       .work { padding: 60px 24px 70px; }
       .about { padding: 60px 24px; }
+      .about-grid {
+        grid-template-columns: 1fr; gap: 48px;
+      }
+      .about-title { font-size: clamp(36px, 9vw, 48px); margin-bottom: 28px; }
+      .about-text { font-size: 17px; max-width: none; }
+      .about-side { padding-top: 0; }
+      .about-portrait { max-width: 240px; margin-bottom: 28px; }
       .contact { padding: 80px 24px 60px; }
+      .contact-cta {
+        max-width: 100%; padding: 18px 24px; gap: 12px;
+        font-size: 15px; word-break: break-word; text-align: left;
+      }
+      .contact-cta-arr { flex: none; font-size: 13px; }
+      .contact-alt { flex-wrap: wrap; row-gap: 12px; column-gap: 24px; }
       .footer { padding: 40px 24px 32px; }
       .footer-inner { grid-template-columns: 1fr; gap: 32px; }
       .footer-meta { flex-direction: column; align-items: flex-start; gap: 8px; margin-top: 40px; }
@@ -419,7 +428,6 @@
     <a class="active" href="#hero" data-anchor="hero">Home</a>
     <a href="#work" data-anchor="work">Work</a>
     <a href="#about" data-anchor="about">About</a>
-    <a href="#contact" data-anchor="contact">Contact</a>
     <div class="dock-sep"></div>
     <a class="dock-cta" href="#contact"><span class="dock-cta-label">Get in touch</span> ↗</a>
   </nav>
@@ -487,7 +495,7 @@
           </div>
           <div class="work-footer">
             <a class="work-cta" href="splitsmart-case-study/index.html">Read the case study <span class="work-cta-arr">↗</span></a>
-            <span class="work-stats">4-week design phase</span>
+            <span class="work-stats">2-month design phase</span>
           </div>
         </div>
       </article>
