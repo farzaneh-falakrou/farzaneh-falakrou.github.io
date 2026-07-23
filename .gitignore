@@ -41,3 +41,7 @@ next-env.d.ts
 legacy/
 # local junk / archived scratch (screenshots, stale workspaces)
 _attic/
+
+# tool scratch
+.playwright-mcp/
+.superpowers/
