@@ -48,3 +48,6 @@ _attic/
 
 # design sketches — kept locally, not in repo
 .planning/
+
+# local preview config
+serve.json
