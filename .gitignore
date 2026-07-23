@@ -54,3 +54,6 @@ serve.json
 
 # CV — kept local, not deployed yet
 cv/
+
+# design specs — kept local, not deployed
+docs/
