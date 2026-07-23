@@ -51,3 +51,6 @@ _attic/
 
 # local preview config
 serve.json
+
+# CV — kept local, not deployed yet
+cv/
