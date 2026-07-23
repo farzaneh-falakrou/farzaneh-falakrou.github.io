@@ -45,3 +45,6 @@ _attic/
 # tool scratch
 .playwright-mcp/
 .superpowers/
+
+# design sketches — kept locally, not in repo
+.planning/
