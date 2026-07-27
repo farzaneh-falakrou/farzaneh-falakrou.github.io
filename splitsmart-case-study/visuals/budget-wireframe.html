@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Gaegu:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#f5f4ef; --ink:#1c1c1c; --line:#2b2b2b;
+    --fill:#9a9a9a; --fill-light:#d9d9d6; --track:#e7e6e1; --ph:#cfcec9;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:#e9e8e3;font-family:'Kalam',cursive;color:var(--ink);}
+  .frame{width:1160px;margin:0 auto;background:var(--paper);border:3px solid var(--line);}
+  .layout{display:grid;grid-template-columns:180px 1fr;min-height:760px;}
+  /* sidebar */
+  .side{border-right:2px solid var(--line);padding:22px 16px;}
+  .logo{height:20px;width:100px;background:var(--fill-light);border:1.5px solid var(--line);border-radius:4px;margin-bottom:26px;}
+  .navi{height:12px;background:var(--track);border-radius:3px;margin:14px 0;}
+  .navi.on{background:var(--fill);width:85%;}
+  .navi.w1{width:70%}.navi.w2{width:80%}.navi.w3{width:60%}
+  /* main */
+  .main{padding:20px 30px 30px;}
+  .title{font-family:'Gaegu';font-weight:700;font-size:26px;margin:0 0 16px;}
+  .divider{height:2px;background:var(--line);margin:0 0 20px;}
+  .card{border:2px solid var(--line);border-radius:8px;padding:16px 18px;background:#fbfaf6;margin-bottom:18px;}
+  .label{font-size:17px;font-weight:700;}
+  .muted{color:#777;font-size:14px;}
+  .row{display:flex;align-items:center;justify-content:space-between;}
+  .pill{border:2px solid var(--line);border-radius:20px;padding:2px 14px;font-size:14px;font-weight:700;background:#fff;}
+  /* placeholder blocks (greeked) */
+  .ph{background:var(--ph);border-radius:3px;display:inline-block;height:12px;}
+  /* cap hero — single bar */
+  .bar{height:24px;background:var(--track);border:2px solid var(--line);border-radius:12px;margin:14px 0 8px;overflow:hidden;}
+  .bar > span{display:block;height:100%;background:var(--fill);width:66%;border-right:2px solid var(--line);}
+  .capfoot{display:flex;justify-content:space-between;font-size:14px;color:#555;}
+  /* history */
+  .bars{display:flex;align-items:flex-end;gap:10px;height:140px;border-bottom:2px solid var(--line);padding:0 4px;}
+  .bars .b{flex:1;background:var(--fill-light);border:1.5px solid var(--line);border-bottom:none;border-radius:4px 4px 0 0;}
+  .bars .b.now{background:repeating-linear-gradient(45deg,#fff,#fff 4px,var(--track) 4px,var(--track) 8px);border-style:dashed;}
+  .nowlab{font-size:13px;color:#666;margin-top:6px;text-align:right;}
+  /* two-col breakdown */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  .brow{display:grid;grid-template-columns:1fr 130px 40px;align-items:center;gap:10px;margin:11px 0;}
+  .brow .track{height:12px;background:var(--track);border:1.5px solid var(--line);border-radius:6px;overflow:hidden;}
+  .brow .track > i{display:block;height:100%;background:var(--fill);}
+  /* line by line */
+  .lrow{display:flex;align-items:center;justify-content:space-between;padding:11px 2px;border-bottom:1.5px dashed #bbb;}
+  .sec-label{font-family:'Gaegu';font-weight:700;font-size:18px;margin:2px 0 12px;}
+</style>
+</head>
+<body>
+  <div class="frame">
+    <div class="layout">
+      <!-- SIDEBAR -->
+      <div class="side">
+        <div class="logo"></div>
+        <div class="navi w1"></div>
+        <div class="navi w2"></div>
+        <div class="navi on"></div>
+        <div class="navi w3"></div>
+      </div>
+
+      <!-- MAIN -->
+      <div class="main">
+        <div class="title">Budget screen</div>
+        <div class="divider"></div>
+
+        <!-- CAP HERO: single bar + status + forecast folded in -->
+        <div class="card">
+          <div class="row">
+            <span class="label">your cap this month</span>
+            <span class="pill">on track</span>
+          </div>
+          <div class="bar"><span></span></div>
+          <div class="capfoot">
+            <span>amount left &middot; days remaining</span>
+            <span>projected end of month &middot; under / over cap</span>
+          </div>
+        </div>
+
+        <!-- HISTORY -->
+        <div class="card">
+          <div class="sec-label">history &mdash; month by month</div>
+          <div class="bars">
+            <div class="b" style="height:52%"></div>
+            <div class="b" style="height:70%"></div>
+            <div class="b" style="height:44%"></div>
+            <div class="b" style="height:78%"></div>
+            <div class="b" style="height:58%"></div>
+            <div class="b" style="height:66%"></div>
+            <div class="b" style="height:86%"></div>
+            <div class="b" style="height:60%"></div>
+            <div class="b" style="height:74%"></div>
+            <div class="b" style="height:56%"></div>
+            <div class="b" style="height:68%"></div>
+            <div class="b now" style="height:64%"></div>
+          </div>
+          <div class="nowlab">&larr; now</div>
+        </div>
+
+        <!-- BREAKDOWN: by group + by category -->
+        <div class="cols">
+          <div class="card" style="margin-bottom:0;">
+            <div class="sec-label">by group &middot; contribution to cap</div>
+            <div class="brow"><span class="ph" style="width:55%"></span><span class="track"><i style="width:72%"></i></span><span class="ph" style="width:100%"></span></div>
+            <div class="brow"><span class="ph" style="width:70%"></span><span class="track"><i style="width:50%"></i></span><span class="ph" style="width:100%"></span></div>
+            <div class="brow"><span class="ph" style="width:45%"></span><span class="track"><i style="width:32%"></i></span><span class="ph" style="width:100%"></span></div>
+          </div>
+          <div class="card" style="margin-bottom:0;">
+            <div class="sec-label">by category</div>
+            <div class="brow"><span class="ph" style="width:50%"></span><span class="track"><i style="width:64%"></i></span><span class="ph" style="width:100%"></span></div>
+            <div class="brow"><span class="ph" style="width:65%"></span><span class="track"><i style="width:42%"></i></span><span class="ph" style="width:100%"></span></div>
+            <div class="brow"><span class="ph" style="width:55%"></span><span class="track"><i style="width:40%"></i></span><span class="ph" style="width:100%"></span></div>
+          </div>
+        </div>
+
+        <!-- LINE BY LINE -->
+        <div class="card" style="margin-top:18px;">
+          <div class="sec-label">this month, line by line</div>
+          <div class="lrow"><span class="ph" style="width:45%"></span><span class="ph" style="width:60px"></span></div>
+          <div class="lrow"><span class="ph" style="width:38%"></span><span class="ph" style="width:60px"></span></div>
+          <div class="lrow" style="border-bottom:none;"><span class="ph" style="width:52%"></span><span class="ph" style="width:60px"></span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

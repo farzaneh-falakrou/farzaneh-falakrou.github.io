@@ -1,0 +1,21 @@
+flowchart TB
+  E(["Entry: Budget (nav)"])
+  E --> B["Budget screen"]
+  B --> Bd["Spend vs. monthly cap (+ daily pacing)<br/>By group · By category<br/>Line by line · 12-month history"]
+  Bd --> Drill["Tap a group row"]
+  Drill --> GD["Group detail<br/>expenses that fed the number"]
+  GD --> Act{"Act on it?"}
+  Act -- "+ Add expense" --> A(["→ Flow A"])
+  Act -- "Settle up" --> S(["→ Flow B"])
+  Act -- "Just review" --> End(["Understands where the money went"])
+
+  classDef entry fill:#5A2DF0,stroke:#3A1DB0,color:#fff;
+  classDef screen fill:#EEF0FA,stroke:#C9CEE8,color:#1a1a2e;
+  classDef detail fill:#fff,stroke:#E1E6F0,color:#555;
+  classDef dec fill:#FFF4E5,stroke:#E0A030,color:#7a4a00;
+  classDef done fill:#E6F7F0,stroke:#3BB682,color:#0a5a3a;
+  class E entry;
+  class B,GD screen;
+  class Bd,Drill detail;
+  class Act dec;
+  class A,S,End done;

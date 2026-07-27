@@ -1,0 +1,28 @@
+flowchart TB
+  E(["Entry: Settle up (nav)<br/>OR Debts card (Overview)<br/>OR Group detail → Settle up"])
+  E --> SU["Settle up screen<br/>Net balance · You'll receive / You owe · All clear"]
+  SU --> C{"Clear everyone<br/>or one person?"}
+
+  C -- "Batch" --> B["Pay all  /  Remind all<br/>(min. number of transfers)"]
+  B --> Cleared["Those people move to 'All clear'"]
+
+  C -- "Per person" --> P["Settle up with &lt;person&gt;<br/>net + per-group breakdown"]
+  P --> PD{"You're owed<br/>or you owe?"}
+  PD -- "You're owed" --> R["Send reminder<br/>OR log received manually"]
+  PD -- "You owe" --> Pay["Pay (Apple/Google Pay · Bank · PayPal)<br/>OR log paid manually"]
+  R --> Settled["Person marked settled → back to Settle up"]
+  Pay --> Settled
+
+  Cleared --> End(["Fewer / zero open balances"])
+  Settled --> End
+
+  classDef entry fill:#5A2DF0,stroke:#3A1DB0,color:#fff;
+  classDef screen fill:#EEF0FA,stroke:#C9CEE8,color:#1a1a2e;
+  classDef dec fill:#FFF4E5,stroke:#E0A030,color:#7a4a00;
+  classDef act fill:#fff,stroke:#E1E6F0,color:#555;
+  classDef done fill:#E6F7F0,stroke:#3BB682,color:#0a5a3a;
+  class E entry;
+  class SU,P screen;
+  class C,PD dec;
+  class B,R,Pay,Cleared,Settled act;
+  class End done;

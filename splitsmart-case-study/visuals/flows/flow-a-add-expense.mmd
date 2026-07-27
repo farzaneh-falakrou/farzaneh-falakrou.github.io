@@ -1,0 +1,19 @@
+flowchart TB
+  E(["Entry: + Add expense<br/>(Overview header OR Group detail)"])
+  E --> F["Add expense screen"]
+  F --> Fd["Group (pre-filled if from a group)<br/>Title · Amount · Date · Category<br/>Paid by · Split equally (live 'each pays')"]
+  Fd --> D{"Save or cancel?"}
+  D -- "Cancel / back" --> OV(["Overview<br/>(prod: back to entry point)"])
+  D -- "Add expense" --> S["Saved · balances recalculated<br/>for the whole group"]
+  S --> End(["Overview<br/>(prod: return to origin)"])
+
+  classDef entry fill:#5A2DF0,stroke:#3A1DB0,color:#fff;
+  classDef screen fill:#EEF0FA,stroke:#C9CEE8,color:#1a1a2e;
+  classDef detail fill:#fff,stroke:#E1E6F0,color:#555;
+  classDef dec fill:#FFF4E5,stroke:#E0A030,color:#7a4a00;
+  classDef done fill:#E6F7F0,stroke:#3BB682,color:#0a5a3a;
+  class E entry;
+  class F screen;
+  class Fd,S detail;
+  class D dec;
+  class OV,End done;

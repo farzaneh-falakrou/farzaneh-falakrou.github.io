@@ -340,6 +340,8 @@
       #vb .b-hero-sub { font-size: 18px; }
       #vb .b-toc { display: none; }
     }
+    #vb .b-flow-scroller { scrollbar-width: none; -ms-overflow-style: none; }
+    #vb .b-flow-scroller::-webkit-scrollbar { display: none; }
   </style>
 </head>
 <body>
@@ -446,10 +448,16 @@
         <div class="b-section-mark" id="vb-ia"><span class="num">04</span><span class="label">Information architecture</span></div>
         <p>Before moving to high fidelity, I mapped the full app hierarchy: every screen, how they connect, and where key actions live. This made it possible to validate the two-layer structure — shared and personal — before committing to interface work, and to confirm that the Budget screen could sit as a peer to the Overview / Dashboard rather than buried inside it.</p>
 
-        <figure class="b-figure">
-          <img src="visuals/splitsmart-ia.png" alt="Information architecture diagram — SplitSmart hierarchy with Overview/Dashboard, Budget, Groups, and Settle up as peer nav sections, their detail and action screens, and cross-links showing the action queue's route to Settle up and the budget cap's link into every group expense" style="width: 100%; height: auto; display: block; border-radius: 12px; mix-blend-mode: multiply;">
-          <figcaption>The information architecture.</figcaption>
-        </figure>
+        <div class="b-flow-scroller" style="display: flex; gap: 28px; align-items: flex-start; overflow-x: auto; margin: 36px 0 32px; padding: 4px; scroll-snap-type: x proximity;">
+          <figure class="b-figure" style="flex: 0 0 auto; margin: 0; scroll-snap-align: start;">
+            <img src="visuals/flows/flow-a-add-expense-t.png" alt="Add-expense flow — entry from the Overview header or a group detail opens the Add expense screen (group pre-filled, title, amount, date, category, paid by, split equally); a save-or-cancel decision either returns to the entry point on cancel or, on Add expense, saves and recalculates balances for the whole group before returning to origin" style="height: 560px; width: auto; display: block; border-radius: 12px;">
+            <figcaption>Add an expense user flow.</figcaption>
+          </figure>
+          <figure class="b-figure" style="flex: 0 0 auto; margin: 0; scroll-snap-align: start;">
+            <img src="visuals/flows/flow-b-settle-up-t.png" alt="Settle-up flow — entry from the Settle up nav, the Overview debts card, or a group detail opens the Settle up screen (net balance, you'll receive / you owe / all clear); a decision to clear everyone (batch: pay all or remind all with the minimum number of transfers) or one person branches to a per-person screen where, depending on whether you're owed or you owe, you send a reminder or pay via Apple/Google Pay, bank, or PayPal — each path reducing open balances" style="height: 560px; width: auto; display: block; border-radius: 12px;">
+            <figcaption>Settle up user flow.</figcaption>
+          </figure>
+        </div>
       </section>
 
       <section>
@@ -498,6 +506,17 @@
             <img src="visuals/app-groups.png" alt="Groups screen — each group card leads with budget remaining, alongside total spent and members" style="width: 100%; height: auto; display: block; border-radius: 6px;">
           </div>
           <figcaption>The Groups page — each card leads with budget remaining.</figcaption>
+        </figure>
+
+        <h3>Group detail — the group in context, not in isolation</h3>
+        <p>Opening a group leads with the same position-plus-action pattern: what you spent, what you're owed, what you owe, then the debts right beneath them with settle inline. The deliberate choice sits in the Debts card — it states that <em>settling happens across all groups</em>, so a single group never pretends to be a closed ledger. Members carry their share of the total, and the expense list makes every split legible by showing <em>your share</em> next to each amount — the number that actually matters to the person reading it.</p>
+
+        <figure class="b-figure">
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="visuals/app-group-detail.png" alt="Group detail screen — a single group's position with you spent, owed to you, and you owe, debts within the group settled across all groups, members with their share of total expenses, and an expense ledger showing category, date, who paid, amount, and your share per line" style="width: 100%; height: auto; display: block; border-radius: 6px;">
+          </div>
+          <figcaption>The Group detail — position, debts, members, and a per-share expense ledger.</figcaption>
         </figure>
       </section>
 

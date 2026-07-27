@@ -1,0 +1,42 @@
+flowchart TB
+  Start(["SplitSmart"])
+
+  Start --> OV["Overview<br/>(Dashboard · hub)"]
+  Start --> GR["Groups"]
+  Start --> SU["Settle up"]
+  Start --> BU["Budget"]
+
+  %% Overview
+  OV --> OVd["Overall balance · Monthly spend<br/>Spending over time · By category"]
+  OV --> AE["Add expense"]
+  OV -. Debts .-> SU
+  OV -. Groups preview .-> GD["Group detail"]
+
+  %% Groups
+  GR --> CG["Create group"]
+  GR --> GD
+  GD --> AE
+  GD --> SU
+  GD --> GDd["Expenses · Members · Charts tab"]
+
+  %% Settle up
+  SU --> SUnet["Net balance · You'll receive / You owe<br/>Pay all / Remind all · All clear"]
+  SU --> PP["Settle up with a person<br/>(per-group breakdown)"]
+
+  %% Budget
+  BU --> BUd["Spend vs. cap (+ pacing)<br/>By group · By category<br/>Line by line · 12-month history"]
+  BU -. By group .-> GD
+
+  %% Orphan
+  FR["Friends"] <-.-> AF["Add friend"]
+  ORPH{{"Not wired in prototype —<br/>no entry point"}}
+  ORPH -.-> FR
+
+  classDef nav fill:#5A2DF0,stroke:#3A1DB0,color:#fff;
+  classDef screen fill:#EEF0FA,stroke:#C9CEE8,color:#1a1a2e;
+  classDef detail fill:#fff,stroke:#E1E6F0,color:#555;
+  classDef orphan fill:#FFF4E5,stroke:#E0A030,color:#7a4a00,stroke-dasharray:4 3;
+  class OV,GR,SU,BU nav;
+  class AE,CG,GD,PP,FR,AF screen;
+  class OVd,GDd,SUnet,BUd detail;
+  class ORPH orphan;
