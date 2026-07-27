@@ -1,0 +1,182 @@
+<title>Taxonomy tree — pruning (top-down)</title>
+<style>
+  :root{
+    --bg:#f4f7f6; --surface:#ffffff; --ink:#16211f; --muted:#8a9793; --line:#d8e2df;
+    --accent:#0e9e93; --accent-ink:#0a6f68;
+    --pathfill:#e2f4f0; --pathline:#0e9e93;
+    --sibfill:#f1f5f4; --sibline:#cfdbd7; --sibink:#8a9793;
+    --dino:#c9871f; --dino-ink:#8a5e12; --dinofill:#faf1df;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#0e1514; --surface:#14201e; --ink:#eaf2f0; --muted:#8194900; --line:#2b3733;
+      --accent:#2dd4c4; --accent-ink:#7fecdf;
+      --pathfill:#123c37; --pathline:#2dd4c4;
+      --sibfill:#1a2523; --sibline:#33423e; --sibink:#8697920;
+      --dino:#e0a94a; --dino-ink:#e8bd6a; --dinofill:#2c2513; }
+  }
+  :root[data-theme="light"]{ --bg:#f4f7f6; --surface:#ffffff; --ink:#16211f; --muted:#8a9793; --line:#d8e2df;
+    --accent:#0e9e93; --accent-ink:#0a6f68; --pathfill:#e2f4f0; --pathline:#0e9e93;
+    --sibfill:#f1f5f4; --sibline:#cfdbd7; --sibink:#8a9793; --dino:#c9871f; --dino-ink:#8a5e12; --dinofill:#faf1df; }
+  :root[data-theme="dark"]{ --bg:#0e1514; --surface:#14201e; --ink:#eaf2f0; --muted:#819490; --line:#2b3733;
+    --accent:#2dd4c4; --accent-ink:#7fecdf; --pathfill:#123c37; --pathline:#2dd4c4;
+    --sibfill:#1a2523; --sibline:#33423e; --sibink:#869792; --dino:#e0a94a; --dino-ink:#e8bd6a; --dinofill:#2c2513; }
+
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;line-height:1.5;padding:18px 20px 40px;}
+  .wrap{max-width:900px;margin:0 auto;}
+  .bar{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:0 0 12px;}
+  .field{display:flex;align-items:center;gap:8px;}
+  .field label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
+  select{font:inherit;font-size:14px;padding:7px 30px 7px 11px;border:1px solid var(--line);border-radius:8px;
+    background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%238a9793' stroke-width='2'%3E%3Cpath d='M2 4l4 4 4-4'/%3E%3C/svg%3E") no-repeat right 10px center;
+    color:var(--ink);appearance:none;cursor:pointer;max-width:220px;}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface);}
+  .seg button{font:inherit;font-size:13px;font-weight:600;padding:7px 15px;border:none;background:none;color:var(--muted);cursor:pointer;}
+  .seg button[aria-pressed="true"]{background:var(--accent);color:#fff;}
+  .count{margin-left:auto;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;}
+  .count b{color:var(--ink);font-weight:700;}
+
+  .legend{display:flex;flex-wrap:wrap;gap:6px 18px;padding:2px 2px 10px;font-size:12px;color:var(--muted);}
+  .legend span{display:inline-flex;align-items:center;gap:7px;}
+  .legend .q{opacity:.6;font-style:italic;}
+  .sw{width:20px;height:13px;border-radius:4px;flex:none;border:1.5px solid var(--sibline);background:var(--sibfill);}
+  .sw.path{border-color:var(--pathline);background:var(--pathfill);}
+  .sw.sel{border-color:var(--pathline);border-width:2.5px;background:var(--pathfill);}
+  .sw.dino{border-color:var(--dino);background:var(--dinofill);}
+  .lgl{width:22px;height:0;border-top:2px solid var(--accent);position:relative;}
+  .lgl::after{content:"";position:absolute;right:-1px;top:-3px;border-left:5px solid var(--accent);border-top:3px solid transparent;border-bottom:3px solid transparent;}
+
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;overflow:auto;max-height:500px;}
+  .panel svg{display:block;margin:0 auto;}
+  .bx{font-size:12px;fill:var(--ink);}
+  .bx.path{fill:var(--accent-ink);font-weight:600;}
+  .bx.sel{fill:var(--accent-ink);font-weight:700;font-style:italic;}
+  .bx.dino{fill:var(--dino-ink);font-style:italic;}
+  .bx.sib{fill:var(--sibink);}
+  svg.full .bx{font-size:9.5px;}
+
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px;}
+  .foot{margin-top:12px;font-size:12.5px;color:var(--muted);line-height:1.55;}
+  .foot b{color:var(--ink);font-weight:600;}
+</style>
+
+<div class="wrap">
+  <div class="bar">
+    <div class="field"><label for="dino">Dinosaur</label><select id="dino"></select></div>
+    <div class="seg" role="group" aria-label="View">
+      <button id="mFull" aria-pressed="false">Full tree</button>
+      <button id="mPrune" aria-pressed="true">Pruned</button>
+    </div>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="legend">
+    <span><i class="sw sel"></i> Selected dinosaur</span>
+    <span><i class="sw path"></i> On the lineage</span>
+    <span><i class="lgl"></i> Lineage step</span>
+    <span><i class="sw"></i> Sibling group <i class="q">(clade)</i></span>
+    <span><i class="sw dino"></i> Dinosaur <i class="q">(genus)</i></span>
+  </div>
+  <div class="panel" id="panel"></div>
+  <p class="foot" id="foot"></p>
+</div>
+
+<script>
+const DINOS = [{"n":"Aardonyx","t":["Dinosauria","Saurischia","Sauropodomorpha","Prosauropoda","Anchisauria"],"ty":"prosauropod","di":"herbivorous"},{"n":"Abelisaurus","t":["Dinosauria","Saurischia","Theropoda","Neotheropoda","Ceratosauria","Abelisauridae","Abelisaurinae"],"ty":"large theropod","di":"carnivorous"},{"n":"Achelousaurus","t":["Dinosauria","Ornithischia","Neornithischia","Cerapoda","Marginocephalia","Ceratopsia","Neoceratopsia","Coronosauria","Ceratopsidae","Centrosaurinae"],"ty":"ceratopsian","di":"herbivorous"},{"n":"Aegyptosaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda","Neosauropoda","Macronaria","Camarasauromorpha","Titanosauriformes","Titanosauria"],"ty":"sauropod","di":"herbivorous"},{"n":"Afrovenator","t":["Dinosauria","Saurischia","Theropoda","Megalosauridae","Eustreptospondylinae"],"ty":"large theropod","di":"carnivorous"},{"n":"Alamosaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda","Neosauropoda","Macronaria","Camarasauromorpha","Titanosauriformes","Titanosauria","Lithostrotia"],"ty":"sauropod","di":"herbivorous"},{"n":"Albertosaurus","t":["Dinosauria","Saurischia","Theropoda","Tyrannosauroidea","Tyrannosauridae","Albertosaurinae"],"ty":"large theropod","di":"carnivorous"},{"n":"Alectrosaurus","t":["Dinosauria","Saurischia","Theropoda","Tyrannosauroidea"],"ty":"large theropod","di":"carnivorous"},{"n":"Allosaurus","t":["Dinosauria","Saurischia","Theropoda","Neotheropoda","Tetanurae","Avetheropoda","Carnosauria","Allosauroidea","Allosauridae"],"ty":"large theropod","di":"carnivorous"},{"n":"Alvarezsaurus","t":["Dinosauria","Saurischia","Theropoda","Neotheropoda","Tetanurae","Avetheropoda","Coelurosauria","Tyrannoraptora","Maniraptoriformes","Maniraptora","Alvarezsauridae"],"ty":"small theropod","di":"carnivorous"},{"n":"Amargasaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda","Neosauropoda","Diplodocoidea","Dicraeosauridae"],"ty":"sauropod","di":"herbivorous"},{"n":"Ammosaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Prosauropoda","Anchisauria","Anchisauridae"],"ty":"prosauropod","di":"herbivorous"},{"n":"Amygdalodon","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda"],"ty":"sauropod","di":"herbivorous"},{"n":"Anchiceratops","t":["Dinosauria","Ornithischia","Neornithischia","Cerapoda","Marginocephalia","Ceratopsia","Neoceratopsia","Coronosauria","Ceratopsidae","Chasmosaurinae"],"ty":"ceratopsian","di":"herbivorous"},{"n":"Anchisaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Prosauropoda","Anchisauria","Anchisauridae"],"ty":"prosauropod","di":"herbivorous"},{"n":"Ankylosaurus","t":["Dinosauria","Ornithischia","Thyreophora","Ankylosauria","Ankylosauridae"],"ty":"armoured dinosaur","di":"herbivorous"},{"n":"Anserimimus","t":["Dinosauria","Saurischia","Theropoda","Ornithomimosauria","Ornithomimidae"],"ty":"large theropod","di":"carnivorous"},{"n":"Antarctosaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda","Neosauropoda","Macronaria","Camarasauromorpha","Titanosauriformes","Titanosauria","Lithostrotia"],"ty":"sauropod","di":"herbivorous"},{"n":"Apatosaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda","Neosauropoda","Diplodocoidea","Diplodocidae"],"ty":"sauropod","di":"herbivorous"},{"n":"Aralosaurus","t":["Dinosauria","Ornithischia","Ornithopoda","Hadrosauridae","Euhadrosauria","Hadrosaurinae"],"ty":"large ornithopod","di":"herbivorous"},{"n":"Archaeopteryx","t":["Dinosauria","Saurischia","Theropoda","Paraves","Archaeopterygidae"],"ty":"small theropod","di":"carnivorous"},{"n":"Archaeornithomimus","t":["Dinosauria","Saurischia","Theropoda","Ornithomimosauria","Ornithomimidae"],"ty":"small theropod","di":"carnivorous"},{"n":"Argentinosaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda","Neosauropoda","Macronaria","Camarasauromorpha","Titanosauriformes","Titanosauria"],"ty":"sauropod","di":"herbivorous"},{"n":"Arrhinoceratops","t":["Dinosauria","Ornithischia","Neornithischia","Cerapoda","Marginocephalia","Ceratopsia","Neoceratopsia","Coronosauria","Ceratopsidae","Chasmosaurinae"],"ty":"ceratopsian","di":"herbivorous"},{"n":"Atlascopcosaurus","t":["Dinosauria","Ornithischia","Ornithopoda","Euornithopoda"],"ty":"small ornithopod","di":"herbivorous"},{"n":"Austrosaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda","Neosauropoda","Macronaria","Camarasauromorpha","Titanosauriformes","Titanosauria"],"ty":"sauropod","di":"herbivorous"},{"n":"Avaceratops","t":["Dinosauria","Ornithischia","Neornithischia","Cerapoda","Marginocephalia","Ceratopsia","Neoceratopsia","Coronosauria","Ceratopsidae","Centrosaurinae"],"ty":"ceratopsian","di":"herbivorous"},{"n":"Avimimus","t":["Dinosauria","Saurischia","Theropoda","Neotheropoda","Tetanurae","Avetheropoda","Coelurosauria","Tyrannoraptora","Maniraptoriformes","Maniraptora","Oviraptorosauria","Avimimidae"],"ty":"small theropod","di":"omnivorous"},{"n":"Bagaceratops","t":["Dinosauria","Ornithischia","Neornithischia","Cerapoda","Marginocephalia","Ceratopsia","Neoceratopsia","Bagaceratopsidae"],"ty":"ceratopsian","di":"herbivorous"},{"n":"Barapasaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda","Cetiosauridae"],"ty":"sauropod","di":"herbivorous"},{"n":"Barosaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda","Neosauropoda","Diplodocoidea","Diplodocidae"],"ty":"sauropod","di":"herbivorous"},{"n":"Becklespinax","t":["Dinosauria","Saurischia","Theropoda","Neotheropoda","Tetanurae"],"ty":"large theropod","di":"carnivorous"},{"n":"Borogovia","t":["Dinosauria","Saurischia","Theropoda","Paraves","Eumaniraptoria","Troodontidae"],"ty":"small theropod","di":"carnivorous"},{"n":"Brachiosaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda","Neosauropoda","Macronaria","Camarasauromorpha","Titanosauriformes","Brachiosauridae"],"ty":"sauropod","di":"herbivorous"},{"n":"Brachylophosaurus","t":["Dinosauria","Ornithischia","Ornithopoda","Hadrosauridae","Euhadrosauria","Hadrosaurinae"],"ty":"large ornithopod","di":"herbivorous"},{"n":"Camarasaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda","Neosauropoda","Macronaria","Camarasauromorpha","Camarasauridae"],"ty":"sauropod","di":"herbivorous"},{"n":"Camptosaurus","t":["Dinosauria","Ornithischia","Ornithopoda","Euornithopoda","Iguanadontia","Euiguanadontia","Dryomorpha","Ankylopollexia"],"ty":"large ornithopod","di":"herbivorous"},{"n":"Carcharodontosaurus","t":["Dinosauria","Saurischia","Theropoda","Carcharodontosauridae"],"ty":"large theropod","di":"carnivorous"},{"n":"Carnotaurus","t":["Dinosauria","Saurischia","Theropoda","Neotheropoda","Ceratosauria","Abelisauridae"],"ty":"large theropod","di":"carnivorous"},{"n":"Centrosaurus","t":["Dinosauria","Ornithischia","Neornithischia","Cerapoda","Marginocephalia","Ceratopsia","Neoceratopsia","Coronosauria","Ceratopsidae","Centrosaurinae"],"ty":"ceratopsian","di":"herbivorous"},{"n":"Ceratosaurus","t":["Dinosauria","Saurischia","Theropoda","Neotheropoda","Ceratosauria","Neoceratosauria"],"ty":"large theropod","di":"carnivorous"},{"n":"Cetiosauriscus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda","Neosauropoda","Diplodocoidea"],"ty":"sauropod","di":"herbivorous"},{"n":"Cetiosaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda","Cetiosauridae"],"ty":"sauropod","di":"herbivorous"},{"n":"Chasmosaurus","t":["Dinosauria","Ornithischia","Neornithischia","Cerapoda","Marginocephalia","Ceratopsia","Neoceratopsia","Coronosauria","Ceratopsidae","Chasmosaurinae"],"ty":"ceratopsian","di":"herbivorous"},{"n":"Chindesaurus","t":["Dinosauria","Saurischia","Theropoda","Herrerasauridae"],"ty":"early dinosaur","di":"carnivorous"},{"n":"Chinshakiangosaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda"],"ty":"sauropod","di":"herbivorous"},{"n":"Citipati","t":["Dinosauria","Saurischia","Theropoda","Neotheropoda","Tetanurae","Avetheropoda","Coelurosauria","Tyrannoraptora","Maniraptoriformes","Maniraptora","Oviraptorosauria","Caenagnathoidea","Oviraptoridae","Oviraptorinae"],"ty":"small theropod","di":"omnivorous"},{"n":"Coelophysis","t":["Dinosauria","Saurischia","Theropoda","Neotheropoda","Coelophysoidea","Coelophysidae"],"ty":"small theropod","di":"carnivorous"},{"n":"Coelurus","t":["Dinosauria","Saurischia","Theropoda","Neotheropoda","Tetanurae","Avetheropoda","Coelurosauria"],"ty":"small theropod","di":"carnivorous"},{"n":"Coloradisaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Prosauropoda","Plateosauria","Plateosauridae"],"ty":"prosauropod","di":"omnivorous"},{"n":"Conchoraptor","t":["Dinosauria","Saurischia","Theropoda","Neotheropoda","Tetanurae","Avetheropoda","Coelurosauria","Tyrannoraptora","Maniraptoriformes","Maniraptora","Oviraptorosauria","Caenagnathoidea","Oviraptoridae","Ingeniinae"],"ty":"small theropod","di":"carnivorous"},{"n":"Confuciusornis","t":["Dinosauria","Saurischia","Theropoda","Paraves","Eumaniraptoria","Avialae","Ornithurae","Avibrevicauda","Pygostylia","Confuciusornithidae"],"ty":"small theropod","di":"carnivorous"},{"n":"Corythosaurus","t":["Dinosauria","Ornithischia","Ornithopoda","Hadrosauridae","Lambeosaurinae"],"ty":"large ornithopod","di":"herbivorous"},{"n":"Cryolophosaurus","t":["Dinosauria","Saurischia","Theropoda","Neotheropoda","Tetanurae","Avetheropoda","Carnosauria"],"ty":"large theropod","di":"carnivorous"},{"n":"Dacentrurus","t":["Dinosauria","Ornithischia","Thyreophora","Stegosauria","Stegosauridae"],"ty":"armoured dinosaur","di":"herbivorous"},{"n":"Daspletosaurus","t":["Dinosauria","Saurischia","Theropoda","Tyrannosauroidea","Tyrannosauridae","Tyrannosaurinae"],"ty":"large theropod","di":"carnivorous"},{"n":"Datousaurus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda"],"ty":"sauropod","di":"herbivorous"},{"n":"Deinocheirus","t":["Dinosauria","Saurischia","Theropoda","Ornithomimosauria"],"ty":"large theropod","di":"omnivorous"},{"n":"Deinonychus","t":["Dinosauria","Saurischia","Theropoda","Dromaeosauridae"],"ty":"small theropod","di":"carnivorous"},{"n":"Dilophosaurus","t":["Dinosauria","Saurischia","Theropoda","Neotheropoda","Dilophosauridae"],"ty":"large theropod","di":"carnivorous"},{"n":"Diplodocus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda","Neosauropoda","Diplodocoidea","Diplodocidae"],"ty":"sauropod","di":"herbivorous"},{"n":"Dreadnoughtus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda","Neosauropoda","Macronaria","Camarasauromorpha","Titanosauriformes","Titanosauria"],"ty":"sauropod","di":"herbivorous"},{"n":"Dromaeosaurus","t":["Dinosauria","Saurischia","Theropoda","Dromaeosauridae"],"ty":"small theropod","di":"carnivorous"},{"n":"Dromiceiomimus","t":["Dinosauria","Saurischia","Theropoda","Ornithomimosauria","Ornithomimidae"],"ty":"large theropod","di":"omnivorous"},{"n":"Dryosaurus","t":["Dinosauria","Ornithischia","Ornithopoda","Euornithopoda","Iguanadontia","Euiguanadontia","Dryomorpha","Dryosauridae"],"ty":"small ornithopod","di":"herbivorous"},{"n":"Dryptosaurus","t":["Dinosauria","Saurischia","Theropoda","Tyrannosauroidea"],"ty":"large theropod","di":"carnivorous"},{"n":"Edmontonia","t":["Dinosauria","Ornithischia","Thyreophora","Ankylosauria","Nodosauridae"],"ty":"armoured dinosaur","di":"herbivorous"},{"n":"Elaphrosaurus","t":["Dinosauria","Saurischia","Theropoda","Neotheropoda","Ceratosauria","Neoceratosauria"],"ty":"large theropod","di":"carnivorous"},{"n":"Emausaurus","t":["Dinosauria","Ornithischia","Thyreophora"],"ty":"armoured dinosaur","di":"herbivorous"},{"n":"Eolambia","t":["Dinosauria","Ornithischia","Ornithopoda","Euornithopoda","Iguanadontia","Euiguanadontia","Dryomorpha","Ankylopollexia","Iguanodontoidea"],"ty":"large ornithopod","di":"herbivorous"},{"n":"Eoraptor","t":["Dinosauria","Saurischia","Theropoda"],"ty":"small theropod","di":"carnivorous"},{"n":"Euhelopus","t":["Dinosauria","Saurischia","Sauropodomorpha","Sauropoda","Eusauropoda"],"ty":"sauropod","di":"herbivorous"},{"n":"Euoplocephalus","t":["Dinosauria","Ornithischia","Thyreophora","Ankylosauria","Ankylosauridae"],"ty":"armoured dinosaur","di":"herbivorous"},{"n":"Eustreptospondylus","t":["Dinosauria","Saurischia","Theropoda","Megalosauridae","Eustreptospondylinae"],"ty":"large theropod","di":"carnivorous"},{"n":"Gallimimus","t":["Dinosauria","Saurischia","Theropoda","Ornithomimosauria","Ornithomimidae"],"ty":"large theropod","di":"omnivorous"}];
+let uid=0; const byId={};
+function node(name){ const n={id:++uid,name,kids:new Map(),genus:false,dino:null,parent:null}; byId[n.id]=n; return n; }
+const root=node("Dinosauria");
+for(const d of DINOS){ let n=root; const path=d.t[0]==="Dinosauria"?d.t.slice(1):d.t.slice();
+  for(const c of path){ if(!n.kids.has(c)){const nn=node(c);nn.parent=n;n.kids.set(c,nn);} n=n.kids.get(c); }
+  const g=node(d.n); g.genus=true; g.dino=d; g.parent=n; n.kids.set("§"+d.n,g); }
+let TOTAL=0; (function tally(n){ TOTAL++; if(n.genus){n.species=1;return 1;} let s=0; for(const c of n.kids.values())s+=tally(c); n.species=s; return s; })(root);
+function chain(name){ const set=new Set(); let leafId=null;
+  (function dfs(n){ if(n.genus){ if(n.name===name){set.add(n.id);leafId=n.id;return true;} return false;}
+    for(const c of n.kids.values()){ if(dfs(c)){set.add(n.id);return true;} } return false; })(root);
+  return {set,leafId}; }
+function sortedKids(n){ return [...n.kids.values()].sort((a,b)=> a.genus!==b.genus?(a.genus?1:-1):a.name.localeCompare(b.name)); }
+
+let mode="prune", focus=DINOS[0].n;
+const SVGNS="http://www.w3.org/2000/svg";
+function svel(tag,a){ const e=document.createElementNS(SVGNS,tag); for(const k in a) e.setAttribute(k,a[k]); return e; }
+const panel=document.getElementById("panel"), elCount=document.getElementById("count"), elFoot=document.getElementById("foot");
+
+function buildView(onpath,leafId){
+  function make(n){
+    const on=onpath.has(n.id), sel=n.genus&&n.id===leafId;
+    const v={name:n.name,genus:n.genus,on,sel,children:[]};
+    const kids=sortedKids(n);
+    for(const c of kids){
+      if(mode==="full" || onpath.has(c.id)) v.children.push(make(c));
+      else if(mode==="prune") v.children.push({name:c.name,genus:c.genus,on:false,sel:false,children:[]}); // sibling, not expanded
+    }
+    return v;
+  }
+  return make(root);
+}
+function cls(v){ return v.sel?"sel": v.on?"path": v.genus?"dino":"sib"; }
+function boxW(v,fs){ return Math.max(56, v.name.length*(fs*0.6)+22); }
+
+function render(){
+  const {set:onpath,leafId}=chain(focus);
+  const view=buildView(onpath,leafId);
+  const full = mode==="full";
+  const fs = full?9.5:12;
+  const yGap = full?66:92, BH = full?18:26, mx=30, my=22;
+  let shown=0, maxDepth=0;
+  if(full){
+    let cursor=0;
+    (function place(v,depth){ shown++; maxDepth=Math.max(maxDepth,depth); v.depth=depth; v.w=boxW(v,fs);
+      if(!v.children.length){ v.cx=cursor+v.w/2; cursor+=v.w+12; }
+      else { v.children.forEach(c=>place(c,depth+1)); v.cx=(v.children[0].cx+v.children[v.children.length-1].cx)/2; }
+    })(view,0);
+  } else {
+    const slot=182;
+    (function place(v,depth,xa){ shown++; maxDepth=Math.max(maxDepth,depth); v.depth=depth; v.cx=xa; v.w=boxW(v,fs);
+      if(v.children.length){ let pi=v.children.findIndex(c=>c.on); if(pi<0) pi=(v.children.length-1)/2;
+        v.children.forEach((c,i)=>place(c,depth+1, xa+(i-pi)*slot)); }
+    })(view,0,0);
+  }
+  let minX=Infinity,maxX=-Infinity;
+  (function b(v){ minX=Math.min(minX,v.cx-v.w/2); maxX=Math.max(maxX,v.cx+v.w/2); v.children.forEach(b); })(view);
+  const off = mx - minX;
+  const W=(maxX-minX)+mx*2, H=my*2+maxDepth*yGap+BH;
+  const X=v=>v.cx+off, Y=v=>my+v.depth*yGap+BH/2;
+  const svg=svel("svg",{viewBox:`0 0 ${W} ${H}`,width:W,height:H});
+  if(full) svg.setAttribute("class","full");
+  const defs=svel("defs",{});
+  defs.innerHTML=`<marker id="ar" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>`;
+  svg.appendChild(defs);
+  (function edges(v){ const py=Y(v)+BH/2; for(const c of v.children){ const cy=Y(c)-BH/2; const onEdge=c.on;
+    svg.appendChild(svel("line",{x1:X(v),y1:py,x2:X(c),y2:cy,
+      stroke: onEdge?"var(--accent)":"var(--sibline)","stroke-width": onEdge?2:1.2,
+      "marker-end": onEdge?"url(#ar)":""}));
+    edges(c); } })(view);
+  (function boxes(v){ const cx=X(v), cy=Y(v), c=cls(v);
+    const stroke = c==="path"||c==="sel"?"var(--pathline)": c==="dino"?"var(--dino)":"var(--sibline)";
+    const fill = c==="path"||c==="sel"?"var(--pathfill)": c==="dino"?"var(--dinofill)":"var(--sibfill)";
+    svg.appendChild(svel("rect",{x:cx-v.w/2,y:cy-BH/2,width:v.w,height:BH,rx:6,
+      fill, stroke, "stroke-width": c==="sel"?2.4:1.5}));
+    const t=svel("text",{x:cx,y:cy+fs*0.35,"text-anchor":"middle"}); t.setAttribute("class","bx "+c); t.textContent=v.name;
+    svg.appendChild(t);
+    v.children.forEach(boxes);
+  })(view);
+  panel.innerHTML=""; panel.appendChild(svg);
+
+  elCount.innerHTML=`showing <b>${shown}</b> of ${TOTAL} nodes`;
+  const leaf=byId[leafId], par=leaf.parent, cladeSibs=[...par.kids.values()].filter(c=>!c.genus);
+  let msg = full
+    ? "<b>Full tree</b> — every dinosaur's lineage, top to bottom, all at once."
+    : "<b>Pruned</b> — the selected lineage is drawn in teal with its sibling groups beside each step; branches off the path aren't expanded.";
+  if(cladeSibs.length) msg += `  Note: <b>${leaf.name}</b> is recorded only to <b>${par.name}</b>, so it sits <i>beside</i> the group ${cladeSibs.map(c=>c.name).join(", ")} — not inside it.`;
+  elFoot.innerHTML=msg;
+}
+
+const sel=document.getElementById("dino");
+[...DINOS].sort((a,b)=>a.n.localeCompare(b.n)).forEach(d=>{const o=document.createElement("option");o.value=d.n;o.textContent=d.n;sel.appendChild(o);});
+sel.value=focus; sel.onchange=()=>{ focus=sel.value; render(); };
+const bFull=document.getElementById("mFull"), bPrune=document.getElementById("mPrune");
+function setMode(m){ mode=m; bFull.setAttribute("aria-pressed",m==="full"); bPrune.setAttribute("aria-pressed",m==="prune"); render(); }
+bFull.onclick=()=>setMode("full"); bPrune.onclick=()=>setMode("prune");
+render();
+</script>
