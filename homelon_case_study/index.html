@@ -405,7 +405,6 @@
       cursor: grab;
     }
     .zoomview-stage:active { cursor: grabbing; }
-    .zoomview-stage > * { transform-origin: 0 0; }
     .zoomview-stage svg, .zoomview-stage img {
       width: min(92vw, 1520px); height: auto; display: block;
       user-select: none; -webkit-user-drag: none;
@@ -808,18 +807,19 @@
   (function () {
     const view = document.getElementById('zoomview');
     const stage = document.getElementById('zoomStage');
-    if (!view || !stage || typeof panzoom !== 'function') return;
-    let pz = null, lastFocus = null;
+    if (!view || !stage || typeof Panzoom !== 'function') return;
+    let pz = null, wheelHandler = null, lastFocus = null;
     const svgCache = {};
 
     function mount(node) {
       stage.innerHTML = '';
       stage.appendChild(node);
-      pz = panzoom(node, {
-        maxZoom: 12, minZoom: 0.6,
-        bounds: true, boundsPadding: 0.15,
-        zoomDoubleClickSpeed: 2.2, smoothScroll: false
+      pz = Panzoom(node, {
+        maxScale: 12, minScale: 0.5, step: 0.3,
+        canvas: true, cursor: 'grab', animate: false
       });
+      wheelHandler = pz.zoomWithWheel;
+      stage.addEventListener('wheel', wheelHandler);
     }
 
     function openImg(src, alt) {
@@ -843,7 +843,8 @@
     }
 
     function close() {
-      if (pz) { pz.dispose(); pz = null; }
+      if (wheelHandler) { stage.removeEventListener('wheel', wheelHandler); wheelHandler = null; }
+      if (pz) { pz.destroy(); pz = null; }
       stage.innerHTML = '';
       view.classList.remove('open'); view.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
