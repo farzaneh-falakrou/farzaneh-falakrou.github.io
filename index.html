@@ -354,6 +354,62 @@
     .contact-alt a { transition: color 0.15s; }
     .contact-alt a:hover { color: var(--accent); }
 
+    /* ── Contact modal (Web3Forms — no backend) ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      display: flex; justify-content: center; align-items: flex-start;
+      padding: 24px; overflow-y: auto;
+      background: rgba(20,16,12,0.55); backdrop-filter: blur(6px);
+      opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s;
+    }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
+    .modal-card {
+      position: relative; width: 100%; max-width: 520px; margin: auto;
+      background: var(--surface); color: var(--ink);
+      border-radius: 24px; padding: 44px 44px 40px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+      transform: translateY(12px) scale(0.98); transition: transform 0.25s ease;
+      text-align: left;
+    }
+    .modal-overlay.open .modal-card { transform: none; }
+    .modal-close {
+      position: absolute; top: 18px; right: 18px;
+      width: 36px; height: 36px; border-radius: 50%;
+      display: grid; place-items: center; font-size: 22px; line-height: 1;
+      color: var(--muted); background: var(--bg-2); transition: all 0.15s;
+    }
+    .modal-close:hover { background: var(--accent); color: var(--ink); }
+    .modal-eyebrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 18px; margin-bottom: 10px; }
+    .modal-title { font-family: var(--font-serif); font-size: 40px; font-weight: 400; line-height: 1; letter-spacing: -0.02em; margin-bottom: 10px; }
+    .modal-sub { font-size: 15px; color: var(--muted); margin-bottom: 28px; }
+    .mform { display: flex; flex-direction: column; gap: 16px; }
+    .mform-row { display: flex; gap: 16px; }
+    .mform-row .mfield { flex: 1; }
+    .mfield { display: flex; flex-direction: column; gap: 7px; }
+    .mfield label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+    .mfield input, .mfield textarea {
+      font-family: inherit; font-size: 15px; color: var(--ink);
+      background: var(--bg-2); border: 1px solid var(--line);
+      border-radius: 12px; padding: 13px 15px; width: 100%;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .mfield input::placeholder, .mfield textarea::placeholder { color: var(--muted-2); }
+    .mfield input:focus, .mfield textarea:focus { outline: none; border-color: var(--accent); background: var(--surface); }
+    .mfield textarea { resize: vertical; min-height: 120px; }
+    .mform-hp { position: absolute; left: -9999px; opacity: 0; }
+    .mform-submit {
+      align-self: flex-start; margin-top: 4px;
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 15px 32px; border: none; cursor: pointer;
+      background: var(--accent); color: var(--ink);
+      border-radius: 100px; font-size: 15px; font-weight: 500; transition: all 0.15s;
+    }
+    .mform-submit:hover { background: var(--ink); color: var(--bg); }
+    .mform-submit:disabled { opacity: 0.55; cursor: default; }
+    .mform-status { font-size: 14px; min-height: 20px; color: var(--muted); }
+    .mform-status.ok { color: #1f9d57; }
+    .mform-status.err { color: #d1462f; }
+
     /* ═══════════════════════════════════════════════════════════
        FOOTER
        ─────────────────────────────────────────────────────────── */
@@ -411,6 +467,9 @@
       }
       .contact-cta-arr { flex: none; font-size: 13px; }
       .contact-alt { flex-wrap: wrap; row-gap: 12px; column-gap: 24px; }
+      .modal-card { padding: 40px 24px 32px; }
+      .modal-title { font-size: 34px; }
+      .mform-row { flex-direction: column; gap: 16px; }
       .footer { padding: 40px 24px 32px; }
       .footer-inner { grid-template-columns: 1fr; gap: 32px; }
       .footer-meta { flex-direction: column; align-items: flex-start; gap: 8px; margin-top: 40px; }
@@ -430,7 +489,7 @@
     <a href="#work" data-anchor="work">Work</a>
     <a href="#about" data-anchor="about">About</a>
     <div class="dock-sep"></div>
-    <a class="dock-cta" href="#contact"><span class="dock-cta-label">Get in touch</span> ↗</a>
+    <a class="dock-cta" href="#contact" data-open-modal><span class="dock-cta-label">Get in touch</span> ↗</a>
   </nav>
 
   <!-- ─────────── HERO ─────────── -->
@@ -602,7 +661,7 @@
     <div class="contact-inner">
       <div class="contact-eyebrow">— Let's talk</div>
       <h2 class="contact-title">Got a <em>problem</em> worth<br>thinking carefully about?</h2>
-      <a class="contact-cta" href="mailto:farzaneh.falakrou@gmail.com">
+      <a class="contact-cta" href="mailto:farzaneh.falakrou@gmail.com" data-open-modal>
         Get in touch
         <span class="contact-cta-arr">↗</span>
       </a>
@@ -633,7 +692,7 @@
       </div>
       <div class="footer-col">
         <div class="footer-col-label">Contact</div>
-        <a href="mailto:farzaneh.falakrou@gmail.com">Get in touch ↗</a>
+        <a href="mailto:farzaneh.falakrou@gmail.com" data-open-modal>Get in touch ↗</a>
       </div>
     </div>
     <div class="footer-meta">
@@ -692,6 +751,99 @@
         document.body.classList.toggle('dark-section', inDark);
       });
     })();
+
+    // ─── Contact modal (Web3Forms) ───
+    document.addEventListener('DOMContentLoaded', function() {
+      const modal = document.getElementById('contactModal');
+      if (!modal) return;
+      const form = document.getElementById('contactForm');
+      const status = document.getElementById('cmStatus');
+      const btn = form.querySelector('.mform-submit');
+      let lastFocus = null;
+
+      function open(e) {
+        if (e) e.preventDefault();
+        lastFocus = document.activeElement;
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        const first = form.querySelector('input, textarea');
+        if (first) setTimeout(() => first.focus(), 60);
+      }
+      function close() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (lastFocus) lastFocus.focus();
+      }
+
+      document.querySelectorAll('[data-open-modal]').forEach(el => el.addEventListener('click', open));
+      modal.querySelectorAll('[data-close-modal]').forEach(el => el.addEventListener('click', close));
+      modal.addEventListener('click', e => { if (e.target === modal) close(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) close(); });
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        status.className = 'mform-status';
+        status.textContent = 'Sending…';
+        btn.disabled = true;
+        const data = Object.fromEntries(new FormData(form).entries());
+        fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data)
+        })
+        .then(r => r.json())
+        .then(res => {
+          if (res.success) {
+            status.className = 'mform-status ok';
+            status.textContent = "Thanks — your message is on its way. I'll be in touch soon.";
+            form.reset();
+          } else {
+            status.className = 'mform-status err';
+            status.textContent = res.message || 'Something went wrong. Please try again.';
+          }
+          btn.disabled = false;
+        })
+        .catch(() => {
+          status.className = 'mform-status err';
+          status.textContent = 'Network error. Please try again in a moment.';
+          btn.disabled = false;
+        });
+      });
+    });
   </script>
+
+  <!-- ─────────── CONTACT MODAL (Web3Forms — no backend) ─────────── -->
+  <div class="modal-overlay" id="contactModal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="cmTitle">
+      <button class="modal-close" type="button" data-close-modal aria-label="Close">×</button>
+      <div class="modal-eyebrow">— Let's talk</div>
+      <h2 class="modal-title" id="cmTitle">Get in touch</h2>
+      <p class="modal-sub">Tell me a little about what you're working on — I'll get back to you by email.</p>
+      <form class="mform" id="contactForm">
+        <input type="hidden" name="access_key" value="bf0d75ec-45ff-4a29-82ec-f34efbba672a">
+        <input type="hidden" name="subject" value="New message from your portfolio">
+        <input type="hidden" name="from_name" value="Portfolio contact form">
+        <input type="checkbox" name="botcheck" class="mform-hp" tabindex="-1" autocomplete="off">
+        <div class="mform-row">
+          <div class="mfield">
+            <label for="cmName">Name</label>
+            <input id="cmName" type="text" name="name" placeholder="Your name" required>
+          </div>
+          <div class="mfield">
+            <label for="cmEmail">Email</label>
+            <input id="cmEmail" type="email" name="email" placeholder="you@example.com" required>
+          </div>
+        </div>
+        <div class="mfield">
+          <label for="cmMsg">Message</label>
+          <textarea id="cmMsg" name="message" placeholder="What would you like to talk about?" required></textarea>
+        </div>
+        <button class="mform-submit" type="submit">Send message <span class="contact-cta-arr">↗</span></button>
+        <p class="mform-status" id="cmStatus" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
 </body>
 </html>
