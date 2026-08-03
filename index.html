@@ -6,7 +6,7 @@
   <title>Farzaneh Falakrou — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg:        #ebe8e2;
@@ -24,6 +24,7 @@
 
       --font-serif: 'Instrument Serif', serif;
       --font-sans:  'Inter', system-ui, sans-serif;
+      --font-display: 'Poppins', system-ui, sans-serif;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { width: 100%; overflow-x: hidden; }
@@ -54,12 +55,34 @@
        ─────────────────────────────────────────────────────────── */
     .brand {
       position: absolute; top: 40px; left: 80px; z-index: 60;
-      display: flex; align-items: center; gap: 6px;
-      font-family: var(--font-serif); font-style: italic; font-size: 22px;
-      color: var(--ink);
+      display: inline-block;
+      font-family: var(--font-display); font-weight: 600; font-size: 28px;
+      letter-spacing: -0.02em; line-height: 1;
+      color: var(--ink); text-decoration: none;
       transition: color 0.3s;
     }
     body.dark-section .brand { color: var(--bg); }
+    .brand-word { position: relative; white-space: nowrap; }
+    .brand-end { display: inline-block; width: 0; }
+
+    /* Accent dot: rests as a full stop after the final "h", and on hover rolls
+       left along the baseline to sit in front of the "f". Rest position and the
+       roll distance are measured in JS (see "Brand dot placement") because both
+       depend on Poppins' metrics at the current font-size. */
+    .brand-dot {
+      position: absolute; top: 0; left: 0;
+      width: 0.2em; height: 0.2em;
+      border-radius: 50%; background: var(--accent);
+      pointer-events: none;
+      transform: translateX(0);
+      transition: transform 480ms cubic-bezier(0.34, 1.28, 0.64, 1);
+    }
+    .brand:hover .brand-dot { transform: translateX(var(--dx-h, 0px)); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .brand-dot { transition: none; }
+      .brand:hover .brand-dot { transform: translateX(0); }
+    }
 
     /* ───────────────────────────────────────────────────────────
        Floating Dock (bottom-center)
@@ -90,13 +113,13 @@
     @media (max-width: 960px) {
       .dock a { padding: 8px 14px; font-size: 12px; }
       .dock-cta { white-space: nowrap; }
-      .brand { font-size: 18px; left: 24px; }
+      .brand { font-size: 23px; left: 24px; }
     }
     @media (max-width: 600px) {
       .dock { top: 76px; padding: 4px; gap: 0; max-width: calc(100vw - 24px); }
       .dock a { padding: 8px 10px; font-size: 11px; white-space: nowrap; }
       .dock-cta .dock-cta-label { display: none; }
-      .brand { top: 20px; left: 20px; font-size: 16px; }
+      .brand { top: 20px; left: 20px; font-size: 20px; }
     }
     @media (max-width: 380px) {
       .dock a[data-anchor="about"] { display: none; }
@@ -479,9 +502,9 @@
 <body>
 
   <!-- Brand mark -->
-  <div class="brand">
-    <span>Farzaneh Falakrou</span>
-  </div>
+  <a class="brand" href="#hero" aria-label="Farzaneh Falakrou — home">
+    <span class="brand-word">farzaneh<span class="brand-end"></span><span class="brand-dot" aria-hidden="true"></span></span>
+  </a>
 
   <!-- Floating dock -->
   <nav class="dock" id="dock">
@@ -735,6 +758,40 @@
           if (target) target.scrollIntoView({ behavior: 'smooth' });
         });
       });
+    })();
+
+    // ─── Brand dot placement ───
+    // Rest = a full stop just after the final "h". Hover = rolled left along
+    // the baseline to sit in front of the "f". Both are measured rather than
+    // hard-coded so they stay correct across the three brand font-sizes and
+    // once Poppins has actually loaded.
+    (function() {
+      const brand = document.querySelector('.brand');
+      if (!brand) return;
+      const word  = brand.querySelector('.brand-word');
+      const endEl = brand.querySelector('.brand-end');
+      const dot   = brand.querySelector('.brand-dot');
+      if (!word || !endEl || !dot) return;
+
+      // Fraction of the glyph box where a full stop sits, and the gap either
+      // side of the word, in dot-widths.
+      const PERIOD_Y = 0.74, GAP = 0.55;
+
+      function place() {
+        const w = word.getBoundingClientRect();
+        const e = endEl.getBoundingClientRect();
+        const size = dot.offsetWidth;
+        const restX = (e.left - w.left) + size * GAP;
+        const restY = w.height * PERIOD_Y - size / 2;
+        const frontX = -(size * (1 + GAP));
+        dot.style.left = restX + 'px';
+        dot.style.top  = restY + 'px';
+        dot.style.setProperty('--dx-h', (frontX - restX) + 'px');
+      }
+
+      place();
+      window.addEventListener('resize', place);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
     })();
 
     // ─── Brand-mark color flip on dark sections ───
