@@ -55,5 +55,8 @@ serve.json
 # CV — kept local, not deployed yet
 cv/
 
+# motivation letters — used for applications, never deployed
+letter/
+
 # design specs — kept local, not deployed
 docs/
