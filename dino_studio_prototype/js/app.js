@@ -154,4 +154,24 @@
       renderGrid(allDinosaurs);
       if (typeof renderCharts === 'function') renderCharts(allDinosaurs);
     });
+  let cachedTaxonomyTree = null;
+
+  function renderTaxonomyTree(selectedDino) {
+    if (!cachedTaxonomyTree) cachedTaxonomyTree = buildTaxonomyTree(allDinosaurs);
+    const activePath = resolveTaxonomyPath(selectedDino);
+
+    function renderNode(node, depth) {
+      const pathIndex = depth - 1;
+      const isActive = pathIndex >= 0 && pathIndex < activePath.length && node.name === activePath[pathIndex];
+      const childrenEntries = Object.values(node.children);
+      const childrenHTML = childrenEntries
+        .map((child) => renderNode(child, depth + 1))
+        .join('');
+      const cssClass = depth === 0 ? '' : `branch ${isActive ? 'active' : 'dim'}`;
+      const label = depth === 0 ? '' : `<div>${node.name}</div>`;
+      return `<div class="${cssClass}">${label}${childrenHTML}</div>`;
+    }
+
+    document.getElementById('taxonomy-tree').innerHTML = renderNode(cachedTaxonomyTree, 0);
+  }
 })();
