@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict');
-const { filterDinosaurs } = require('../js/data.js');
+const { filterDinosaurs, computeDietCounts, computeTypeCounts } = require('../js/data.js');
 
 const sample = [
   { name: 'Aardonyx', foundIn: 'South Africa', diet: 'herbivorous', typeOfDinosaur: 'prosauropod' },
@@ -32,9 +32,25 @@ function testNoMatchesReturnsEmptyArray() {
   assert.deepEqual(result, []);
 }
 
+function testComputeDietCounts() {
+  const result = computeDietCounts(sample);
+  assert.deepEqual(result, { herbivorous: 2, carnivorous: 1, omnivorous: 0 });
+}
+
+function testComputeTypeCounts() {
+  const result = computeTypeCounts(sample);
+  assert.deepEqual(result, {
+    prosauropod: 1,
+    'large theropod': 1,
+    ceratopsian: 1,
+  });
+}
+
 testFilterByNameCaseInsensitivePartial();
 testFilterByCountry();
 testFilterByDiet();
 testEmptyQueryReturnsAll();
 testNoMatchesReturnsEmptyArray();
+testComputeDietCounts();
+testComputeTypeCounts();
 console.log('filterDinosaurs: all tests passed');
