@@ -25,6 +25,37 @@ function computeTypeCounts(dinosaurs) {
   return counts;
 }
 
+function resolveTaxonomyPath(dinosaur) {
+  const segments = dinosaur.taxonomy
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  segments.push(dinosaur.name);
+  return segments;
+}
+
+function buildTaxonomyTree(dinosaurs) {
+  const root = { name: 'root', children: {}, isLeaf: false };
+  for (const dinosaur of dinosaurs) {
+    const path = resolveTaxonomyPath(dinosaur);
+    let node = root;
+    path.forEach((segment, i) => {
+      if (!node.children[segment]) {
+        node.children[segment] = { name: segment, children: {}, isLeaf: false };
+      }
+      node = node.children[segment];
+      if (i === path.length - 1) node.isLeaf = true;
+    });
+  }
+  return root;
+}
+
 if (typeof module !== 'undefined') {
-  module.exports = { filterDinosaurs, computeDietCounts, computeTypeCounts };
+  module.exports = {
+    filterDinosaurs,
+    computeDietCounts,
+    computeTypeCounts,
+    resolveTaxonomyPath,
+    buildTaxonomyTree,
+  };
 }

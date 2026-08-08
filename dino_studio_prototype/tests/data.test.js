@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict');
-const { filterDinosaurs, computeDietCounts, computeTypeCounts } = require('../js/data.js');
+const { filterDinosaurs, computeDietCounts, computeTypeCounts, resolveTaxonomyPath, buildTaxonomyTree } = require('../js/data.js');
 
 const sample = [
   { name: 'Aardonyx', foundIn: 'South Africa', diet: 'herbivorous', typeOfDinosaur: 'prosauropod' },
@@ -46,6 +46,37 @@ function testComputeTypeCounts() {
   });
 }
 
+const taxonomySample = [
+  { name: 'Aardonyx', taxonomy: 'Dinosauria, Saurischia, Sauropodomorpha, Prosauropoda, Anchisauria' },
+  { name: 'Massospondylus', taxonomy: 'Dinosauria, Saurischia, Sauropodomorpha, Prosauropoda' },
+  { name: 'Tyrannosaurus', taxonomy: 'Dinosauria, Saurischia, Theropoda, Tyrannosauroidea' },
+];
+
+function testResolveTaxonomyPathAppendsName() {
+  const path = resolveTaxonomyPath(taxonomySample[0]);
+  assert.deepEqual(path, [
+    'Dinosauria', 'Saurischia', 'Sauropodomorpha', 'Prosauropoda', 'Anchisauria', 'Aardonyx',
+  ]);
+}
+
+function testResolveTaxonomyPathTrimsWhitespace() {
+  const path = resolveTaxonomyPath({ name: 'X', taxonomy: 'A,  B ,C' });
+  assert.deepEqual(path, ['A', 'B', 'C', 'X']);
+}
+
+function testBuildTaxonomyTreeSharesCommonAncestors() {
+  const tree = buildTaxonomyTree(taxonomySample);
+  // root -> Dinosauria -> Saurischia -> Sauropodomorpha -> Prosauropoda -> { Anchisauria -> Aardonyx (leaf) }
+  //                                                                      -> Massospondylus (leaf)
+  const dinosauria = tree.children['Dinosauria'];
+  const saurischia = dinosauria.children['Saurischia'];
+  assert.equal(Object.keys(saurischia.children).sort().join(','), 'Sauropodomorpha,Theropoda');
+
+  const prosauropoda = saurischia.children['Sauropodomorpha'].children['Prosauropoda'];
+  assert.ok(prosauropoda.children['Massospondylus'].isLeaf);
+  assert.ok(prosauropoda.children['Anchisauria'].children['Aardonyx'].isLeaf);
+}
+
 testFilterByNameCaseInsensitivePartial();
 testFilterByCountry();
 testFilterByDiet();
@@ -53,4 +84,7 @@ testEmptyQueryReturnsAll();
 testNoMatchesReturnsEmptyArray();
 testComputeDietCounts();
 testComputeTypeCounts();
+testResolveTaxonomyPathAppendsName();
+testResolveTaxonomyPathTrimsWhitespace();
+testBuildTaxonomyTreeSharesCommonAncestors();
 console.log('filterDinosaurs: all tests passed');
