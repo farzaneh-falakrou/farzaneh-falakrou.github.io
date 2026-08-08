@@ -174,4 +174,37 @@
 
     document.getElementById('taxonomy-tree').innerHTML = renderNode(cachedTaxonomyTree, 0);
   }
+
+  function renderWorldMapBase() {
+    // Simplified continent silhouettes (rough blobs, not survey-accurate),
+    // drawn once against the 100x60 viewBox used by #world-map in index.html.
+    return `
+      <path d="M8,20 Q20,10 32,18 Q30,28 18,30 Q10,28 8,20 Z" fill="#cfe0d1" />
+      <path d="M22,32 Q30,30 34,40 Q30,50 24,48 Q20,40 22,32 Z" fill="#cfe0d1" />
+      <path d="M45,15 Q60,8 65,18 Q62,28 50,26 Q44,22 45,15 Z" fill="#cfe0d1" />
+      <path d="M46,28 Q54,26 56,38 Q52,48 48,44 Q44,36 46,28 Z" fill="#cfe0d1" />
+      <path d="M62,15 Q80,10 88,20 Q84,30 68,28 Q62,22 62,15 Z" fill="#cfe0d1" />
+      <path d="M78,42 Q90,38 94,46 Q88,52 80,50 Q76,46 78,42 Z" fill="#cfe0d1" />
+    `;
+  }
+
+  function renderMap(selectedDino) {
+    const svg = document.getElementById('world-map');
+    const positions = resolveCountryPositions(selectedDino.foundIn);
+    const dots = positions.map(({ x, y }) =>
+      `<circle cx="${x}" cy="${y * 0.6}" r="1.6" fill="#c96f4a" stroke="#fff" stroke-width="0.4" />`
+    ).join('');
+    svg.innerHTML = renderWorldMapBase() + dots;
+
+    const carousel = document.getElementById('carousel');
+    carousel.innerHTML = allDinosaurs.map((d) => `
+      <img src="${d.imageSrc}" alt="${d.name}" data-name="${d.name}"
+           class="${d.name === selectedDino.name ? 'selected' : ''}"
+           onerror="this.onerror=null;this.src='images/placeholder.svg'" />
+    `).join('');
+    carousel.querySelectorAll('img').forEach((img) => {
+      img.addEventListener('click', () => selectDinosaur(img.dataset.name));
+    });
+  }
+
 })();
