@@ -53,6 +53,59 @@
   window.selectDinosaur = selectDinosaur;
   function renderDetail() {}
 
+  const DIET_COLORS = { herbivorous: '#2e4d3e', carnivorous: '#c96f4a', omnivorous: '#d8b04a' };
+  const TYPE_COLORS = [
+    '#2e4d3e', '#c96f4a', '#d8b04a', '#6b8f71', '#a85c3b',
+    '#e0c987', '#4c6b57', '#b98a5e', '#8a7b4f',
+  ];
+
+  function describeArc(cx, cy, r, startAngle, endAngle) {
+    const toXY = (angle) => [
+      cx + r * Math.cos((Math.PI / 180) * angle),
+      cy + r * Math.sin((Math.PI / 180) * angle),
+    ];
+    const [x1, y1] = toXY(startAngle);
+    const [x2, y2] = toXY(endAngle);
+    const largeArc = endAngle - startAngle > 180 ? 1 : 0;
+    return `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z`;
+  }
+
+  function renderPie(svgEl, counts, colorFor, innerHole) {
+    const total = Object.values(counts).reduce((a, b) => a + b, 0);
+    const cx = 50, cy = 50, r = 45;
+    let angle = 0;
+    let svg = '';
+    for (const [key, value] of Object.entries(counts)) {
+      if (value === 0) continue;
+      const sweep = (value / total) * 360;
+      svg += `<path d="${describeArc(cx, cy, r, angle, angle + sweep)}" fill="${colorFor(key)}" />`;
+      angle += sweep;
+    }
+    if (innerHole) svg += `<circle cx="${cx}" cy="${cy}" r="22" fill="var(--sand)" />`;
+    svgEl.innerHTML = svg;
+  }
+
+  function renderLegend(listEl, counts, colorFor) {
+    listEl.innerHTML = Object.entries(counts)
+      .filter(([, count]) => count > 0)
+      .map(([key, count]) => `
+        <li><span class="swatch" style="background:${colorFor(key)}"></span>${key} (${count})</li>
+      `).join('');
+  }
+
+  function renderCharts(dinosaurs) {
+    const dietCounts = computeDietCounts(dinosaurs);
+    const dietColorFor = (key) => DIET_COLORS[key];
+    renderPie(document.getElementById('diet-chart'), dietCounts, dietColorFor, false);
+    renderLegend(document.getElementById('diet-legend'), dietCounts, dietColorFor);
+
+    const typeCounts = computeTypeCounts(dinosaurs);
+    const typeKeys = Object.keys(typeCounts);
+    const typeColorFor = (key) => TYPE_COLORS[typeKeys.indexOf(key) % TYPE_COLORS.length];
+    renderPie(document.getElementById('type-chart'), typeCounts, typeColorFor, true);
+    renderLegend(document.getElementById('type-legend'), typeCounts, typeColorFor);
+  }
+
   fetch('data/dinosaurs.json')
     .then((res) => res.json())
     .then((dinosaurs) => {
