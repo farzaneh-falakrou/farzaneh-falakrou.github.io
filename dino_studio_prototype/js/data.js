@@ -78,6 +78,10 @@ const COUNTRY_POSITIONS = {
   Zimbabwe: { x: 58, y: 61 },
 };
 
+// Assumes COUNTRY_POSITIONS covers every country in dinosaurs.json (verified
+// at build time — see Task 5 of plans/2026-08-08-dino-studio-prototype.md).
+// Unknown countries are silently dropped: add new entries here when adding
+// dinosaurs whose foundIn introduces a country not already listed above.
 function resolveCountryPositions(foundIn) {
   return foundIn
     .split(',')
