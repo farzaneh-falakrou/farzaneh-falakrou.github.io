@@ -4,25 +4,61 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dino Studio — Prototype</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <header class="site-header">
     <div class="wordmark">Dino Studio</div>
-    <input id="search-input" class="search-input" type="search" placeholder="Search by name, country, diet, type…" />
+    <nav class="header-nav">
+      <a href="../dino_studio_case_study/index.html">Case study</a>
+      <a href="https://github.com/farzaneh-falakrou">GitHub</a>
+    </nav>
   </header>
 
+  <section class="hero">
+    <h1>Find all Dinosaurs</h1>
+    <p class="hero-subtitle">75 dinosaurs from the National History Museum's dataset — search, filter, and explore where they lived and how they're classified.</p>
+  </section>
+
+  <section class="filter-bar" aria-label="Search and filters">
+    <input id="search-input" class="filter-input filter-search" type="search" placeholder="Find a dinosaur…" />
+    <select id="country-filter" class="filter-input" aria-label="Filter by country">
+      <option value="">Country</option>
+    </select>
+    <select id="diet-filter" class="filter-input" aria-label="Filter by diet">
+      <option value="">Diet</option>
+    </select>
+    <label class="filter-range">
+      Min weight (kg)
+      <input id="weight-filter" type="range" min="0" max="0" value="0" step="1" />
+      <output id="weight-filter-value">0</output>
+    </label>
+    <label class="filter-range">
+      Min length (m)
+      <input id="length-filter" type="range" min="0" max="0" value="0" step="1" />
+      <output id="length-filter-value">0</output>
+    </label>
+    <button id="clear-filters" type="button" class="filter-clear">Clear filters</button>
+  </section>
+
   <main>
-    <section class="overview" aria-label="Dataset overview">
-      <div class="chart-block">
-        <h2>Diet</h2>
-        <svg id="diet-chart" viewBox="0 0 100 100" role="img" aria-label="Diet distribution pie chart"></svg>
-        <ul id="diet-legend" class="chart-legend"></ul>
+    <section class="map-overview" aria-label="Dinosaur locations and dataset overview">
+      <div class="map-card">
+        <h2>Dinosaur locations</h2>
+        <div id="world-map" role="img" aria-label="Interactive world map of dinosaur discovery locations"></div>
       </div>
-      <div class="chart-block">
-        <h2>Type</h2>
-        <svg id="type-chart" viewBox="0 0 100 100" role="img" aria-label="Dinosaur type distribution doughnut chart"></svg>
-        <ul id="type-legend" class="chart-legend"></ul>
+      <div class="charts-card">
+        <div class="chart-block">
+          <h3>Diet</h3>
+          <svg id="diet-chart" viewBox="0 0 100 100" role="img" aria-label="Diet distribution pie chart"></svg>
+          <ul id="diet-legend" class="chart-legend"></ul>
+        </div>
+        <div class="chart-block">
+          <h3>Type</h3>
+          <svg id="type-chart" viewBox="0 0 100 100" role="img" aria-label="Dinosaur type distribution doughnut chart"></svg>
+          <ul id="type-legend" class="chart-legend"></ul>
+        </div>
       </div>
     </section>
 
@@ -34,24 +70,19 @@
     <section id="detail-panel" class="detail-panel" aria-label="Selected dinosaur detail">
       <p id="detail-placeholder" class="empty-state">Select a dinosaur to see its details, taxonomy, and location.</p>
       <div id="detail-content" class="detail-content" hidden>
-        <div class="detail-info">
+        <div class="detail-image-col">
           <img id="detail-image" src="" alt="" />
-          <div>
-            <h2 id="detail-name"></h2>
-            <dl id="detail-fields"></dl>
-            <p id="detail-description"></p>
-          </div>
+          <div id="detail-fields" class="fact-pills"></div>
         </div>
-
-        <div class="taxonomy-block">
+        <div class="detail-text-col">
+          <h2 id="detail-name"></h2>
+          <h3>Description</h3>
+          <p id="detail-description"></p>
           <h3>Taxonomy</h3>
-          <div id="taxonomy-tree" class="taxonomy-tree"></div>
-        </div>
-
-        <div class="map-block">
-          <h3>Found in</h3>
-          <svg id="world-map" viewBox="0 0 100 60" role="img" aria-label="Stylized world map"></svg>
-          <div id="carousel" class="carousel"></div>
+          <p id="detail-when-lived" class="when-lived"></p>
+          <div class="taxonomy-tree-wrap">
+            <svg id="taxonomy-tree" class="taxonomy-tree" role="img" aria-label="Taxonomy lineage diagram"></svg>
+          </div>
         </div>
       </div>
     </section>
@@ -62,6 +93,7 @@
     <a href="https://github.com/farzaneh-falakrou">GitHub</a>
   </footer>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
 </body>

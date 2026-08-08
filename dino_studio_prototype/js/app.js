@@ -1,11 +1,18 @@
-// dino_studio_prototype/js/app.js
 (function () {
   let allDinosaurs = [];
   let selectedDinosaur = null;
+  let mapCountryFilter = null; // geo name (properties.name) clicked on the choropleth, or null
 
   const grid = document.getElementById('dino-grid');
   const emptyState = document.getElementById('grid-empty-state');
   const searchInput = document.getElementById('search-input');
+  const countryFilter = document.getElementById('country-filter');
+  const dietFilter = document.getElementById('diet-filter');
+  const weightFilter = document.getElementById('weight-filter');
+  const lengthFilter = document.getElementById('length-filter');
+  const weightFilterValue = document.getElementById('weight-filter-value');
+  const lengthFilterValue = document.getElementById('length-filter-value');
+  const clearFiltersButton = document.getElementById('clear-filters');
 
   function dinoCardHTML(dinosaur) {
     return `
@@ -34,12 +41,73 @@
     });
   }
 
-  function handleSearch() {
-    const filtered = filterDinosaurs(allDinosaurs, searchInput.value);
-    renderGrid(filtered);
+  function populateFilterOptions(dinosaurs) {
+    const countries = new Set();
+    dinosaurs.forEach((d) => d.foundIn.split(',').forEach((c) => countries.add(c.trim())));
+    countryFilter.innerHTML = '<option value="">Country</option>' +
+      [...countries].sort().map((c) => `<option value="${c}">${c}</option>`).join('');
+
+    const diets = [...new Set(dinosaurs.map((d) => d.diet))].sort();
+    dietFilter.innerHTML = '<option value="">Diet</option>' +
+      diets.map((d) => `<option value="${d}">${d}</option>`).join('');
+
+    const weights = dinosaurs.map((d) => d.weight).filter((w) => typeof w === 'number');
+    const lengths = dinosaurs.map((d) => d.length).filter((l) => typeof l === 'number');
+    weightFilter.max = String(Math.max(...weights));
+    lengthFilter.max = String(Math.max(...lengths));
   }
 
-  searchInput.addEventListener('input', handleSearch);
+  function applyFilters() {
+    let result = filterDinosaurs(allDinosaurs, searchInput.value);
+
+    const country = countryFilter.value;
+    if (country) {
+      result = result.filter((d) => d.foundIn.split(',').map((c) => c.trim()).includes(country));
+    }
+
+    const diet = dietFilter.value;
+    if (diet) {
+      result = result.filter((d) => d.diet === diet);
+    }
+
+    const minWeight = Number(weightFilter.value);
+    if (minWeight > 0) {
+      result = result.filter((d) => typeof d.weight === 'number' && d.weight >= minWeight);
+    }
+
+    const minLength = Number(lengthFilter.value);
+    if (minLength > 0) {
+      result = result.filter((d) => typeof d.length === 'number' && d.length >= minLength);
+    }
+
+    if (mapCountryFilter) {
+      result = result.filter((d) => resolveCountryGeoNames(d.foundIn).includes(mapCountryFilter));
+    }
+
+    renderGrid(result);
+  }
+
+  searchInput.addEventListener('input', applyFilters);
+  countryFilter.addEventListener('change', applyFilters);
+  dietFilter.addEventListener('change', applyFilters);
+  weightFilter.addEventListener('input', () => {
+    weightFilterValue.textContent = weightFilter.value;
+    applyFilters();
+  });
+  lengthFilter.addEventListener('input', () => {
+    lengthFilterValue.textContent = lengthFilter.value;
+    applyFilters();
+  });
+  clearFiltersButton.addEventListener('click', () => {
+    searchInput.value = '';
+    countryFilter.value = '';
+    dietFilter.value = '';
+    weightFilter.value = '0';
+    lengthFilter.value = '0';
+    weightFilterValue.textContent = '0';
+    lengthFilterValue.textContent = '0';
+    setMapCountryFilter(null);
+  });
 
   function selectDinosaur(name) {
     selectedDinosaur = allDinosaurs.find((d) => d.name === name) || null;
@@ -48,14 +116,11 @@
     document.getElementById('detail-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  // renderDetail, renderCharts, renderTaxonomyTree, renderMap are added in later tasks.
-  // Declared here as no-ops so this task is independently testable in a browser.
   const DETAIL_FIELDS = [
     ['Type', 'typeOfDinosaur'],
     ['Length', (d) => `${d.length}m`],
     ['Weight', 'weight'],
     ['Diet', 'diet'],
-    ['When lived', 'whenLived'],
     ['Type species', 'typeSpecies'],
     ['Found in', 'foundIn'],
     ['Named by', 'namedBy'],
@@ -74,30 +139,32 @@
     placeholder.hidden = true;
     content.hidden = false;
 
-    document.getElementById('detail-image').src = dinosaur.imageSrc;
-    document.getElementById('detail-image').alt = dinosaur.name;
-    document.getElementById('detail-image').onerror = function () {
+    const detailImage = document.getElementById('detail-image');
+    detailImage.src = dinosaur.imageSrc;
+    detailImage.alt = dinosaur.name;
+    detailImage.onerror = function () {
       this.onerror = null;
       this.src = 'images/placeholder.svg';
     };
     document.getElementById('detail-name').textContent = dinosaur.name;
     document.getElementById('detail-description').textContent = dinosaur.description;
+    document.getElementById('detail-when-lived').textContent = `When lived: ${dinosaur.whenLived}`;
 
     document.getElementById('detail-fields').innerHTML = DETAIL_FIELDS.map(([label, accessor]) => {
       const value = typeof accessor === 'function' ? accessor(dinosaur) : dinosaur[accessor];
-      return `<dt>${label}</dt><dd>${value}</dd>`;
+      return `<div class="fact-pill"><dt>${label}</dt><dd>${value}</dd></div>`;
     }).join('');
 
     if (typeof renderTaxonomyTree === 'function') renderTaxonomyTree(dinosaur);
-    if (typeof renderMap === 'function') renderMap(dinosaur);
+    if (typeof focusMapOnDinosaur === 'function') focusMapOnDinosaur(dinosaur);
   }
 
   window.selectDinosaur = selectDinosaur;
 
-  const DIET_COLORS = { herbivorous: '#2e4d3e', carnivorous: '#c96f4a', omnivorous: '#d8b04a' };
+  const DIET_COLORS = { herbivorous: '#ff5a5a', carnivorous: '#111111', omnivorous: '#e0a72e' };
   const TYPE_COLORS = [
-    '#2e4d3e', '#c96f4a', '#d8b04a', '#6b8f71', '#a85c3b',
-    '#e0c987', '#4c6b57', '#b98a5e', '#8a7b4f',
+    '#ff5a5a', '#111111', '#e0a72e', '#6b6b6b', '#e14545',
+    '#f2a5a5', '#3d3d3d', '#c9c9c9', '#9c1f1f',
   ];
 
   function describeArc(cx, cy, r, startAngle, endAngle) {
@@ -122,7 +189,7 @@
       svg += `<path d="${describeArc(cx, cy, r, angle, angle + sweep)}" fill="${colorFor(key)}" />`;
       angle += sweep;
     }
-    if (innerHole) svg += `<circle cx="${cx}" cy="${cy}" r="22" fill="var(--sand)" />`;
+    if (innerHole) svg += `<circle cx="${cx}" cy="${cy}" r="22" fill="var(--card-bg)" />`;
     svgEl.innerHTML = svg;
   }
 
@@ -147,64 +214,122 @@
     renderLegend(document.getElementById('type-legend'), typeCounts, typeColorFor);
   }
 
+  // --- Taxonomy tree: renders only the selected dinosaur's ancestor chain
+  // (not the full 75-dinosaur tree) as a left-to-right lineage diagram.
+  function renderTaxonomyTree(dinosaur) {
+    const path = resolveTaxonomyPath(dinosaur);
+    const stepX = 150;
+    const cx0 = 60;
+    const cy = 50;
+    const width = cx0 * 2 + (path.length - 1) * stepX;
+    const svg = document.getElementById('taxonomy-tree');
+    svg.setAttribute('viewBox', `0 0 ${width} 110`);
+    svg.setAttribute('width', width);
+    svg.setAttribute('height', 110);
+
+    let markup = '';
+    path.forEach((name, i) => {
+      const x = cx0 + i * stepX;
+      const isLast = i === path.length - 1;
+      if (i > 0) {
+        markup += `<line class="taxonomy-edge" x1="${x - stepX}" y1="${cy}" x2="${x}" y2="${cy}" />`;
+      }
+      markup += `<circle class="taxonomy-node-circle${isLast ? ' active' : ''}" cx="${x}" cy="${cy}" r="7" />`;
+      markup += `<text class="taxonomy-node-label${isLast ? ' active' : ''}" x="${x}" y="${cy + 28}" text-anchor="middle">${name}</text>`;
+    });
+    svg.innerHTML = markup;
+  }
+
+  // --- Choropleth map (Leaflet + real country GeoJSON) ---
+  let leafletMap = null;
+  let countryLayer = null;
+  let countryCounts = {};
+  let selectedCountryLayer = null;
+
+  function choroplethColor(count, maxCount) {
+    if (count === 0) return '#f0f0f0';
+    const t = maxCount > 0 ? count / maxCount : 0;
+    // Interpolate from light coral (#ffd6d6) to deep red (#c81e1e).
+    const from = [255, 214, 214];
+    const to = [200, 30, 30];
+    const rgb = from.map((c, i) => Math.round(c + (to[i] - c) * t));
+    return `rgb(${rgb.join(',')})`;
+  }
+
+  function styleForFeature(feature) {
+    const count = countryCounts[feature.properties.name] || 0;
+    const maxCount = Math.max(1, ...Object.values(countryCounts));
+    return {
+      fillColor: choroplethColor(count, maxCount),
+      fillOpacity: count > 0 ? 0.9 : 0.5,
+      color: '#ffffff',
+      weight: 1,
+    };
+  }
+
+  function setMapCountryFilter(geoName) {
+    mapCountryFilter = mapCountryFilter === geoName ? null : geoName;
+    applyFilters();
+  }
+
+  function onEachCountryFeature(feature, layer) {
+    const count = countryCounts[feature.properties.name] || 0;
+    layer.bindTooltip(`${feature.properties.name}: ${count} dinosaur${count === 1 ? '' : 's'}`, {
+      className: 'country-tooltip',
+    });
+    layer.on('click', () => setMapCountryFilter(feature.properties.name));
+  }
+
+  function focusMapOnDinosaur(dinosaur) {
+    if (!leafletMap || !countryLayer) return;
+
+    if (selectedCountryLayer) {
+      countryLayer.resetStyle(selectedCountryLayer);
+      selectedCountryLayer = null;
+    }
+
+    const geoNames = resolveCountryGeoNames(dinosaur.foundIn);
+    if (geoNames.length === 0) return;
+
+    const bounds = [];
+    countryLayer.eachLayer((layer) => {
+      if (geoNames.includes(layer.feature.properties.name)) {
+        layer.setStyle({ color: '#111111', weight: 3 });
+        layer.bringToFront();
+        bounds.push(layer.getBounds());
+        if (!selectedCountryLayer) selectedCountryLayer = layer;
+      }
+    });
+
+    if (bounds.length > 0) {
+      let combined = bounds[0];
+      bounds.slice(1).forEach((b) => { combined = combined.extend(b); });
+      leafletMap.flyToBounds(combined, { maxZoom: 5, duration: 0.6 });
+    }
+  }
+
+  function initMap() {
+    leafletMap = L.map('world-map', { scrollWheelZoom: true }).setView([15, 10], 1.4);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 8,
+    }).addTo(leafletMap);
+
+    fetch('data/world-countries.geo.json')
+      .then((res) => res.json())
+      .then((geo) => {
+        countryCounts = computeCountryCounts(allDinosaurs);
+        countryLayer = L.geoJSON(geo, { style: styleForFeature, onEachFeature: onEachCountryFeature }).addTo(leafletMap);
+      });
+  }
+
   fetch('data/dinosaurs.json')
     .then((res) => res.json())
     .then((dinosaurs) => {
       allDinosaurs = dinosaurs;
+      populateFilterOptions(allDinosaurs);
       renderGrid(allDinosaurs);
       if (typeof renderCharts === 'function') renderCharts(allDinosaurs);
+      initMap();
     });
-  let cachedTaxonomyTree = null;
-
-  function renderTaxonomyTree(selectedDino) {
-    if (!cachedTaxonomyTree) cachedTaxonomyTree = buildTaxonomyTree(allDinosaurs);
-    const activePath = resolveTaxonomyPath(selectedDino);
-
-    function renderNode(node, depth) {
-      const pathIndex = depth - 1;
-      const isActive = pathIndex >= 0 && pathIndex < activePath.length && node.name === activePath[pathIndex];
-      const childrenEntries = Object.values(node.children);
-      const childrenHTML = childrenEntries
-        .map((child) => renderNode(child, depth + 1))
-        .join('');
-      const cssClass = depth === 0 ? '' : `branch ${isActive ? 'active' : 'dim'}`;
-      const label = depth === 0 ? '' : `<div>${node.name}</div>`;
-      return `<div class="${cssClass}">${label}${childrenHTML}</div>`;
-    }
-
-    document.getElementById('taxonomy-tree').innerHTML = renderNode(cachedTaxonomyTree, 0);
-  }
-
-  function renderWorldMapBase() {
-    // Simplified continent silhouettes (rough blobs, not survey-accurate),
-    // drawn once against the 100x60 viewBox used by #world-map in index.html.
-    return `
-      <path d="M8,20 Q20,10 32,18 Q30,28 18,30 Q10,28 8,20 Z" fill="#cfe0d1" />
-      <path d="M22,32 Q30,30 34,40 Q30,50 24,48 Q20,40 22,32 Z" fill="#cfe0d1" />
-      <path d="M45,15 Q60,8 65,18 Q62,28 50,26 Q44,22 45,15 Z" fill="#cfe0d1" />
-      <path d="M46,28 Q54,26 56,38 Q52,48 48,44 Q44,36 46,28 Z" fill="#cfe0d1" />
-      <path d="M62,15 Q80,10 88,20 Q84,30 68,28 Q62,22 62,15 Z" fill="#cfe0d1" />
-      <path d="M78,42 Q90,38 94,46 Q88,52 80,50 Q76,46 78,42 Z" fill="#cfe0d1" />
-    `;
-  }
-
-  function renderMap(selectedDino) {
-    const svg = document.getElementById('world-map');
-    const positions = resolveCountryPositions(selectedDino.foundIn);
-    const dots = positions.map(({ x, y }) =>
-      `<circle cx="${x}" cy="${y * 0.6}" r="1.6" fill="#c96f4a" stroke="#fff" stroke-width="0.4" />`
-    ).join('');
-    svg.innerHTML = renderWorldMapBase() + dots;
-
-    const carousel = document.getElementById('carousel');
-    carousel.innerHTML = allDinosaurs.map((d) => `
-      <img src="${d.imageSrc}" alt="${d.name}" data-name="${d.name}"
-           class="${d.name === selectedDino.name ? 'selected' : ''}"
-           onerror="this.onerror=null;this.src='images/placeholder.svg'" />
-    `).join('');
-    carousel.querySelectorAll('img').forEach((img) => {
-      img.addEventListener('click', () => selectDinosaur(img.dataset.name));
-    });
-  }
-
 })();

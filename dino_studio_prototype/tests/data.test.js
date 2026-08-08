@@ -1,7 +1,8 @@
 const assert = require('node:assert/strict');
 const {
   filterDinosaurs, computeDietCounts, computeTypeCounts,
-  resolveTaxonomyPath, buildTaxonomyTree, resolveCountryPositions,
+  resolveTaxonomyPath, buildTaxonomyTree,
+  resolveCountryGeoNames, computeCountryCounts,
 } = require('../js/data.js');
 
 const sample = [
@@ -80,19 +81,29 @@ function testBuildTaxonomyTreeSharesCommonAncestors() {
   assert.ok(prosauropoda.children['Anchisauria'].children['Aardonyx'].isLeaf);
 }
 
-function testResolveCountryPositionsSingleCountry() {
-  const positions = resolveCountryPositions('USA');
-  assert.deepEqual(positions, [{ country: 'USA', x: 22, y: 28 }]);
+function testResolveCountryGeoNamesSingleCountry() {
+  const geoNames = resolveCountryGeoNames('USA');
+  assert.deepEqual(geoNames, ['United States of America']);
 }
 
-function testResolveCountryPositionsMultiCountry() {
-  const positions = resolveCountryPositions('Canada, USA');
-  assert.deepEqual(positions.map((p) => p.country), ['Canada', 'USA']);
+function testResolveCountryGeoNamesMultiCountry() {
+  const geoNames = resolveCountryGeoNames('Canada, USA');
+  assert.deepEqual(geoNames, ['Canada', 'United States of America']);
 }
 
-function testResolveCountryPositionsUnknownCountrySkipped() {
-  const positions = resolveCountryPositions('Atlantis');
-  assert.deepEqual(positions, []);
+function testResolveCountryGeoNamesUnmappedSkipped() {
+  const geoNames = resolveCountryGeoNames('Atlantis, North Africa');
+  assert.deepEqual(geoNames, []);
+}
+
+function testComputeCountryCountsTalliesMultiCountryEntries() {
+  const counts = computeCountryCounts(sample);
+  // Aardonyx -> South Africa; Tyrannosaurus -> USA, Canada; Triceratops -> USA
+  assert.deepEqual(counts, {
+    'South Africa': 1,
+    'United States of America': 2,
+    Canada: 1,
+  });
 }
 
 testFilterByNameCaseInsensitivePartial();
@@ -105,7 +116,8 @@ testComputeTypeCounts();
 testResolveTaxonomyPathAppendsName();
 testResolveTaxonomyPathTrimsWhitespace();
 testBuildTaxonomyTreeSharesCommonAncestors();
-testResolveCountryPositionsSingleCountry();
-testResolveCountryPositionsMultiCountry();
-testResolveCountryPositionsUnknownCountrySkipped();
+testResolveCountryGeoNamesSingleCountry();
+testResolveCountryGeoNamesMultiCountry();
+testResolveCountryGeoNamesUnmappedSkipped();
+testComputeCountryCountsTalliesMultiCountryEntries();
 console.log('filterDinosaurs: all tests passed');

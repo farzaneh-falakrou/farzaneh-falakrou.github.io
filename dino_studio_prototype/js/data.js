@@ -50,44 +50,63 @@ function buildTaxonomyTree(dinosaurs) {
   return root;
 }
 
-const COUNTRY_POSITIONS = {
-  Algeria: { x: 51, y: 34 },
-  Antarctica: { x: 50, y: 94 },
-  Argentina: { x: 32, y: 69 },
-  Australia: { x: 88, y: 64 },
-  Canada: { x: 21, y: 19 },
-  Chile: { x: 30, y: 68 },
-  China: { x: 79, y: 31 },
-  Egypt: { x: 58, y: 35 },
-  England: { x: 50, y: 21 },
-  France: { x: 51, y: 24 },
-  Germany: { x: 53, y: 22 },
-  India: { x: 72, y: 38 },
-  Kazakhstan: { x: 69, y: 23 },
-  Mongolia: { x: 79, y: 24 },
-  Morocco: { x: 48, y: 32 },
-  Niger: { x: 52, y: 41 },
-  'North Africa': { x: 54, y: 36 },
-  Portugal: { x: 48, y: 28 },
-  'South Africa': { x: 57, y: 67 },
-  Tanzania: { x: 60, y: 53 },
-  USA: { x: 22, y: 28 },
-  'United Kingdom': { x: 50, y: 21 },
-  Uruguay: { x: 34, y: 68 },
-  Uzbekistan: { x: 68, y: 27 },
-  Zimbabwe: { x: 58, y: 61 },
+// Maps a country string as it appears in dinosaurs.json's `foundIn` field to
+// the matching `properties.name` in data/world-countries.geo.json (Natural
+// Earth 110m country polygons, via the world-atlas npm package), for
+// rendering an actual choropleth map. `null` means no matching polygon
+// exists in that dataset (e.g. "North Africa" is a region, not a country) —
+// those are excluded from the choropleth rather than mapped incorrectly.
+const COUNTRY_GEO_NAMES = {
+  Algeria: 'Algeria',
+  Antarctica: 'Antarctica',
+  Argentina: 'Argentina',
+  Australia: 'Australia',
+  Canada: 'Canada',
+  Chile: 'Chile',
+  China: 'China',
+  Egypt: 'Egypt',
+  England: 'United Kingdom',
+  France: 'France',
+  Germany: 'Germany',
+  India: 'India',
+  Kazakhstan: 'Kazakhstan',
+  Mongolia: 'Mongolia',
+  Morocco: 'Morocco',
+  Niger: 'Niger',
+  'North Africa': null,
+  Portugal: 'Portugal',
+  'South Africa': 'South Africa',
+  Tanzania: 'Tanzania',
+  USA: 'United States of America',
+  'United Kingdom': 'United Kingdom',
+  Uruguay: 'Uruguay',
+  Uzbekistan: 'Uzbekistan',
+  Zimbabwe: 'Zimbabwe',
 };
 
-// Assumes COUNTRY_POSITIONS covers every country in dinosaurs.json (verified
-// at build time — see Task 5 of plans/2026-08-08-dino-studio-prototype.md).
-// Unknown countries are silently dropped: add new entries here when adding
-// dinosaurs whose foundIn introduces a country not already listed above.
-function resolveCountryPositions(foundIn) {
+// Assumes COUNTRY_GEO_NAMES covers every country in dinosaurs.json (verified
+// at build time). Unknown/unmapped countries are silently dropped: add new
+// entries here when adding dinosaurs whose foundIn introduces a country not
+// already listed above.
+function resolveCountryGeoNames(foundIn) {
   return foundIn
     .split(',')
     .map((c) => c.trim())
-    .filter((c) => COUNTRY_POSITIONS[c])
-    .map((c) => ({ country: c, ...COUNTRY_POSITIONS[c] }));
+    .map((c) => COUNTRY_GEO_NAMES[c])
+    .filter(Boolean);
+}
+
+// Tallies how many dinosaurs were found in each choropleth country (by geo
+// name), for coloring the map by density. A dinosaur found in multiple
+// countries (e.g. "Canada, USA") counts once toward each.
+function computeCountryCounts(dinosaurs) {
+  const counts = {};
+  for (const dinosaur of dinosaurs) {
+    for (const geoName of resolveCountryGeoNames(dinosaur.foundIn)) {
+      counts[geoName] = (counts[geoName] || 0) + 1;
+    }
+  }
+  return counts;
 }
 
 if (typeof module !== 'undefined') {
@@ -97,7 +116,8 @@ if (typeof module !== 'undefined') {
     computeTypeCounts,
     resolveTaxonomyPath,
     buildTaxonomyTree,
-    resolveCountryPositions,
-    COUNTRY_POSITIONS,
+    resolveCountryGeoNames,
+    computeCountryCounts,
+    COUNTRY_GEO_NAMES,
   };
 }
