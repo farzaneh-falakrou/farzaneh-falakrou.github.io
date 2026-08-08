@@ -1,5 +1,8 @@
 const assert = require('node:assert/strict');
-const { filterDinosaurs, computeDietCounts, computeTypeCounts, resolveTaxonomyPath, buildTaxonomyTree } = require('../js/data.js');
+const {
+  filterDinosaurs, computeDietCounts, computeTypeCounts,
+  resolveTaxonomyPath, buildTaxonomyTree, resolveCountryPositions,
+} = require('../js/data.js');
 
 const sample = [
   { name: 'Aardonyx', foundIn: 'South Africa', diet: 'herbivorous', typeOfDinosaur: 'prosauropod' },
@@ -77,6 +80,21 @@ function testBuildTaxonomyTreeSharesCommonAncestors() {
   assert.ok(prosauropoda.children['Anchisauria'].children['Aardonyx'].isLeaf);
 }
 
+function testResolveCountryPositionsSingleCountry() {
+  const positions = resolveCountryPositions('USA');
+  assert.deepEqual(positions, [{ country: 'USA', x: 22, y: 28 }]);
+}
+
+function testResolveCountryPositionsMultiCountry() {
+  const positions = resolveCountryPositions('Canada, USA');
+  assert.deepEqual(positions.map((p) => p.country), ['Canada', 'USA']);
+}
+
+function testResolveCountryPositionsUnknownCountrySkipped() {
+  const positions = resolveCountryPositions('Atlantis');
+  assert.deepEqual(positions, []);
+}
+
 testFilterByNameCaseInsensitivePartial();
 testFilterByCountry();
 testFilterByDiet();
@@ -87,4 +105,7 @@ testComputeTypeCounts();
 testResolveTaxonomyPathAppendsName();
 testResolveTaxonomyPathTrimsWhitespace();
 testBuildTaxonomyTreeSharesCommonAncestors();
+testResolveCountryPositionsSingleCountry();
+testResolveCountryPositionsMultiCountry();
+testResolveCountryPositionsUnknownCountrySkipped();
 console.log('filterDinosaurs: all tests passed');

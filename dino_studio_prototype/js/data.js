@@ -50,6 +50,42 @@ function buildTaxonomyTree(dinosaurs) {
   return root;
 }
 
+const COUNTRY_POSITIONS = {
+  Algeria: { x: 51, y: 34 },
+  Antarctica: { x: 50, y: 94 },
+  Argentina: { x: 32, y: 69 },
+  Australia: { x: 88, y: 64 },
+  Canada: { x: 21, y: 19 },
+  Chile: { x: 30, y: 68 },
+  China: { x: 79, y: 31 },
+  Egypt: { x: 58, y: 35 },
+  England: { x: 50, y: 21 },
+  France: { x: 51, y: 24 },
+  Germany: { x: 53, y: 22 },
+  India: { x: 72, y: 38 },
+  Kazakhstan: { x: 69, y: 23 },
+  Mongolia: { x: 79, y: 24 },
+  Morocco: { x: 48, y: 32 },
+  Niger: { x: 52, y: 41 },
+  'North Africa': { x: 54, y: 36 },
+  Portugal: { x: 48, y: 28 },
+  'South Africa': { x: 57, y: 67 },
+  Tanzania: { x: 60, y: 53 },
+  USA: { x: 22, y: 28 },
+  'United Kingdom': { x: 50, y: 21 },
+  Uruguay: { x: 34, y: 68 },
+  Uzbekistan: { x: 68, y: 27 },
+  Zimbabwe: { x: 58, y: 61 },
+};
+
+function resolveCountryPositions(foundIn) {
+  return foundIn
+    .split(',')
+    .map((c) => c.trim())
+    .filter((c) => COUNTRY_POSITIONS[c])
+    .map((c) => ({ country: c, ...COUNTRY_POSITIONS[c] }));
+}
+
 if (typeof module !== 'undefined') {
   module.exports = {
     filterDinosaurs,
@@ -57,5 +93,7 @@ if (typeof module !== 'undefined') {
     computeTypeCounts,
     resolveTaxonomyPath,
     buildTaxonomyTree,
+    resolveCountryPositions,
+    COUNTRY_POSITIONS,
   };
 }
