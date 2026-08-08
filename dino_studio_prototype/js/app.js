@@ -50,8 +50,49 @@
 
   // renderDetail, renderCharts, renderTaxonomyTree, renderMap are added in later tasks.
   // Declared here as no-ops so this task is independently testable in a browser.
+  const DETAIL_FIELDS = [
+    ['Type', 'typeOfDinosaur'],
+    ['Length', (d) => `${d.length}m`],
+    ['Weight', 'weight'],
+    ['Diet', 'diet'],
+    ['When lived', 'whenLived'],
+    ['Type species', 'typeSpecies'],
+    ['Found in', 'foundIn'],
+    ['Named by', 'namedBy'],
+  ];
+
+  function renderDetail(dinosaur) {
+    const placeholder = document.getElementById('detail-placeholder');
+    const content = document.getElementById('detail-content');
+
+    if (!dinosaur) {
+      placeholder.hidden = false;
+      content.hidden = true;
+      return;
+    }
+
+    placeholder.hidden = true;
+    content.hidden = false;
+
+    document.getElementById('detail-image').src = dinosaur.imageSrc;
+    document.getElementById('detail-image').alt = dinosaur.name;
+    document.getElementById('detail-image').onerror = function () {
+      this.onerror = null;
+      this.src = 'images/placeholder.svg';
+    };
+    document.getElementById('detail-name').textContent = dinosaur.name;
+    document.getElementById('detail-description').textContent = dinosaur.description;
+
+    document.getElementById('detail-fields').innerHTML = DETAIL_FIELDS.map(([label, accessor]) => {
+      const value = typeof accessor === 'function' ? accessor(dinosaur) : dinosaur[accessor];
+      return `<dt>${label}</dt><dd>${value}</dd>`;
+    }).join('');
+
+    if (typeof renderTaxonomyTree === 'function') renderTaxonomyTree(dinosaur);
+    if (typeof renderMap === 'function') renderMap(dinosaur);
+  }
+
   window.selectDinosaur = selectDinosaur;
-  function renderDetail() {}
 
   const DIET_COLORS = { herbivorous: '#2e4d3e', carnivorous: '#c96f4a', omnivorous: '#d8b04a' };
   const TYPE_COLORS = [
