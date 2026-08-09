@@ -535,6 +535,13 @@
       li.setAttribute('aria-selected', String(isSelected));
     });
     renderDetail(selectedDinosaur);
+    // The timeline and size charts mark the selection at render time, but
+    // selecting never re-rendered them — so a dinosaur picked from the list or
+    // the search box was highlighted everywhere except the two charts that show
+    // it in context, which is exactly where the highlight is worth having.
+    const inView = filterDinosaurs();
+    if (typeof renderTimeline === 'function') renderTimeline(inView);
+    if (typeof renderSizeChart === 'function') renderSizeChart(inView);
     if (!fromSearch) {
       scrollToElement(document.getElementById('detail-panel'));
       // Focus, not just scroll — otherwise a screen reader is never told that
