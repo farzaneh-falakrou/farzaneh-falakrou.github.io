@@ -31,9 +31,11 @@
   --sib-fill:   rgba(255,255,255,0.04);
   --sib-line:   rgba(255,255,255,0.22);
   --sib-ink:    rgba(240,232,200,0.72);
-  --dino-stroke: #d4a048;
-  --dino-ink:   #d4a048;
-  --dino-fill:  rgba(212,160,72,0.10);
+  /* Sibling species must NOT reuse the accent — amber is reserved for the
+     selected lineage, or every leaf on screen reads as highlighted. */
+  --dino-stroke: rgba(86,160,107,0.55);
+  --dino-ink:   #6fb885;
+  --dino-fill:  rgba(86,160,107,0.10);
 
   /* Chart palettes live here (not in JS) so they re-theme for free. */
   --chart-herb:    #56a06b;
@@ -80,9 +82,9 @@
   --sib-fill:   rgba(22,40,29,0.04);
   --sib-line:   rgba(22,40,29,0.28);
   --sib-ink:    rgba(22,40,29,0.72);
-  --dino-stroke: #8a5f14;
-  --dino-ink:   #8a5f14;
-  --dino-fill:  rgba(138,95,20,0.08);
+  --dino-stroke: rgba(47,99,64,0.5);
+  --dino-ink:   #2f6340;
+  --dino-fill:  rgba(47,99,64,0.07);
 
   --chart-herb:    #2f6340;
   --chart-carn:    #8a5f14;
@@ -694,7 +696,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 .tx-box-label { font-size: 12px; fill: var(--ink); }
 .tx-box-label.path { fill: var(--accent); font-weight: 600; }
 .tx-box-label.sel  { fill: var(--accent); font-weight: 700; font-style: italic; }
-.tx-box-label.dino { fill: var(--accent); font-style: italic; }
+.tx-box-label.dino { fill: var(--dino-ink); font-style: italic; }
 .tx-box-label.sib  { fill: var(--sib-ink); }
 
 .site-footer {

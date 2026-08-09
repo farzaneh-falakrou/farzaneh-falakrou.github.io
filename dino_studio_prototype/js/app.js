@@ -606,7 +606,10 @@
       const cx = X(v), cy = Y(v), cls = nodeClass(v);
       const stroke = cls === 'path' || cls === 'sel' ? 'var(--path-line)' : cls === 'dino' ? 'var(--dino-stroke)' : 'var(--sib-line)';
       const fill = cls === 'path' || cls === 'sel' ? 'var(--path-fill)' : cls === 'dino' ? 'var(--dino-fill)' : 'var(--sib-fill)';
-      boxesSvg += `<rect x="${cx - v.width / 2}" y="${cy - boxHeight / 2}" width="${v.width}" height="${boxHeight}" rx="6" fill="${fill}" stroke="${stroke}" stroke-width="${cls === 'sel' ? 2.4 : 1.5}" />`;
+      // Weight reinforces the hue split: the lineage is heavier than everything
+      // it sits among, so the path reads first even at a glance.
+      const strokeWidth = cls === 'sel' ? 2.4 : cls === 'path' ? 1.6 : 1;
+      boxesSvg += `<rect x="${cx - v.width / 2}" y="${cy - boxHeight / 2}" width="${v.width}" height="${boxHeight}" rx="6" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}" />`;
       boxesSvg += `<text class="tx-box-label ${cls}" x="${cx}" y="${cy + fontSize * 0.35}" text-anchor="middle">${v.name}</text>`;
       v.children.forEach(drawBoxes);
     })(view);
