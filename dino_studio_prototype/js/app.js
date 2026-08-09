@@ -368,11 +368,18 @@
   window.selectDinosaur = selectDinosaur;
 
   // Multi-hue pastel palette, matching the shipped design's chart legends.
-  const DIET_COLORS = { herbivorous: '#3d7a50', carnivorous: '#d4a048', omnivorous: 'rgba(240,232,200,0.35)', unknown: 'rgba(255,255,255,0.15)' };
+  // Chart colours are CSS custom properties, so switching theme restyles the
+  // SVGs without re-rendering them.
+  const DIET_COLORS = {
+    herbivorous: 'var(--chart-herb)',
+    carnivorous: 'var(--chart-carn)',
+    omnivorous: 'var(--chart-omni)',
+    unknown: 'var(--chart-unknown)',
+  };
   const TYPE_COLORS = [
-    '#3d7a50', '#4a9060', '#5aab70',
-    '#d4a048', '#c08030', '#e8b870',
-    'rgba(240,232,200,0.5)', 'rgba(240,232,200,0.3)', 'rgba(240,232,200,0.18)',
+    'var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)',
+    'var(--chart-4)', 'var(--chart-5)', 'var(--chart-6)',
+    'var(--chart-7)', 'var(--chart-8)', 'var(--chart-9)',
   ];
 
   // A type's colour must not shift as filters change, so the mapping is keyed off
@@ -597,13 +604,23 @@
   let selectedCountryLayer = null;
 
   const MAP_SCALE_STEPS = [10, 20, 40, 60, 80, 100];
-  const MAP_COLOR_FROM = [20, 55, 35];
-  const MAP_COLOR_TO = [61, 122, 80];
+
+  // Leaflet paints to canvas, so it can't consume var() the way the SVG charts
+  // do — the ramp endpoints are read back from the active theme instead.
+  function themeToken(name, fallback) {
+    const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return value || fallback;
+  }
+  function mapRamp() {
+    const parse = (n, fb) => themeToken(n, fb).split(',').map((v) => Number(v.trim()));
+    return { from: parse('--map-from', '20,55,35'), to: parse('--map-to', '86,160,107') };
+  }
 
   function choroplethColor(count, maxCount) {
-    if (count === 0) return '#0a1a10';
+    if (count === 0) return themeToken('--map-void', '#0a1a10');
+    const { from, to } = mapRamp();
     const t = maxCount > 0 ? Math.min(1, count / maxCount) : 0;
-    const rgb = MAP_COLOR_FROM.map((c, i) => Math.round(c + (MAP_COLOR_TO[i] - c) * t));
+    const rgb = from.map((c, i) => Math.round(c + (to[i] - c) * t));
     return `rgb(${rgb.join(',')})`;
   }
 
@@ -621,7 +638,7 @@
     return {
       fillColor: choroplethColor(count, maxCount),
       fillOpacity: 1,
-      color: 'rgba(255,255,255,0.06)',
+      color: themeToken('--map-border', 'rgba(255,255,255,0.10)'),
       weight: 1,
     };
   }
@@ -668,7 +685,7 @@
     const bounds = [];
     countryLayer.eachLayer((layer) => {
       if (geoNames.includes(layer.feature.properties.name)) {
-        layer.setStyle({ color: '#d4a048', weight: 2 });
+        layer.setStyle({ color: themeToken('--accent', '#d4a048'), weight: 2 });
         layer.bringToFront();
         bounds.push(layer.getBounds());
         if (!selectedCountryLayer) selectedCountryLayer = layer;
@@ -711,6 +728,36 @@
       });
   }
 
+  // --- Theme toggle. The initial theme is set by an inline script in <head>
+  // so it lands before first paint; this only handles user switches. ---
+  function syncThemeToggle() {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    const toggle = document.getElementById('theme-toggle');
+    if (!toggle) return;
+    toggle.setAttribute('aria-pressed', String(isLight));
+    toggle.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
+    document.getElementById('theme-toggle-label').textContent = isLight ? 'Dark' : 'Light';
+  }
+
+  function initThemeToggle() {
+    const toggle = document.getElementById('theme-toggle');
+    if (!toggle) return;
+    syncThemeToggle();
+    toggle.addEventListener('click', () => {
+      const nowLight = document.documentElement.getAttribute('data-theme') !== 'light';
+      if (nowLight) document.documentElement.setAttribute('data-theme', 'light');
+      else document.documentElement.removeAttribute('data-theme');
+      try { localStorage.setItem('dino-theme', nowLight ? 'light' : 'dark'); } catch (e) { /* private mode */ }
+      syncThemeToggle();
+      // Charts/tree follow var() automatically; the Leaflet canvas does not.
+      if (countryLayer) {
+        countryLayer.setStyle(styleForFeature);
+        if (selectedDinosaur) focusMapOnDinosaur(selectedDinosaur);
+      }
+      applyFilters();
+    });
+  }
+
   fetch('data/dinosaurs.json')
     .then((res) => res.json())
     .then((dinosaurs) => {
@@ -721,5 +768,6 @@
       renderResultBar(allDinosaurs);
       syncSearchClearButton();
       initMap();
+      initThemeToggle();
     });
 })();

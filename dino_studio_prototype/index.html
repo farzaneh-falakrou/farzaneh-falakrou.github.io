@@ -9,6 +9,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
+  <script>
+    // Applied before first paint so the chosen theme never flashes.
+    (function () {
+      var stored = null;
+      try { stored = localStorage.getItem('dino-theme'); } catch (e) { /* private mode */ }
+      var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+      if ((stored || (prefersLight ? 'light' : 'dark')) === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
 </head>
 <body>
   <header class="site-header">
@@ -16,6 +27,10 @@
     <nav class="header-nav">
       <a href="../dino_studio_case_study/index.html">Case study</a>
       <a href="https://github.com/farzaneh-falakrou">GitHub</a>
+      <button id="theme-toggle" type="button" class="theme-toggle" aria-pressed="false">
+        <span aria-hidden="true" class="theme-toggle__icon"></span>
+        <span id="theme-toggle-label">Light</span>
+      </button>
     </nav>
   </header>
 
