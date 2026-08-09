@@ -84,6 +84,29 @@ impossible state. URL writes are debounced and pushed, so a slider drag or a
 burst of typing is one history entry and Back steps through decisions rather
 than keystrokes.
 
+## Dig sites
+
+Selecting a dinosaur drops its actual excavation coordinates on the map, from
+the Paleobiology Database: 1063 distinct sites across all 75 genera, 1027 of
+them naming a geological formation. Citipati stops being "Mongolia" and becomes
+two points in the Djadokhta Formation.
+
+This is **prebaked, not fetched at runtime** — `tools/fetch-occurrences.py`
+writes `data/occurrences.json`, `tools/bundle-data.py` wraps it for the
+`file://` path, and the result is ~31 KB. A runtime call would add a network
+dependency, a rate limit, and a failure mode to a page whose whole posture is
+that it works offline. Regenerate with:
+
+    python3 tools/fetch-occurrences.py && python3 tools/bundle-data.py
+
+The layer is strictly additive: if `occurrences.json` is missing or fails to
+load, the map shades countries exactly as it did before.
+
+Occurrence data is CC BY 4.0 and credited in the map panel. It is *not* part of
+the museum dataset, which locates a dinosaur only as a list of modern country
+names — which is why the choropleth can shade whole countries and nothing
+finer, and why "North Africa" (a region with no polygon) is dropped from it.
+
 ## Design notes
 
 - Layout, palette, filter bar, and detail-panel structure are modeled on the

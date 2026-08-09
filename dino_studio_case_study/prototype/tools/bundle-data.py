@@ -20,6 +20,8 @@ DATA = ROOT / "data"
 BUNDLES = [
     ("dinosaurs.json", "dinosaurs.data.js", "DINO_DATA"),
     ("world-countries.geo.json", "world.data.js", "DINO_WORLD"),
+    # Regenerate the source with tools/fetch-occurrences.py first.
+    ("occurrences.json", "occurrences.data.js", "DINO_OCCURRENCES"),
 ]
 
 

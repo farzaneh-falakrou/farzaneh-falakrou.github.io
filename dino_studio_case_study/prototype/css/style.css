@@ -1254,3 +1254,17 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 }
 .leaflet-bar a:first-child { border-radius: var(--radius) var(--radius) 0 0; }
 .leaflet-bar a:last-child { border-radius: 0 0 var(--radius) var(--radius); }
+
+/* Provenance for the dig-site layer: the coordinates are PBDB's, not the
+   museum's, and CC BY 4.0 requires the credit. Same register as the
+   timeline's ICS-constants note. */
+.map-note {
+  margin: var(--s2) 0 0;
+  font-size: var(--t-micro);
+  line-height: 1.6;
+  color: var(--muted);
+}
+.map-note a { color: var(--accent); }
+
+/* Dig-site markers sit above the choropleth fill. */
+.dig-site-note { color: var(--accent); }

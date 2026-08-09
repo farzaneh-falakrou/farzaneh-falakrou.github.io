@@ -10,6 +10,8 @@
   // chart brushes both. Keeping them as separate filters would repeat the
   // dropdown-vs-map-click contradiction fixed earlier.
   let lengthWindow = null; // {min, max} in metres, or null
+  let occurrences = {}; // genus -> [[lng, lat, formation?], ...] from PBDB
+  let digSiteLayer = null;
 
   // Data loading. The .json files are the source of truth, but fetch() is
   // blocked by CORS over file://, so data/*.data.js — the same payloads wrapped
@@ -1413,7 +1415,49 @@
       countryLayer.resetStyle(selectedCountryLayer);
       selectedCountryLayer = null;
     }
+    clearDigSites();
     leafletMap.setView([15, 10], 2);
+  }
+
+  // --- Dig sites --------------------------------------------------------
+  //
+  // The museum dataset locates a dinosaur only as a list of modern country
+  // names, which is why the choropleth can shade whole countries and nothing
+  // finer — and why "North Africa", a region with no polygon, gets dropped.
+  // PBDB gives the actual excavation coordinates, so selecting a dinosaur can
+  // show where it was really dug up: Citipati stops being "Mongolia" and
+  // becomes two points in the Djadokhta Formation.
+  function clearDigSites() {
+    if (digSiteLayer && leafletMap) {
+      leafletMap.removeLayer(digSiteLayer);
+      digSiteLayer = null;
+    }
+  }
+
+  function showDigSites(dinosaur) {
+    clearDigSites();
+    if (!leafletMap || !dinosaur) return null;
+    const sites = occurrences[dinosaur.name];
+    if (!sites || sites.length === 0) return null;
+
+    const markers = sites.map(([lng, lat, formation]) => {
+      // Cream ring, amber core: the choropleth fill is mid-green at every
+      // density step, so a marker in accent alone had too little separation
+      // from the country it sits on.
+      const marker = L.circleMarker([lat, lng], {
+        radius: 5,
+        weight: 2,
+        color: themeToken('--ink', '#f0e8c8'),
+        fillColor: themeToken('--accent', '#d4a048'),
+        fillOpacity: 1,
+      });
+      const place = formation ? `${formation} Formation` : 'Formation not recorded';
+      marker.bindTooltip(`${dinosaur.name} — ${place}`, { direction: 'top' });
+      return marker;
+    });
+
+    digSiteLayer = L.layerGroup(markers).addTo(leafletMap);
+    return L.latLngBounds(sites.map(([lng, lat]) => [lat, lng]));
   }
 
   function focusMapOnDinosaur(dinosaur) {
@@ -1424,8 +1468,15 @@
       selectedCountryLayer = null;
     }
 
+    // Dig sites are strictly better than a country outline, so they win when
+    // present; the country highlight still runs underneath for orientation.
+    const siteBounds = showDigSites(dinosaur);
+
     const geoNames = resolveCountryGeoNames(dinosaur.foundIn);
-    if (geoNames.length === 0) return;
+    if (geoNames.length === 0) {
+      if (siteBounds) leafletMap.flyToBounds(siteBounds.pad(0.8), { maxZoom: 4, duration: 0.6 });
+      return;
+    }
 
     const bounds = [];
     countryLayer.eachLayer((layer) => {
@@ -1437,7 +1488,9 @@
       }
     });
 
-    if (bounds.length > 0) {
+    if (siteBounds) {
+      leafletMap.flyToBounds(siteBounds.pad(0.8), { maxZoom: 4, duration: 0.6 });
+    } else if (bounds.length > 0) {
       let combined = bounds[0];
       bounds.slice(1).forEach((b) => { combined = combined.extend(b); });
       leafletMap.flyToBounds(combined, { maxZoom: 5, duration: 0.6 });
@@ -1523,6 +1576,11 @@
       renderResultBar(allDinosaurs);
       syncSearchClearButton();
       syncFilterControls();
+      loadJson('data/occurrences.json', 'DINO_OCCURRENCES')
+        .then((sites) => { occurrences = sites; })
+        // Dig sites are an enhancement: without them the map still shades
+        // countries exactly as before.
+        .catch(() => { occurrences = {}; });
       initMap();
       initThemeToggle();
       initUrlState();
