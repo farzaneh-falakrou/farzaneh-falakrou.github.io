@@ -12,6 +12,16 @@
   let lengthWindow = null; // {min, max} in metres, or null
   let occurrences = {}; // genus -> [[lng, lat, formation?], ...] from PBDB
   let digSiteLayer = null;
+  // Off for now: the data pipeline is built, verified, and correctness-fixed
+  // (see tools/fetch-occurrences.py), but there's nowhere good to show it yet.
+  // Selecting a dinosaur auto-scrolls straight to the detail panel, so the map
+  // is off-screen at the exact moment dig sites would appear — and for a real
+  // fraction of genera, PBDB's own occurrences under that genus name disagree
+  // with the museum's own foundIn field (Alectrosaurus 17/19, Ammosaurus 3/3),
+  // which needs an honest, deliberate way to show "these exist but disagree"
+  // rather than silently vanishing. Revisit as part of the detail-panel
+  // rebuild, where dig sites can be a labelled fact instead of map decoration.
+  const DIG_SITES_ENABLED = false;
 
   // Data loading. The .json files are the source of truth, but fetch() is
   // blocked by CORS over file://, so data/*.data.js — the same payloads wrapped
@@ -1494,16 +1504,12 @@
       selectedCountryLayer = null;
     }
 
-    // Dig sites are strictly better than a country outline, so they win when
-    // present; the country highlight still runs underneath for orientation.
-    const siteBounds = showDigSites(dinosaur);
-
+    // Country highlight runs first: it calls bringToFront() on the matched
+    // polygon, and with preferCanvas:true the polygon and the dig-site markers
+    // share one canvas — bringToFront() redraws whichever ran last on top. Dig
+    // sites are added after for exactly that reason, or the opaque country
+    // fill painted over them and they were invisible despite being on the map.
     const geoNames = resolveCountryGeoNames(dinosaur.foundIn);
-    if (geoNames.length === 0) {
-      if (siteBounds) leafletMap.flyToBounds(siteBounds.pad(0.8), { maxZoom: 4, duration: 0.6 });
-      return;
-    }
-
     const bounds = [];
     countryLayer.eachLayer((layer) => {
       if (geoNames.includes(layer.feature.properties.name)) {
@@ -1513,6 +1519,15 @@
         if (!selectedCountryLayer) selectedCountryLayer = layer;
       }
     });
+
+    // Dig sites are strictly better than a country outline, so they win when
+    // present; the country highlight still runs underneath for orientation.
+    const siteBounds = DIG_SITES_ENABLED ? showDigSites(dinosaur) : null;
+
+    if (geoNames.length === 0) {
+      if (siteBounds) leafletMap.flyToBounds(siteBounds.pad(0.8), { maxZoom: 4, duration: 0.6 });
+      return;
+    }
 
     if (siteBounds) {
       leafletMap.flyToBounds(siteBounds.pad(0.8), { maxZoom: 4, duration: 0.6 });
@@ -1602,11 +1617,13 @@
       renderResultBar(allDinosaurs);
       syncSearchClearButton();
       syncFilterControls();
-      loadJson('data/occurrences.json', 'DINO_OCCURRENCES')
-        .then((sites) => { occurrences = sites; })
-        // Dig sites are an enhancement: without them the map still shades
-        // countries exactly as before.
-        .catch(() => { occurrences = {}; });
+      if (DIG_SITES_ENABLED) {
+        loadJson('data/occurrences.json', 'DINO_OCCURRENCES')
+          .then((sites) => { occurrences = sites; })
+          // Dig sites are an enhancement: without them the map still shades
+          // countries exactly as before.
+          .catch(() => { occurrences = {}; });
+      }
       initMap();
       initThemeToggle();
       initUrlState();

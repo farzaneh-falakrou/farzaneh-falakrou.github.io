@@ -60,3 +60,5 @@ letter/
 
 # design specs — kept local, not deployed
 docs/
+
+__pycache__/

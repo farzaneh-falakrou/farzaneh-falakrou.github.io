@@ -806,7 +806,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 }
 .detail-text-col p:not(.field-label) { color: var(--muted); line-height: 1.6; margin: 0; max-width: 68ch; }
 
-.taxonomy-tree-wrap { margin-top: 0.5rem; }
+/* The "Taxonomy" heading used to sit at the bottom of the two-column .detail-top
+   row while the ladder itself was a full-width block below it — so the label
+   promised content immediately, and the content arrived wherever the taller
+   column happened to end (sometimes a full image-column's height later). The
+   heading now sits directly above the thing it names. */
+.taxonomy-tree-wrap { margin-top: var(--s5); padding-top: var(--s4); border-top: 1px solid var(--line); }
+.taxonomy-tree-wrap .field-label { margin-top: 0; }
 
 /* Full lineage in one line, for the reader who only wants the answer. */
 .tx-crumb {
