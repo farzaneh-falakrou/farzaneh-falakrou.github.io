@@ -226,6 +226,7 @@
 
   function applyFilters({ writeUrl = true } = {}) {
     if (typeof updateMapDensity === 'function') updateMapDensity(filterDinosaurs({ skipMap: true, skipCountry: true }));
+    if (typeof syncCountryHighlight === 'function') syncCountryHighlight();
 
     const result = filterDinosaurs();
 
@@ -1383,6 +1384,30 @@
     applyFilters();
   }
 
+  // Clicking a country has always filtered, but never marked the country. That
+  // went unnoticed while the Country dropdown was collapsing the choropleth to
+  // a single lit country — an accident that looked like feedback. Fixing that
+  // collapse left the map with no response to a click at all, so the selection
+  // is now drawn explicitly.
+  //
+  // Driven from applyFilters rather than the click handler, so removing the
+  // chip, restoring from a URL, and "Clear all" all keep the map in step.
+  let clickedCountryLayer = null;
+  function syncCountryHighlight() {
+    if (!countryLayer) return;
+    if (clickedCountryLayer) {
+      countryLayer.resetStyle(clickedCountryLayer);
+      clickedCountryLayer = null;
+    }
+    if (!mapCountryFilter) return;
+    countryLayer.eachLayer((layer) => {
+      if (layer.feature.properties.name !== mapCountryFilter) return;
+      layer.setStyle({ color: themeToken('--ink', '#f0e8c8'), weight: 2.5 });
+      layer.bringToFront();
+      clickedCountryLayer = layer;
+    });
+  }
+
   function onEachCountryFeature(feature, layer) {
     layer.bindTooltip('', { className: 'country-tooltip' });
     layer.on('click', () => setMapCountryFilter(feature.properties.name));
@@ -1416,6 +1441,7 @@
       selectedCountryLayer = null;
     }
     clearDigSites();
+    clickedCountryLayer = null;
     leafletMap.setView([15, 10], 2);
   }
 
