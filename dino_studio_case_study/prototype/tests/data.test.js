@@ -4,6 +4,7 @@ const {
   resolveTaxonomyPath, buildTaxonomyTree,
   resolveCountryGeoNames, computeCountryCounts,
   parseWhenLived, packLanes, packDots,
+  canonicalCountry, countryLabels,
 } = require('../js/data.js');
 
 const sample = [
@@ -100,6 +101,10 @@ testPackLanesOpensLaneWhenBarsOverlap();
 testPackDotsKeepsClearPointsInOneLane();
 testPackDotsOpensLaneForCrowdedPoints();
 testPackDotsNeverMovesAPointAlongTheAxis();
+testResolveCountryGeoNamesDeduplicatesAliasedLabels();
+testCountryCountsDoNotDoubleCountUkRecords();
+testCanonicalCountryAliasesEngland();
+testCountryLabelsAreDistinctAndCanonical();
 console.log('data: all tests passed');
 
 function testParseWhenLivedRange() {
@@ -170,4 +175,30 @@ function testPackDotsNeverMovesAPointAlongTheAxis() {
   const lanes = packDots(input, 2);
   const out = lanes.flat().map((e) => e.position).sort((a, b) => a - b);
   assert.deepEqual(out, [1, 1.2, 3, 9]);
+}
+
+// Every UK record lists both "England" and "United Kingdom"; both resolve to the
+// same polygon, so without de-duplication the choropleth counted each twice.
+function testResolveCountryGeoNamesDeduplicatesAliasedLabels() {
+  assert.deepEqual(resolveCountryGeoNames('England, United Kingdom'), ['United Kingdom']);
+  assert.deepEqual(
+    resolveCountryGeoNames('England, France, Portugal, United Kingdom'),
+    ['United Kingdom', 'France', 'Portugal'],
+  );
+}
+
+function testCountryCountsDoNotDoubleCountUkRecords() {
+  const dinosaurs = require('../data/dinosaurs.json');
+  const ukRecords = dinosaurs.filter((d) => /United Kingdom|England/.test(d.foundIn)).length;
+  assert.equal(computeCountryCounts(dinosaurs)['United Kingdom'], ukRecords);
+}
+
+function testCanonicalCountryAliasesEngland() {
+  assert.equal(canonicalCountry('England'), 'United Kingdom');
+  assert.equal(canonicalCountry(' France '), 'France');
+  assert.equal(canonicalCountry('North Africa'), 'North Africa', 'regions are kept, not dropped');
+}
+
+function testCountryLabelsAreDistinctAndCanonical() {
+  assert.deepEqual(countryLabels('England, United Kingdom, USA'), ['United Kingdom', 'USA']);
 }

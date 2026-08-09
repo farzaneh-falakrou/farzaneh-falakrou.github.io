@@ -110,7 +110,7 @@
 
   function populateFilterOptions(dinosaurs) {
     const countries = new Set();
-    dinosaurs.forEach((d) => d.foundIn.split(',').forEach((c) => countries.add(c.trim())));
+    dinosaurs.forEach((d) => countryLabels(d.foundIn).forEach((c) => countries.add(c)));
     countryFilter.innerHTML = '<option value="">All</option>' +
       [...countries].sort().map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
 
@@ -180,7 +180,7 @@
 
     const country = countryFilter.value;
     if (!skipCountry && country) {
-      result = result.filter((d) => d.foundIn.split(',').map((c) => c.trim()).includes(country));
+      result = result.filter((d) => countryLabels(d.foundIn).includes(country));
     }
 
     if (!skipDiet && dietFilter.value) {

@@ -162,12 +162,40 @@ const COUNTRY_GEO_NAMES = {
 // at build time). Unknown/unmapped countries are silently dropped: add new
 // entries here when adding dinosaurs whose foundIn introduces a country not
 // already listed above.
+// All six UK records list BOTH "England" and "United Kingdom" (e.g. Becklespinax
+// is "England, United Kingdom"), and both resolve to the same polygon — so
+// without de-duplication each one was tallied twice and the choropleth claimed
+// 12 dinosaurs in the UK where there are 6, shading it about twice as dark as
+// the data warrants.
 function resolveCountryGeoNames(foundIn) {
-  return foundIn
-    .split(',')
-    .map((c) => c.trim())
-    .map((c) => COUNTRY_GEO_NAMES[c])
-    .filter(Boolean);
+  return [...new Set(
+    foundIn
+      .split(',')
+      .map((c) => c.trim())
+      .map((c) => COUNTRY_GEO_NAMES[c])
+      .filter(Boolean),
+  )];
+}
+
+// The same duplication surfaced in the Country dropdown as two options that
+// each returned the identical six dinosaurs. Aliased to one label for
+// filtering; the detail panel still shows the record's raw `foundIn` string,
+// because tidying the source value in the record view would be the wrong fix.
+const COUNTRY_ALIASES = { England: 'United Kingdom' };
+
+function canonicalCountry(name) {
+  const trimmed = String(name == null ? '' : name).trim();
+  return COUNTRY_ALIASES[trimmed] || trimmed;
+}
+
+// Distinct, canonical country labels for one record — what the filter matches on.
+function countryLabels(foundIn) {
+  return [...new Set(
+    String(foundIn == null ? '' : foundIn)
+      .split(',')
+      .map(canonicalCountry)
+      .filter(Boolean),
+  )];
 }
 
 // Tallies how many dinosaurs were found in each choropleth country (by geo
@@ -194,6 +222,8 @@ if (typeof module !== 'undefined') {
     EPOCH_BOUNDS,
     buildTaxonomyTree,
     resolveCountryGeoNames,
+    canonicalCountry,
+    countryLabels,
     computeCountryCounts,
     COUNTRY_GEO_NAMES,
   };
