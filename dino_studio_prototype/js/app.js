@@ -2,6 +2,7 @@
   let allDinosaurs = [];
   let selectedDinosaur = null;
   let mapCountryFilter = null; // geo name (properties.name) clicked on the choropleth, or null
+  let chartTypeFilter = null;  // typeOfDinosaur value clicked on the type chart, or null
 
   const listEl = document.getElementById('dino-list');
   const listEmptyState = document.getElementById('list-empty-state');
@@ -75,6 +76,8 @@
     const diet = dietFilter.value;
     if (diet) result = result.filter((d) => d.diet === diet);
 
+    if (chartTypeFilter) result = result.filter((d) => d.typeOfDinosaur === chartTypeFilter);
+
     const minWeight = Number(weightFilter.value);
     if (minWeight > 0) {
       result = result.filter((d) => typeof d.weight === 'number' && d.weight >= minWeight);
@@ -123,6 +126,9 @@
     }
     if (mapCountryFilter) {
       chips.push({ label: `Map: ${mapCountryFilter}`, clear: () => { mapCountryFilter = null; } });
+    }
+    if (chartTypeFilter) {
+      chips.push({ label: `Type: ${chartTypeFilter}`, clear: () => { chartTypeFilter = null; } });
     }
     return chips;
   }
@@ -177,6 +183,7 @@
     weightFilter.value = '0';
     lengthFilter.value = '0';
     mapCountryFilter = null;
+    chartTypeFilter = null;
     hideSuggestions();
     applyFilters();
   }
@@ -380,7 +387,7 @@
     for (const [key, value] of Object.entries(counts)) {
       if (value === 0) continue;
       const sweep = (value / total) * 360;
-      svg += `<path d="${describeArc(cx, cy, r, angle, angle + sweep)}" fill="${colorFor(key)}" />`;
+      svg += `<path data-key="${key}" d="${describeArc(cx, cy, r, angle, angle + sweep)}" fill="${colorFor(key)}" style="cursor:pointer;transition:opacity 0.15s" />`;
       angle += sweep;
     }
     if (innerHole) svg += `<circle cx="${cx}" cy="${cy}" r="22" fill="var(--surface)" />`;
@@ -391,21 +398,61 @@
     listEl.innerHTML = Object.entries(counts)
       .filter(([, count]) => count > 0)
       .map(([key, count]) => `
-        <li><span class="swatch" style="background:${colorFor(key)}"></span>${key} (${count})</li>
+        <li data-key="${key}" style="cursor:pointer;transition:opacity 0.15s"><span class="swatch" style="background:${colorFor(key)}"></span>${key} (${count})</li>
       `).join('');
+  }
+
+  function applyChartOpacity(svgEl, legendEl, activeKey) {
+    const hasFilter = Boolean(activeKey);
+    svgEl.querySelectorAll('[data-key]').forEach((el) => {
+      el.style.opacity = hasFilter && el.dataset.key !== activeKey ? '0.3' : '1';
+    });
+    legendEl.querySelectorAll('[data-key]').forEach((el) => {
+      el.style.opacity = hasFilter && el.dataset.key !== activeKey ? '0.3' : '1';
+    });
   }
 
   function renderCharts(dinosaurs) {
     const dietCounts = computeDietCounts(dinosaurs);
     const dietColorFor = (key) => DIET_COLORS[key];
-    renderPie(document.getElementById('diet-chart'), dietCounts, dietColorFor, true);
-    renderLegend(document.getElementById('diet-legend'), dietCounts, dietColorFor);
+    const dietSvg = document.getElementById('diet-chart');
+    const dietLegend = document.getElementById('diet-legend');
+    renderPie(dietSvg, dietCounts, dietColorFor, true);
+    renderLegend(dietLegend, dietCounts, dietColorFor);
+    applyChartOpacity(dietSvg, dietLegend, dietFilter.value);
+    dietSvg.querySelectorAll('[data-key]').forEach((el) => {
+      el.addEventListener('click', () => {
+        dietFilter.value = dietFilter.value === el.dataset.key ? '' : el.dataset.key;
+        applyFilters();
+      });
+    });
+    dietLegend.querySelectorAll('[data-key]').forEach((el) => {
+      el.addEventListener('click', () => {
+        dietFilter.value = dietFilter.value === el.dataset.key ? '' : el.dataset.key;
+        applyFilters();
+      });
+    });
 
     const typeCounts = computeTypeCounts(dinosaurs);
     const typeKeys = Object.keys(typeCounts);
     const typeColorFor = (key) => TYPE_COLORS[typeKeys.indexOf(key) % TYPE_COLORS.length];
-    renderPie(document.getElementById('type-chart'), typeCounts, typeColorFor, false);
-    renderLegend(document.getElementById('type-legend'), typeCounts, typeColorFor);
+    const typeSvg = document.getElementById('type-chart');
+    const typeLegend = document.getElementById('type-legend');
+    renderPie(typeSvg, typeCounts, typeColorFor, false);
+    renderLegend(typeLegend, typeCounts, typeColorFor);
+    applyChartOpacity(typeSvg, typeLegend, chartTypeFilter);
+    typeSvg.querySelectorAll('[data-key]').forEach((el) => {
+      el.addEventListener('click', () => {
+        chartTypeFilter = chartTypeFilter === el.dataset.key ? null : el.dataset.key;
+        applyFilters();
+      });
+    });
+    typeLegend.querySelectorAll('[data-key]').forEach((el) => {
+      el.addEventListener('click', () => {
+        chartTypeFilter = chartTypeFilter === el.dataset.key ? null : el.dataset.key;
+        applyFilters();
+      });
+    });
   }
 
   // --- Taxonomy tree: a pruned lineage diagram for the selected dinosaur —
