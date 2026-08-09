@@ -6,7 +6,7 @@ development means you can end up testing a stale page against fresh files —
 easy to misread as a code bug. This serves the same files but tells the
 browser never to reuse them.
 
-Usage: python3 tools/dev-server.py [port]   (run from dino_studio_prototype/)
+Usage: python3 tools/dev-server.py [port]   (run from the prototype/ folder)
 """
 
 import sys
