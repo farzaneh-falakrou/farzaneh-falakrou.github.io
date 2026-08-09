@@ -611,6 +611,26 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 }
 .map-legend__min, .map-legend__max { font-variant-numeric: tabular-nums; }
 
+/* Leaflet ships its own white tooltip with dark text. Setting only the text
+   colour left cream-on-white — about 1.15:1, effectively invisible in the dark
+   theme. The whole tooltip is themed, arrow included. --panel-solid rather than
+   --surface because it sits over the map and must be opaque. */
+.leaflet-tooltip {
+  background: var(--panel-solid);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 10px var(--shadow);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--t-micro);
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.5rem;
+}
+.leaflet-tooltip-top::before { border-top-color: var(--line); }
+.leaflet-tooltip-bottom::before { border-bottom-color: var(--line); }
+.leaflet-tooltip-left::before { border-left-color: var(--line); }
+.leaflet-tooltip-right::before { border-right-color: var(--line); }
+
 .country-tooltip { font-weight: 600; color: var(--ink); }
 
 .dino-list {
@@ -618,9 +638,14 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
   margin: 0;
   padding: 0;
   overflow-y: auto;
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
-  max-height: none;
+  /* Bounded, or the list stops being a scroller: the overview grid sizes its
+     row to the tallest item, so an uncapped 75-row list defines the row height
+     and renders in full instead of the map defining it. Derived from --media-h
+     (the map's height) plus the map legend's row, so the two panels end up the
+     same height and neither carries dead space. */
+  max-height: calc(var(--media-h) + 1.25rem);
   border-top: 1px solid var(--line);
 }
 
@@ -1212,3 +1237,20 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 @media (max-width: 860px) {
   .filter-clear--link { grid-column: 1 / -1; justify-self: stretch; }
 }
+
+/* Leaflet's zoom controls ship white with dark glyphs, which read as a pair of
+   bright chips punched into a dark map. Themed to match the panel vocabulary. */
+.leaflet-bar a,
+.leaflet-bar a:hover {
+  background: var(--panel-solid);
+  color: var(--ink);
+  border-bottom-color: var(--line);
+}
+.leaflet-bar a:hover { background: var(--surface-hover); color: var(--accent); }
+.leaflet-bar {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 10px var(--shadow);
+}
+.leaflet-bar a:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+.leaflet-bar a:last-child { border-radius: 0 0 var(--radius) var(--radius); }
