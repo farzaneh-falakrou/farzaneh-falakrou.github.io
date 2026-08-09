@@ -122,7 +122,8 @@ h1, h2, h3 { margin: 0 0 0.5rem; }
   border-bottom: 1px solid var(--line);
   position: sticky;
   top: 0;
-  z-index: 100;
+  /* Above Leaflet, whose panes and controls reach z-index 1000. */
+  z-index: 1100;
   flex-wrap: wrap;
 }
 
@@ -526,6 +527,15 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
   gap: 1.5rem;
   margin-bottom: 1.5rem;
   align-items: stretch;
+}
+
+/* Leaflet gives its panes and controls z-index 400–1000. Without a stacking
+   context here those values compete in the root context and paint the map over
+   the sticky header. `isolation` traps them inside this panel. */
+.map-panel {
+  position: relative;
+  isolation: isolate;
+  z-index: 0;
 }
 
 #world-map {
