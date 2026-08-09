@@ -62,10 +62,11 @@
     lengthFilter.max = String(Math.max(...lengths));
   }
 
-  // Applies every filter except the map's own country selection. Split out so
-  // the choropleth can be coloured by "everything but me" — otherwise clicking
-  // a country would instantly recolour the map down to that single country.
-  function filterExceptMap() {
+  // Applies every filter, optionally skipping one dimension. Each cross-filtered
+  // view is fed "everything but me": otherwise clicking a country would recolour
+  // the map down to that single country, and clicking a pie slice would collapse
+  // its own chart to a single wedge with nothing left to click.
+  function filterDinosaurs({ skipMap = false, skipDiet = false, skipType = false } = {}) {
     let result = searchDinosaurs(allDinosaurs, searchInput.value);
 
     const country = countryFilter.value;
@@ -73,10 +74,13 @@
       result = result.filter((d) => d.foundIn.split(',').map((c) => c.trim()).includes(country));
     }
 
-    const diet = dietFilter.value;
-    if (diet) result = result.filter((d) => d.diet === diet);
+    if (!skipDiet && dietFilter.value) {
+      result = result.filter((d) => d.diet === dietFilter.value);
+    }
 
-    if (chartTypeFilter) result = result.filter((d) => d.typeOfDinosaur === chartTypeFilter);
+    if (!skipType && chartTypeFilter) {
+      result = result.filter((d) => d.typeOfDinosaur === chartTypeFilter);
+    }
 
     const minWeight = Number(weightFilter.value);
     if (minWeight > 0) {
@@ -88,19 +92,22 @@
       result = result.filter((d) => typeof d.length === 'number' && d.length >= minLength);
     }
 
+    if (!skipMap && mapCountryFilter) {
+      result = result.filter((d) => resolveCountryGeoNames(d.foundIn).includes(mapCountryFilter));
+    }
+
     return result;
   }
 
   function applyFilters() {
-    const beforeMap = filterExceptMap();
-    if (typeof updateMapDensity === 'function') updateMapDensity(beforeMap);
+    if (typeof updateMapDensity === 'function') updateMapDensity(filterDinosaurs({ skipMap: true }));
 
-    const result = mapCountryFilter
-      ? beforeMap.filter((d) => resolveCountryGeoNames(d.foundIn).includes(mapCountryFilter))
-      : beforeMap;
+    const result = filterDinosaurs();
 
     renderList(result);
-    if (typeof renderCharts === 'function') renderCharts(result);
+    if (typeof renderCharts === 'function') {
+      renderCharts(filterDinosaurs({ skipDiet: true }), filterDinosaurs({ skipType: true }));
+    }
     renderResultBar(result);
     syncSearchClearButton();
   }
@@ -368,6 +375,15 @@
     'rgba(240,232,200,0.5)', 'rgba(240,232,200,0.3)', 'rgba(240,232,200,0.18)',
   ];
 
+  // A type's colour must not shift as filters change, so the mapping is keyed off
+  // the full dataset's type ordering rather than whatever subset is on screen.
+  let stableTypeKeys = null;
+  function typeColorFor(key) {
+    if (!stableTypeKeys) stableTypeKeys = Object.keys(computeTypeCounts(allDinosaurs)).sort();
+    const index = stableTypeKeys.indexOf(key);
+    return TYPE_COLORS[(index < 0 ? 0 : index) % TYPE_COLORS.length];
+  }
+
   function describeArc(cx, cy, r, startAngle, endAngle) {
     const toXY = (angle) => [
       cx + r * Math.cos((Math.PI / 180) * angle),
@@ -412,8 +428,8 @@
     });
   }
 
-  function renderCharts(dinosaurs) {
-    const dietCounts = computeDietCounts(dinosaurs);
+  function renderCharts(dietBase, typeBase) {
+    const dietCounts = computeDietCounts(dietBase);
     const dietColorFor = (key) => DIET_COLORS[key];
     const dietSvg = document.getElementById('diet-chart');
     const dietLegend = document.getElementById('diet-legend');
@@ -433,9 +449,7 @@
       });
     });
 
-    const typeCounts = computeTypeCounts(dinosaurs);
-    const typeKeys = Object.keys(typeCounts);
-    const typeColorFor = (key) => TYPE_COLORS[typeKeys.indexOf(key) % TYPE_COLORS.length];
+    const typeCounts = computeTypeCounts(typeBase);
     const typeSvg = document.getElementById('type-chart');
     const typeLegend = document.getElementById('type-legend');
     renderPie(typeSvg, typeCounts, typeColorFor, false);
@@ -703,7 +717,7 @@
       allDinosaurs = dinosaurs;
       populateFilterOptions(allDinosaurs);
       renderList(allDinosaurs);
-      if (typeof renderCharts === 'function') renderCharts(allDinosaurs);
+      if (typeof renderCharts === 'function') renderCharts(allDinosaurs, allDinosaurs);
       renderResultBar(allDinosaurs);
       syncSearchClearButton();
       initMap();
