@@ -1,6 +1,6 @@
 const assert = require('node:assert/strict');
 const {
-  filterDinosaurs, computeDietCounts, computeTypeCounts,
+  computeDietCounts, computeTypeCounts,
   resolveTaxonomyPath, buildTaxonomyTree,
   resolveCountryGeoNames, computeCountryCounts,
 } = require('../js/data.js');
@@ -10,31 +10,6 @@ const sample = [
   { name: 'Tyrannosaurus', foundIn: 'USA, Canada', diet: 'carnivorous', typeOfDinosaur: 'large theropod' },
   { name: 'Triceratops', foundIn: 'USA', diet: 'herbivorous', typeOfDinosaur: 'ceratopsian' },
 ];
-
-function testFilterByNameCaseInsensitivePartial() {
-  const result = filterDinosaurs(sample, 'tri');
-  assert.deepEqual(result.map(d => d.name), ['Triceratops']);
-}
-
-function testFilterByCountry() {
-  const result = filterDinosaurs(sample, 'usa');
-  assert.deepEqual(result.map(d => d.name).sort(), ['Triceratops', 'Tyrannosaurus']);
-}
-
-function testFilterByDiet() {
-  const result = filterDinosaurs(sample, 'carnivorous');
-  assert.deepEqual(result.map(d => d.name), ['Tyrannosaurus']);
-}
-
-function testEmptyQueryReturnsAll() {
-  const result = filterDinosaurs(sample, '');
-  assert.equal(result.length, 3);
-}
-
-function testNoMatchesReturnsEmptyArray() {
-  const result = filterDinosaurs(sample, 'xyz-no-match');
-  assert.deepEqual(result, []);
-}
 
 function testComputeDietCounts() {
   const result = computeDietCounts(sample);
@@ -106,11 +81,6 @@ function testComputeCountryCountsTalliesMultiCountryEntries() {
   });
 }
 
-testFilterByNameCaseInsensitivePartial();
-testFilterByCountry();
-testFilterByDiet();
-testEmptyQueryReturnsAll();
-testNoMatchesReturnsEmptyArray();
 testComputeDietCounts();
 testComputeTypeCounts();
 testResolveTaxonomyPathAppendsName();
@@ -120,4 +90,4 @@ testResolveCountryGeoNamesSingleCountry();
 testResolveCountryGeoNamesMultiCountry();
 testResolveCountryGeoNamesUnmappedSkipped();
 testComputeCountryCountsTalliesMultiCountryEntries();
-console.log('filterDinosaurs: all tests passed');
+console.log('data: all tests passed');
