@@ -2,7 +2,6 @@
   let allDinosaurs = [];
   let selectedDinosaur = null;
   let mapCountryFilter = null; // geo name (properties.name) clicked on the choropleth, or null
-  let chartTypeFilter = null;  // typeOfDinosaur value clicked on the type chart, or null
 
   const listEl = document.getElementById('dino-list');
   const listEmptyState = document.getElementById('list-empty-state');
@@ -15,9 +14,15 @@
   const didYouMean = document.getElementById('did-you-mean');
   const countryFilter = document.getElementById('country-filter');
   const dietFilter = document.getElementById('diet-filter');
+  // The type <select> IS the type-filter state — the pie chart writes to it rather
+  // than holding a parallel variable, so the two can never disagree.
+  const typeFilter = document.getElementById('type-filter');
   const weightFilter = document.getElementById('weight-filter');
   const lengthFilter = document.getElementById('length-filter');
+  const weightValue = document.getElementById('weight-value');
+  const lengthValue = document.getElementById('length-value');
   const clearFiltersButton = document.getElementById('clear-filters');
+  const selectFilters = [countryFilter, typeFilter, dietFilter];
 
   function truncate(text, max) {
     if (!text) return '';
@@ -56,10 +61,22 @@
     dietFilter.innerHTML = '<option value="">All</option>' +
       diets.map((d) => `<option value="${d}">${d}</option>`).join('');
 
+    const types = [...new Set(dinosaurs.map((d) => d.typeOfDinosaur))].filter(Boolean).sort();
+    typeFilter.innerHTML = '<option value="">All</option>' +
+      types.map((t) => `<option value="${t}">${t}</option>`).join('');
+
     const weights = dinosaurs.map((d) => d.weight).filter((w) => typeof w === 'number');
     const lengths = dinosaurs.map((d) => d.length).filter((l) => typeof l === 'number');
     weightFilter.max = String(Math.max(...weights));
     lengthFilter.max = String(Math.max(...lengths));
+  }
+
+  // Keeps the range readouts and the "this select is filtering" styling in step
+  // with whatever changed the controls — user input, a chart click, or a chip ×.
+  function syncFilterControls() {
+    weightValue.textContent = Number(weightFilter.value) > 0 ? `${weightFilter.value} kg` : 'Any';
+    lengthValue.textContent = Number(lengthFilter.value) > 0 ? `${lengthFilter.value} m` : 'Any';
+    selectFilters.forEach((el) => el.classList.toggle('is-active', Boolean(el.value)));
   }
 
   // Applies every filter, optionally skipping one dimension. Each cross-filtered
@@ -78,8 +95,8 @@
       result = result.filter((d) => d.diet === dietFilter.value);
     }
 
-    if (!skipType && chartTypeFilter) {
-      result = result.filter((d) => d.typeOfDinosaur === chartTypeFilter);
+    if (!skipType && typeFilter.value) {
+      result = result.filter((d) => d.typeOfDinosaur === typeFilter.value);
     }
 
     const minWeight = Number(weightFilter.value);
@@ -110,6 +127,7 @@
     }
     renderResultBar(result);
     syncSearchClearButton();
+    syncFilterControls();
   }
 
   // --- Result count, active filter chips, and empty-state recovery ---
@@ -134,8 +152,8 @@
     if (mapCountryFilter) {
       chips.push({ label: `Map: ${mapCountryFilter}`, clear: () => { mapCountryFilter = null; } });
     }
-    if (chartTypeFilter) {
-      chips.push({ label: `Type: ${chartTypeFilter}`, clear: () => { chartTypeFilter = null; } });
+    if (typeFilter.value) {
+      chips.push({ label: `Type: ${typeFilter.value}`, clear: () => { typeFilter.value = ''; } });
     }
     return chips;
   }
@@ -190,7 +208,7 @@
     weightFilter.value = '0';
     lengthFilter.value = '0';
     mapCountryFilter = null;
-    chartTypeFilter = null;
+    typeFilter.value = '';
     hideSuggestions();
     applyFilters();
   }
@@ -308,6 +326,7 @@
   searchButton.addEventListener('click', () => { hideSuggestions(); applyFilters(); });
   countryFilter.addEventListener('change', applyFilters);
   dietFilter.addEventListener('change', applyFilters);
+  typeFilter.addEventListener('change', applyFilters);
   weightFilter.addEventListener('input', applyFilters);
   lengthFilter.addEventListener('input', applyFilters);
   clearFiltersButton.addEventListener('click', clearAllFilters);
@@ -461,16 +480,16 @@
     const typeLegend = document.getElementById('type-legend');
     renderPie(typeSvg, typeCounts, typeColorFor, false);
     renderLegend(typeLegend, typeCounts, typeColorFor);
-    applyChartOpacity(typeSvg, typeLegend, chartTypeFilter);
+    applyChartOpacity(typeSvg, typeLegend, typeFilter.value);
     typeSvg.querySelectorAll('[data-key]').forEach((el) => {
       el.addEventListener('click', () => {
-        chartTypeFilter = chartTypeFilter === el.dataset.key ? null : el.dataset.key;
+        typeFilter.value = typeFilter.value === el.dataset.key ? '' : el.dataset.key;
         applyFilters();
       });
     });
     typeLegend.querySelectorAll('[data-key]').forEach((el) => {
       el.addEventListener('click', () => {
-        chartTypeFilter = chartTypeFilter === el.dataset.key ? null : el.dataset.key;
+        typeFilter.value = typeFilter.value === el.dataset.key ? '' : el.dataset.key;
         applyFilters();
       });
     });
@@ -767,6 +786,7 @@
       if (typeof renderCharts === 'function') renderCharts(allDinosaurs, allDinosaurs);
       renderResultBar(allDinosaurs);
       syncSearchClearButton();
+      syncFilterControls();
       initMap();
       initThemeToggle();
     });

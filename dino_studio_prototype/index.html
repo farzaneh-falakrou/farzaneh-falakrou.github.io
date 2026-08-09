@@ -48,20 +48,28 @@
       </div>
       <button id="search-button" type="button" class="btn-accent">Search</button>
     </div>
-    <div class="filter-bar" aria-label="Filters">
-      <label class="filter-chip">Country
-        <select id="country-filter" aria-label="Filter by country"><option value="">All</option></select>
+    <div class="filter-bar" role="group" aria-label="Filters">
+      <label class="filter-field">
+        <span class="filter-field__label">Country</span>
+        <select id="country-filter"><option value="">All</option></select>
       </label>
-      <label class="filter-chip filter-chip-range">Weight
+      <label class="filter-field">
+        <span class="filter-field__label">Type</span>
+        <select id="type-filter"><option value="">All</option></select>
+      </label>
+      <label class="filter-field">
+        <span class="filter-field__label">Diet</span>
+        <select id="diet-filter"><option value="">All</option></select>
+      </label>
+      <label class="filter-field filter-field--range">
+        <span class="filter-field__label">Min weight <output id="weight-value">Any</output></span>
         <input id="weight-filter" type="range" min="0" max="0" value="0" step="1" />
       </label>
-      <label class="filter-chip">Diet
-        <select id="diet-filter" aria-label="Filter by diet"><option value="">All</option></select>
-      </label>
-      <label class="filter-chip filter-chip-range">Length
+      <label class="filter-field filter-field--range">
+        <span class="filter-field__label">Min length <output id="length-value">Any</output></span>
         <input id="length-filter" type="range" min="0" max="0" value="0" step="1" />
       </label>
-      <button id="clear-filters" type="button" class="filter-clear">Clear</button>
+      <button id="clear-filters" type="button" class="filter-clear">Clear all</button>
     </div>
     <div class="result-bar">
       <p id="result-count" class="result-count" aria-live="polite"></p>
