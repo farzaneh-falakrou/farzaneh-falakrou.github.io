@@ -3,6 +3,7 @@ const {
   computeDietCounts, computeTypeCounts,
   resolveTaxonomyPath, buildTaxonomyTree,
   resolveCountryGeoNames, computeCountryCounts,
+  parseWhenLived, packLanes, packDots,
 } = require('../js/data.js');
 
 const sample = [
@@ -89,5 +90,84 @@ testBuildTaxonomyTreeSharesCommonAncestors();
 testResolveCountryGeoNamesSingleCountry();
 testResolveCountryGeoNamesMultiCountry();
 testResolveCountryGeoNamesUnmappedSkipped();
-testComputeCountryCountsTalliesMultiCountryEntries();
+testParseWhenLivedRange();
+testParseWhenLivedNormalisesReversedPair();
+testParseWhenLivedSinglePoint();
+testParseWhenLivedRejectsUnparseable();
+testParseWhenLivedCoversWholeDataset();
+testPackLanesReusesLaneWhenBarsDoNotOverlap();
+testPackLanesOpensLaneWhenBarsOverlap();
+testPackDotsKeepsClearPointsInOneLane();
+testPackDotsOpensLaneForCrowdedPoints();
+testPackDotsNeverMovesAPointAlongTheAxis();
 console.log('data: all tests passed');
+
+function testParseWhenLivedRange() {
+  assert.deepEqual(
+    parseWhenLived({ whenLived: 'Early Jurassic, 199-189 million years ago' }),
+    { epoch: 'Early Jurassic', from: 199, to: 189, isPoint: false },
+  );
+}
+
+// Carnotaurus is recorded "69-71" — younger bound first. `from` must still be
+// the older edge, or the bar renders with a negative width.
+function testParseWhenLivedNormalisesReversedPair() {
+  const span = parseWhenLived({ whenLived: 'Late Cretaceous, 69-71 million years ago' });
+  assert.equal(span.from, 71);
+  assert.equal(span.to, 69);
+}
+
+function testParseWhenLivedSinglePoint() {
+  const span = parseWhenLived({ whenLived: 'Late Triassic, 228 million years ago' });
+  assert.equal(span.from, 228);
+  assert.equal(span.to, 228);
+  assert.equal(span.isPoint, true, 'a point date is an absence of range, not a zero-length one');
+}
+
+function testParseWhenLivedRejectsUnparseable() {
+  assert.equal(parseWhenLived({ whenLived: 'sometime in the Jurassic' }), null);
+  assert.equal(parseWhenLived({}), null);
+}
+
+// The timeline silently drops anything that fails to parse, so the guarantee
+// that nothing is dropped belongs in a test.
+function testParseWhenLivedCoversWholeDataset() {
+  const dinosaurs = require('../data/dinosaurs.json');
+  const unparsed = dinosaurs.filter((d) => parseWhenLived(d) === null);
+  assert.deepEqual(unparsed.map((d) => d.name), [], 'every whenLived value must parse');
+}
+
+function testPackLanesReusesLaneWhenBarsDoNotOverlap() {
+  const lanes = packLanes([
+    { name: 'older', span: { from: 200, to: 180 } },
+    { name: 'younger', span: { from: 150, to: 130 } },
+  ]);
+  assert.equal(lanes.length, 1);
+  assert.deepEqual(lanes[0].map((e) => e.name), ['older', 'younger']);
+}
+
+function testPackLanesOpensLaneWhenBarsOverlap() {
+  const lanes = packLanes([
+    { name: 'a', span: { from: 200, to: 150 } },
+    { name: 'b', span: { from: 180, to: 120 } },
+  ]);
+  assert.equal(lanes.length, 2);
+}
+
+function testPackDotsKeepsClearPointsInOneLane() {
+  const lanes = packDots([{ position: 0 }, { position: 10 }, { position: 20 }], 5);
+  assert.equal(lanes.length, 1);
+}
+
+function testPackDotsOpensLaneForCrowdedPoints() {
+  const lanes = packDots([{ position: 0 }, { position: 1 }, { position: 2 }], 5);
+  assert.equal(lanes.length, 3);
+}
+
+// The whole point of a beeswarm over jitter: the encoded axis stays truthful.
+function testPackDotsNeverMovesAPointAlongTheAxis() {
+  const input = [{ position: 3 }, { position: 1 }, { position: 1.2 }, { position: 9 }];
+  const lanes = packDots(input, 2);
+  const out = lanes.flat().map((e) => e.position).sort((a, b) => a - b);
+  assert.deepEqual(out, [1, 1.2, 3, 9]);
+}

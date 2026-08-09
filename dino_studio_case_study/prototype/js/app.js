@@ -2,6 +2,42 @@
   let allDinosaurs = [];
   let selectedDinosaur = null;
   let mapCountryFilter = null; // geo name (properties.name) clicked on the choropleth, or null
+  let cladeFilter = null; // clade name clicked in the taxonomy ladder, or null
+  let weightSteps = []; // sorted distinct known weights; the slider indexes into this
+  let lengthSteps = []; // sorted distinct known lengths, same idea
+  let timeWindow = null; // {from, to} in Ma brushed on the timeline, or null
+  // ONE length filter with two inputs — the slider writes its min edge, the size
+  // chart brushes both. Keeping them as separate filters would repeat the
+  // dropdown-vs-map-click contradiction fixed earlier.
+  let lengthWindow = null; // {min, max} in metres, or null
+
+  // Data loading. The .json files are the source of truth, but fetch() is
+  // blocked by CORS over file://, so data/*.data.js — the same payloads wrapped
+  // in a global assignment and loaded as <script> — stand in when it fails.
+  // Regenerate them with tools/bundle-data.py after editing the JSON.
+  function loadJson(path, globalName) {
+    return fetch(path)
+      .then((res) => {
+        if (!res.ok) throw new Error(`${path}: HTTP ${res.status}`);
+        return res.json();
+      })
+      .catch((error) => {
+        if (window[globalName]) return window[globalName];
+        throw error;
+      });
+  }
+
+  function showLoadError(error) {
+    const main = document.querySelector('main');
+    if (!main) return;
+    main.innerHTML = `<div class="panel load-error">
+      <h2 class="section-label">Couldn't load the dataset</h2>
+      <p>${escapeHtml(error && error.message ? error.message : String(error))}</p>
+      <p class="load-error__hint">If you opened this file directly from disk, serve the
+      folder over HTTP instead — <code>python3 -m http.server 8000</code> — then visit
+      <code>http://localhost:8000</code>.</p>
+    </div>`;
+  }
 
   const listEl = document.getElementById('dino-list');
   const listEmptyState = document.getElementById('list-empty-state');
@@ -24,20 +60,29 @@
   const clearFiltersButton = document.getElementById('clear-filters');
   const selectFilters = [countryFilter, typeFilter, dietFilter];
 
-  function truncate(text, max) {
-    if (!text) return '';
-    return text.length > max ? `${text.slice(0, max).trim()}…` : text;
+  // "Late Cretaceous, 75-71 million years ago" -> "Late Cretaceous".
+  function periodOf(dinosaur) {
+    return String(dinosaur.whenLived || '').split(',')[0].trim();
   }
 
+  // Rows used to show a truncated description. 35 of the 75 dinosaurs have none,
+  // so half the list read as a column of "N/A" — and a prose fragment is not
+  // what anyone scans a list like this by. Diet, type and period always exist
+  // and are exactly the axes the filters work on.
   function listItemHTML(dinosaur) {
     const isSelected = selectedDinosaur && dinosaur.name === selectedDinosaur.name;
+    const meta = [dinosaur.diet, dinosaur.typeOfDinosaur, periodOf(dinosaur)]
+      .filter((value) => value && value !== 'N/A')
+      .map((value) => `<span>${escapeHtml(value)}</span>`)
+      .join('<i aria-hidden="true">·</i>');
     return `
-      <li class="${isSelected ? 'selected' : ''}" data-name="${dinosaur.name}">
-        <img src="${dinosaur.imageSrc}" alt="${dinosaur.name}"
+      <li class="${isSelected ? 'selected' : ''}" data-name="${escapeHtml(dinosaur.name)}"
+          role="option" tabindex="0" aria-selected="${isSelected ? 'true' : 'false'}">
+        <img src="${escapeHtml(dinosaur.imageSrc)}" alt="" loading="lazy" decoding="async"
              onerror="this.onerror=null;this.src='images/placeholder.svg'" />
         <div class="list-item-text">
-          <h3>${dinosaur.name}</h3>
-          <p>${truncate(dinosaur.description, 70)}</p>
+          <h3>${escapeHtml(dinosaur.name)}</h3>
+          <p class="list-item-meta">${meta}</p>
         </div>
       </li>
     `;
@@ -48,6 +93,18 @@
     listEl.innerHTML = dinosaurs.map(listItemHTML).join('');
     listEl.querySelectorAll('li').forEach((li) => {
       li.addEventListener('click', () => selectDinosaur(li.dataset.name));
+      // Selecting a dinosaur is the primary interaction on the page and was
+      // mouse-only: the rows were bare <li> with a click handler.
+      li.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          selectDinosaur(li.dataset.name);
+        } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          const sibling = event.key === 'ArrowDown' ? li.nextElementSibling : li.previousElementSibling;
+          if (sibling) sibling.focus();
+        }
+      });
     });
   }
 
@@ -55,27 +112,62 @@
     const countries = new Set();
     dinosaurs.forEach((d) => d.foundIn.split(',').forEach((c) => countries.add(c.trim())));
     countryFilter.innerHTML = '<option value="">All</option>' +
-      [...countries].sort().map((c) => `<option value="${c}">${c}</option>`).join('');
+      [...countries].sort().map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
 
     const diets = [...new Set(dinosaurs.map((d) => d.diet))].sort();
     dietFilter.innerHTML = '<option value="">All</option>' +
-      diets.map((d) => `<option value="${d}">${d}</option>`).join('');
+      diets.map((d) => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join('');
 
     const types = [...new Set(dinosaurs.map((d) => d.typeOfDinosaur))].filter(Boolean).sort();
     typeFilter.innerHTML = '<option value="">All</option>' +
-      types.map((t) => `<option value="${t}">${t}</option>`).join('');
+      types.map((t) => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
 
-    const weights = dinosaurs.map((d) => d.weight).filter((w) => typeof w === 'number');
-    const lengths = dinosaurs.map((d) => d.length).filter((l) => typeof l === 'number');
-    weightFilter.max = String(Math.max(...weights));
-    lengthFilter.max = String(Math.max(...lengths));
+    // The sliders index into the sorted list of values that actually occur,
+    // not into a linear kg/m range. Weight spans 1 to 70000kg, so on a linear
+    // track the entire useful range lived in the first few pixels and one nudge
+    // jumped from "all" to "almost none". One notch now means one dinosaur.
+    weightSteps = [...new Set(dinosaurs.map((d) => d.weight).filter((w) => typeof w === 'number'))].sort((a, b) => a - b);
+    lengthSteps = [...new Set(dinosaurs.map((d) => d.length).filter((l) => typeof l === 'number'))].sort((a, b) => a - b);
+    weightFilter.max = String(weightSteps.length);
+    lengthFilter.max = String(lengthSteps.length);
+  }
+
+  // Slider position -> threshold. Position 0 means "Any".
+  function stepValue(steps, position) {
+    const index = Number(position);
+    return index > 0 ? steps[Math.min(index, steps.length) - 1] : 0;
+  }
+  function minWeightValue() { return stepValue(weightSteps, weightFilter.value); }
+
+  // Slider position for a threshold that may have come from the chart brush and
+  // so need not be one of the recorded lengths.
+  function nearestStepIndex(steps, value) {
+    if (!(value > 0)) return 0;
+    const index = steps.findIndex((step) => step >= value);
+    return index < 0 ? steps.length : index + 1;
+  }
+
+  function maxRecordedLength() {
+    return lengthSteps.length ? lengthSteps[lengthSteps.length - 1] : 0;
+  }
+
+  function describeLengthWindow() {
+    if (!lengthWindow) return 'Any';
+    const min = Math.round(lengthWindow.min * 10) / 10;
+    const max = Math.round(lengthWindow.max * 10) / 10;
+    return max >= maxRecordedLength() ? `${min}+ m` : `${min}–${max} m`;
   }
 
   // Keeps the range readouts and the "this select is filtering" styling in step
   // with whatever changed the controls — user input, a chart click, or a chip ×.
   function syncFilterControls() {
-    weightValue.textContent = Number(weightFilter.value) > 0 ? `${weightFilter.value} kg` : 'Any';
-    lengthValue.textContent = Number(lengthFilter.value) > 0 ? `${lengthFilter.value} m` : 'Any';
+    weightValue.textContent = minWeightValue() > 0 ? `${minWeightValue().toLocaleString()} kg` : 'Any';
+    lengthValue.textContent = describeLengthWindow();
+    // Keep the slider's thumb where the chart brush put it, so the two inputs
+    // to the same filter never show different answers.
+    lengthFilter.value = String(lengthWindow ? nearestStepIndex(lengthSteps, lengthWindow.min) : 0);
+    weightFilter.setAttribute('aria-valuetext', weightValue.textContent);
+    lengthFilter.setAttribute('aria-valuetext', lengthValue.textContent);
     selectFilters.forEach((el) => el.classList.toggle('is-active', Boolean(el.value)));
   }
 
@@ -83,11 +175,11 @@
   // view is fed "everything but me": otherwise clicking a country would recolour
   // the map down to that single country, and clicking a pie slice would collapse
   // its own chart to a single wedge with nothing left to click.
-  function filterDinosaurs({ skipMap = false, skipDiet = false, skipType = false } = {}) {
+  function filterDinosaurs({ skipMap = false, skipCountry = false, skipDiet = false, skipType = false, skipSizes = false, skipTime = false } = {}) {
     let result = searchDinosaurs(allDinosaurs, searchInput.value);
 
     const country = countryFilter.value;
-    if (country) {
+    if (!skipCountry && country) {
       result = result.filter((d) => d.foundIn.split(',').map((c) => c.trim()).includes(country));
     }
 
@@ -99,14 +191,28 @@
       result = result.filter((d) => d.typeOfDinosaur === typeFilter.value);
     }
 
-    const minWeight = Number(weightFilter.value);
+    // 55 of the 75 dinosaurs have no recorded weight, so any threshold above
+    // zero necessarily hides most of the dataset. That is the right filter
+    // semantics, but it has to be *said* — renderResultBar reports the count.
+    const minWeight = skipSizes ? 0 : minWeightValue();
     if (minWeight > 0) {
       result = result.filter((d) => typeof d.weight === 'number' && d.weight >= minWeight);
     }
 
-    const minLength = Number(lengthFilter.value);
-    if (minLength > 0) {
-      result = result.filter((d) => typeof d.length === 'number' && d.length >= minLength);
+    if (!skipSizes && lengthWindow) {
+      result = result.filter((d) => typeof d.length === 'number'
+        && d.length >= lengthWindow.min && d.length <= lengthWindow.max);
+    }
+
+    if (!skipTime && timeWindow) {
+      result = result.filter((d) => {
+        const span = parseWhenLived(d);
+        return span && span.from >= timeWindow.to && span.to <= timeWindow.from;
+      });
+    }
+
+    if (cladeFilter) {
+      result = result.filter((d) => resolveTaxonomyPath(d).includes(cladeFilter));
     }
 
     if (!skipMap && mapCountryFilter) {
@@ -116,8 +222,8 @@
     return result;
   }
 
-  function applyFilters() {
-    if (typeof updateMapDensity === 'function') updateMapDensity(filterDinosaurs({ skipMap: true }));
+  function applyFilters({ writeUrl = true } = {}) {
+    if (typeof updateMapDensity === 'function') updateMapDensity(filterDinosaurs({ skipMap: true, skipCountry: true }));
 
     const result = filterDinosaurs();
 
@@ -125,9 +231,25 @@
     if (typeof renderCharts === 'function') {
       renderCharts(filterDinosaurs({ skipDiet: true }), filterDinosaurs({ skipType: true }));
     }
+    if (typeof renderTimeline === 'function') renderTimeline(result);
+    if (typeof renderSizeChart === 'function') renderSizeChart(result);
     renderResultBar(result);
+    syncOutOfResults(result);
     syncSearchClearButton();
     syncFilterControls();
+    if (writeUrl) syncUrl();
+  }
+
+  // The detail panel is not cleared when filters exclude its dinosaur — losing
+  // the user's place would be worse — but it must say so, or the page shows a
+  // complete dinosaur directly beneath "No dinosaurs match your filters".
+  function syncOutOfResults(result) {
+    const panel = document.getElementById('detail-panel');
+    const notice = document.getElementById('detail-out-of-results');
+    if (!panel || !notice) return;
+    const stale = Boolean(selectedDinosaur) && !result.some((d) => d.name === selectedDinosaur.name);
+    notice.hidden = !stale;
+    panel.classList.toggle('is-stale', stale);
   }
 
   // --- Result count, active filter chips, and empty-state recovery ---
@@ -143,14 +265,23 @@
     if (dietFilter.value) {
       chips.push({ label: dietFilter.value, clear: () => { dietFilter.value = ''; } });
     }
-    if (Number(weightFilter.value) > 0) {
-      chips.push({ label: `≥ ${weightFilter.value} kg`, clear: () => { weightFilter.value = '0'; } });
+    if (minWeightValue() > 0) {
+      chips.push({ label: `≥ ${minWeightValue().toLocaleString()} kg`, clear: () => { weightFilter.value = '0'; } });
     }
-    if (Number(lengthFilter.value) > 0) {
-      chips.push({ label: `≥ ${lengthFilter.value} m`, clear: () => { lengthFilter.value = '0'; } });
+    if (lengthWindow) {
+      chips.push({ label: `Length: ${describeLengthWindow()}`, clear: () => { lengthWindow = null; } });
     }
     if (mapCountryFilter) {
       chips.push({ label: `Map: ${mapCountryFilter}`, clear: () => { mapCountryFilter = null; } });
+    }
+    if (cladeFilter) {
+      chips.push({ label: `Clade: ${cladeFilter}`, clear: () => { cladeFilter = null; } });
+    }
+    if (timeWindow) {
+      chips.push({
+        label: `Time: ${Math.round(timeWindow.from)}–${Math.round(timeWindow.to)} Ma`,
+        clear: () => { timeWindow = null; },
+      });
     }
     if (typeFilter.value) {
       chips.push({ label: `Type: ${typeFilter.value}`, clear: () => { typeFilter.value = ''; } });
@@ -164,11 +295,31 @@
       ? `Showing all <strong>${total}</strong> dinosaurs`
       : `Showing <strong>${result.length}</strong> of ${total} dinosaurs`;
 
+    // A size threshold can only be applied to dinosaurs whose size is recorded,
+    // and most weights are not. Reported as the actual delta against the other
+    // active filters — counting unknowns across the whole dataset claimed
+    // "55 hidden" even when only a handful had been dropped.
+    const notes = [];
+    if (minWeightValue() > 0 || lengthWindow) {
+      const withoutSizes = filterDinosaurs({ skipSizes: true });
+      if (minWeightValue() > 0) {
+        const n = withoutSizes.filter((d) => typeof d.weight !== 'number').length;
+        if (n > 0) notes.push(`${n} hidden — weight not recorded`);
+      }
+      if (lengthWindow) {
+        const n = withoutSizes.filter((d) => typeof d.length !== 'number').length;
+        if (n > 0) notes.push(`${n} hidden — length not recorded`);
+      }
+    }
+    if (notes.length) {
+      resultCount.innerHTML += ` <span class="result-note">${escapeHtml(notes.join(' · '))}</span>`;
+    }
+
     const chips = activeFilters();
     activeFiltersEl.innerHTML = chips
       .map((chip, i) => `
-        <span class="active-filter">${chip.label}
-          <button type="button" data-chip="${i}" aria-label="Remove filter ${chip.label}">×</button>
+        <span class="active-filter">${escapeHtml(chip.label)}
+          <button type="button" data-chip="${i}" aria-label="Remove filter ${escapeHtml(chip.label)}">×</button>
         </span>`)
       .join('');
     activeFiltersEl.querySelectorAll('button[data-chip]').forEach((button) => {
@@ -182,14 +333,21 @@
   }
 
   function renderEmptyState(result) {
-    if (result.length > 0) return;
+    // Cleared unconditionally: leaving the previous run's suggestion in place
+    // meant a later empty search could surface a correction for a query the
+    // user had already moved on from.
+    if (result.length > 0) {
+      didYouMean.hidden = true;
+      didYouMean.textContent = '';
+      return;
+    }
     const query = searchInput.value.trim();
     const correction = query ? suggestCorrection(allDinosaurs, query) : null;
 
     if (correction) {
       didYouMean.hidden = false;
       didYouMean.innerHTML =
-        `Did you mean <button type="button">${correction}</button>?`;
+        `Did you mean <button type="button">${escapeHtml(correction)}</button>?`;
       didYouMean.querySelector('button').addEventListener('click', () => {
         searchInput.value = correction;
         hideSuggestions();
@@ -201,14 +359,31 @@
     }
   }
 
+  function clearSelection() {
+    selectedDinosaur = null;
+    renderDetail(null);
+    if (typeof resetMapView === 'function') resetMapView();
+    listEl.querySelectorAll('li').forEach((li) => {
+      li.classList.remove('selected');
+      li.setAttribute('aria-selected', 'false');
+    });
+    applyFilters();
+  }
+
   function clearAllFilters() {
     searchInput.value = '';
     countryFilter.value = '';
     dietFilter.value = '';
     weightFilter.value = '0';
     lengthFilter.value = '0';
+    lengthWindow = null;
     mapCountryFilter = null;
+    cladeFilter = null;
+    timeWindow = null;
     typeFilter.value = '';
+    selectedDinosaur = null;
+    renderDetail(null);
+    if (typeof resetMapView === 'function') resetMapView();
     hideSuggestions();
     applyFilters();
   }
@@ -224,6 +399,7 @@
     suggestionsEl.hidden = true;
     suggestionsEl.innerHTML = '';
     searchInput.setAttribute('aria-expanded', 'false');
+    searchInput.removeAttribute('aria-activedescendant');
   }
 
   function highlightMatch(value, query) {
@@ -238,15 +414,17 @@
     if (suggestions.length === 0) { hideSuggestions(); return; }
     const query = searchInput.value.trim();
     suggestionsEl.innerHTML = suggestions.map((s, i) => `
-      <li role="option" data-index="${i}" aria-selected="${i === activeSuggestion}">
+      <li role="option" id="suggestion-${i}" data-index="${i}" aria-selected="${i === activeSuggestion}">
         <span>${highlightMatch(s.value, query)}</span>
         <span class="suggestion-kind">${s.kind}</span>
       </li>`).join('');
     suggestionsEl.hidden = false;
     searchInput.setAttribute('aria-expanded', 'true');
+    if (activeSuggestion >= 0) searchInput.setAttribute('aria-activedescendant', `suggestion-${activeSuggestion}`);
+    else searchInput.removeAttribute('aria-activedescendant');
 
     suggestionsEl.querySelectorAll('li').forEach((li) => {
-      li.addEventListener('mousedown', (event) => {
+      li.addEventListener('pointerdown', (event) => {
         event.preventDefault(); // keep focus in the input
         chooseSuggestion(Number(li.dataset.index));
       });
@@ -266,6 +444,9 @@
     } else if (suggestion.kind === 'diet') {
       searchInput.value = '';
       dietFilter.value = suggestion.value;
+    } else if (suggestion.kind === 'type') {
+      searchInput.value = '';
+      typeFilter.value = suggestion.value;
     } else {
       searchInput.value = suggestion.value;
     }
@@ -273,7 +454,7 @@
     hideSuggestions();
     applyFilters();
 
-    if (suggestion.kind === 'name') selectDinosaur(suggestion.value);
+    if (suggestion.kind === 'name') selectDinosaur(suggestion.value, { fromSearch: true });
   }
 
   function updateSuggestions() {
@@ -328,23 +509,48 @@
   dietFilter.addEventListener('change', applyFilters);
   typeFilter.addEventListener('change', applyFilters);
   weightFilter.addEventListener('input', applyFilters);
-  lengthFilter.addEventListener('input', applyFilters);
+  lengthFilter.addEventListener('input', () => {
+    const min = stepValue(lengthSteps, lengthFilter.value);
+    lengthWindow = min > 0 ? { min, max: maxRecordedLength() } : null;
+    applyFilters();
+  });
   clearFiltersButton.addEventListener('click', clearAllFilters);
   document.querySelector('[data-clear-all]').addEventListener('click', clearAllFilters);
+  document.getElementById('detail-clear').addEventListener('click', clearSelection);
 
-  function selectDinosaur(name) {
+  const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function scrollToElement(el) {
+    if (!el) return;
+    el.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  // `fromSearch` suppresses the jump: selecting from the suggestion popup used
+  // to fling the viewport two screens down while focus stayed in the search
+  // box, so the user carried on typing into an off-screen field.
+  function selectDinosaur(name, { fromSearch = false } = {}) {
     selectedDinosaur = allDinosaurs.find((d) => d.name === name) || null;
     listEl.querySelectorAll('li').forEach((li) => {
-      li.classList.toggle('selected', selectedDinosaur && li.dataset.name === selectedDinosaur.name);
+      const isSelected = Boolean(selectedDinosaur) && li.dataset.name === selectedDinosaur.name;
+      li.classList.toggle('selected', isSelected);
+      li.setAttribute('aria-selected', String(isSelected));
     });
     renderDetail(selectedDinosaur);
-    document.getElementById('detail-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!fromSearch) {
+      scrollToElement(document.getElementById('detail-panel'));
+      // Focus, not just scroll — otherwise a screen reader is never told that
+      // anything happened.
+      const heading = document.getElementById('detail-name');
+      if (heading) heading.focus({ preventScroll: true });
+    }
+    syncUrl();
   }
 
   const DETAIL_FIELDS = [
     ['Type', 'typeOfDinosaur'],
-    ['Length', (d) => `${d.length}m`],
-    ['Weight', 'weight'],
+    // Units are appended only to real measurements: the dataset stores missing
+    // values as the string "N/A", which used to render as "N/Am".
+    ['Length', (d) => (typeof d.length === 'number' ? `${d.length} m` : '—')],
+    ['Weight', (d) => (typeof d.weight === 'number' ? `${d.weight.toLocaleString()} kg` : '—')],
     ['Diet', 'diet'],
     ['Type species', 'typeSpecies'],
     ['Found in', 'foundIn'],
@@ -372,12 +578,16 @@
       this.src = 'images/placeholder.svg';
     };
     document.getElementById('detail-name').textContent = dinosaur.name;
-    document.getElementById('detail-description').textContent = dinosaur.description;
+    const description = document.getElementById('detail-description');
+    const hasDescription = dinosaur.description && dinosaur.description !== 'N/A';
+    description.textContent = hasDescription ? dinosaur.description : 'No description recorded for this dinosaur.';
+    description.classList.toggle('empty-state', !hasDescription);
     document.getElementById('detail-when-lived').textContent = dinosaur.whenLived;
 
     document.getElementById('detail-fields').innerHTML = DETAIL_FIELDS.map(([label, accessor]) => {
-      const value = typeof accessor === 'function' ? accessor(dinosaur) : dinosaur[accessor];
-      return `<div class="fact-pill"><dt>${label}</dt><dd>${value}</dd></div>`;
+      const raw = typeof accessor === 'function' ? accessor(dinosaur) : dinosaur[accessor];
+      const value = raw && raw !== 'N/A' ? raw : '—';
+      return `<div class="fact-pill"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`;
     }).join('');
 
     if (typeof renderTaxonomyTree === 'function') renderTaxonomyTree(dinosaur);
@@ -429,128 +639,629 @@
     for (const [key, value] of Object.entries(counts)) {
       if (value === 0) continue;
       const sweep = (value / total) * 360;
-      svg += `<path data-key="${key}" d="${describeArc(cx, cy, r, angle, angle + sweep)}" fill="${colorFor(key)}" style="cursor:pointer;transition:opacity 0.15s" />`;
+      svg += `<path data-key="${escapeHtml(key)}" d="${describeArc(cx, cy, r, angle, angle + sweep)}" fill="${colorFor(key)}" stroke="var(--panel-solid)" stroke-width="0.8" />`;
       angle += sweep;
     }
-    if (innerHole) svg += `<circle cx="${cx}" cy="${cy}" r="22" fill="var(--surface)" />`;
+    if (innerHole) svg += `<circle cx="${cx}" cy="${cy}" r="22" fill="var(--panel-solid)" />`;
     svgEl.innerHTML = svg;
   }
 
   function renderLegend(listEl, counts, colorFor) {
-    listEl.innerHTML = Object.entries(counts)
-      .filter(([, count]) => count > 0)
+    const entries = Object.entries(counts).filter(([, count]) => count > 0);
+    listEl.classList.toggle('chart-legend--split', entries.length > 6);
+    listEl.innerHTML = entries
       .map(([key, count]) => `
-        <li data-key="${key}" style="cursor:pointer;transition:opacity 0.15s"><span class="swatch" style="background:${colorFor(key)}"></span>${key} (${count})</li>
+        <li><button type="button" data-key="${escapeHtml(key)}" aria-pressed="false"><span class="swatch" style="background:${colorFor(key)}"></span>${escapeHtml(key)} (${count})</button></li>
       `).join('');
   }
 
-  function applyChartOpacity(svgEl, legendEl, activeKey) {
+  // Active category is marked on the control (aria-pressed + a visible ring)
+  // rather than signalled only by dimming everything else — dimming removes the
+  // colour cue and pushes already-muted legend text below contrast minimums.
+  function applyChartState(svgEl, legendEl, activeKey) {
     const hasFilter = Boolean(activeKey);
     svgEl.querySelectorAll('[data-key]').forEach((el) => {
-      el.style.opacity = hasFilter && el.dataset.key !== activeKey ? '0.3' : '1';
+      el.classList.toggle('is-dimmed', hasFilter && el.dataset.key !== activeKey);
     });
     legendEl.querySelectorAll('[data-key]').forEach((el) => {
-      el.style.opacity = hasFilter && el.dataset.key !== activeKey ? '0.3' : '1';
+      const isActive = el.dataset.key === activeKey;
+      el.setAttribute('aria-pressed', String(isActive));
+      el.classList.toggle('is-active', isActive);
+    });
+  }
+
+  function wireChart({ svgEl, legendEl, counts, colorFor, innerHole, filterEl }) {
+    renderPie(svgEl, counts, colorFor, innerHole);
+    renderLegend(legendEl, counts, colorFor);
+    applyChartState(svgEl, legendEl, filterEl.value);
+    const toggle = (key) => {
+      filterEl.value = filterEl.value === key ? '' : key;
+      applyFilters();
+    };
+    // The legend buttons are the accessible control; the pie is the same data
+    // as a shortcut for pointer users.
+    legendEl.querySelectorAll('[data-key]').forEach((el) => {
+      el.addEventListener('click', () => toggle(el.dataset.key));
+    });
+    svgEl.querySelectorAll('[data-key]').forEach((el) => {
+      el.addEventListener('click', () => toggle(el.dataset.key));
     });
   }
 
   function renderCharts(dietBase, typeBase) {
-    const dietCounts = computeDietCounts(dietBase);
-    const dietColorFor = (key) => DIET_COLORS[key];
-    const dietSvg = document.getElementById('diet-chart');
-    const dietLegend = document.getElementById('diet-legend');
-    renderPie(dietSvg, dietCounts, dietColorFor, true);
-    renderLegend(dietLegend, dietCounts, dietColorFor);
-    applyChartOpacity(dietSvg, dietLegend, dietFilter.value);
-    dietSvg.querySelectorAll('[data-key]').forEach((el) => {
-      el.addEventListener('click', () => {
-        dietFilter.value = dietFilter.value === el.dataset.key ? '' : el.dataset.key;
-        applyFilters();
-      });
+    wireChart({
+      svgEl: document.getElementById('diet-chart'),
+      legendEl: document.getElementById('diet-legend'),
+      counts: computeDietCounts(dietBase),
+      colorFor: (key) => DIET_COLORS[key],
+      innerHole: true,
+      filterEl: dietFilter,
     });
-    dietLegend.querySelectorAll('[data-key]').forEach((el) => {
-      el.addEventListener('click', () => {
-        dietFilter.value = dietFilter.value === el.dataset.key ? '' : el.dataset.key;
-        applyFilters();
-      });
-    });
-
-    const typeCounts = computeTypeCounts(typeBase);
-    const typeSvg = document.getElementById('type-chart');
-    const typeLegend = document.getElementById('type-legend');
-    renderPie(typeSvg, typeCounts, typeColorFor, false);
-    renderLegend(typeLegend, typeCounts, typeColorFor);
-    applyChartOpacity(typeSvg, typeLegend, typeFilter.value);
-    typeSvg.querySelectorAll('[data-key]').forEach((el) => {
-      el.addEventListener('click', () => {
-        typeFilter.value = typeFilter.value === el.dataset.key ? '' : el.dataset.key;
-        applyFilters();
-      });
-    });
-    typeLegend.querySelectorAll('[data-key]').forEach((el) => {
-      el.addEventListener('click', () => {
-        typeFilter.value = typeFilter.value === el.dataset.key ? '' : el.dataset.key;
-        applyFilters();
-      });
+    wireChart({
+      svgEl: document.getElementById('type-chart'),
+      legendEl: document.getElementById('type-legend'),
+      counts: computeTypeCounts(typeBase),
+      colorFor: typeColorFor,
+      innerHole: false,
+      filterEl: typeFilter,
     });
   }
 
-  // --- Taxonomy tree: a pruned lineage diagram for the selected dinosaur —
-  // the selected dinosaur's ancestor chain in teal, sibling clades shown
-  // collapsed (not expanded) beside each step, ported from the design's
-  // dino_studio_case_study/visuals/dino-taxonomy.html reference build.
-  let cachedTaxonomyRoot = null; // the "Dinosauria" node (skips the synthetic root)
+  // --- URL state -----------------------------------------------------------
+  //
+  // Every filter lives in location.hash, so a configured view is a citable
+  // object: it can be shared, bookmarked, and reached with Back. Param names
+  // are versioned by `v` so old links can be migrated rather than silently
+  // misread if the encoding ever changes.
+  const STATE_VERSION = '1';
+  let suppressHashRead = false;
+  let hashWriteTimer = null;
 
-  function findOnPath(root, dinosaurName) {
-    const onPath = new Set();
-    let leaf = null;
-    (function dfs(node) {
-      if (node.isLeaf && Object.keys(node.children).length === 0) {
-        if (node.name === dinosaurName) { onPath.add(node); leaf = node; return true; }
+  function currentState() {
+    const params = new URLSearchParams();
+    params.set('v', STATE_VERSION);
+    if (searchInput.value.trim()) params.set('q', searchInput.value.trim());
+    if (countryFilter.value) params.set('country', countryFilter.value);
+    if (typeFilter.value) params.set('type', typeFilter.value);
+    if (dietFilter.value) params.set('diet', dietFilter.value);
+    if (minWeightValue() > 0) params.set('kg', String(minWeightValue()));
+    if (lengthWindow) params.set('m', `${round1(lengthWindow.min)}-${round1(lengthWindow.max)}`);
+    if (timeWindow) params.set('ma', `${round1(timeWindow.from)}-${round1(timeWindow.to)}`);
+    if (cladeFilter) params.set('clade', cladeFilter);
+    if (mapCountryFilter) params.set('geo', mapCountryFilter);
+    if (selectedDinosaur) params.set('sel', selectedDinosaur.name);
+    return params;
+  }
+
+  function round1(value) { return Math.round(value * 10) / 10; }
+
+  // Debounced and pushed: a slider drag or a burst of typing collapses into one
+  // history entry instead of one per event, so Back steps through decisions
+  // rather than keystrokes.
+  function syncUrl() {
+    clearTimeout(hashWriteTimer);
+    hashWriteTimer = setTimeout(() => {
+      const params = currentState();
+      const next = params.toString() === `v=${STATE_VERSION}` ? ' ' : `#${params}`;
+      if (next.trim() === window.location.hash.trim()) return;
+      suppressHashRead = true;
+      if (next === ' ') history.pushState(null, '', window.location.pathname);
+      else history.pushState(null, '', next);
+      suppressHashRead = false;
+    }, 350);
+  }
+
+  function pairFrom(raw) {
+    if (!raw) return null;
+    const [a, b] = raw.split('-').map(Number);
+    if (!Number.isFinite(a) || !Number.isFinite(b)) return null;
+    return [a, b];
+  }
+
+  // Always applies, including when a param is absent — returning early on an
+  // empty hash meant navigating Back to the bare URL left the previous entry's
+  // filters in place while the address bar claimed there were none.
+  function readStateFromUrl() {
+    const params = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+
+    const setIfPresent = (el, key) => {
+      const value = params.get(key) || '';
+      // Only accept values the control actually offers, so a stale or hand-edited
+      // link degrades to "no filter" rather than to an impossible state.
+      el.value = [...el.options].some((o) => o.value === value) ? value : '';
+    };
+    searchInput.value = params.get('q') || '';
+    setIfPresent(countryFilter, 'country');
+    setIfPresent(typeFilter, 'type');
+    setIfPresent(dietFilter, 'diet');
+
+    const kg = Number(params.get('kg'));
+    weightFilter.value = Number.isFinite(kg) && kg > 0 ? String(nearestStepIndex(weightSteps, kg)) : '0';
+
+    const metres = pairFrom(params.get('m'));
+    lengthWindow = metres ? { min: metres[0], max: metres[1] } : null;
+
+    const ma = pairFrom(params.get('ma'));
+    timeWindow = ma ? { from: ma[0], to: ma[1] } : null;
+
+    cladeFilter = params.get('clade') || null;
+    mapCountryFilter = params.get('geo') || null;
+
+    const selected = params.get('sel');
+    selectedDinosaur = selected ? allDinosaurs.find((d) => d.name === selected) || null : null;
+    return params.has('v');
+  }
+
+  function initUrlState() {
+    if (readStateFromUrl()) {
+      renderDetail(selectedDinosaur);
+      // Applied explicitly rather than relying on the map's async boot to run a
+      // pass for us — that ordering was accidental.
+      applyFilters({ writeUrl: false });
+      if (selectedDinosaur && typeof focusMapOnDinosaur === 'function') focusMapOnDinosaur(selectedDinosaur);
+    }
+    window.addEventListener('popstate', () => {
+      if (suppressHashRead) return;
+      readStateFromUrl();
+      renderDetail(selectedDinosaur);
+      applyFilters({ writeUrl: false });
+    });
+
+    const copy = document.getElementById('copy-link');
+    if (!copy) return;
+    copy.addEventListener('click', () => {
+      const url = window.location.href;
+      const done = () => {
+        copy.textContent = 'Link copied';
+        setTimeout(() => { copy.textContent = 'Copy link to this view'; }, 1600);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(done, done);
+      } else {
+        done();
+      }
+    });
+  }
+
+  // --- Deep-time chart -----------------------------------------------------
+  //
+  // The dataset's dates were the one fully-populated dimension the UI never
+  // touched: it could answer "where" and "what kind" but not "when", which is
+  // the question the subject matter is actually about. Each dinosaur is a bar
+  // across its recorded range, greedily packed into lanes; brushing a window
+  // filters everything else on the page.
+  const TIME_PAD = 4;             // Ma of breathing room at each end
+  const LANE_H = 15;
+  const BAR_H = 9;
+  const AXIS_H = 34;
+  const BAND_LABEL_H = 18;
+
+  function timelineEntries(dinosaurs) {
+    return dinosaurs
+      .map((d) => ({ dinosaur: d, span: parseWhenLived(d) }))
+      .filter((e) => e.span);
+  }
+
+  function timeBounds() {
+    const spans = timelineEntries(allDinosaurs).map((e) => e.span);
+    return {
+      oldest: Math.max(...spans.map((s) => s.from)) + TIME_PAD,
+      youngest: Math.min(...spans.map((s) => s.to)) - TIME_PAD,
+    };
+  }
+
+  function renderTimeline(visible) {
+    const host = document.getElementById('timeline');
+    if (!host || allDinosaurs.length === 0) return;
+
+    const { oldest, youngest } = timeBounds();
+    // Measured, never clamped upward: forcing a minimum wider than the
+    // container pushed the SVG past the page edge on small screens.
+    const width = host.clientWidth || 320;
+    const padX = 14;
+    const plotW = width - padX * 2;
+    // Time runs oldest-left, which is how every geologic column is drawn.
+    const x = (ma) => ((oldest - ma) / (oldest - youngest)) * plotW + padX;
+
+    const lanes = packLanes(timelineEntries(allDinosaurs));
+    const height = BAND_LABEL_H + lanes.length * LANE_H + AXIS_H;
+    const top = BAND_LABEL_H;
+    const visibleNames = new Set(visible.map((d) => d.name));
+
+    // Six epoch names across a 300px panel collide into an unreadable smear, so
+    // each label steps down to an abbreviation and then drops out entirely
+    // rather than overlapping its neighbours.
+    const CHAR_W = 5.4; // 9px JetBrains Mono, uppercase, with letterspacing
+    let bands = '';
+    let bandLabels = '';
+    EPOCH_BOUNDS.forEach((epoch, i) => {
+      const from = Math.min(epoch.from, oldest);
+      const to = Math.max(epoch.to, youngest);
+      if (from <= to) return;
+      const left = x(from);
+      const w = x(to) - left;
+      bands += `<rect class="tl-band ${i % 2 ? 'tl-band--alt' : ''}" data-epoch="${escapeHtml(epoch.name)}"
+        x="${left}" y="${top}" width="${w}" height="${lanes.length * LANE_H}" />`;
+      bands += `<line class="tl-band-edge" x1="${left}" y1="${top}" x2="${left}" y2="${top + lanes.length * LANE_H}" />`;
+
+      const [era, period] = epoch.name.split(' ');
+      const short = `${era[0]}. ${period.slice(0, 3)}.`;
+      const label = w > (epoch.name.length + 1) * CHAR_W ? epoch.name
+        : w > (short.length + 1) * CHAR_W ? short
+          : null;
+      if (label) {
+        bandLabels += `<text class="tl-band-label" x="${left + w / 2}" y="${BAND_LABEL_H - 6}"
+          text-anchor="middle">${escapeHtml(label)}<title>${escapeHtml(epoch.name)}</title></text>`;
+      }
+    });
+
+    let bars = '';
+    lanes.forEach((lane, laneIndex) => {
+      const y = top + laneIndex * LANE_H + (LANE_H - BAR_H) / 2;
+      lane.forEach(({ dinosaur, span }) => {
+        const isVisible = visibleNames.has(dinosaur.name);
+        const isSelected = selectedDinosaur && selectedDinosaur.name === dinosaur.name;
+        const cls = `tl-bar${isVisible ? '' : ' tl-bar--out'}${isSelected ? ' tl-bar--sel' : ''}`;
+        const fill = DIET_COLORS[dinosaur.diet] || 'var(--chart-unknown)';
+        const label = `${dinosaur.name} — ${escapeHtml(dinosaur.whenLived)}`;
+        if (span.isPoint) {
+          // A single date is an absence of range. Drawing it as a bar would
+          // invent a duration, so it gets a diamond with no width meaning.
+          const cx = x(span.from);
+          const r = BAR_H / 2;
+          bars += `<polygon class="${cls} tl-point" data-name="${escapeHtml(dinosaur.name)}" fill="${fill}"
+            points="${cx},${y} ${cx + r},${y + r} ${cx},${y + BAR_H} ${cx - r},${y + r}"><title>${label}</title></polygon>`;
+        } else {
+          const left = x(span.from);
+          const w = Math.max(2, x(span.to) - left);
+          bars += `<rect class="${cls}" data-name="${escapeHtml(dinosaur.name)}" fill="${fill}"
+            x="${left}" y="${y}" width="${w}" height="${BAR_H}" rx="1"><title>${label}</title></rect>`;
+        }
+      });
+    });
+
+    const axisY = top + lanes.length * LANE_H;
+    let ticks = '';
+    // floor, not ceil: rounding up put the first tick older than the axis start,
+    // i.e. at a negative x, off the left edge of the SVG.
+    for (let ma = Math.floor(oldest / 20) * 20; ma >= youngest; ma -= 20) {
+      ticks += `<line class="tl-tick" x1="${x(ma)}" y1="${axisY}" x2="${x(ma)}" y2="${axisY + 5}" />`;
+      ticks += `<text class="tl-tick-label" x="${x(ma)}" y="${axisY + 17}" text-anchor="middle">${ma}</text>`;
+    }
+    ticks += `<text class="tl-axis-label" x="${plotW + padX}" y="${axisY + 30}" text-anchor="end">million years ago</text>`;
+
+    const brush = timeWindow
+      ? `<rect class="tl-brush" x="${x(timeWindow.from)}" y="${top}"
+           width="${Math.max(1, x(timeWindow.to) - x(timeWindow.from))}" height="${lanes.length * LANE_H}" />`
+      : '';
+
+    host.innerHTML =
+      `<svg class="tl-svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"
+            role="img" aria-label="Timeline of when each dinosaur lived, ${Math.round(oldest)} to ${Math.round(youngest)} million years ago">
+        ${bands}${bandLabels}${brush}${bars}
+        <line class="tl-axis" x1="${padX}" y1="${axisY}" x2="${plotW + padX}" y2="${axisY}" />
+        ${ticks}
+      </svg>`;
+
+    wireTimeline(host, oldest, youngest, padX);
+  }
+
+  function wireTimeline(host, oldest, youngest, padX) {
+    const svg = host.querySelector('svg');
+    if (!svg) return;
+    const toMa = (clientX) => {
+      const rect = svg.getBoundingClientRect();
+      const span = Math.max(1, rect.width - padX * 2);
+      const ratio = Math.min(1, Math.max(0, (clientX - rect.left - padX) / span));
+      return oldest - ratio * (oldest - youngest);
+    };
+
+    svg.querySelectorAll('[data-name]').forEach((el) => {
+      el.addEventListener('click', (event) => {
+        event.stopPropagation();
+        selectDinosaur(el.dataset.name);
+      });
+    });
+
+    // Clicking a band is a shortcut for brushing exactly that epoch — one
+    // mechanism, two ways in, rather than two competing time filters.
+    svg.querySelectorAll('[data-epoch]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const epoch = EPOCH_BOUNDS.find((e) => e.name === el.dataset.epoch);
+        if (!epoch) return;
+        const same = timeWindow && timeWindow.from === epoch.from && timeWindow.to === epoch.to;
+        timeWindow = same ? null : { from: epoch.from, to: epoch.to };
+        applyFilters();
+      });
+    });
+
+    let dragStart = null;
+    let dragMoved = false;
+    svg.addEventListener('pointerdown', (event) => {
+      if (event.target.closest('[data-name]')) return;
+      dragStart = toMa(event.clientX);
+      dragMoved = false;
+      // Throws if the pointer is already gone (fast taps, synthetic events);
+      // capture is an optimisation here, not a requirement for the drag.
+      try { svg.setPointerCapture(event.pointerId); } catch (e) { /* not capturable */ }
+    });
+    svg.addEventListener('pointermove', (event) => {
+      if (dragStart === null) return;
+      const now = toMa(event.clientX);
+      if (Math.abs(now - dragStart) < 1) return; // ignore jitter on a plain click
+      dragMoved = true;
+      timeWindow = { from: Math.max(dragStart, now), to: Math.min(dragStart, now) };
+      applyFilters();
+    });
+    const endDrag = () => {
+      // A click with no drag clears the brush. Keyed off whether the pointer
+      // actually moved — inspecting the resulting window instead meant a click
+      // after an earlier drag left that earlier window in place.
+      if (dragStart !== null && !dragMoved && timeWindow) {
+        timeWindow = null;
+        applyFilters();
+      }
+      dragStart = null;
+      dragMoved = false;
+    };
+    svg.addEventListener('pointerup', endDrag);
+    svg.addEventListener('pointercancel', endDrag);
+  }
+
+  // --- Size chart ----------------------------------------------------------
+  //
+  // `length` is recorded for 74 of 75 and was previously reduced to a one-way
+  // "minimum" slider, which says nothing about the distribution. A strip plot
+  // shows the shape — a dense cluster of mid-sized theropods with a long
+  // sauropod tail — and the human reference is what makes 35 m mean anything.
+  const HUMAN_M = 1.8;
+  const DOT_R = 4;
+  const DOT_LANE_H = 11;
+  const SIZE_AXIS_H = 34;
+  const SIZE_TOP = 26; // headroom for the human marker's label
+
+  function renderSizeChart(visible) {
+    const host = document.getElementById('size-chart');
+    if (!host || allDinosaurs.length === 0) return;
+
+    const withLength = allDinosaurs.filter((d) => typeof d.length === 'number');
+    const withoutLength = allDinosaurs.filter((d) => typeof d.length !== 'number');
+    const maxLength = Math.ceil(Math.max(...withLength.map((d) => d.length)) / 5) * 5;
+
+    const width = host.clientWidth || 320;
+    // Inset by half a tick label plus the dot radius: without it the "0" and
+    // "35" labels and the dot at the maximum were clipped by the SVG edge.
+    const padX = 14;
+    const plotW = width - padX * 2;
+    const x = (metres) => (metres / maxLength) * plotW + padX;
+    // Lanes are packed in metres, so the gap is expressed in metres too.
+    const gapM = ((DOT_R * 2) + 1) / plotW * maxLength;
+
+    const lanes = packDots(
+      withLength.map((d) => ({ dinosaur: d, position: d.length })),
+      gapM,
+    );
+    const height = SIZE_TOP + lanes.length * DOT_LANE_H + SIZE_AXIS_H;
+    const axisY = SIZE_TOP + lanes.length * DOT_LANE_H;
+    const visibleNames = new Set(visible.map((d) => d.name));
+
+    let dots = '';
+    lanes.forEach((lane, laneIndex) => {
+      const cy = SIZE_TOP + laneIndex * DOT_LANE_H + DOT_LANE_H / 2;
+      lane.forEach(({ dinosaur }) => {
+        const isVisible = visibleNames.has(dinosaur.name);
+        const isSelected = selectedDinosaur && selectedDinosaur.name === dinosaur.name;
+        const cls = `sz-dot${isVisible ? '' : ' sz-dot--out'}${isSelected ? ' sz-dot--sel' : ''}`;
+        dots += `<circle class="${cls}" data-name="${escapeHtml(dinosaur.name)}"
+          cx="${x(dinosaur.length)}" cy="${cy}" r="${DOT_R}"
+          fill="${DIET_COLORS[dinosaur.diet] || 'var(--chart-unknown)'}"
+          ><title>${escapeHtml(dinosaur.name)} — ${dinosaur.length} m</title></circle>`;
+      });
+    });
+
+    // The human reference is the whole reason this chart reads viscerally, so
+    // it is drawn over the dots rather than behind them.
+    const humanX = x(HUMAN_M);
+    const human = `<g class="sz-human">
+      <line x1="${humanX}" y1="${SIZE_TOP - 8}" x2="${humanX}" y2="${axisY}" />
+      <text x="${humanX + 5}" y="${SIZE_TOP - 12}">1.8 m — average adult human</text>
+    </g>`;
+
+    let ticks = '';
+    const step = maxLength > 20 ? 5 : 2;
+    for (let m = 0; m <= maxLength; m += step) {
+      ticks += `<line class="tl-tick" x1="${x(m)}" y1="${axisY}" x2="${x(m)}" y2="${axisY + 5}" />`;
+      ticks += `<text class="tl-tick-label" x="${x(m)}" y="${axisY + 17}" text-anchor="middle">${m}</text>`;
+    }
+    ticks += `<text class="tl-axis-label" x="${plotW + padX}" y="${axisY + 30}" text-anchor="end">metres long</text>`;
+
+    const brush = lengthWindow
+      ? `<rect class="tl-brush" x="${x(lengthWindow.min)}" y="${SIZE_TOP}"
+           width="${Math.max(1, x(lengthWindow.max) - x(lengthWindow.min))}" height="${lanes.length * DOT_LANE_H}" />`
+      : '';
+
+    const missingNote = withoutLength.length
+      ? `<p class="sz-missing">Length not recorded: ${withoutLength.map((d) => escapeHtml(d.name)).join(', ')}</p>`
+      : '';
+
+    host.innerHTML =
+      `<svg class="sz-svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"
+            role="img" aria-label="Every dinosaur plotted by length, from 0 to ${maxLength} metres, against a 1.8 metre human reference">
+        ${brush}${dots}${human}
+        <line class="tl-axis" x1="${padX}" y1="${axisY}" x2="${plotW + padX}" y2="${axisY}" />
+        ${ticks}
+      </svg>${missingNote}`;
+
+    wireSizeChart(host, maxLength, padX);
+  }
+
+  function wireSizeChart(host, maxLength, padX) {
+    const svg = host.querySelector('svg');
+    if (!svg) return;
+    // The plot is inset by padX, so the pointer must be mapped against the plot
+    // area rather than the full element or the brush lands off by ~14px.
+    const toMetres = (clientX) => {
+      const rect = svg.getBoundingClientRect();
+      const span = Math.max(1, rect.width - padX * 2);
+      const ratio = Math.min(1, Math.max(0, (clientX - rect.left - padX) / span));
+      return ratio * maxLength;
+    };
+
+    svg.querySelectorAll('[data-name]').forEach((el) => {
+      el.addEventListener('click', (event) => {
+        event.stopPropagation();
+        selectDinosaur(el.dataset.name);
+      });
+    });
+
+    let dragStart = null;
+    let dragMoved = false;
+    svg.addEventListener('pointerdown', (event) => {
+      if (event.target.closest('[data-name]')) return;
+      dragStart = toMetres(event.clientX);
+      dragMoved = false;
+      // Throws if the pointer is already gone (fast taps, synthetic events);
+      // capture is an optimisation here, not a requirement for the drag.
+      try { svg.setPointerCapture(event.pointerId); } catch (e) { /* not capturable */ }
+    });
+    svg.addEventListener('pointermove', (event) => {
+      if (dragStart === null) return;
+      const now = toMetres(event.clientX);
+      if (Math.abs(now - dragStart) < 0.2) return;
+      dragMoved = true;
+      lengthWindow = { min: Math.min(dragStart, now), max: Math.max(dragStart, now) };
+      applyFilters();
+    });
+    const endDrag = () => {
+      if (dragStart !== null && !dragMoved && lengthWindow) {
+        lengthWindow = null;
+        applyFilters();
+      }
+      dragStart = null;
+      dragMoved = false;
+    };
+    svg.addEventListener('pointerup', endDrag);
+    svg.addEventListener('pointercancel', endDrag);
+  }
+
+  // --- Taxonomy ladder: one row per rank, top to bottom.
+  //
+  // Replaces an earlier node-link SVG tree. That tree paid full 2D layout cost
+  // for data that is really a *path*: only one node per row ever has children,
+  // so every other box was a collapsed dead end drawn purely for context. With
+  // a fixed horizontal slot per sibling it reached 1642x1358px for Citipati
+  // (14 ranks deep, under a Theropoda node with 10 children) and needed
+  // horizontal scrolling to read.
+  //
+  // The ladder is bounded in both axes by construction: rank count sets the
+  // height, and siblings *wrap* inside their row instead of spreading, so
+  // branching factor costs nothing horizontally. It is also plain DOM, which
+  // makes it keyboard-navigable and screen-readable for free — the SVG was
+  // neither.
+  let cachedTaxonomyRoot = null; // the "Dinosauria" node (skips the synthetic root)
+  const leafCountCache = new Map();
+
+  // How many dinosaurs sit under a clade. Shown on every chip so the ladder
+  // answers "how big is this group?" as well as "what is it?" — the old tree
+  // carried no quantities at all.
+  function countLeaves(node) {
+    if (leafCountCache.has(node)) return leafCountCache.get(node);
+    const children = Object.values(node.children);
+    const total = children.length === 0
+      ? 1
+      : children.reduce((sum, child) => sum + countLeaves(child), 0);
+    leafCountCache.set(node, total);
+    return total;
+  }
+
+  // Walks the chain of nodes from Dinosauria down to the dinosaur itself,
+  // recording each step's siblings as we go.
+  function lineageRungs(root, dinosaurName) {
+    const path = [];
+    (function dfs(node, trail) {
+      if (Object.keys(node.children).length === 0) {
+        if (node.name === dinosaurName) { path.push(...trail, node); return true; }
         return false;
       }
       for (const child of Object.values(node.children)) {
-        if (dfs(child)) { onPath.add(node); return true; }
+        if (dfs(child, [...trail, node])) return true;
       }
       return false;
-    })(root);
-    return { onPath, leaf };
-  }
+    })(root, []);
 
-  function sortedChildren(node) {
-    return Object.values(node.children).sort((a, b) => {
-      const aLeaf = Object.keys(a.children).length === 0;
-      const bLeaf = Object.keys(b.children).length === 0;
-      if (aLeaf !== bLeaf) return aLeaf ? 1 : -1;
-      return a.name.localeCompare(b.name);
+    return path.map((node, i) => {
+      const parent = i === 0 ? null : path[i - 1];
+      const siblings = parent
+        ? Object.values(parent.children)
+            .filter((c) => c !== node)
+            .map((c) => ({ name: c.name, count: countLeaves(c), isDino: Object.keys(c.children).length === 0 }))
+            .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+        : [];
+      return {
+        name: node.name,
+        count: countLeaves(node),
+        siblings,
+        isSelf: i === path.length - 1,
+      };
     });
   }
 
-  function buildPrunedView(node, onPath, leaf) {
-    const isLeafNode = Object.keys(node.children).length === 0;
-    const on = onPath.has(node);
-    const sel = node === leaf;
-    const view = { name: node.name, isLeafNode, on, sel, children: [] };
-    for (const child of sortedChildren(node)) {
-      if (onPath.has(child)) {
-        view.children.push(buildPrunedView(child, onPath, leaf));
-      } else {
-        const childIsLeaf = Object.keys(child.children).length === 0;
-        view.children.push({ name: child.name, isLeafNode: childIsLeaf, on: false, sel: false, children: [] });
+  // A rank where the lineage had no alternative is a pass-through: no
+  // classification decision happened there. Runs of them collapse behind one
+  // expander so the ranks that *did* branch carry the eye.
+  const MIN_FOLD_RUN = 3;
+  function foldPassThroughRuns(rungs) {
+    const rows = [];
+    let run = [];
+    const flush = () => {
+      if (run.length === 0) return;
+      if (run.length >= MIN_FOLD_RUN) rows.push({ fold: run });
+      else rows.push(...run.map((r) => ({ rung: r })));
+      run = [];
+    };
+    rungs.forEach((rung, i) => {
+      const foldable = rung.siblings.length === 0 && i !== 0 && !rung.isSelf;
+      if (foldable) run.push(rung);
+      else { flush(); rows.push({ rung }); }
+    });
+    flush();
+    return rows;
+  }
+
+  const SIBLINGS_SHOWN = 5;
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, (c) =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  function rungHtml(rung) {
+    const cls = rung.isSelf ? 'tx-rung tx-rung--self' : 'tx-rung';
+    const name = escapeHtml(rung.name);
+    const clade = rung.isSelf
+      ? `<span class="tx-clade tx-clade--self">${name}</span>`
+      : `<button type="button" class="tx-clade" data-clade="${name}">${name}
+           <span class="tx-count">${rung.count}</span></button>`;
+
+    let sibs = '';
+    if (rung.siblings.length) {
+      const shown = rung.siblings.slice(0, SIBLINGS_SHOWN);
+      const rest = rung.siblings.length - shown.length;
+      sibs = shown
+        .map((s) => `<button type="button" class="tx-sib${s.isDino ? ' tx-sib--dino' : ''}" data-clade="${escapeHtml(s.name)}">${escapeHtml(s.name)}<span class="tx-count">${s.count}</span></button>`)
+        .join('');
+      if (rest > 0) {
+        sibs += `<button type="button" class="tx-more" data-expand>+${rest} more</button>`;
+        sibs += rung.siblings.slice(SIBLINGS_SHOWN)
+          .map((s) => `<button type="button" class="tx-sib tx-sib--hidden${s.isDino ? ' tx-sib--dino' : ''}" data-clade="${escapeHtml(s.name)}" hidden>${escapeHtml(s.name)}<span class="tx-count">${s.count}</span></button>`)
+          .join('');
       }
     }
-    return view;
-  }
 
-  function nodeClass(v) {
-    if (v.sel) return 'sel';
-    if (v.on) return 'path';
-    if (v.isLeafNode) return 'dino';
-    return 'sib';
-  }
-
-  function boxWidth(name, fontSize) {
-    return Math.max(56, name.length * (fontSize * 0.6) + 22);
+    return `<li class="${cls}">
+      <div class="tx-rung__main">${clade}</div>
+      <div class="tx-sibs">${sibs}</div>
+    </li>`;
   }
 
   function renderTaxonomyTree(dinosaur) {
@@ -559,63 +1270,54 @@
       cachedTaxonomyRoot = fullTree.children['Dinosauria'];
     }
 
-    const { onPath, leaf } = findOnPath(cachedTaxonomyRoot, dinosaur.name);
-    const view = buildPrunedView(cachedTaxonomyRoot, onPath, leaf);
-
-    const fontSize = 12, yGap = 92, boxHeight = 26, marginX = 30, marginY = 22, slot = 182;
-    let maxDepth = 0;
-
-    (function place(v, depth, xAnchor) {
-      v.depth = depth;
-      v.cx = xAnchor;
-      v.width = boxWidth(v.name, fontSize);
-      maxDepth = Math.max(maxDepth, depth);
-      if (v.children.length) {
-        let pivotIndex = v.children.findIndex((c) => c.on);
-        if (pivotIndex < 0) pivotIndex = (v.children.length - 1) / 2;
-        v.children.forEach((c, i) => place(c, depth + 1, xAnchor + (i - pivotIndex) * slot));
-      }
-    })(view, 0, 0);
-
-    let minX = Infinity, maxX = -Infinity;
-    (function bounds(v) {
-      minX = Math.min(minX, v.cx - v.width / 2);
-      maxX = Math.max(maxX, v.cx + v.width / 2);
-      v.children.forEach(bounds);
-    })(view);
-
-    const offsetX = marginX - minX;
-    const width = (maxX - minX) + marginX * 2;
-    const height = marginY * 2 + maxDepth * yGap + boxHeight;
-    const X = (v) => v.cx + offsetX;
-    const Y = (v) => marginY + v.depth * yGap + boxHeight / 2;
-
-    let edgesSvg = '';
-    (function drawEdges(v) {
-      const parentY = Y(v) + boxHeight / 2;
-      for (const c of v.children) {
-        const childY = Y(c) - boxHeight / 2;
-        const onEdge = c.on;
-        edgesSvg += `<line x1="${X(v)}" y1="${parentY}" x2="${X(c)}" y2="${childY}" stroke="${onEdge ? 'var(--path-line)' : 'var(--sib-line)'}" stroke-width="${onEdge ? 2 : 1.2}" />`;
-        drawEdges(c);
-      }
-    })(view);
-
-    let boxesSvg = '';
-    (function drawBoxes(v) {
-      const cx = X(v), cy = Y(v), cls = nodeClass(v);
-      const stroke = cls === 'path' || cls === 'sel' ? 'var(--path-line)' : cls === 'dino' ? 'var(--dino-stroke)' : 'var(--sib-line)';
-      const fill = cls === 'path' || cls === 'sel' ? 'var(--path-fill)' : cls === 'dino' ? 'var(--dino-fill)' : 'var(--sib-fill)';
-      // Weight reinforces the hue split: the lineage is heavier than everything
-      // it sits among, so the path reads first even at a glance.
-      const strokeWidth = cls === 'sel' ? 2.4 : cls === 'path' ? 1.6 : 1;
-      boxesSvg += `<rect x="${cx - v.width / 2}" y="${cy - boxHeight / 2}" width="${v.width}" height="${boxHeight}" rx="6" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}" />`;
-      boxesSvg += `<text class="tx-box-label ${cls}" x="${cx}" y="${cy + fontSize * 0.35}" text-anchor="middle">${v.name}</text>`;
-      v.children.forEach(drawBoxes);
-    })(view);
-
+    const rungs = lineageRungs(cachedTaxonomyRoot, dinosaur.name);
     const container = document.getElementById('taxonomy-tree');
-    container.innerHTML = `<svg viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">${edgesSvg}${boxesSvg}</svg>`;
+    if (rungs.length === 0) { container.innerHTML = ''; return; }
+
+    const crumb = rungs
+      .map((r) => `<span class="${r.isSelf ? 'tx-crumb__self' : ''}">${escapeHtml(r.name)}</span>`)
+      .join('<i aria-hidden="true">›</i>');
+
+    const rows = foldPassThroughRuns(rungs).map((row) => {
+      if (row.fold) {
+        return `<li class="tx-fold">
+          <button type="button" class="tx-fold__toggle" aria-expanded="false" data-fold>
+            ${row.fold.length} intermediate clades
+          </button>
+          <ol class="tx-fold__body" hidden>${row.fold.map(rungHtml).join('')}</ol>
+        </li>`;
+      }
+      return rungHtml(row.rung);
+    }).join('');
+
+    container.innerHTML =
+      `<p class="tx-crumb">${crumb}</p>
+       <ol class="tx-ladder">${rows}</ol>`;
+
+    container.querySelectorAll('[data-fold]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const open = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', String(!open));
+        button.parentElement.querySelector('.tx-fold__body').hidden = open;
+      });
+    });
+    container.querySelectorAll('[data-expand]').forEach((button) => {
+      button.addEventListener('click', () => {
+        button.parentElement.querySelectorAll('.tx-sib--hidden').forEach((el) => { el.hidden = false; });
+        button.remove();
+      });
+    });
+    // Clicking any clade filters the whole app to that group — the old tree's
+    // sibling boxes were inert, which made most of the diagram cost with no payoff.
+    container.querySelectorAll('[data-clade]').forEach((button) => {
+      button.addEventListener('click', () => {
+        cladeFilter = cladeFilter === button.dataset.clade ? null : button.dataset.clade;
+        applyFilters();
+        // .result-bar, not .overview-grid: the latter pushed the count and the
+        // filter chips — the only explanation of what just changed — off-screen.
+        scrollToElement(document.querySelector('.result-bar'));
+      });
+    });
   }
 
   // --- Choropleth map (Leaflet + real country GeoJSON, colored by density —
@@ -648,10 +1350,12 @@
 
   function renderMapLegend(maxCount) {
     const legend = document.getElementById('map-legend');
-    legend.innerHTML = MAP_SCALE_STEPS
-      .filter((step) => step <= Math.max(maxCount, 10))
-      .map((step) => `<span class="swatch" style="background:${choroplethColor(step, maxCount)}"></span>${step}`)
-      .join('');
+    const ramp = `linear-gradient(to right, ${choroplethColor(1, maxCount)}, ${choroplethColor(maxCount, maxCount)})`;
+    legend.innerHTML =
+      `<span class="map-legend__title">Dinosaurs found</span>
+       <span class="map-legend__min">1</span>
+       <span class="map-legend__ramp" style="background:${ramp}"></span>
+       <span class="map-legend__max">${maxCount}</span>`;
   }
 
   function styleForFeature(feature) {
@@ -691,6 +1395,18 @@
       layer.setStyle({ fillColor: choroplethColor(count, maxCount), fillOpacity: 1 });
       layer.setTooltipContent(`${name}: ${count} dinosaur${count === 1 ? '' : 's'}`);
     });
+  }
+
+  // "Clear all" used to leave the map flown in on whichever country the last
+  // selection highlighted, so a full reset still showed (say) Mongolia with all
+  // 75 results listed beside it.
+  function resetMapView() {
+    if (!leafletMap) return;
+    if (selectedCountryLayer && countryLayer) {
+      countryLayer.resetStyle(selectedCountryLayer);
+      selectedCountryLayer = null;
+    }
+    leafletMap.setView([15, 10], 2);
   }
 
   function focusMapOnDinosaur(dinosaur) {
@@ -735,8 +1451,7 @@
       fadeAnimation: false,
     }).setView([15, 10], 2);
 
-    fetch('data/world-countries.geo.json')
-      .then((res) => res.json())
+    loadJson('data/world-countries.geo.json', 'DINO_WORLD')
       .then((geo) => {
         countryCounts = computeCountryCounts(allDinosaurs);
         countryLayer = L.geoJSON(geo, { style: styleForFeature, onEachFeature: onEachCountryFeature }).addTo(leafletMap);
@@ -747,6 +1462,16 @@
         requestAnimationFrame(() => leafletMap.invalidateSize());
         // Exposed for manual/automated visual checks in the browser console.
         window.dinoStudio = { map: leafletMap, countryLayer };
+        // The init path never ran a filter pass, so country tooltips stayed
+        // empty until the user happened to touch a control.
+        applyFilters();
+      })
+      .catch(() => {
+        const panel = document.querySelector('.map-panel');
+        if (!panel) return;
+        panel.querySelector('#world-map').remove();
+        panel.querySelector('#map-legend').innerHTML =
+          '<span class="map-legend__title">Map unavailable — country data could not be loaded.</span>';
       });
   }
 
@@ -756,9 +1481,11 @@
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
     const toggle = document.getElementById('theme-toggle');
     if (!toggle) return;
-    toggle.setAttribute('aria-pressed', String(isLight));
-    toggle.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
-    document.getElementById('theme-toggle-label').textContent = isLight ? 'Dark' : 'Light';
+    // The visible string must be part of the accessible name, and the label
+    // already flips — carrying aria-pressed as well double-signals in opposite
+    // directions, so it is removed.
+    toggle.removeAttribute('aria-pressed');
+    document.getElementById('theme-toggle-label').textContent = isLight ? 'Dark theme' : 'Light theme';
   }
 
   function initThemeToggle() {
@@ -780,8 +1507,7 @@
     });
   }
 
-  fetch('data/dinosaurs.json')
-    .then((res) => res.json())
+  loadJson('data/dinosaurs.json', 'DINO_DATA')
     .then((dinosaurs) => {
       allDinosaurs = dinosaurs;
       populateFilterOptions(allDinosaurs);
@@ -792,5 +1518,22 @@
       syncFilterControls();
       initMap();
       initThemeToggle();
+      initUrlState();
+      renderTimeline(allDinosaurs);
+      renderSizeChart(allDinosaurs);
+      let resizeTimer = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          const current = filterDinosaurs();
+          renderTimeline(current);
+          renderSizeChart(current);
+        }, 150);
+      });
+    })
+    .catch((error) => {
+      // Previously this rejected silently and left an empty shell — the most
+      // common way to hit it being to open index.html straight off disk.
+      showLoadError(error);
     });
 })();
