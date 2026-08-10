@@ -1276,12 +1276,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 .dig-site-note { color: var(--accent); }
 
 /* --- Hero showcase ---------------------------------------------------------
-   One large illustration on a dome-shaped plinth, auto-cycling with a
+   One large illustration in a circular frame, auto-cycling with a
    crossfade, modelled on the Harvard Museum of Natural History's gallery
-   carousel. The dome is a decorative backdrop shape, not a crop mask — the
+   carousel. The frame is a decorative plate colour, not a crop mask — the
    illustration stands in front of it, whole and uncropped, same as every
    other image in this app (they span aspect ratios 0.56-2.41, so a hard
-   circular/dome crop would chop heads and tails off). */
+   circular crop would chop heads and tails off). */
 .showcase {
   display: flex;
   align-items: center;
@@ -1307,30 +1307,37 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 
 .showcase-stage {
   position: relative;
-  width: 260px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   flex-shrink: 0;
 }
 
-/* Flat base, rounded top: a dome sitting on the ground, echoing the arched
-   rock-mound backdrop in the reference. */
-.showcase-dome {
+/* A true circle — width and height must stay equal, or this stops being one.
+   --plate, not --surface-hover: the illustrations already sit on an off-white
+   plate everywhere else in this app (the list rows, the detail panel), and
+   the previous greenish --surface-hover fought that colour instead of
+   matching it. */
+.showcase-frame {
   position: absolute;
   inset: 0;
-  background: var(--surface-hover);
+  border-radius: 50%;
+  background: var(--plate);
   border: 1px solid var(--line);
-  border-bottom: none;
-  border-radius: 50% 50% 0 0 / 65% 65% 0 0;
 }
 
 .showcase-image {
   position: absolute;
-  bottom: 0;
+  /* Centered and capped at ~66% of the circle's diameter in BOTH dimensions —
+     not just height, as the previous bottom-anchored version was. A circle's
+     inscribed square is ~70.7% of its diameter; a centered box at 66% keeps
+     every corner inside the circle regardless of the illustration's own
+     aspect ratio (0.56-2.41 across this set), so nothing can poke past the
+     curve the way a wide sauropod or a tall theropod previously could. */
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
-  height: 88%;
-  width: auto;
-  max-width: 88%;
+  transform: translate(-50%, -50%);
+  width: 66%;
+  height: 66%;
   object-fit: contain;
   opacity: 1;
   transition: opacity 0.4s ease;
@@ -1338,7 +1345,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 .showcase-image.is-fading { opacity: 0; }
 
 /* Name, meta and the view-details link sit in their own centered row below
-   the stage+arrows row, so the caption doesn't fight the dome for width. */
+   the stage+arrows row, so the caption doesn't fight the frame for width. */
 .showcase { flex-wrap: wrap; }
 .showcase-caption {
   flex-basis: 100%;
@@ -1352,7 +1359,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 
 @media (max-width: 640px) {
   .showcase { gap: var(--s3); }
-  .showcase-stage { width: 190px; height: 150px; }
+  .showcase-stage { width: 160px; height: 160px; }
   .showcase-nav { width: 30px; height: 30px; font-size: 1rem; }
 }
 .showcase-name {

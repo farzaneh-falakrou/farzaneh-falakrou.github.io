@@ -539,7 +539,7 @@
 
   // --- Hero showcase ---------------------------------------------------
   //
-  // One large illustration at a time on a dome-shaped plinth, auto-cycling
+  // One large illustration at a time in a circular frame, auto-cycling
   // with a crossfade, plus manual prev/next — modelled on the Harvard Museum
   // of Natural History site's gallery carousel. Reuses the same
   // object-fit:contain treatment as the rest of the app: these illustrations
