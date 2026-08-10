@@ -1274,3 +1274,112 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 
 /* Dig-site markers sit above the choropleth fill. */
 .dig-site-note { color: var(--accent); }
+
+/* --- Hero showcase ---------------------------------------------------------
+   One large illustration on a dome-shaped plinth, auto-cycling with a
+   crossfade, modelled on the Harvard Museum of Natural History's gallery
+   carousel. The dome is a decorative backdrop shape, not a crop mask — the
+   illustration stands in front of it, whole and uncropped, same as every
+   other image in this app (they span aspect ratios 0.56-2.41, so a hard
+   circular/dome crop would chop heads and tails off). */
+.showcase {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s5);
+  margin: var(--s6) auto 0;
+}
+
+.showcase-nav {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color var(--dur), color var(--dur), background var(--dur);
+}
+.showcase-nav:hover { border-color: var(--accent); color: var(--accent); }
+
+.showcase-stage {
+  position: relative;
+  width: 260px;
+  height: 200px;
+  flex-shrink: 0;
+}
+
+/* Flat base, rounded top: a dome sitting on the ground, echoing the arched
+   rock-mound backdrop in the reference. */
+.showcase-dome {
+  position: absolute;
+  inset: 0;
+  background: var(--surface-hover);
+  border: 1px solid var(--line);
+  border-bottom: none;
+  border-radius: 50% 50% 0 0 / 65% 65% 0 0;
+}
+
+.showcase-image {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 88%;
+  width: auto;
+  max-width: 88%;
+  object-fit: contain;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+.showcase-image.is-fading { opacity: 0; }
+
+/* Name, meta and the view-details link sit in their own centered row below
+   the stage+arrows row, so the caption doesn't fight the dome for width. */
+.showcase { flex-wrap: wrap; }
+.showcase-caption {
+  flex-basis: 100%;
+  text-align: center;
+  margin-top: var(--s2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .showcase-image { transition: none; }
+}
+
+@media (max-width: 640px) {
+  .showcase { gap: var(--s3); }
+  .showcase-stage { width: 190px; height: 150px; }
+  .showcase-nav { width: 30px; height: 30px; font-size: 1rem; }
+}
+.showcase-name {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: var(--t-h3);
+  color: var(--ink);
+  margin: 0;
+}
+.showcase-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--t-micro);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin: var(--s1) 0 0;
+}
+.showcase-view {
+  margin-top: var(--s2);
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--t-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  cursor: pointer;
+  border-bottom: 1px solid var(--accent-rule);
+}
+.showcase-view:hover { color: var(--ink); border-bottom-color: var(--ink); }

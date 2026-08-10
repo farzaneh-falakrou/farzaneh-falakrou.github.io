@@ -39,6 +39,21 @@
     <p class="hero-eyebrow">Natural History Museum · 75 species</p>
     <h1>Find all <span class="accent">dinosaurs</span></h1>
     <p class="hero-subtitle">Search, filter, and explore 75 dinosaurs from the National History Museum's dataset — where they lived, what they ate, and how they're classified.</p>
+
+    <div id="showcase" class="showcase" aria-roledescription="carousel" aria-label="Featured dinosaurs">
+      <button type="button" id="showcase-prev" class="showcase-nav showcase-nav--prev" aria-label="Previous featured dinosaur">‹</button>
+      <div class="showcase-stage">
+        <div class="showcase-dome" aria-hidden="true"></div>
+        <img id="showcase-image" class="showcase-image" alt="" />
+      </div>
+      <button type="button" id="showcase-next" class="showcase-nav showcase-nav--next" aria-label="Next featured dinosaur">›</button>
+      <div class="showcase-caption">
+        <p id="showcase-name" class="showcase-name"></p>
+        <p id="showcase-meta" class="showcase-meta"></p>
+        <button type="button" id="showcase-view" class="showcase-view">View details →</button>
+      </div>
+    </div>
+
     <div class="hero-search">
       <div class="search-field">
         <input id="search-input" type="search" placeholder="Find a dinosaur, country, or diet"

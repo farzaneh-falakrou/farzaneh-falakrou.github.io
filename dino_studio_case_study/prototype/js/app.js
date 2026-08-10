@@ -537,6 +537,99 @@
     el.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
   }
 
+  // --- Hero showcase ---------------------------------------------------
+  //
+  // One large illustration at a time on a dome-shaped plinth, auto-cycling
+  // with a crossfade, plus manual prev/next — modelled on the Harvard Museum
+  // of Natural History site's gallery carousel. Reuses the same
+  // object-fit:contain treatment as the rest of the app: these illustrations
+  // span aspect ratios from 0.56 to 2.41, so nothing here crops one.
+  const SHOWCASE_SIZE = 7;
+  const SHOWCASE_INTERVAL_MS = 5000;
+  let showcaseSet = [];
+  let showcaseIndex = 0;
+  let showcaseTimer = null;
+
+  function pickRandom(list, count) {
+    const pool = [...list];
+    const picked = [];
+    while (picked.length < count && pool.length > 0) {
+      const i = Math.floor(Math.random() * pool.length);
+      picked.push(pool.splice(i, 1)[0]);
+    }
+    return picked;
+  }
+
+  function capitalize(value) {
+    return value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
+  }
+
+  function renderShowcaseFrame() {
+    const dinosaur = showcaseSet[showcaseIndex];
+    if (!dinosaur) return;
+    const img = document.getElementById('showcase-image');
+    if (!img) return;
+
+    // Preload before swapping, so the crossfade never shows a blank frame
+    // while the next illustration is still downloading.
+    const preload = new Image();
+    const settle = () => {
+      img.src = preload.src;
+      requestAnimationFrame(() => img.classList.remove('is-fading'));
+    };
+    preload.onload = settle;
+    preload.onerror = () => { preload.src = 'images/placeholder.svg'; };
+    img.classList.add('is-fading');
+    preload.src = dinosaur.imageSrc;
+
+    document.getElementById('showcase-name').textContent = dinosaur.name;
+    document.getElementById('showcase-meta').textContent =
+      [capitalize(dinosaur.typeOfDinosaur), capitalize(dinosaur.diet), periodOf(dinosaur)]
+        .filter((value) => value && value !== 'N/A')
+        .join(' · ');
+    const view = document.getElementById('showcase-view');
+    view.onclick = () => selectDinosaur(dinosaur.name);
+  }
+
+  function showcaseAdvance(direction) {
+    if (showcaseSet.length === 0) return;
+    showcaseIndex = (showcaseIndex + direction + showcaseSet.length) % showcaseSet.length;
+    renderShowcaseFrame();
+  }
+
+  function startShowcaseTimer() {
+    if (reducedMotion) return;
+    clearInterval(showcaseTimer);
+    showcaseTimer = setInterval(() => showcaseAdvance(1), SHOWCASE_INTERVAL_MS);
+  }
+
+  function initShowcase(dinosaurs) {
+    const root = document.getElementById('showcase');
+    if (!root || dinosaurs.length === 0) return;
+
+    showcaseSet = pickRandom(dinosaurs, Math.min(SHOWCASE_SIZE, dinosaurs.length));
+    showcaseIndex = 0;
+    renderShowcaseFrame();
+
+    document.getElementById('showcase-prev').addEventListener('click', () => {
+      showcaseAdvance(-1);
+      startShowcaseTimer(); // manual nav resets the clock rather than fighting it
+    });
+    document.getElementById('showcase-next').addEventListener('click', () => {
+      showcaseAdvance(1);
+      startShowcaseTimer();
+    });
+
+    // Auto-advance pauses on hover/focus — a carousel that changes under a
+    // pointer the user hasn't moved yet is the classic a11y/UX complaint.
+    root.addEventListener('mouseenter', () => clearInterval(showcaseTimer));
+    root.addEventListener('mouseleave', startShowcaseTimer);
+    root.addEventListener('focusin', () => clearInterval(showcaseTimer));
+    root.addEventListener('focusout', startShowcaseTimer);
+
+    startShowcaseTimer();
+  }
+
   // `fromSearch` suppresses the jump: selecting from the suggestion popup used
   // to fling the viewport two screens down while focus stayed in the search
   // box, so the user carried on typing into an off-screen field.
@@ -1611,6 +1704,7 @@
   loadJson('data/dinosaurs.json', 'DINO_DATA')
     .then((dinosaurs) => {
       allDinosaurs = dinosaurs;
+      initShowcase(allDinosaurs);
       populateFilterOptions(allDinosaurs);
       renderList(allDinosaurs);
       if (typeof renderCharts === 'function') renderCharts(allDinosaurs, allDinosaurs);
