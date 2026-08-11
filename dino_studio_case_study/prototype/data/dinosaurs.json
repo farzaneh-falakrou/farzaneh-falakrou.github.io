@@ -2,7 +2,7 @@
   {
     "id": 1,
     "name": "Aardonyx",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/aardonyx.jpg",
+    "imageSrc": "images/reconstructions/aardonyx.jpg",
     "typeOfDinosaur": "prosauropod",
     "length": 8,
     "weight": "N/A",
@@ -17,7 +17,7 @@
   {
     "id": 2,
     "name": "Abelisaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/abeli.jpg",
+    "imageSrc": "images/reconstructions/abeli.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 9,
     "weight": "N/A",
@@ -32,7 +32,7 @@
   {
     "id": 3,
     "name": "Achelousaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/achelou.jpg",
+    "imageSrc": "images/reconstructions/achelou.jpg",
     "typeOfDinosaur": "ceratopsian",
     "length": 6,
     "weight": "N/A",
@@ -47,7 +47,7 @@
   {
     "id": 6,
     "name": "Aegyptosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/aegypto.jpg",
+    "imageSrc": "images/reconstructions/aegypto.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 15,
     "weight": "N/A",
@@ -62,7 +62,7 @@
   {
     "id": 7,
     "name": "Afrovenator",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/afrovenator.jpg",
+    "imageSrc": "images/reconstructions/afrovenator.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 9,
     "weight": "N/A",
@@ -77,7 +77,7 @@
   {
     "id": 9,
     "name": "Alamosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/alamo.jpg",
+    "imageSrc": "images/reconstructions/alamo.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 21,
     "weight": "N/A",
@@ -92,7 +92,7 @@
   {
     "id": 11,
     "name": "Albertosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/albert.jpg",
+    "imageSrc": "images/reconstructions/albert.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 9,
     "weight": 1500,
@@ -107,7 +107,7 @@
   {
     "id": 12,
     "name": "Alectrosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/alectro.jpg",
+    "imageSrc": "images/reconstructions/alectro.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 5,
     "weight": "N/A",
@@ -122,7 +122,7 @@
   {
     "id": 14,
     "name": "Allosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/allo.jpg",
+    "imageSrc": "images/reconstructions/allo.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 12,
     "weight": 2000,
@@ -137,7 +137,7 @@
   {
     "id": 15,
     "name": "Alvarezsaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/alvarez.jpg",
+    "imageSrc": "images/reconstructions/alvarez.jpg",
     "typeOfDinosaur": "small theropod",
     "length": 2,
     "weight": "N/A",
@@ -152,7 +152,7 @@
   {
     "id": 16,
     "name": "Amargasaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Amargasaurus.jpg",
+    "imageSrc": "images/reconstructions/Amargasaurus.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 12,
     "weight": 9000,
@@ -167,7 +167,7 @@
   {
     "id": 17,
     "name": "Ammosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/ammo.jpg",
+    "imageSrc": "images/reconstructions/ammo.jpg",
     "typeOfDinosaur": "prosauropod",
     "length": 5,
     "weight": "N/A",
@@ -182,7 +182,7 @@
   {
     "id": 19,
     "name": "Amygdalodon",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Amygdalodon.jpg",
+    "imageSrc": "images/reconstructions/Amygdalodon.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 15,
     "weight": "N/A",
@@ -197,7 +197,7 @@
   {
     "id": 20,
     "name": "Anchiceratops",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/anchi2.jpg",
+    "imageSrc": "images/reconstructions/anchi2.jpg",
     "typeOfDinosaur": "ceratopsian",
     "length": 6,
     "weight": "N/A",
@@ -212,7 +212,7 @@
   {
     "id": 21,
     "name": "Anchisaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/anchi.jpg",
+    "imageSrc": "images/reconstructions/anchi.jpg",
     "typeOfDinosaur": "prosauropod",
     "length": 2,
     "weight": "N/A",
@@ -227,7 +227,7 @@
   {
     "id": 22,
     "name": "Ankylosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/ankylosaurus.jpg",
+    "imageSrc": "images/reconstructions/ankylosaurus.jpg",
     "typeOfDinosaur": "armoured dinosaur",
     "length": 8,
     "weight": 8000,
@@ -242,7 +242,7 @@
   {
     "id": 23,
     "name": "Anserimimus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/anseri.jpg",
+    "imageSrc": "images/reconstructions/anseri.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 3.5,
     "weight": "N/A",
@@ -257,7 +257,7 @@
   {
     "id": 24,
     "name": "Antarctosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/antarcto.jpg",
+    "imageSrc": "images/reconstructions/antarcto.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 18,
     "weight": "N/A",
@@ -272,7 +272,7 @@
   {
     "id": 25,
     "name": "Apatosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/apatosaurus-art.jpg",
+    "imageSrc": "images/reconstructions/apatosaurus-art.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 21,
     "weight": "N/A",
@@ -287,7 +287,7 @@
   {
     "id": 27,
     "name": "Aralosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Aralosaurus.jpg",
+    "imageSrc": "images/reconstructions/Aralosaurus.jpg",
     "typeOfDinosaur": "large ornithopod",
     "length": 8,
     "weight": "N/A",
@@ -302,7 +302,7 @@
   {
     "id": 29,
     "name": "Archaeopteryx",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/archaeopteryx.jpg",
+    "imageSrc": "images/reconstructions/archaeopteryx.jpg",
     "typeOfDinosaur": "small theropod",
     "length": 0.5,
     "weight": "N/A",
@@ -317,7 +317,7 @@
   {
     "id": 30,
     "name": "Archaeornithomimus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/archaeorn.jpg",
+    "imageSrc": "images/reconstructions/archaeorn.jpg",
     "typeOfDinosaur": "small theropod",
     "length": 3.5,
     "weight": "N/A",
@@ -332,7 +332,7 @@
   {
     "id": 31,
     "name": "Argentinosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/argent.jpg",
+    "imageSrc": "images/reconstructions/argent.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 35,
     "weight": 70000,
@@ -347,7 +347,7 @@
   {
     "id": 32,
     "name": "Arrhinoceratops",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Arrhinoceratops.jpg",
+    "imageSrc": "images/reconstructions/Arrhinoceratops.jpg",
     "typeOfDinosaur": "ceratopsian",
     "length": 6,
     "weight": "N/A",
@@ -362,7 +362,7 @@
   {
     "id": 33,
     "name": "Atlascopcosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Atlascopcosaurus.jpg",
+    "imageSrc": "images/reconstructions/Atlascopcosaurus.jpg",
     "typeOfDinosaur": "small ornithopod",
     "length": 3,
     "weight": "N/A",
@@ -377,7 +377,7 @@
   {
     "id": 35,
     "name": "Austrosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Austrosaurus.jpg",
+    "imageSrc": "images/reconstructions/Austrosaurus.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 15,
     "weight": "N/A",
@@ -392,7 +392,7 @@
   {
     "id": 36,
     "name": "Avaceratops",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Avaceratops.jpg",
+    "imageSrc": "images/reconstructions/Avaceratops.jpg",
     "typeOfDinosaur": "ceratopsian",
     "length": 2.3,
     "weight": "N/A",
@@ -407,7 +407,7 @@
   {
     "id": 37,
     "name": "Avimimus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/avim.jpg",
+    "imageSrc": "images/reconstructions/avim.jpg",
     "typeOfDinosaur": "small theropod",
     "length": 1.5,
     "weight": "N/A",
@@ -422,7 +422,7 @@
   {
     "id": 39,
     "name": "Bagaceratops",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Bagaceratops.jpg",
+    "imageSrc": "images/reconstructions/Bagaceratops.jpg",
     "typeOfDinosaur": "ceratopsian",
     "length": 1,
     "weight": "N/A",
@@ -437,7 +437,7 @@
   {
     "id": 41,
     "name": "Barapasaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/barapa.jpg",
+    "imageSrc": "images/reconstructions/barapa.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 14,
     "weight": "N/A",
@@ -452,7 +452,7 @@
   {
     "id": 42,
     "name": "Barosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/baro.jpg",
+    "imageSrc": "images/reconstructions/baro.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 24,
     "weight": "N/A",
@@ -467,7 +467,7 @@
   {
     "id": 44,
     "name": "Becklespinax",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Becklespinax.jpg",
+    "imageSrc": "images/reconstructions/Becklespinax.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 5,
     "weight": "N/A",
@@ -482,7 +482,7 @@
   {
     "id": 47,
     "name": "Borogovia",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Borogovia.jpg",
+    "imageSrc": "images/reconstructions/Borogovia.jpg",
     "typeOfDinosaur": "small theropod",
     "length": 1.5,
     "weight": "N/A",
@@ -490,14 +490,14 @@
     "whenLived": "Late Cretaceous, 84-66 million years ago",
     "foundIn": "Mongolia",
     "taxonomy": "Dinosauria, Saurischia, Theropoda, Paraves, Eumaniraptoria, Troodontidae",
-    "namedBy": "Osmólska (1987)",
+    "namedBy": "Osm\u00f3lska (1987)",
     "typeSpecies": "gracilicrus",
     "description": "Only partial hindlimbs of this dinosaur have been found, so reconstructions are speculative. It was named after Lewis Carroll's borogoves from the poem Jabberwocky, published in 1871."
   },
   {
     "id": 48,
     "name": "Brachiosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/brach.jpg",
+    "imageSrc": "images/reconstructions/brach.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 30,
     "weight": "N/A",
@@ -512,7 +512,7 @@
   {
     "id": 49,
     "name": "Brachylophosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Brachylophosaurus.jpg",
+    "imageSrc": "images/reconstructions/Brachylophosaurus.jpg",
     "typeOfDinosaur": "large ornithopod",
     "length": 7,
     "weight": "N/A",
@@ -527,7 +527,7 @@
   {
     "id": 52,
     "name": "Camarasaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/camara.jpg",
+    "imageSrc": "images/reconstructions/camara.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 23,
     "weight": 20000,
@@ -542,7 +542,7 @@
   {
     "id": 53,
     "name": "Camptosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/campto.jpg",
+    "imageSrc": "images/reconstructions/campto.jpg",
     "typeOfDinosaur": "large ornithopod",
     "length": 5,
     "weight": 1000,
@@ -557,7 +557,7 @@
   {
     "id": 54,
     "name": "Carcharodontosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/carcharodontosaurus.jpg",
+    "imageSrc": "images/reconstructions/carcharodontosaurus.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 12.5,
     "weight": "N/A",
@@ -572,7 +572,7 @@
   {
     "id": 55,
     "name": "Carnotaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/carnotaurus.jpg",
+    "imageSrc": "images/reconstructions/carnotaurus.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 8,
     "weight": "N/A",
@@ -587,7 +587,7 @@
   {
     "id": 58,
     "name": "Centrosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/centro.jpg",
+    "imageSrc": "images/reconstructions/centro.jpg",
     "typeOfDinosaur": "ceratopsian",
     "length": 6,
     "weight": 1000,
@@ -602,7 +602,7 @@
   {
     "id": 59,
     "name": "Ceratosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/cerato.jpg",
+    "imageSrc": "images/reconstructions/cerato.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 6,
     "weight": 970,
@@ -617,7 +617,7 @@
   {
     "id": 60,
     "name": "Cetiosauriscus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/cetios.jpg",
+    "imageSrc": "images/reconstructions/cetios.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 15,
     "weight": "N/A",
@@ -632,7 +632,7 @@
   {
     "id": 61,
     "name": "Cetiosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/cetio.jpg",
+    "imageSrc": "images/reconstructions/cetio.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 18,
     "weight": "N/A",
@@ -647,7 +647,7 @@
   {
     "id": 63,
     "name": "Chasmosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/chasmo.jpg",
+    "imageSrc": "images/reconstructions/chasmo.jpg",
     "typeOfDinosaur": "ceratopsian",
     "length": 5,
     "weight": 2500,
@@ -662,7 +662,7 @@
   {
     "id": 64,
     "name": "Chindesaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Chindesaurus.jpg",
+    "imageSrc": "images/reconstructions/Chindesaurus.jpg",
     "typeOfDinosaur": "early dinosaur",
     "length": 4,
     "weight": "N/A",
@@ -677,7 +677,7 @@
   {
     "id": 65,
     "name": "Chinshakiangosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Chinshakiangosaurus.jpg",
+    "imageSrc": "images/reconstructions/Chinshakiangosaurus.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 11,
     "weight": "N/A",
@@ -692,7 +692,7 @@
   {
     "id": 69,
     "name": "Citipati",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Citipati.jpg",
+    "imageSrc": "images/reconstructions/Citipati.jpg",
     "typeOfDinosaur": "small theropod",
     "length": 2.1,
     "weight": "N/A",
@@ -707,7 +707,7 @@
   {
     "id": 70,
     "name": "Coelophysis",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/coelo.jpg",
+    "imageSrc": "images/reconstructions/coelo.jpg",
     "typeOfDinosaur": "small theropod",
     "length": 2,
     "weight": 27,
@@ -722,7 +722,7 @@
   {
     "id": 71,
     "name": "Coelurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/coelurus.jpg",
+    "imageSrc": "images/reconstructions/coelurus.jpg",
     "typeOfDinosaur": "small theropod",
     "length": 1.8,
     "weight": "N/A",
@@ -737,7 +737,7 @@
   {
     "id": 72,
     "name": "Coloradisaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Coloradisaurus.jpg",
+    "imageSrc": "images/reconstructions/Coloradisaurus.jpg",
     "typeOfDinosaur": "prosauropod",
     "length": 4,
     "weight": "N/A",
@@ -752,7 +752,7 @@
   {
     "id": 74,
     "name": "Conchoraptor",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Conchoraptor.jpg",
+    "imageSrc": "images/reconstructions/Conchoraptor.jpg",
     "typeOfDinosaur": "small theropod",
     "length": 1.5,
     "weight": "N/A",
@@ -767,7 +767,7 @@
   {
     "id": 75,
     "name": "Confuciusornis",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Confuciusornis.jpg",
+    "imageSrc": "images/reconstructions/Confuciusornis.jpg",
     "typeOfDinosaur": "small theropod",
     "length": 0.25,
     "weight": "N/A",
@@ -782,7 +782,7 @@
   {
     "id": 76,
     "name": "Corythosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/coryth.jpg",
+    "imageSrc": "images/reconstructions/coryth.jpg",
     "typeOfDinosaur": "large ornithopod",
     "length": 10,
     "weight": "N/A",
@@ -797,7 +797,7 @@
   {
     "id": 77,
     "name": "Cryolophosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/cryolopho.jpg",
+    "imageSrc": "images/reconstructions/cryolopho.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 8,
     "weight": 500,
@@ -812,7 +812,7 @@
   {
     "id": 78,
     "name": "Dacentrurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/dacentr.jpg",
+    "imageSrc": "images/reconstructions/dacentr.jpg",
     "typeOfDinosaur": "armoured dinosaur",
     "length": 6,
     "weight": "N/A",
@@ -827,7 +827,7 @@
   {
     "id": 79,
     "name": "Daspletosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/daspelet.jpg",
+    "imageSrc": "images/reconstructions/daspelet.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 9,
     "weight": "N/A",
@@ -842,7 +842,7 @@
   {
     "id": 80,
     "name": "Datousaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/datou.jpg",
+    "imageSrc": "images/reconstructions/datou.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 15,
     "weight": "N/A",
@@ -857,7 +857,7 @@
   {
     "id": 81,
     "name": "Deinocheirus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/deinoc.jpg",
+    "imageSrc": "images/reconstructions/deinoc.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 10,
     "weight": "N/A",
@@ -865,14 +865,14 @@
     "whenLived": "Late Cretaceous, 70-66 million years ago",
     "foundIn": "Mongolia",
     "taxonomy": "Dinosauria, Saurischia, Theropoda, Ornithomimosauria",
-    "namedBy": "Osmólska and Roniewicz (1970)",
+    "namedBy": "Osm\u00f3lska and Roniewicz (1970)",
     "typeSpecies": "mirificus",
     "description": "Originally, scientists only had a pair of arm bones with big, long claws to learn about Deinocheirus. But in 2014, new material revealed that it had a unique, large hump on its back, supported by its back bones. Now we know that it was a truly bizarre-looking creature, with huge, clawed hands, a beaked head like a duck and a hump like a camel."
   },
   {
     "id": 82,
     "name": "Deinonychus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/deinonychus.jpg",
+    "imageSrc": "images/reconstructions/deinonychus.jpg",
     "typeOfDinosaur": "small theropod",
     "length": 3.4,
     "weight": 100,
@@ -902,7 +902,7 @@
   {
     "id": 86,
     "name": "Diplodocus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/diplodocus.jpg",
+    "imageSrc": "images/reconstructions/diplodocus.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 26,
     "weight": 15000,
@@ -917,7 +917,7 @@
   {
     "id": 88,
     "name": "Dreadnoughtus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/dreadnoughtus-c.jpg",
+    "imageSrc": "images/reconstructions/dreadnoughtus-c.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 26,
     "weight": "N/A",
@@ -932,7 +932,7 @@
   {
     "id": 89,
     "name": "Dromaeosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/droma.jpg",
+    "imageSrc": "images/reconstructions/droma.jpg",
     "typeOfDinosaur": "small theropod",
     "length": 1.8,
     "weight": 15,
@@ -947,7 +947,7 @@
   {
     "id": 90,
     "name": "Dromiceiomimus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/dromic.jpg",
+    "imageSrc": "images/reconstructions/dromic.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 3.5,
     "weight": 100,
@@ -962,7 +962,7 @@
   {
     "id": 91,
     "name": "Dryosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/dryo.jpg",
+    "imageSrc": "images/reconstructions/dryo.jpg",
     "typeOfDinosaur": "small ornithopod",
     "length": 4,
     "weight": "N/A",
@@ -977,7 +977,7 @@
   {
     "id": 92,
     "name": "Dryptosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/drypto.jpg",
+    "imageSrc": "images/reconstructions/drypto.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 6.4,
     "weight": "N/A",
@@ -992,7 +992,7 @@
   {
     "id": 94,
     "name": "Edmontonia",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Edmontonia.jpg",
+    "imageSrc": "images/reconstructions/Edmontonia.jpg",
     "typeOfDinosaur": "armoured dinosaur",
     "length": 4,
     "weight": "N/A",
@@ -1007,7 +1007,7 @@
   {
     "id": 97,
     "name": "Elaphrosaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Elaphrosaurus.jpg",
+    "imageSrc": "images/reconstructions/Elaphrosaurus.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 6.2,
     "weight": "N/A",
@@ -1022,7 +1022,7 @@
   {
     "id": 98,
     "name": "Emausaurus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Emausaurus.jpg",
+    "imageSrc": "images/reconstructions/Emausaurus.jpg",
     "typeOfDinosaur": "armoured dinosaur",
     "length": 2,
     "weight": "N/A",
@@ -1037,7 +1037,7 @@
   {
     "id": 99,
     "name": "Eolambia",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Eolambia.jpg",
+    "imageSrc": "images/reconstructions/Eolambia.jpg",
     "typeOfDinosaur": "large ornithopod",
     "length": "N/A",
     "weight": "N/A",
@@ -1052,7 +1052,7 @@
   {
     "id": 100,
     "name": "Eoraptor",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/eor.jpg",
+    "imageSrc": "images/reconstructions/eor.jpg",
     "typeOfDinosaur": "small theropod",
     "length": 1.7,
     "weight": 10,
@@ -1067,7 +1067,7 @@
   {
     "id": 105,
     "name": "Euhelopus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Euhelopus.jpg",
+    "imageSrc": "images/reconstructions/Euhelopus.jpg",
     "typeOfDinosaur": "sauropod",
     "length": 10,
     "weight": "N/A",
@@ -1082,7 +1082,7 @@
   {
     "id": 106,
     "name": "Euoplocephalus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/euoplo.jpg",
+    "imageSrc": "images/reconstructions/euoplo.jpg",
     "typeOfDinosaur": "armoured dinosaur",
     "length": 7,
     "weight": 2000,
@@ -1097,7 +1097,7 @@
   {
     "id": 108,
     "name": "Eustreptospondylus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/Eustreptospondylus.jpg",
+    "imageSrc": "images/reconstructions/Eustreptospondylus.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 7,
     "weight": "N/A",
@@ -1112,7 +1112,7 @@
   {
     "id": 111,
     "name": "Gallimimus",
-    "imageSrc": "https://www.nhm.ac.uk/resources/nature-online/life/dinosaurs/dinosaur-directory/images/reconstruction/small/gallim.jpg",
+    "imageSrc": "images/reconstructions/gallim.jpg",
     "typeOfDinosaur": "large theropod",
     "length": 6,
     "weight": 200,
@@ -1120,7 +1120,7 @@
     "whenLived": "Late Cretaceous, 74-70 million years ago",
     "foundIn": "Mongolia",
     "taxonomy": "Dinosauria, Saurischia, Theropoda, Ornithomimosauria, Ornithomimidae",
-    "namedBy": "Osmólska, Roniewicz and Barsbold (1972)",
+    "namedBy": "Osm\u00f3lska, Roniewicz and Barsbold (1972)",
     "typeSpecies": "bullatus",
     "description": "N/A"
   }

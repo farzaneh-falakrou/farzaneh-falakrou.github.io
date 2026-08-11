@@ -41,12 +41,26 @@
     <p class="hero-subtitle">Search, filter, and explore 75 dinosaurs from the National History Museum's dataset — where they lived, what they ate, and how they're classified.</p>
 
     <div id="showcase" class="showcase" aria-roledescription="carousel" aria-label="Featured dinosaurs">
-      <button type="button" id="showcase-prev" class="showcase-nav showcase-nav--prev" aria-label="Previous featured dinosaur">‹</button>
+      <button type="button" id="showcase-prev" class="showcase-nav" aria-label="Previous featured dinosaur">←</button>
+
       <div class="showcase-stage">
-        <div class="showcase-frame" aria-hidden="true"></div>
-        <img id="showcase-image" class="showcase-image" alt="" />
+        <!-- A single spinning disc: the engraved backdrop and two dinosaurs,
+             one fixed to each pole, all rigidly part of the same wheel. Only
+             the top of the disc pokes above the stage's horizon; a half turn
+             carries the current animal under it as the other rises up. -->
+        <div class="showcase-wheel-mount">
+          <div id="showcase-wheel-spin" class="showcase-wheel-spin">
+            <!-- The landscape wrapped all the way around the rim as a polar
+                 ring, so every angle of the spin has ground on it. Painted by
+                 JS; the CSS pseudo-elements behind it are the no-JS fallback. -->
+            <img id="showcase-dino-a" class="showcase-wheel-dino showcase-wheel-dino-a" alt="" />
+            <img id="showcase-dino-b" class="showcase-wheel-dino showcase-wheel-dino-b" alt="" />
+          </div>
+        </div>
       </div>
-      <button type="button" id="showcase-next" class="showcase-nav showcase-nav--next" aria-label="Next featured dinosaur">›</button>
+
+      <button type="button" id="showcase-next" class="showcase-nav" aria-label="Next featured dinosaur">→</button>
+
       <div class="showcase-caption">
         <p id="showcase-name" class="showcase-name"></p>
         <p id="showcase-meta" class="showcase-meta"></p>
@@ -154,6 +168,33 @@
           <ul id="diet-legend" class="chart-legend"></ul>
           <svg id="diet-chart" viewBox="0 0 100 100" role="img" aria-label="Dinosaur diet distribution doughnut chart"></svg>
         </div>
+      </div>
+    </section>
+
+    <section id="quiz-panel" class="panel quiz-panel" aria-label="Dinosaur trivia quiz">
+      <div class="quiz-top">
+        <h2 class="section-label">Trivia quiz
+          <span id="quiz-score" class="quiz-score">
+            <span id="quiz-streak" class="quiz-streak" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 3-2 4-2 7a4 4 0 0 0 8 0c0-1-1-2-1-2 2 1 3 4 3 6a6 6 0 1 1-12 0c0-4 3-6 4-11Z"/></svg>
+              <span id="quiz-streak-count"></span>
+            </span>
+            <span id="quiz-score-text">Score: 0 / 0</span>
+          </span>
+        </h2>
+        <div id="quiz-timer" class="quiz-timer" aria-hidden="true">
+          <svg viewBox="0 0 44 44">
+            <circle class="quiz-timer-track" cx="22" cy="22" r="19" />
+            <circle id="quiz-timer-ring" class="quiz-timer-ring" cx="22" cy="22" r="19" />
+          </svg>
+          <span id="quiz-timer-num" class="quiz-timer-num">10</span>
+        </div>
+      </div>
+      <p id="quiz-question" class="quiz-question"></p>
+      <div id="quiz-options" class="quiz-options" role="group" aria-label="Answer options"></div>
+      <div class="quiz-footer">
+        <p id="quiz-feedback" class="quiz-feedback" aria-live="polite"></p>
+        <button id="quiz-next" type="button" class="btn-accent" hidden>Next question →</button>
       </div>
     </section>
 

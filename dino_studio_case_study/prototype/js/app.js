@@ -70,6 +70,17 @@
   const weightValue = document.getElementById('weight-value');
   const lengthValue = document.getElementById('length-value');
   const clearFiltersButton = document.getElementById('clear-filters');
+  const quizQuestionEl = document.getElementById('quiz-question');
+  const quizOptionsEl = document.getElementById('quiz-options');
+  const quizFeedbackEl = document.getElementById('quiz-feedback');
+  const quizScoreEl = document.getElementById('quiz-score');
+  const quizScoreTextEl = document.getElementById('quiz-score-text');
+  const quizStreakEl = document.getElementById('quiz-streak');
+  const quizStreakCountEl = document.getElementById('quiz-streak-count');
+  const quizNextButton = document.getElementById('quiz-next');
+  const quizTimerEl = document.getElementById('quiz-timer');
+  const quizTimerRing = document.getElementById('quiz-timer-ring');
+  const quizTimerNum = document.getElementById('quiz-timer-num');
   const selectFilters = [countryFilter, typeFilter, dietFilter];
 
   // "Late Cretaceous, 75-71 million years ago" -> "Late Cretaceous".
@@ -539,89 +550,341 @@
 
   // --- Hero showcase ---------------------------------------------------
   //
-  // One large illustration at a time in a circular frame, auto-cycling
-  // with a crossfade, plus manual prev/next — modelled on the Harvard Museum
-  // of Natural History site's gallery carousel. Reuses the same
-  // object-fit:contain treatment as the rest of the app: these illustrations
-  // span aspect ratios from 0.56 to 2.41, so nothing here crops one.
-  const SHOWCASE_SIZE = 7;
-  const SHOWCASE_INTERVAL_MS = 5000;
+  // Two elements per slide, as in the Harvard Museum of Natural History
+  // reference: an engraved habitat dome, and the animal isolated on
+  // transparent background standing in front of it, breaking the dome's top
+  // edge so it reads as standing *on* the mound rather than pasted into a
+  // frame.
+  //
+  // This needs cut-outs, which the NHM dataset images are not — they're flat
+  // JPEGs with their own baked-in backdrop. So the four featured animals use
+  // CC-licensed transparent PNGs from Wikimedia Commons instead
+  // (images/specimens/CREDITS.md). Both are by Emily Willoughby — painterly,
+  // naturalistic hand-painted reconstructions, not the 3D renders these
+  // started as, which read as plastic against an 1863 engraving, and not the
+  // flat-ink style tried in between either. The set is chosen by which genera
+  // actually have this artist's work on a transparent background, not the
+  // other way round; every other dinosaur is still reachable through search,
+  // the list and the charts.
+  const SHOWCASE_SPECIMENS = [
+    { name: 'Camptosaurus', file: 'camptosaurus.png' },
+    { name: 'Anchiceratops', file: 'anchiceratops.png' },
+    { name: 'Albertosaurus', file: 'albertosaurus.png' },
+  ];
+  const SHOWCASE_HOLD_MS = 3000;
+  const SHOWCASE_FLIP_MS = 900;
+  // A single smooth ease across the whole 180° — no overshoot, no pause at
+  // the midpoint — so the motion never abruptly cuts or reverses.
+  const SHOWCASE_FLIP_EASE = 'cubic-bezier(0.65, 0, 0.35, 1)';
+
   let showcaseSet = [];
   let showcaseIndex = 0;
+  let showcaseAngle = 0; // running total; never reset, so the rotation is one continuous motion
+  let showcaseFlipCount = 0;
+  let showcaseAnimating = false;
   let showcaseTimer = null;
-
-  function pickRandom(list, count) {
-    const pool = [...list];
-    const picked = [];
-    while (picked.length < count && pool.length > 0) {
-      const i = Math.floor(Math.random() * pool.length);
-      picked.push(pool.splice(i, 1)[0]);
-    }
-    return picked;
-  }
 
   function capitalize(value) {
     return value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
   }
 
-  function renderShowcaseFrame() {
-    const dinosaur = showcaseSet[showcaseIndex];
-    if (!dinosaur) return;
-    const img = document.getElementById('showcase-image');
-    if (!img) return;
-
-    // Preload before swapping, so the crossfade never shows a blank frame
-    // while the next illustration is still downloading.
-    const preload = new Image();
-    const settle = () => {
-      img.src = preload.src;
-      requestAnimationFrame(() => img.classList.remove('is-fading'));
-    };
-    preload.onload = settle;
-    preload.onerror = () => { preload.src = 'images/placeholder.svg'; };
-    img.classList.add('is-fading');
-    preload.src = dinosaur.imageSrc;
-
-    document.getElementById('showcase-name').textContent = dinosaur.name;
-    document.getElementById('showcase-meta').textContent =
-      [capitalize(dinosaur.typeOfDinosaur), capitalize(dinosaur.diet), periodOf(dinosaur)]
-        .filter((value) => value && value !== 'N/A')
-        .join(' · ');
-    const view = document.getElementById('showcase-view');
-    view.onclick = () => selectDinosaur(dinosaur.name);
+  function showcaseCaptionFor(entry) {
+    const d = entry.dinosaur;
+    return d
+      ? [capitalize(d.typeOfDinosaur), capitalize(d.diet), periodOf(d)]
+          .filter((value) => value && value !== 'N/A')
+          .join(' · ')
+      : '';
   }
 
-  function showcaseAdvance(direction) {
-    if (showcaseSet.length === 0) return;
-    showcaseIndex = (showcaseIndex + direction + showcaseSet.length) % showcaseSet.length;
-    renderShowcaseFrame();
+  // Trivia quiz. Every question is generated on the fly from the same 75-row
+  // dataset the rest of the page already uses — no separate question bank to
+  // write or keep in sync. Two shapes: a "which of these four had property X"
+  // question built from one categorical field (diet/type/period/country), and
+  // a "which of these four was the longest" comparison built from the numeric
+  // length field. A field only produces a question if it can also produce 3
+  // honest distractors (dinosaurs whose value for that field actually
+  // differs), so sparse fields quietly drop out rather than surface a
+  // 4-option question where two options are secretly both correct.
+  let quizScore = { correct: 0, total: 0 };
+  let quizCurrent = null; // { correctName, options, answered }
+
+  function shuffled(list) {
+    const copy = list.slice();
+    for (let i = copy.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  const QUIZ_FIELD_QUESTIONS = [
+    { field: 'diet', prompt: (value) => `Which of these dinosaurs was ${value}?` },
+    { field: 'typeOfDinosaur', prompt: (value) => `Which of these dinosaurs was a ${value}?` },
+    { field: 'foundIn', prompt: (value) => `Which of these dinosaurs was found in ${value}?` },
+    {
+      field: '__period',
+      prompt: (value) => `Which of these dinosaurs lived during the ${value}?`,
+      get: periodOf,
+    },
+  ];
+
+  function buildFieldQuestion(spec) {
+    const getValue = spec.get || ((d) => d[spec.field]);
+    const candidates = allDinosaurs.filter((d) => {
+      const value = getValue(d);
+      return value && value !== 'N/A';
+    });
+    if (candidates.length < 4) return null;
+    const correct = candidates[Math.floor(Math.random() * candidates.length)];
+    const value = getValue(correct);
+    const distractors = shuffled(
+      candidates.filter((d) => d.name !== correct.name && getValue(d) !== value),
+    ).slice(0, 3);
+    if (distractors.length < 3) return null;
+    return {
+      prompt: spec.prompt(value),
+      correctName: correct.name,
+      options: shuffled([correct.name, ...distractors.map((d) => d.name)]),
+    };
+  }
+
+  function buildLengthQuestion() {
+    const candidates = allDinosaurs.filter((d) => typeof d.length === 'number' && d.length > 0);
+    if (candidates.length < 4) return null;
+    const four = shuffled(candidates).slice(0, 4);
+    const correct = four.reduce((longest, d) => (d.length > longest.length ? d : longest));
+    return {
+      prompt: 'Which of these dinosaurs was the longest?',
+      correctName: correct.name,
+      options: shuffled(four.map((d) => d.name)),
+    };
+  }
+
+  function buildQuizQuestion() {
+    const attempts = shuffled([...QUIZ_FIELD_QUESTIONS, { field: '__length' }]);
+    for (const spec of attempts) {
+      const question = spec.field === '__length' ? buildLengthQuestion() : buildFieldQuestion(spec);
+      if (question) return question;
+    }
+    return null;
+  }
+
+  // Kahoot-style shape+colour tiles instead of A/B/C/D text — the shape and
+  // colour are what let you register "which one" a half-second before you've
+  // actually read the label, which is the whole point under a countdown.
+  const QUIZ_OPTION_ICONS = [
+    '<svg viewBox="0 0 24 24"><path d="M12 3 21 20 3 20Z"/></svg>', // triangle
+    '<svg viewBox="0 0 24 24"><path d="M12 2 22 12 12 22 2 12Z"/></svg>', // diamond
+    '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>', // circle
+    '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>', // square
+  ];
+  const QUIZ_TIME_MS = 10000;
+  const QUIZ_TIMER_CIRCUMFERENCE = 119.4; // 2 * pi * r(19), matches the SVG in index.html
+  let quizStreak = 0;
+  let quizTimerDeadline = 0;
+  let quizTimerTickHandle = null;
+
+  function renderQuizScore() {
+    quizScoreTextEl.textContent = `Score: ${quizScore.correct} / ${quizScore.total}`;
+    quizStreakEl.hidden = quizStreak < 2;
+    quizStreakCountEl.textContent = quizStreak;
+    quizScoreEl.classList.toggle('on-fire', quizStreak >= 2);
+  }
+
+  function stopQuizTimer() {
+    if (quizTimerTickHandle) clearInterval(quizTimerTickHandle);
+    quizTimerTickHandle = null;
+    quizTimerEl.classList.add('stopped');
+  }
+
+  function startQuizTimer() {
+    quizTimerEl.classList.remove('danger', 'stopped');
+    quizTimerNum.textContent = String(Math.ceil(QUIZ_TIME_MS / 1000));
+    // Snap the ring back to "full" with no transition, force a reflow so the
+    // browser commits that state, then re-enable the transition and set the
+    // target — that's what makes the sweep animate from full to empty on
+    // every question instead of jumping straight there once and never
+    // resetting (a bare style change on an already-transitioning property
+    // doesn't restart the transition).
+    quizTimerRing.style.transition = 'none';
+    quizTimerRing.style.strokeDashoffset = '0';
+    quizTimerRing.getBoundingClientRect(); // forces the reflow the reset above needs
+    quizTimerRing.style.transition = `stroke-dashoffset ${QUIZ_TIME_MS}ms linear, stroke var(--dur)`;
+    quizTimerRing.style.strokeDashoffset = String(QUIZ_TIMER_CIRCUMFERENCE);
+    quizTimerDeadline = Date.now() + QUIZ_TIME_MS;
+    quizTimerTickHandle = setInterval(() => {
+      const remainingMs = quizTimerDeadline - Date.now();
+      const remainingSec = Math.max(0, Math.ceil(remainingMs / 1000));
+      quizTimerNum.textContent = String(remainingSec);
+      quizTimerEl.classList.toggle('danger', remainingSec <= 3);
+      if (remainingMs <= 0) {
+        stopQuizTimer();
+        answerQuiz(null, { timedOut: true });
+      }
+    }, 200);
+  }
+
+  function renderQuizQuestion() {
+    stopQuizTimer();
+    quizCurrent = buildQuizQuestion();
+    quizFeedbackEl.textContent = '';
+    quizFeedbackEl.className = 'quiz-feedback';
+    quizNextButton.hidden = true;
+    if (!quizCurrent) {
+      quizQuestionEl.textContent = 'Not enough data to build a question right now.';
+      quizOptionsEl.innerHTML = '';
+      return;
+    }
+    quizQuestionEl.textContent = quizCurrent.prompt;
+    quizOptionsEl.innerHTML = quizCurrent.options
+      .map((name, index) => `
+        <button type="button" class="quiz-option" data-name="${escapeHtml(name)}">
+          <span class="quiz-option-icon">${QUIZ_OPTION_ICONS[index]}</span>
+          <span class="quiz-option-text">${escapeHtml(name)}</span>
+        </button>
+      `)
+      .join('');
+    startQuizTimer();
+  }
+
+  function answerQuiz(chosenName, { timedOut = false } = {}) {
+    if (!quizCurrent || quizCurrent.answered) return;
+    quizCurrent.answered = true;
+    stopQuizTimer();
+    quizScore.total += 1;
+    const isCorrect = !timedOut && chosenName === quizCurrent.correctName;
+    if (isCorrect) {
+      quizScore.correct += 1;
+      quizStreak += 1;
+    } else {
+      quizStreak = 0;
+    }
+    renderQuizScore();
+    quizOptionsEl.querySelectorAll('.quiz-option').forEach((button) => {
+      button.disabled = true;
+      if (button.dataset.name === quizCurrent.correctName) button.classList.add('correct');
+      else if (button.dataset.name === chosenName) button.classList.add('wrong');
+    });
+    if (isCorrect) {
+      quizFeedbackEl.textContent = quizStreak >= 3 ? `Correct! ${quizStreak} in a row.` : 'Correct!';
+    } else if (timedOut) {
+      quizFeedbackEl.textContent = `Time's up! It was ${quizCurrent.correctName}.`;
+    } else {
+      quizFeedbackEl.textContent = `Not quite — it was ${quizCurrent.correctName}.`;
+    }
+    quizFeedbackEl.classList.add(isCorrect ? 'is-correct' : 'is-wrong');
+    quizNextButton.hidden = false;
+  }
+
+  function initQuiz() {
+    if (!quizQuestionEl) return;
+    quizOptionsEl.addEventListener('click', (event) => {
+      const button = event.target.closest('.quiz-option');
+      if (button) answerQuiz(button.dataset.name);
+    });
+    quizNextButton.addEventListener('click', renderQuizQuestion);
+    renderQuizScore();
+    renderQuizQuestion();
+  }
+
+  function applyShowcaseDino(img, entry) {
+    img.src = `images/specimens/${entry.file}`;
+    img.alt = `Reconstruction of ${entry.name}`;
+  }
+
+  function renderShowcaseCaption(entry) {
+    document.getElementById('showcase-name').textContent = entry.name;
+    document.getElementById('showcase-meta').textContent = showcaseCaptionFor(entry);
+    document.getElementById('showcase-view').onclick = () => selectDinosaur(entry.name);
+  }
+
+  // The backdrop and both dinosaurs are one flat disc (see .showcase-wheel-*
+  // in style.css), spun purely in the screen plane with CSS rotate() — no
+  // rotateY, no perspective, no third axis. Dino A sits at the top pole,
+  // dino B at the bottom (already rotated 180° in CSS, so it's upside-down
+  // relative to A). A half turn of the disc swaps their poles: the one above
+  // the stage's horizon arcs down under it exactly as the other arcs up from
+  // underneath — one rigid object, one motion, no crossfade or cut. The angle
+  // keeps accumulating (0 -> 180 -> 360 -> ...) rather than ever resetting,
+  // so consecutive turns chain into one continuous, seamless, looping spin.
+  function showcaseFlip(direction) {
+    if (showcaseSet.length === 0 || showcaseAnimating) return;
+
+    const nextIndex = (showcaseIndex + direction + showcaseSet.length) % showcaseSet.length;
+    const entry = showcaseSet[nextIndex];
+    const spin = document.getElementById('showcase-wheel-spin');
+
+    if (!spin || reducedMotion || !spin.animate) {
+      showcaseIndex = nextIndex;
+      applyShowcaseDino(document.getElementById('showcase-dino-a'), entry);
+      renderShowcaseCaption(entry);
+      return;
+    }
+
+    // Whichever pole is about to rise above the horizon this spin is the one
+    // that needs the upcoming animal loaded into it before rotation starts —
+    // the other pole already holds what's currently showing.
+    const incomingDino = document.getElementById(
+      showcaseFlipCount % 2 === 0 ? 'showcase-dino-b' : 'showcase-dino-a',
+    );
+    applyShowcaseDino(incomingDino, entry);
+
+    const fromAngle = showcaseAngle;
+    const toAngle = showcaseAngle + 180 * direction;
+    showcaseAnimating = true;
+
+    spin.animate(
+      [{ transform: `rotate(${fromAngle}deg)` }, { transform: `rotate(${toAngle}deg)` }],
+      { duration: SHOWCASE_FLIP_MS, easing: SHOWCASE_FLIP_EASE, fill: 'forwards' },
+    ).onfinish = () => {
+      showcaseAngle = toAngle;
+      showcaseFlipCount += 1;
+      showcaseIndex = nextIndex;
+      showcaseAnimating = false;
+      renderShowcaseCaption(entry);
+    };
   }
 
   function startShowcaseTimer() {
     if (reducedMotion) return;
     clearInterval(showcaseTimer);
-    showcaseTimer = setInterval(() => showcaseAdvance(1), SHOWCASE_INTERVAL_MS);
+    showcaseTimer = setInterval(() => showcaseFlip(1), SHOWCASE_HOLD_MS);
   }
 
   function initShowcase(dinosaurs) {
     const root = document.getElementById('showcase');
-    if (!root || dinosaurs.length === 0) return;
+    if (!root) return;
 
-    showcaseSet = pickRandom(dinosaurs, Math.min(SHOWCASE_SIZE, dinosaurs.length));
-    showcaseIndex = 0;
-    renderShowcaseFrame();
+    // Only feature specimens we have both a cut-out AND a dataset record for,
+    // so "View details" can never lead somewhere that doesn't exist.
+    showcaseSet = SHOWCASE_SPECIMENS
+      .map((s) => ({ ...s, dinosaur: dinosaurs.find((d) => d.name === s.name) }))
+      .filter((s) => s.dinosaur);
+    if (showcaseSet.length === 0) { root.hidden = true; return; }
+
+
+    showcaseIndex = Math.floor(Math.random() * showcaseSet.length);
+    applyShowcaseDino(document.getElementById('showcase-dino-a'), showcaseSet[showcaseIndex]);
+    // Preload the next animal onto the far pole so the very first spin has
+    // nothing left to fetch mid-rotation.
+    applyShowcaseDino(
+      document.getElementById('showcase-dino-b'),
+      showcaseSet[(showcaseIndex + 1) % showcaseSet.length],
+    );
+    renderShowcaseCaption(showcaseSet[showcaseIndex]);
 
     document.getElementById('showcase-prev').addEventListener('click', () => {
-      showcaseAdvance(-1);
+      showcaseFlip(-1);
       startShowcaseTimer(); // manual nav resets the clock rather than fighting it
     });
     document.getElementById('showcase-next').addEventListener('click', () => {
-      showcaseAdvance(1);
+      showcaseFlip(1);
       startShowcaseTimer();
     });
 
     // Auto-advance pauses on hover/focus — a carousel that changes under a
-    // pointer the user hasn't moved yet is the classic a11y/UX complaint.
+    // pointer the user hasn't moved yet is the classic complaint.
     root.addEventListener('mouseenter', () => clearInterval(showcaseTimer));
     root.addEventListener('mouseleave', startShowcaseTimer);
     root.addEventListener('focusin', () => clearInterval(showcaseTimer));
@@ -1705,6 +1968,7 @@
     .then((dinosaurs) => {
       allDinosaurs = dinosaurs;
       initShowcase(allDinosaurs);
+      initQuiz();
       populateFilterOptions(allDinosaurs);
       renderList(allDinosaurs);
       if (typeof renderCharts === 'function') renderCharts(allDinosaurs, allDinosaurs);

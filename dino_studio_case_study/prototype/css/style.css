@@ -1088,6 +1088,222 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
   cursor: pointer;
   transition: border-color var(--dur), color var(--dur);
 }
+.quiz-panel {
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  /* A faint radial glow behind the question, purely decorative — gives the
+     panel some presence instead of reading as a plain form. */
+  background:
+    radial-gradient(560px 260px at 15% 0%, var(--accent-soft), transparent 65%),
+    var(--surface);
+}
+.quiz-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s4);
+}
+.quiz-top .section-label { flex: 1 1 auto; }
+.quiz-score {
+  margin-left: var(--s3);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: 0.2em 0.7em;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface-hover);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--t-micro);
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-transform: none;
+  transition: border-color var(--dur), color var(--dur);
+}
+.quiz-streak {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+.quiz-streak svg { width: 0.85em; height: 0.85em; fill: var(--accent); }
+.quiz-score.on-fire { border-color: var(--accent-rule); color: var(--accent-ink); }
+
+/* Countdown ring: an SVG circle whose stroke-dashoffset is transitioned from
+   0 (full loop, i.e. full time left) to its own circumference (empty) over
+   exactly QUIZ_TIME_MS, linearly — CSS does the ticking, JS only starts it
+   and swaps a colour class in the final few seconds. Rotated -90deg so the
+   sweep starts at 12 o'clock like a clock face, not 3 o'clock. */
+.quiz-timer {
+  position: relative;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+}
+.quiz-timer svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.quiz-timer-track { fill: none; stroke: var(--line); stroke-width: 3; }
+.quiz-timer-ring {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 119.4;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset linear, stroke var(--dur);
+}
+.quiz-timer.danger .quiz-timer-ring { stroke: #c0564a; }
+.quiz-timer.danger .quiz-timer-num { color: #c0564a; }
+.quiz-timer-num {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--t-micro);
+  font-weight: 500;
+  color: var(--muted);
+}
+.quiz-timer.stopped .quiz-timer-ring { transition: none; }
+
+.quiz-question {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: var(--t-h3);
+  color: var(--ink);
+  margin: var(--s4) 0 var(--s4);
+  animation: quizRise 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.quiz-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--s3);
+}
+/* Four fixed colours (reusing the same palette the type/diet charts use, so
+   the quiz feels like part of the same dataset rather than a bolted-on
+   widget) rather than a colour derived from the answer's own data — the
+   whole point of a lettered/coloured tile grid is that shape+colour let you
+   spot an option before reading it, so the mapping has to be stable, not
+   meaningful. */
+.quiz-option {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  text-align: left;
+  padding: var(--s4);
+  border: none;
+  border-radius: var(--radius);
+  border-left: 4px solid var(--quiz-tile-color, var(--line));
+  background: var(--quiz-tile-bg, var(--surface-hover));
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: var(--t-body);
+  cursor: pointer;
+  transition: background var(--dur), transform 0.15s ease, box-shadow var(--dur);
+  animation: quizRise 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.quiz-option:nth-child(1) {
+  animation-delay: 0.03s;
+  --quiz-tile-color: var(--chart-1);
+  --quiz-tile-bg: color-mix(in srgb, var(--chart-1) 14%, var(--surface-hover));
+}
+.quiz-option:nth-child(2) {
+  animation-delay: 0.07s;
+  --quiz-tile-color: var(--chart-2);
+  --quiz-tile-bg: color-mix(in srgb, var(--chart-2) 14%, var(--surface-hover));
+}
+.quiz-option:nth-child(3) {
+  animation-delay: 0.11s;
+  --quiz-tile-color: var(--chart-3);
+  --quiz-tile-bg: color-mix(in srgb, var(--chart-3) 14%, var(--surface-hover));
+}
+.quiz-option:nth-child(4) {
+  animation-delay: 0.15s;
+  --quiz-tile-color: var(--chart-4);
+  --quiz-tile-bg: color-mix(in srgb, var(--chart-4) 14%, var(--surface-hover));
+}
+.quiz-option-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  background: var(--quiz-tile-color, var(--muted));
+  color: #fff;
+}
+.quiz-option-icon svg { width: 1.05em; height: 1.05em; fill: currentColor; }
+.quiz-option:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.35);
+}
+.quiz-option:active:not(:disabled) { transform: translateY(-1px) scale(0.98); }
+.quiz-option:disabled { cursor: default; }
+.quiz-option.correct {
+  border-left-color: #4a8c5f;
+  background: rgba(74, 140, 95, 0.18);
+  color: #326b45;
+  animation: quizPop 0.45s cubic-bezier(0.3, 1.6, 0.4, 1);
+  box-shadow: 0 0 0 3px rgba(74, 140, 95, 0.16);
+}
+.quiz-option.correct .quiz-option-icon { background: #4a8c5f; color: #fff; }
+.quiz-option.wrong {
+  border-left-color: #c0564a;
+  background: rgba(192, 86, 74, 0.16);
+  color: #963e33;
+  animation: quizShake 0.4s ease;
+}
+.quiz-option.wrong .quiz-option-icon { background: #c0564a; color: #fff; }
+.quiz-option:disabled:not(.correct):not(.wrong) { opacity: 0.5; }
+.quiz-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+  margin-top: var(--s4);
+  min-height: 2.5rem;
+}
+.quiz-feedback {
+  margin: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--t-micro);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  animation: quizRise 0.3s ease both;
+}
+.quiz-feedback.is-correct { color: #4a8c5f; }
+.quiz-feedback.is-wrong { color: #c0564a; }
+.quiz-next {
+  animation: quizRise 0.3s ease both;
+}
+
+@keyframes quizRise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes quizPop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.035); }
+  100% { transform: scale(1); }
+}
+@keyframes quizShake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .quiz-question, .quiz-option, .quiz-feedback, .quiz-next { animation: none; }
+  .quiz-timer-ring { transition: none; }
+}
+@media (max-width: 640px) {
+  .quiz-options { grid-template-columns: 1fr; }
+}
+
 .detail-clear:hover { border-color: var(--accent); color: var(--accent); }
 /* The label already carries the meaning; ::after would put a rule between the
    heading and the button. */
@@ -1276,91 +1492,213 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 .dig-site-note { color: var(--accent); }
 
 /* --- Hero showcase ---------------------------------------------------------
-   One large illustration in a circular frame, auto-cycling with a
-   crossfade, modelled on the Harvard Museum of Natural History's gallery
-   carousel. The frame is a decorative plate colour, not a crop mask — the
-   illustration stands in front of it, whole and uncropped, same as every
-   other image in this app (they span aspect ratios 0.56-2.41, so a hard
-   circular crop would chop heads and tails off). */
+   Two elements per slide, modelled on the Harvard Museum of Natural History
+   reference: an engraved habitat dome, and the animal isolated on transparent
+   background standing in front of it. The animal deliberately breaks the top
+   edge of the dome — that overlap is what makes it read as standing ON a
+   mound rather than being pasted inside a frame, and it's why these have to be
+   cut-outs rather than the dataset's flat JPEGs. */
 .showcase {
+  /* One shared duotone recipe for both the engraving and the digital cut-out:
+     flattened to grayscale first (removes the cut-out's smooth painted
+     colour), then a single warm ink tint reapplied to both, so the two very
+     different source techniques land on the same limited parchment/ink
+     palette instead of clashing. */
+  --showcase-duotone: grayscale(1) sepia(0.35) saturate(1.4) contrast(1.08) brightness(0.95);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--s5);
-  margin: var(--s6) auto 0;
+  flex-wrap: wrap;
+  gap: 0 var(--s5);
+  margin: var(--s6) auto 5rem;
+  max-width: 1650px;
 }
 
 .showcase-nav {
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 1px solid var(--line);
-  background: var(--surface);
+  background: transparent;
   color: var(--muted);
   font-size: 1.1rem;
   line-height: 1;
   cursor: pointer;
-  transition: border-color var(--dur), color var(--dur), background var(--dur);
+  transition: border-color var(--dur), color var(--dur);
 }
 .showcase-nav:hover { border-color: var(--accent); color: var(--accent); }
 
 .showcase-stage {
   position: relative;
-  width: 220px;
-  height: 220px;
-  flex-shrink: 0;
+  flex: 1 1 auto;
+  max-width: 1400px;
+  /* Shows a shallow cap of a much larger circle, plus headroom above the rim.
+     A full semicircle would be 2:1, but these animals are ~2.8:1, so one
+     sized to span a semicircle top-to-bottom would have to be twice the
+     dome's width. A shallower arch lets the animal cover the whole visible
+     dome and still break well out of the top, as in the reference. */
+  /* Geometry is expressed as ratios from here down, not fixed pixels, so the
+     whole composition scales as one unit at any width and needs no
+     per-breakpoint retuning. The ratios are the ones that tested best:
+     circle = 0.70 x stage width, dino = 1.20 x circle, rim at 0.10 x circle.
+     Height follows from those — it has to clear the animal's feet, which is
+     what was cropping them when the stage was set independently. */
+  /* Height = rim offset (0.10D) + visible cap (0.48D) = 0.58D, and D is 0.70
+     of this width, so H = 0.406W. The cap is deliberately just UNDER the
+     circle's radius: at exactly 0.50D you reach the equator, and any deeper
+     the sides curve back inward so the shape stops reading as a dome — and
+     the disc's far pole rises high enough that the *other* dinosaur's feet
+     appear over the horizon. */
+  aspect-ratio: 1000 / 406;
+  height: auto;
+  overflow: hidden;
+  /* Soft fade at the horizon instead of a hard clip line, so the dinosaur
+     sinking below it thins out rather than getting guillotined. Kept shallow
+     so it never reaches the feet of the animal standing in front. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 97%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 97%, transparent 100%);
 }
 
-/* A true circle — width and height must stay equal, or this stops being one.
-   --plate, not --surface-hover: the illustrations already sit on an off-white
-   plate everywhere else in this app (the list rows, the detail panel), and
-   the previous greenish --surface-hover fought that colour instead of
-   matching it. */
-.showcase-frame {
+/* One flat disc, spun purely in the plane of the screen — rotate(), not
+   rotateY/rotateX, no perspective, no third axis. Two dinosaurs are fixed to
+   opposite poles of that disc (.showcase-wheel-dino-a at the top, -b at the
+   bottom, baked in already rotated 180° from -a) the way two pegs sit on
+   opposite sides of a wheel-of-fortune. The disc's own backdrop — the
+   engraving — is part of the same rigid object, so it spins with them: one
+   continuous circular surface, like a globe, that simply carries a different
+   animal at a different point along its rim.
+   .showcase-wheel-mount only centres that disc so its equator sits on the
+   stage's horizon line (half of it always below, clipped by the stage's
+   overflow); .showcase-wheel-spin is the piece Web Animations actually
+   rotates. As it turns 180°, whichever dinosaur was above the horizon arcs
+   down and under it while the other arcs up from underneath — same motion,
+   same object, so the current animal is never cut or crossfaded, only
+   carried out of and into view along the disc's own curve. */
+.showcase-wheel-mount {
+  position: absolute;
+  left: 50%;
+  /* Anchored from the top so the rim sits at a known height and the headroom
+     above it is predictable; the rest of the disc runs off the bottom of the
+     stage and is clipped, leaving a shallow, wide arch. */
+  /* Raised so the arch shows a deeper slice of the circle rather than just
+     its crown. How much of each engraving is visible scales 1:1 with this
+     depth, so it is the main lever on "the background looks cropped" — the
+     limit is that content compresses toward the disc's centre, by
+     (1 - capDepth/radius) at the base of the arch. */
+  /* 0.10 x the circle's own diameter, expressed against the stage height. */
+  top: 17.2%;
+  /* Never wider than the stage that clips it. The stage has overflow:hidden
+     to make the horizon, and a disc wider than the stage gets its sides
+     sliced off by that same clip — two straight vertical cuts through the
+     arch. Capping at 100% means the whole circle always fits across, so only
+     its bottom is ever cut, which is the horizon we actually want. */
+  width: 70%;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+}
+
+.showcase-wheel-spin {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: var(--plate);
-  border: 1px solid var(--line);
+  will-change: transform;
 }
-
-.showcase-image {
+/* The landscape is a wide band laid across the disc's rim, not a texture
+   stretched over the whole disc: `cover` on a 940px circle blew a 3.3:1
+   engraving up to roughly double size and cropped away everything legible,
+   so it fits to the disc's *width* instead and sits at the pole, which is
+   the only part the stage ever reveals.
+   It's drawn twice — ::before at the top pole, ::after flipped to the bottom
+   one — because the disc turns 180°: whatever the rim shows now, the
+   opposite pole has to show after the spin, exactly like the two dinosaurs.
+   Both carry the same ink/parchment duotone as the animals so the engraving
+   and the cut-outs read as one object rather than two techniques. */
+/* Each plate fills exactly half the disc, unwarped: ::before the top half,
+   ::after the bottom half via a 180deg turn, so each is upright when its own
+   pole is at the top. `100% 50%` on a plate cropped to exactly 2:1 means it
+   fits that half at its true aspect — no stretching.
+   This replaces an earlier polar warp that wrapped the engraving around the
+   full circumference. The warp guaranteed ground at every angle, but it bent
+   the plate's straight hatching into concentric arcs, which is what made the
+   backdrop read as an odd woven texture rather than a landscape. Between the
+   two halves the disc is now fully covered, so nothing goes blank mid-turn;
+   the cost is that at intermediate angles the scenery is simply rotated,
+   which is what a real spinning disc would do anyway. */
+.showcase-wheel-spin::before,
+.showcase-wheel-spin::after {
+  content: '';
   position: absolute;
-  /* Centered and capped at ~66% of the circle's diameter in BOTH dimensions —
-     not just height, as the previous bottom-anchored version was. A circle's
-     inscribed square is ~70.7% of its diameter; a centered box at 66% keeps
-     every corner inside the circle regardless of the illustration's own
-     aspect ratio (0.56-2.41 across this set), so nothing can poke past the
-     curve the way a wide sauropod or a tall theropod previously could. */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 66%;
-  height: 66%;
-  object-fit: contain;
-  opacity: 1;
-  transition: opacity 0.4s ease;
+  inset: 0;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-size: 100% 50%;
+  background-position: center top;
+  filter: var(--showcase-duotone);
 }
-.showcase-image.is-fading { opacity: 0; }
+.showcase-wheel-spin::before {
+  background-image: url('../images/specimens/habitat.jpg');
+}
+.showcase-wheel-spin::after {
+  background-image: url('../images/specimens/habitat2.jpg');
+  transform: rotate(180deg);
+}
 
-/* Name, meta and the view-details link sit in their own centered row below
-   the stage+arrows row, so the caption doesn't fight the frame for width. */
-.showcase { flex-wrap: wrap; }
+.showcase-wheel-dino {
+  position: absolute;
+  /* Above both halves of the disc. ::after is generated as the spin element's
+     last child, so without this it paints straight over the animal. */
+  z-index: 1;
+  left: 50%;
+  /* Nearly as wide as the disc itself — in the reference the animal is the
+     subject and the engraving is its setting, not the other way round. */
+  /* 1.20 x the circle: the animal is wider than the mound it stands on, which
+     is what makes it read as the subject rather than as scenery. */
+  width: 105%;
+  /* Capped so a tall/narrow animal (portrait crop, aspect < ~1.3) can't blow
+     the box out vertically. Each pole's box sits mostly off the visible cap
+     (mount is much taller than the stage that clips it) — but only if the
+     box stays short enough that its far edge doesn't creep back into the
+     stage. Past ~66% of the mount's diameter the far pole's box overlaps the
+     near pole's visible area and its feet start showing up in the other
+     animal's scene. object-fit: contain then shrinks any image that would
+     exceed either the width or this height, instead of stretching it. */
+  height: 48%;
+  object-fit: contain;
+  /* Deliberately NOT duotoned. The engraving stays monochrome and the animal
+     stays in full colour — that contrast is what makes it read as the subject
+     rather than part of the scenery, and it is what the reference does: a
+     colour painting standing on a black-and-white plate. Only the shadow ties
+     it to the ground. */
+  filter: drop-shadow(0 18px 20px rgba(0, 0, 0, 0.45));
+}
+/* Straddling the rim, as in the reference: most of the animal stands over
+   the illustrated ground inside the dome, while its head and back break out
+   above the top edge. Anchored at the pole and lifted by about a third of
+   its own height, so roughly a third clears the rim and two thirds overlap
+   the landscape. Upright when the wheel is unrotated. */
+.showcase-wheel-dino-a {
+  top: 0;
+  /* Lifted just clear of the rim so the animal's feet land on the dome's
+     baseline rather than below it: it covers the dome top to bottom and
+     breaks out over the top edge, without spilling past the horizon. */
+  transform: translate(-50%, -8%);
+}
+/* The antipodal peg: the exact point-reflection of -a through the disc's
+   centre (same offset, mirrored, plus the 180° bake-in), so once the wheel
+   itself turns 180° this one arrives in precisely the position -a started
+   in. Until then it's the upside-down animal on the far, hidden side of the
+   disc — the "opposite side" the wheel carries around. */
+.showcase-wheel-dino-b {
+  bottom: 0;
+  transform: translate(-50%, 8%) rotate(180deg);
+}
+
+/* Name, meta and the view-details link get their own centred row below. */
 .showcase-caption {
   flex-basis: 100%;
   text-align: center;
-  margin-top: var(--s2);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .showcase-image { transition: none; }
-}
-
-@media (max-width: 640px) {
-  .showcase { gap: var(--s3); }
-  .showcase-stage { width: 160px; height: 160px; }
-  .showcase-nav { width: 30px; height: 30px; font-size: 1rem; }
+  margin-top: var(--s3);
 }
 .showcase-name {
   font-family: 'Instrument Serif', serif;
@@ -1390,3 +1728,14 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
   border-bottom: 1px solid var(--accent-rule);
 }
 .showcase-view:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+@media (max-width: 860px) {
+  /* Geometry is ratio-based now and scales on its own; only the chrome needs
+     adjusting here. */
+}
+
+@media (max-width: 640px) {
+  .showcase { gap: 0 var(--s2); }
+  .showcase-nav { width: 36px; height: 36px; }
+
+}
