@@ -801,18 +801,48 @@
   const NEWS_CARDS_VISIBLE = 3;
   const NEWS_SOURCE_COLORS = { ScienceDaily: 'var(--chart-1)', 'Phys.org': 'var(--chart-3)' };
 
-  function newsCardHtml(item, hidden) {
+  // A topic badge inferred from the headline itself — real signal (the words
+  // the outlet actually chose), not a fabricated category. Three buckets
+  // cover the large majority of paleontology headlines; anything else falls
+  // back to a plain "Discovery" badge rather than forcing a bad match.
+  const NEWS_TOPICS = [
+    {
+      test: /\bfossil|bone|skeleton|skull\b/i,
+      label: 'Fossil find',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12c0-1.5 1-2.5 2.2-2.5.9 0 1.4.5 1.8 1 .5-.7 1.2-1.2 2-1.2 1.7 0 3 1.5 3 3s-1.3 3-3 3c-.8 0-1.5-.5-2-1.2-.4.5-.9 1-1.8 1C5 15.3 4 14.3 4 12Zm12 0c0-1.5 1-2.5 2.2-2.5.9 0 1.4.5 1.8 1 .5-.7 1.2-1.2 2-1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    },
+    {
+      test: /\bevolv|evolution|ancestor|origin\b/i,
+      label: 'Evolution',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20V10a4 4 0 0 1 4-4h1M6 14h4a4 4 0 0 0 4-4V6M18 4l2 2-2 2M18 12l2 2-2 2"/></svg>',
+    },
+    {
+      test: /.*/,
+      label: 'Discovery',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20 15 15"/></svg>',
+    },
+  ];
+  function newsTopicFor(title) {
+    return NEWS_TOPICS.find((topic) => topic.test.test(title));
+  }
+
+  function newsCardHtml(item, { hidden, isNew }) {
     const color = NEWS_SOURCE_COLORS[item.source] || 'var(--accent)';
+    const topic = newsTopicFor(item.title);
     return `
-      <a class="news-card" style="--news-source-color:${color}" href="${escapeHtml(item.link)}"
-         target="_blank" rel="noopener noreferrer" ${hidden ? 'hidden' : ''}>
-        <span class="news-card__meta">
-          <span class="news-card__source">${escapeHtml(item.source)}</span>
-          <span class="news-card__date">· ${NEWS_DATE_FORMAT.format(new Date(item.date))}</span>
+      <a class="news-card" style="--news-source-color:${color}"
+         href="${escapeHtml(item.link)}" target="_blank" rel="noopener noreferrer" ${hidden ? 'hidden' : ''}>
+        <span class="news-card__top">
+          <span class="news-card__topic">${topic.icon}${escapeHtml(topic.label)}</span>
+          ${isNew ? '<span class="news-card__new">New</span>' : ''}
         </span>
         <p class="news-card__title">${escapeHtml(item.title)}</p>
         <p class="news-card__summary">${escapeHtml(item.summary)}</p>
-        <span class="news-card__link">Read more →</span>
+        <span class="news-card__foot">
+          <span class="news-card__source">${escapeHtml(item.source)}</span>
+          <span class="news-card__dot">·</span>
+          <span>${NEWS_DATE_FORMAT.format(new Date(item.date))}</span>
+        </span>
       </a>
     `;
   }
@@ -831,12 +861,17 @@
       updatedEl.textContent = `Latest: ${NEWS_DATE_FORMAT.format(new Date(items[0].date))}`;
     }
 
+    const latestDay = items[0].date.slice(0, 10);
     const visible = items.slice(0, NEWS_CARDS_VISIBLE);
     const extra = items.slice(NEWS_CARDS_VISIBLE);
+    const cardHtml = (item, hidden) => newsCardHtml(item, {
+      hidden,
+      isNew: item.date.slice(0, 10) === latestDay,
+    });
 
     listEl.innerHTML =
-      visible.map((item) => newsCardHtml(item, false)).join('') +
-      extra.map((item) => newsCardHtml(item, true)).join('');
+      visible.map((item) => cardHtml(item, false)).join('') +
+      extra.map((item) => cardHtml(item, true)).join('');
 
     const panel = document.getElementById('news-panel');
     const existingToggleRow = document.getElementById('news-toggle-row');

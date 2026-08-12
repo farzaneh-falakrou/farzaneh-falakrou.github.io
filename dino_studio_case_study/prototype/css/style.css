@@ -26,11 +26,12 @@
   --scroll-thumb: rgba(212,160,72,0.35);
   --header-bg:   rgba(14,31,22,0.92);
   --hero-glow:   rgba(61,122,80,0.4);
-  /* Every source image is a JPEG on a white ground, so the plate behind them
-     is warm off-white in BOTH themes — matching the artwork's own background
-     means the letterboxing disappears instead of framing each image in a
-     mismatched dark bar. */
-  --plate:       #f2eee3;
+  /* Every source image is a JPEG on a near-white ground (measured ~249-255
+     per channel across the set), so the plate behind them is near-white in
+     BOTH themes — matching the artwork's own background means the
+     letterboxing disappears instead of framing each image in a visibly
+     mismatched tinted bar. */
+  --plate:       #fdfdfb;
 
   /* ---- System tokens ----------------------------------------------------
      The stylesheet had grown 18 font sizes (13 of them under 1rem, 11 within
@@ -100,7 +101,7 @@
   --scroll-thumb: rgba(138,95,20,0.4);
   --header-bg:   rgba(244,239,225,0.92);
   --hero-glow:   rgba(47,99,64,0.18);
-  --plate:       #f2eee3;
+  --plate:       #fdfdfb;
 
   --path-fill:  rgba(138,95,20,0.12);
   --path-line:  #8a5f14;
@@ -1150,12 +1151,14 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 }
 /* One dedicated card per story. A slim colour bar along the top edge carries
    the source's identity (so ScienceDaily vs Phys.org reads at a glance
-   without another badge competing with the headline), everything below it
-   is quiet: mono meta line, serif headline, clamped summary, a plain text
-   link that only asserts itself on hover. Only a handful of cards show by
-   default — the "View all" button appends the rest into the same grid
-   rather than a separate list, so revealing more never changes the layout
-   language, just the count. */
+   without another badge competing with the headline). A topic badge above
+   the headline is inferred from the headline's own wording (fossil find /
+   evolution / discovery) — real signal, not a decorative label. Every card
+   is the same size — nothing is promoted above the rest, so the grid reads
+   as one consistent set rather than a hierarchy. Only a handful show by
+   default — the "View all" button appends
+   the rest into the same grid rather than a separate list, so revealing
+   more never changes the layout language, just the count. */
 .news-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -1165,35 +1168,60 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 .news-card {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.6rem;
   padding: var(--s4);
   border: 1px solid var(--line);
   border-top: 3px solid var(--news-source-color, var(--accent));
   border-radius: var(--radius);
-  background: var(--surface);
+  /* Faint glow in the corner, same recipe as the quiz panel's background —
+     a small bit of colour so the card doesn't read as a flat form field. */
+  background:
+    radial-gradient(220px 140px at 100% 0%, var(--accent-soft), transparent 70%),
+    var(--surface);
   text-decoration: none;
   color: inherit;
-  transition: border-color var(--dur), transform 0.15s ease, box-shadow var(--dur);
+  transition: border-color var(--dur), transform 0.18s ease, box-shadow var(--dur);
 }
 .news-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px -14px rgba(0, 0, 0, 0.4);
+  border-color: var(--news-source-color, var(--accent));
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px -16px rgba(0, 0, 0, 0.45);
 }
 /* display:flex above beats the UA stylesheet's [hidden]{display:none} on
    specificity, so a card marked hidden (everything past NEWS_CARDS_VISIBLE)
    would otherwise render anyway — this reasserts it. */
 .news-card[hidden] { display: none; }
-.news-card__meta {
+
+
+.news-card__top {
   display: flex;
   align-items: center;
-  gap: 0.5em;
+  justify-content: space-between;
+  gap: var(--s3);
+}
+.news-card__topic {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
   font-family: 'JetBrains Mono', monospace;
   font-size: var(--t-micro);
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  color: var(--news-source-color, var(--accent));
 }
-.news-card__source { color: var(--news-source-color, var(--accent)); font-weight: 600; }
-.news-card__date { color: var(--muted); }
+.news-card__topic svg { width: 1.1em; height: 1.1em; flex-shrink: 0; }
+.news-card__new {
+  flex-shrink: 0;
+  padding: 0.1em 0.55em;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--bg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
 .news-card__title {
   margin: 0;
   font-family: 'Instrument Serif', serif;
@@ -1207,7 +1235,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.news-card:hover .news-card__title { color: var(--accent); }
+.news-card:hover .news-card__title { color: var(--news-source-color, var(--accent)); }
 .news-card__summary {
   margin: 0;
   flex: 1 1 auto;
@@ -1219,16 +1247,19 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.news-card__link {
+.news-card__foot {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
   margin-top: 0.1rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--line);
   font-family: 'JetBrains Mono', monospace;
   font-size: var(--t-micro);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
   color: var(--muted);
-  transition: color var(--dur);
 }
-.news-card:hover .news-card__link { color: var(--accent); }
+.news-card__source { color: var(--news-source-color, var(--accent)); font-weight: 600; }
+.news-card__dot { opacity: 0.6; }
 
 .news-toggle-row { display: flex; justify-content: center; margin-top: var(--s4); }
 .news-toggle {
