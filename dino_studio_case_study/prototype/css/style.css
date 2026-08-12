@@ -1128,6 +1128,125 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
   cursor: pointer;
   transition: border-color var(--dur), color var(--dur);
 }
+/* --- Dino news --------------------------------------------------------
+   Real headlines pulled at build time from ScienceDaily and Phys.org's own
+   RSS feeds (tools/fetch-news.py) — title, short summary, date and an
+   outbound link, which is exactly what RSS syndication is for. Nothing here
+   is generated or republished beyond that. */
+.news-panel { margin-bottom: 1.5rem; }
+.news-updated {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--muted);
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+.news-panel .section-label::after { display: none; }
+.news-intro {
+  margin: 0.3rem 0 var(--s4);
+  color: var(--muted);
+  font-size: var(--t-small);
+  max-width: 62ch;
+}
+/* One dedicated card per story. A slim colour bar along the top edge carries
+   the source's identity (so ScienceDaily vs Phys.org reads at a glance
+   without another badge competing with the headline), everything below it
+   is quiet: mono meta line, serif headline, clamped summary, a plain text
+   link that only asserts itself on hover. Only a handful of cards show by
+   default — the "View all" button appends the rest into the same grid
+   rather than a separate list, so revealing more never changes the layout
+   language, just the count. */
+.news-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--s4);
+  align-items: stretch;
+}
+.news-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: var(--s4);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--news-source-color, var(--accent));
+  border-radius: var(--radius);
+  background: var(--surface);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color var(--dur), transform 0.15s ease, box-shadow var(--dur);
+}
+.news-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px -14px rgba(0, 0, 0, 0.4);
+}
+/* display:flex above beats the UA stylesheet's [hidden]{display:none} on
+   specificity, so a card marked hidden (everything past NEWS_CARDS_VISIBLE)
+   would otherwise render anyway — this reasserts it. */
+.news-card[hidden] { display: none; }
+.news-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--t-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.news-card__source { color: var(--news-source-color, var(--accent)); font-weight: 600; }
+.news-card__date { color: var(--muted); }
+.news-card__title {
+  margin: 0;
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 1.2rem;
+  line-height: 1.3;
+  color: var(--ink);
+  transition: color var(--dur);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.news-card:hover .news-card__title { color: var(--accent); }
+.news-card__summary {
+  margin: 0;
+  flex: 1 1 auto;
+  font-size: var(--t-small);
+  color: var(--muted);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.news-card__link {
+  margin-top: 0.1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--t-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  transition: color var(--dur);
+}
+.news-card:hover .news-card__link { color: var(--accent); }
+
+.news-toggle-row { display: flex; justify-content: center; margin-top: var(--s4); }
+.news-toggle {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-hover);
+  padding: 0.5rem 1.2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--t-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  cursor: pointer;
+  transition: border-color var(--dur), color var(--dur);
+}
+.news-toggle:hover { border-color: var(--accent); color: var(--ink); }
+.news-empty { color: var(--muted); font-size: var(--t-small); }
+
 .quiz-panel {
   margin-bottom: 1.5rem;
   position: relative;

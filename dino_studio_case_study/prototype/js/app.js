@@ -787,6 +787,79 @@
     renderQuizQuestion();
   }
 
+  // Dino news. Items come from data/news.json — real ScienceDaily/Phys.org
+  // RSS headlines pulled at build time by tools/fetch-news.py, each with its
+  // own short summary and a link back to the original. Nothing here is
+  // generated; the panel just formats and lists what the feeds themselves
+  // published.
+  const NEWS_DATE_FORMAT = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+  // One card per story, only a handful shown until "View all" is clicked —
+  // dumping all ~40 at once read as overwhelming. Each source gets a stable
+  // colour (reusing the chart palette) as a top border on its cards, so the
+  // two outlets are visually distinguishable without another badge.
+  const NEWS_CARDS_VISIBLE = 3;
+  const NEWS_SOURCE_COLORS = { ScienceDaily: 'var(--chart-1)', 'Phys.org': 'var(--chart-3)' };
+
+  function newsCardHtml(item, hidden) {
+    const color = NEWS_SOURCE_COLORS[item.source] || 'var(--accent)';
+    return `
+      <a class="news-card" style="--news-source-color:${color}" href="${escapeHtml(item.link)}"
+         target="_blank" rel="noopener noreferrer" ${hidden ? 'hidden' : ''}>
+        <span class="news-card__meta">
+          <span class="news-card__source">${escapeHtml(item.source)}</span>
+          <span class="news-card__date">· ${NEWS_DATE_FORMAT.format(new Date(item.date))}</span>
+        </span>
+        <p class="news-card__title">${escapeHtml(item.title)}</p>
+        <p class="news-card__summary">${escapeHtml(item.summary)}</p>
+        <span class="news-card__link">Read more →</span>
+      </a>
+    `;
+  }
+
+  function renderNews(items) {
+    const listEl = document.getElementById('news-list');
+    const updatedEl = document.getElementById('news-updated');
+    if (!listEl) return;
+
+    if (!items || items.length === 0) {
+      listEl.innerHTML = '<p class="news-empty">No news available right now — check back later.</p>';
+      return;
+    }
+
+    if (updatedEl) {
+      updatedEl.textContent = `Latest: ${NEWS_DATE_FORMAT.format(new Date(items[0].date))}`;
+    }
+
+    const visible = items.slice(0, NEWS_CARDS_VISIBLE);
+    const extra = items.slice(NEWS_CARDS_VISIBLE);
+
+    listEl.innerHTML =
+      visible.map((item) => newsCardHtml(item, false)).join('') +
+      extra.map((item) => newsCardHtml(item, true)).join('');
+
+    const panel = document.getElementById('news-panel');
+    const existingToggleRow = document.getElementById('news-toggle-row');
+    if (existingToggleRow) existingToggleRow.remove();
+    if (extra.length > 0 && panel) {
+      const row = document.createElement('div');
+      row.id = 'news-toggle-row';
+      row.className = 'news-toggle-row';
+      row.innerHTML = `<button type="button" id="news-toggle" class="news-toggle">View all ${items.length} articles</button>`;
+      panel.appendChild(row);
+      document.getElementById('news-toggle').addEventListener('click', () => {
+        listEl.querySelectorAll('.news-card[hidden]').forEach((card) => { card.hidden = false; });
+        row.remove();
+      });
+    }
+  }
+
+  function initNews() {
+    loadJson('data/news.json', 'DINO_NEWS')
+      .then((items) => renderNews(items))
+      .catch(() => renderNews([]));
+  }
+
   function applyShowcaseDino(img, entry) {
     img.src = `images/specimens/${entry.file}`;
     img.alt = `Reconstruction of ${entry.name}`;
@@ -2214,6 +2287,7 @@
       allDinosaurs = dinosaurs;
       initShowcase(allDinosaurs);
       initQuiz();
+      initNews();
       populateFilterOptions(allDinosaurs);
       renderList(allDinosaurs);
       if (typeof renderCharts === 'function') renderCharts(allDinosaurs, allDinosaurs);
