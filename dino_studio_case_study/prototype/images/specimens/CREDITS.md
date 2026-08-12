@@ -42,7 +42,8 @@ The set is chosen by which genera actually have suitable work available, not
 the other way round; every other dinosaur in the dataset is still reachable
 through search, the list and the charts.
 
-**Camptosaurus** (`camptosaurus.png`) and **Anchiceratops** (`anchiceratops.png`)
+**Camptosaurus** (`camptosaurus.png`, no longer used by the showcase wheel — file
+kept in case it's wanted back) and **Anchiceratops** (`anchiceratops.png`)
 were supplied directly by the site owner rather than sourced from Commons —
 artist and licence unconfirmed, so no attribution line is shown on the page
 for these two. Backgrounds were removed with the same matting script as the
@@ -52,6 +53,18 @@ before this prototype is treated as anything other than a design exercise.
 **Albertosaurus** (`albertosaurus.png`) was supplied pre-cut (transparent
 background already present, no matting needed) — same provenance caveat as
 the two above.
+
+**Alectrosaurus** (`alectrosaurus.png`), **Edmontonia** (`edmontonia.png`) and
+**Coloradisaurus** (`coloradisaurus.png` — not used by the showcase wheel, file
+kept in case it's wanted back) were also supplied by the site owner,
+described as AI-generated colourisations of the same genera's NHM dataset
+reconstructions. Supplied pre-cut with a correct alpha channel already present,
+so no matting was run — only a crop to the alpha bounding box (2% padding) and
+a resize to ~1100px on the long edge, to match the rest of the set. Artist and
+licence of the underlying source are unconfirmed and the derivation is the site
+owner's own statement, so no attribution line is shown on the page for these
+three; same provenance caveat as the three above applies before this prototype
+is treated as anything other than a design exercise.
 
 ### Background removal
 

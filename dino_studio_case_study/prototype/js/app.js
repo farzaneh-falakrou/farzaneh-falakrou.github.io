@@ -3,6 +3,8 @@
   let selectedDinosaur = null;
   let mapCountryFilter = null; // geo name (properties.name) clicked on the choropleth, or null
   let cladeFilter = null; // clade name clicked in the taxonomy ladder, or null
+  let bookmarks = new Set(); // dinosaur names starred into "My list", persisted in localStorage
+  let bookmarksOnly = false; // "My list" view toggle
   let weightSteps = []; // sorted distinct known weights; the slider indexes into this
   let lengthSteps = []; // sorted distinct known lengths, same idea
   let timeWindow = null; // {from, to} in Ma brushed on the timeline, or null
@@ -69,6 +71,9 @@
   const weightValue = document.getElementById('weight-value');
   const lengthValue = document.getElementById('length-value');
   const clearFiltersButton = document.getElementById('clear-filters');
+  const bookmarksToggle = document.getElementById('bookmarks-toggle');
+  const bookmarksToggleLabel = document.getElementById('bookmarks-toggle-label');
+  const detailBookmarkButton = document.getElementById('detail-bookmark');
   const quizQuestionEl = document.getElementById('quiz-question');
   const quizOptionsEl = document.getElementById('quiz-options');
   const quizFeedbackEl = document.getElementById('quiz-feedback');
@@ -87,12 +92,65 @@
     return String(dinosaur.whenLived || '').split(',')[0].trim();
   }
 
+  // --- Bookmarks ("My list") ------------------------------------------------
+  //
+  // Purely client-side: a Set of names in localStorage, nothing server-side to
+  // build. Deliberately not part of the shareable URL state (syncUrl) —
+  // someone else opening a link you sent shouldn't inherit your list.
+  const BOOKMARKS_KEY = 'dino-bookmarks';
+
+  function loadBookmarks() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(BOOKMARKS_KEY) || '[]');
+      bookmarks = new Set(Array.isArray(raw) ? raw : []);
+    } catch (e) {
+      bookmarks = new Set(); // private mode, corrupted value, etc.
+    }
+  }
+
+  function saveBookmarks() {
+    try { localStorage.setItem(BOOKMARKS_KEY, JSON.stringify([...bookmarks])); } catch (e) { /* private mode */ }
+  }
+
+  function isBookmarked(name) { return bookmarks.has(name); }
+
+  function syncBookmarksToggle() {
+    if (!bookmarksToggle) return;
+    bookmarksToggle.classList.toggle('is-active', bookmarksOnly);
+    bookmarksToggle.setAttribute('aria-pressed', String(bookmarksOnly));
+    bookmarksToggleLabel.textContent = `My list (${bookmarks.size})`;
+  }
+
+  function toggleBookmark(name) {
+    if (bookmarks.has(name)) bookmarks.delete(name);
+    else bookmarks.add(name);
+    saveBookmarks();
+    syncBookmarksToggle();
+    listEl.querySelectorAll('li').forEach((li) => {
+      const button = li.querySelector('.bookmark-star');
+      if (button && li.dataset.name === name) {
+        const active = bookmarks.has(name);
+        button.classList.toggle('is-active', active);
+        button.setAttribute('aria-pressed', String(active));
+      }
+    });
+    if (detailBookmarkButton && selectedDinosaur && selectedDinosaur.name === name) {
+      const active = bookmarks.has(name);
+      detailBookmarkButton.classList.toggle('is-active', active);
+      detailBookmarkButton.setAttribute('aria-pressed', String(active));
+    }
+    // Removing the last star while "My list" is the active view would
+    // otherwise leave the list silently empty with no visible cause.
+    if (bookmarksOnly) applyFilters();
+  }
+
   // Rows used to show a truncated description. 35 of the 75 dinosaurs have none,
   // so half the list read as a column of "N/A" — and a prose fragment is not
   // what anyone scans a list like this by. Diet, type and period always exist
   // and are exactly the axes the filters work on.
   function listItemHTML(dinosaur) {
     const isSelected = selectedDinosaur && dinosaur.name === selectedDinosaur.name;
+    const bookmarked = isBookmarked(dinosaur.name);
     const meta = [dinosaur.diet, dinosaur.typeOfDinosaur, periodOf(dinosaur)]
       .filter((value) => value && value !== 'N/A')
       .map((value) => `<span>${escapeHtml(value)}</span>`)
@@ -106,6 +164,10 @@
           <h3>${escapeHtml(dinosaur.name)}</h3>
           <p class="list-item-meta">${meta}</p>
         </div>
+        <button type="button" class="bookmark-star${bookmarked ? ' is-active' : ''}"
+                aria-pressed="${bookmarked}" aria-label="${bookmarked ? 'Remove from' : 'Add to'} my list">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l3.09 6.26 6.91 1-5 4.87 1.18 6.87L12 17.9l-6.18 3.6L7 14.63l-5-4.87 6.91-1L12 2.5z"/></svg>
+        </button>
       </li>
     `;
   }
@@ -115,6 +177,10 @@
     listEl.innerHTML = dinosaurs.map(listItemHTML).join('');
     listEl.querySelectorAll('li').forEach((li) => {
       li.addEventListener('click', () => selectDinosaur(li.dataset.name));
+      li.querySelector('.bookmark-star').addEventListener('click', (event) => {
+        event.stopPropagation();
+        toggleBookmark(li.dataset.name);
+      });
       // Selecting a dinosaur is the primary interaction on the page and was
       // mouse-only: the rows were bare <li> with a click handler.
       li.addEventListener('keydown', (event) => {
@@ -237,6 +303,10 @@
       result = result.filter((d) => resolveTaxonomyPath(d).includes(cladeFilter));
     }
 
+    if (bookmarksOnly) {
+      result = result.filter((d) => bookmarks.has(d.name));
+    }
+
     if (!skipMap && mapCountryFilter) {
       result = result.filter((d) => resolveCountryGeoNames(d.foundIn).includes(mapCountryFilter));
     }
@@ -299,6 +369,9 @@
     }
     if (cladeFilter) {
       chips.push({ label: `Clade: ${cladeFilter}`, clear: () => { cladeFilter = null; } });
+    }
+    if (bookmarksOnly) {
+      chips.push({ label: 'My list', clear: () => { bookmarksOnly = false; syncBookmarksToggle(); } });
     }
     if (timeWindow) {
       chips.push({
@@ -404,6 +477,8 @@
     cladeFilter = null;
     timeWindow = null;
     typeFilter.value = '';
+    bookmarksOnly = false;
+    syncBookmarksToggle();
     selectedDinosaur = null;
     renderDetail(null);
     if (typeof resetMapView === 'function') resetMapView();
@@ -540,6 +615,14 @@
   clearFiltersButton.addEventListener('click', clearAllFilters);
   document.querySelector('[data-clear-all]').addEventListener('click', clearAllFilters);
   document.getElementById('detail-clear').addEventListener('click', clearSelection);
+  bookmarksToggle.addEventListener('click', () => {
+    bookmarksOnly = !bookmarksOnly;
+    syncBookmarksToggle();
+    applyFilters();
+  });
+  detailBookmarkButton.addEventListener('click', () => {
+    if (selectedDinosaur) toggleBookmark(selectedDinosaur.name);
+  });
 
   const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function scrollToElement(el) {
@@ -566,9 +649,21 @@
   // other way round; every other dinosaur is still reachable through search,
   // the list and the charts.
   const SHOWCASE_SPECIMENS = [
-    { name: 'Camptosaurus', file: 'camptosaurus.png' },
-    { name: 'Anchiceratops', file: 'anchiceratops.png' },
+    // scale (default 1) dials an individual specimen's size on the wheel;
+    // drop (default 0, in % of the animal's own height) pushes it further
+    // down the dome, for crops that carry less empty space under the feet
+    // than the rest of the set and so sit too high on the shared offset;
+    // shift (default 0, in % of its own width) slides it right (or left, if
+    // negative) off the dome's centre line.
+    { name: 'Anchiceratops', file: 'anchiceratops.png', scale: 0.9, drop: 6 },
     { name: 'Albertosaurus', file: 'albertosaurus.png' },
+    { name: 'Alectrosaurus', file: 'alectrosaurus.png' },
+    // Edmontonia is the widest, flattest crop in the set — dropped and pushed
+    // right so it stands lower on the dome and its long tail carries out past
+    // the rim rather than sitting entirely inside the landscape.
+    // She's a head-down browser, so facesTrees pins her to the plate whose
+    // treeline she's actually facing (she faces left; see initShowcase).
+    { name: 'Edmontonia', file: 'edmontonia.png', scale: 0.9, drop: 20, shift: 10, facesTrees: 'left' },
   ];
   const SHOWCASE_HOLD_MS = 3000;
   const SHOWCASE_FLIP_MS = 900;
@@ -898,6 +993,9 @@
   function applyShowcaseDino(img, entry) {
     img.src = `images/specimens/${entry.file}`;
     img.alt = `Reconstruction of ${entry.name}`;
+    img.style.setProperty('--showcase-scale', entry.scale ?? 1);
+    img.style.setProperty('--showcase-drop', `${entry.drop ?? 0}%`);
+    img.style.setProperty('--showcase-shift', `${entry.shift ?? 0}%`);
   }
 
   function renderShowcaseCaption(entry) {
@@ -972,6 +1070,24 @@
 
 
     showcaseIndex = Math.floor(Math.random() * showcaseSet.length);
+    // The two backdrop plates are mirror scenes: habitat.jpg (the top pole,
+    // ::before) puts the treeline on the right, habitat2.jpg (the bottom
+    // pole, ::after) puts it on the left. So which way an animal faces only
+    // reads as "facing the trees" on one of the two poles — a specimen with
+    // facesTrees set must always land on the pole whose plate agrees with it.
+    // A specimen shows on the bottom pole exactly when its distance from the
+    // starting index is odd, and the set has an even length, so that parity
+    // is fixed for the whole session by the start alone; nudging the random
+    // start by one is enough to pin it, and still leaves half the set as
+    // possible openers.
+    const anchor = showcaseSet.findIndex((s) => s.facesTrees);
+    if (anchor !== -1) {
+      const wantBottomPole = showcaseSet[anchor].facesTrees === 'left';
+      const onBottomPole = (anchor - showcaseIndex + showcaseSet.length) % 2 === 1;
+      if (onBottomPole !== wantBottomPole) {
+        showcaseIndex = (showcaseIndex + 1) % showcaseSet.length;
+      }
+    }
     applyShowcaseDino(document.getElementById('showcase-dino-a'), showcaseSet[showcaseIndex]);
     // Preload the next animal onto the far pole so the very first spin has
     // nothing left to fetch mid-rotation.
@@ -1109,6 +1225,10 @@
       this.src = 'images/placeholder.svg';
     };
     document.getElementById('detail-name').textContent = dinosaur.name;
+    const bookmarked = isBookmarked(dinosaur.name);
+    detailBookmarkButton.classList.toggle('is-active', bookmarked);
+    detailBookmarkButton.setAttribute('aria-pressed', String(bookmarked));
+    detailBookmarkButton.setAttribute('aria-label', `${bookmarked ? 'Remove from' : 'Add to'} my list`);
     const description = document.getElementById('detail-description');
     const hasDescription = dinosaur.description && dinosaur.description !== 'N/A';
     description.textContent = hasDescription ? dinosaur.description : 'No description recorded for this dinosaur.';
@@ -2234,6 +2354,39 @@
     });
   }
 
+  // Without an explicit minZoom, Leaflet lets the scroll-wheel zoom out well
+  // past the point where the whole world already fits the frame — past that
+  // point every notch just adds empty void margin around a map that can't
+  // get any more "whole". getBoundsZoom() answers "what zoom level exactly
+  // fits these bounds in the current container size", which is recomputed
+  // here (not hardcoded) because the container's own size varies by
+  // viewport and layout.
+  function syncMapMinZoom() {
+    if (!leafletMap || !countryLayer) return;
+    // Fit to the actual country polygons, not an arbitrary symmetric
+    // latitude box. The two poles aren't symmetric in this data: the
+    // northernmost point across every country is ~83.6°, while Antarctica's
+    // polygon runs to the literal -90° pole — so a box built from ±the same
+    // number crops the wrong amount on each side. Clamp to Mercator's
+    // ±85.0511° (it's undefined past that; using the true -90 here is what
+    // made earlier attempts degenerate), then let getBoundsZoom's "inside:
+    // true" (a *cover* fit, same idea as CSS object-fit:cover) find the
+    // smallest zoom that fills the frame with no void — the crop this
+    // leaves is real ocean/ice past the data's own edge, not a country.
+    const dataBounds = countryLayer.getBounds();
+    const south = Math.max(dataBounds.getSouth(), -85.0511);
+    const north = Math.min(dataBounds.getNorth(), 85.0511);
+    const fitZoom = leafletMap.getBoundsZoom([[south, -180], [north, 180]], true);
+    leafletMap.setMinZoom(fitZoom);
+    // A cover fit expands outward from the bounds' own centre, not
+    // wherever the view currently happens to be pointed — so snapping the
+    // zoom up to fitZoom without also recentring would crop asymmetrically
+    // in some other direction than the one this was tuned for.
+    if (leafletMap.getZoom() < fitZoom) {
+      leafletMap.setView([(south + north) / 2, 10], fitZoom);
+    }
+  }
+
   function initMap() {
     leafletMap = L.map('world-map', {
       scrollWheelZoom: true,
@@ -2246,6 +2399,14 @@
       zoomAnimation: false,
       markerZoomAnimation: false,
       fadeAnimation: false,
+      // Continuous zoom. With the default integer-stepped zoom, the exact
+      // "fill the frame with no void" level (a continuous value like 1.43)
+      // has to round up to the next whole number, overshooting into visibly
+      // more crop than the container actually needs — this is what made the
+      // cover fit crop far more than intended. Fractional zoom lets minZoom
+      // land exactly on the true fit value instead of overshooting it.
+      zoomSnap: 0,
+      zoomDelta: 0.5,
     }).setView([15, 10], 2);
 
     loadJson('data/world-countries.geo.json', 'DINO_WORLD')
@@ -2256,7 +2417,10 @@
         // Leaflet can measure the container before the surrounding flex/grid
         // layout has settled, leaving a stale partial paint. Forcing a
         // remeasure+redraw on the next frame clears it.
-        requestAnimationFrame(() => leafletMap.invalidateSize());
+        requestAnimationFrame(() => {
+          leafletMap.invalidateSize();
+          syncMapMinZoom();
+        });
         // Exposed for manual/automated visual checks in the browser console.
         window.dinoStudio = { map: leafletMap, countryLayer };
         // The init path never ran a filter pass, so country tooltips stayed
@@ -2320,6 +2484,8 @@
   loadJson('data/dinosaurs.json', 'DINO_DATA')
     .then((dinosaurs) => {
       allDinosaurs = dinosaurs;
+      loadBookmarks();
+      syncBookmarksToggle();
       initShowcase(allDinosaurs);
       initQuiz();
       initNews();
@@ -2358,6 +2524,7 @@
           const current = filterDinosaurs();
           renderTimeline(current);
           renderSizeChart(current);
+          syncMapMinZoom();
         }, 150);
       });
     })
