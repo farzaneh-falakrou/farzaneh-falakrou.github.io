@@ -129,6 +129,26 @@
       </div>
     </section>
 
+    <section id="excavation-panel" class="panel excavation-panel" aria-label="Excavation sites">
+      <h2 class="section-label">Excavation sites
+        <span id="excavation-stats" class="excavation-stats"></span>
+      </h2>
+      <p class="excavation-intro">
+        Real fossil coordinates from the Paleobiology Database — one dot per dig
+        site, not the country-level guess the map above has to make.
+      </p>
+      <div class="excavation-body">
+        <div class="excavation-map-col">
+          <div id="excavation-map" role="group" aria-label="World map of individual fossil excavation sites"></div>
+          <ul id="excavation-legend" class="chart-legend chart-legend--split excavation-legend"></ul>
+        </div>
+        <div class="excavation-side">
+          <p class="excavation-side-label">Most-excavated formations</p>
+          <ol id="excavation-formations" class="excavation-formations"></ol>
+        </div>
+      </div>
+    </section>
+
     <section class="panel timeline-panel" aria-label="When these dinosaurs lived">
       <h2 class="section-label">When they lived
         <span class="timeline-hint">Drag across the chart to filter by time</span>
@@ -218,6 +238,8 @@
             <p id="detail-description"></p>
             <p class="field-label">When lived</p>
             <p id="detail-when-lived"></p>
+            <p id="detail-dig-sites-label" class="field-label">Excavation sites</p>
+            <div id="detail-dig-sites" class="dig-sites"></div>
           </div>
         </div>
         <div class="taxonomy-tree-wrap">

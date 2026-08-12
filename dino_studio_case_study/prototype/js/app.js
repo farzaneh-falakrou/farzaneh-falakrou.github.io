@@ -12,16 +12,15 @@
   let lengthWindow = null; // {min, max} in metres, or null
   let occurrences = {}; // genus -> [[lng, lat, formation?], ...] from PBDB
   let digSiteLayer = null;
-  // Off for now: the data pipeline is built, verified, and correctness-fixed
-  // (see tools/fetch-occurrences.py), but there's nowhere good to show it yet.
-  // Selecting a dinosaur auto-scrolls straight to the detail panel, so the map
-  // is off-screen at the exact moment dig sites would appear — and for a real
-  // fraction of genera, PBDB's own occurrences under that genus name disagree
-  // with the museum's own foundIn field (Alectrosaurus 17/19, Ammosaurus 3/3),
-  // which needs an honest, deliberate way to show "these exist but disagree"
-  // rather than silently vanishing. Revisit as part of the detail-panel
-  // rebuild, where dig sites can be a labelled fact instead of map decoration.
-  const DIG_SITES_ENABLED = false;
+  // The two blockers noted here previously are both resolved: PBDB
+  // occurrences that disagree with the museum's own foundIn field are
+  // filtered out at build time (see tools/fetch-occurrences.py) rather than
+  // shown or silently dropped at random, and the detail panel now surfaces
+  // formation names as its own fact list (renderDigSitesSummary) instead of
+  // relying on the map alone — selecting a dinosaur still auto-scrolls the
+  // map off-screen, but the sites themselves are visible without scrolling
+  // back up to find them.
+  const DIG_SITES_ENABLED = true;
 
   // Data loading. The .json files are the source of truth, but fetch() is
   // blocked by CORS over file://, so data/*.data.js — the same payloads wrapped
@@ -933,6 +932,54 @@
     ['Named by', 'namedBy'],
   ];
 
+  // Formation names, not raw coordinates — a reader wants "Djadokhta
+  // Formation ×2", not two lat/lng pairs. Sites sharing a formation collapse
+  // into one pill with a count; sites with no recorded formation collapse
+  // into their own "Formation not recorded" pill rather than one pill per
+  // site, which would just be a wall of identical-looking chips.
+  function renderDigSitesSummary(dinosaur) {
+    const label = document.getElementById('detail-dig-sites-label');
+    const container = document.getElementById('detail-dig-sites');
+    if (!label || !container) return;
+    if (!DIG_SITES_ENABLED) {
+      label.hidden = true;
+      container.hidden = true;
+      return;
+    }
+    label.hidden = false;
+    container.hidden = false;
+
+    const sites = occurrences[dinosaur.name] || [];
+    if (sites.length === 0) {
+      container.innerHTML = '<p class="dig-sites-empty">No excavation sites recorded in the Paleobiology Database for this genus.</p>';
+      return;
+    }
+
+    const counts = new Map();
+    sites.forEach(([, , formation]) => {
+      const key = formation || 'Formation not recorded';
+      counts.set(key, (counts.get(key) || 0) + 1);
+    });
+    const items = [...counts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .map(([formation, count]) => `
+        <li class="dig-site-item">
+          <span>${escapeHtml(formation)}</span>
+          <span class="dig-site-count">×${count}</span>
+        </li>
+      `)
+      .join('');
+
+    container.innerHTML = `
+      <ul class="dig-site-list">${items}</ul>
+      <button type="button" id="detail-dig-sites-jump" class="dig-sites-jump">↑ View on map</button>
+    `;
+    document.getElementById('detail-dig-sites-jump').addEventListener('click', () => {
+      scrollToElement(document.getElementById('excavation-panel'));
+      if (typeof highlightGenusOnAtlas === 'function') highlightGenusOnAtlas(dinosaur.name);
+    });
+  }
+
   function renderDetail(dinosaur) {
     const placeholder = document.getElementById('detail-placeholder');
     const content = document.getElementById('detail-content');
@@ -967,6 +1014,7 @@
     }).join('');
 
     if (typeof renderTaxonomyTree === 'function') renderTaxonomyTree(dinosaur);
+    renderDigSitesSummary(dinosaur);
     if (typeof focusMapOnDinosaur === 'function') focusMapOnDinosaur(dinosaur);
   }
 
@@ -1894,6 +1942,190 @@
     }
   }
 
+  // --- Excavation atlas ---------------------------------------------------
+  //
+  // The choropleth above and the per-dinosaur pill in the detail panel both
+  // show this same PBDB data one dinosaur at a time, which is why it read as
+  // a footnote. This plots every recorded site for all 75 genera on one map
+  // at once — the same underlying occurrences object, just never flattened
+  // and shown together before.
+  let excavationMap = null;
+  let excavationCountryLayer = null;
+  let excavationMarkerRefs = []; // [{marker, name, type, formation}]
+  let excavationActiveFormation = null;
+
+  // typeColorFor() returns a literal 'var(--chart-N)' string for the SVG
+  // charts, which resolve it themselves via CSS. Leaflet's SVG renderer sets
+  // colours as plain attributes rather than through the CSS cascade, so — same
+  // as the choropleth's own themeToken() calls above — it needs the actual
+  // computed value, not the var() reference itself.
+  function resolveThemeColor(value) {
+    const match = /^var\((--[\w-]+)\)$/.exec(value || '');
+    return match ? themeToken(match[1], value) : value;
+  }
+
+  function flattenExcavationSites() {
+    const sites = [];
+    allDinosaurs.forEach((d) => {
+      (occurrences[d.name] || []).forEach(([lng, lat, formation]) => {
+        sites.push({ name: d.name, type: d.typeOfDinosaur, lng, lat, formation: formation || null });
+      });
+    });
+    return sites;
+  }
+
+  function computeFormationStats(sites) {
+    const byFormation = new Map();
+    sites.forEach((site) => {
+      if (!site.formation) return;
+      if (!byFormation.has(site.formation)) byFormation.set(site.formation, { count: 0, genera: new Set() });
+      const entry = byFormation.get(site.formation);
+      entry.count += 1;
+      entry.genera.add(site.name);
+    });
+    return byFormation;
+  }
+
+  function renderExcavationStats(sites, formationStats) {
+    const el = document.getElementById('excavation-stats');
+    if (!el) return;
+    const genera = new Set(sites.map((s) => s.name)).size;
+    el.textContent = `${sites.length} sites · ${formationStats.size} formations · ${genera} genera`;
+  }
+
+  function renderExcavationLegend(sites) {
+    const el = document.getElementById('excavation-legend');
+    if (!el) return;
+    const types = [...new Set(sites.map((s) => s.type).filter((t) => t && t !== 'N/A'))].sort();
+    el.innerHTML = types
+      .map((type) => `
+        <li>
+          <span class="swatch" style="background:${typeColorFor(type)}"></span>
+          ${escapeHtml(capitalize(type))}
+        </li>
+      `)
+      .join('');
+  }
+
+  function highlightFormation(formationName) {
+    excavationActiveFormation = excavationActiveFormation === formationName ? null : formationName;
+    document.querySelectorAll('.formation-card').forEach((card) => {
+      card.classList.toggle('is-active', card.dataset.formation === excavationActiveFormation);
+    });
+    const matching = [];
+    excavationMarkerRefs.forEach(({ marker, formation }) => {
+      const el = marker.getElement ? marker.getElement() : null;
+      const isMatch = excavationActiveFormation && formation === excavationActiveFormation;
+      if (el) el.classList.toggle('dig-dot-highlight', isMatch);
+      if (isMatch) matching.push(marker.getLatLng());
+    });
+    if (matching.length > 0 && excavationMap) {
+      excavationMap.flyToBounds(L.latLngBounds(matching).pad(0.6), { maxZoom: 5, duration: 0.6 });
+    }
+  }
+
+  // Called from the detail panel's own "↑ View on map" link — flies the
+  // atlas to just this genus's dots and pulses them, the same highlight
+  // mechanism a formation card uses, so both entry points into the atlas
+  // behave identically once you're looking at it.
+  function highlightGenusOnAtlas(name) {
+    excavationActiveFormation = null;
+    document.querySelectorAll('.formation-card').forEach((card) => card.classList.remove('is-active'));
+    const matching = [];
+    excavationMarkerRefs.forEach(({ marker, name: markerName }) => {
+      const el = marker.getElement ? marker.getElement() : null;
+      const isMatch = markerName === name;
+      if (el) el.classList.toggle('dig-dot-highlight', isMatch);
+      if (isMatch) matching.push(marker.getLatLng());
+    });
+    if (matching.length > 0 && excavationMap) {
+      excavationMap.flyToBounds(L.latLngBounds(matching).pad(0.8), { maxZoom: 5, duration: 0.6 });
+    }
+  }
+
+  function renderFormationList(formationStats) {
+    const el = document.getElementById('excavation-formations');
+    if (!el) return;
+    const top = [...formationStats.entries()]
+      .sort((a, b) => b[1].count - a[1].count)
+      .slice(0, 14);
+    el.innerHTML = top
+      .map(([formation, { count, genera }]) => `
+        <li>
+          <button type="button" class="formation-card" data-formation="${escapeHtml(formation)}">
+            <span class="formation-card__top">
+              <span class="formation-card__name">${escapeHtml(formation)}</span>
+              <span class="formation-card__count">×${count}</span>
+            </span>
+            <p class="formation-card__genera">${escapeHtml([...genera].sort().join(', '))}</p>
+          </button>
+        </li>
+      `)
+      .join('');
+    el.querySelectorAll('.formation-card').forEach((card) => {
+      card.addEventListener('click', () => highlightFormation(card.dataset.formation));
+    });
+  }
+
+  function initExcavationAtlas() {
+    const mapEl = document.getElementById('excavation-map');
+    if (!mapEl) return;
+    const sites = flattenExcavationSites();
+    const formationStats = computeFormationStats(sites);
+    renderExcavationStats(sites, formationStats);
+    renderExcavationLegend(sites);
+    renderFormationList(formationStats);
+
+    if (sites.length === 0) {
+      mapEl.innerHTML = '<p class="dig-sites-empty" style="padding:1rem;">No excavation sites available.</p>';
+      return;
+    }
+
+    // No preferCanvas here (unlike the choropleth): a few hundred SVG circles
+    // is cheap, and only the SVG renderer gives each marker a real DOM node —
+    // which is what lets the formation-card hover/click reach onto the map
+    // and pulse the matching dots via a plain CSS class.
+    excavationMap = L.map('excavation-map', {
+      scrollWheelZoom: true,
+      zoomControl: true,
+      attributionControl: false,
+      worldCopyJump: false,
+      maxBounds: [[-90, -180], [90, 180]],
+      maxBoundsViscosity: 1,
+      zoomAnimation: false,
+      markerZoomAnimation: false,
+      fadeAnimation: false,
+    }).setView([15, 10], 2);
+
+    loadJson('data/world-countries.geo.json', 'DINO_WORLD').then((geo) => {
+      excavationCountryLayer = L.geoJSON(geo, {
+        style: () => ({
+          fillColor: themeToken('--surface-hover', '#e6e0cd'),
+          fillOpacity: 1,
+          color: themeToken('--map-border', 'rgba(22,40,29,0.18)'),
+          weight: 1,
+        }),
+      }).addTo(excavationMap);
+
+      excavationMarkerRefs = sites.map((site) => {
+        const marker = L.circleMarker([site.lat, site.lng], {
+          radius: 4,
+          weight: 1.5,
+          color: themeToken('--ink', '#f0e8c8'),
+          fillColor: resolveThemeColor(typeColorFor(site.type)),
+          fillOpacity: 0.9,
+        });
+        const place = site.formation ? `${site.formation} Formation` : 'Formation not recorded';
+        marker.bindTooltip(`${site.name} — ${place}`, { direction: 'top' });
+        marker.on('click', () => selectDinosaur(site.name));
+        marker.addTo(excavationMap);
+        return { marker, name: site.name, type: site.type, formation: site.formation };
+      });
+
+      requestAnimationFrame(() => excavationMap.invalidateSize());
+    });
+  }
+
   function initMap() {
     leafletMap = L.map('world-map', {
       scrollWheelZoom: true,
@@ -1955,11 +2187,24 @@
       else document.documentElement.removeAttribute('data-theme');
       try { localStorage.setItem('dino-theme', nowLight ? 'light' : 'dark'); } catch (e) { /* private mode */ }
       syncThemeToggle();
-      // Charts/tree follow var() automatically; the Leaflet canvas does not.
+      // Charts/tree follow var() automatically; Leaflet's canvas/SVG output
+      // does not, so every themeToken()-derived colour needs a manual redraw.
       if (countryLayer) {
         countryLayer.setStyle(styleForFeature);
         if (selectedDinosaur) focusMapOnDinosaur(selectedDinosaur);
       }
+      if (excavationCountryLayer) {
+        excavationCountryLayer.setStyle({
+          fillColor: themeToken('--surface-hover', '#e6e0cd'),
+          color: themeToken('--map-border', 'rgba(22,40,29,0.18)'),
+        });
+      }
+      excavationMarkerRefs.forEach(({ marker, type }) => {
+        marker.setStyle({
+          color: themeToken('--ink', '#f0e8c8'),
+          fillColor: resolveThemeColor(typeColorFor(type)),
+        });
+      });
       applyFilters();
     });
   }
@@ -1975,16 +2220,26 @@
       renderResultBar(allDinosaurs);
       syncSearchClearButton();
       syncFilterControls();
-      if (DIG_SITES_ENABLED) {
-        loadJson('data/occurrences.json', 'DINO_OCCURRENCES')
+      // initUrlState() below can select a dinosaur immediately (a shared link
+      // with a dinosaur in the hash), which renders the detail panel and its
+      // dig-site list on the spot — so occurrences must already be loaded by
+      // then, not still in flight. Without this await, a fast page load would
+      // race it and the very first render would show "no sites recorded" for
+      // a genus that does have them.
+      const occurrencesPromise = DIG_SITES_ENABLED
+        ? loadJson('data/occurrences.json', 'DINO_OCCURRENCES')
           .then((sites) => { occurrences = sites; })
           // Dig sites are an enhancement: without them the map still shades
           // countries exactly as before.
-          .catch(() => { occurrences = {}; });
-      }
-      initMap();
-      initThemeToggle();
-      initUrlState();
+          .catch(() => { occurrences = {}; })
+        : Promise.resolve();
+
+      occurrencesPromise.then(() => {
+        initMap();
+        initExcavationAtlas();
+        initThemeToggle();
+        initUrlState();
+      });
       renderTimeline(allDinosaurs);
       renderSizeChart(allDinosaurs);
       let resizeTimer = null;
