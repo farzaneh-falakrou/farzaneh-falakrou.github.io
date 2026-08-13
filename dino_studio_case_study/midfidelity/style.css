@@ -1,5 +1,19 @@
 * { box-sizing: border-box; }
 
+:root {
+  /* Type palette — shared by timeline bars, size dots, and the type pie. */
+  --wf-c1: #8a8f7c;
+  --wf-c2: #a06a5a;
+  --wf-c3: #7d8fa3;
+  --wf-c4: #b0855a;
+  --wf-c5: #7a9e8e;
+  /* Diet palette — deliberately distinct hues from the type palette above,
+     so type and diet never read as the same encoding on adjacent charts. */
+  --wf-d1: #6f9463;
+  --wf-d2: #b5654a;
+  --wf-d3: #bfa24a;
+}
+
 body {
   margin: 0;
   font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -77,6 +91,10 @@ main {
 /* ---- section scaffolding ---- */
 .wf-section {
   margin-bottom: 44px;
+}
+.wf-box {
+  border-radius: 3px;
+  padding: 22px 24px;
 }
 .wf-eyebrow {
   font-size: 11px;
@@ -245,24 +263,23 @@ main {
   position: relative;
   overflow: hidden;
   border: 1px solid #ddd;
+  background: #fff;
 }
 .wf-map-world {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
 }
-.wf-map-dot {
-  position: absolute;
-  width: 7px;
-  height: 7px;
-  margin-left: -3.5px;
-  margin-top: -3.5px;
-  border-radius: 50%;
-  background: #b04a2f;
-  border: 1px solid #fff;
+.wf-map-countries path {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 0.6;
+}
+.wf-map-pin-dot {
+  fill: #b04a2f;
+  stroke: #fff;
+  stroke-width: 1;
 }
 
 .wf-scope-tabs {
@@ -285,6 +302,7 @@ main {
   gap: 10px;
   padding: 10px 12px;
   border-radius: 3px;
+  background: #fff;
 }
 .wf-list-thumb {
   width: 30px;
@@ -302,8 +320,6 @@ main {
   display: grid;
   grid-template-columns: 200px 1fr;
   gap: 28px;
-  padding: 24px;
-  border-radius: 3px;
 }
 .wf-detail-img {
   height: 170px;
@@ -312,6 +328,7 @@ main {
   align-items: center;
   justify-content: center;
   gap: 6px;
+  background: #fff;
 }
 .wf-detail-name { font-size: 22px; font-weight: 700; margin: 0 0 8px; }
 .wf-detail-meta {
@@ -353,43 +370,116 @@ main {
 
 /* ---- timeline / size charts ---- */
 .wf-chart-box {
-  height: 130px;
+  height: 190px;
   border-radius: 3px;
   position: relative;
   overflow: hidden;
+  background: #e2e2e2;
+}
+.wf-timeline-box { height: 220px; }
+
+/* Type color coding — shared between timeline bars, size dots, and their legends. */
+.wf-c1 { --wf-c: var(--wf-c1); }
+.wf-c2 { --wf-c: var(--wf-c2); }
+.wf-c3 { --wf-c: var(--wf-c3); }
+.wf-c4 { --wf-c: var(--wf-c4); }
+.wf-c5 { --wf-c: var(--wf-c5); }
+.wf-d1 { --wf-c: var(--wf-d1); }
+.wf-d2 { --wf-c: var(--wf-d2); }
+.wf-d3 { --wf-c: var(--wf-d3); }
+
+.wf-epoch-bands {
+  position: absolute;
+  inset: 0 0 auto 0;
+  top: 0;
+  height: 100%;
+  display: flex;
+}
+.wf-epoch-band {
+  flex: 1;
+  border-right: 1px solid #d2d2d2;
+  position: relative;
+}
+.wf-epoch-band:last-child { border-right: none; }
+.wf-epoch-band span {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #999;
+  white-space: nowrap;
+}
+.wf-chart-plot {
+  position: absolute;
+  inset: 24px 0 0 0;
 }
 .wf-chart-bar {
   position: absolute;
   height: 8px;
   border-radius: 2px;
-  background: #a9a9a9;
+  background: var(--wf-c, #a9a9a9);
+  opacity: 0.75;
 }
+.wf-size-box { padding-top: 26px; }
 .wf-chart-dot {
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background: #999;
+  background: var(--wf-c, #999);
+  opacity: 0.85;
+}
+.wf-human-ref {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed #999;
+}
+.wf-human-ref span {
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  font-size: 9px;
+  color: #888;
+  white-space: nowrap;
+}
+.wf-chart-axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding: 0 2px;
+  font-size: 10px;
+  color: #999;
+  font-family: 'JetBrains Mono', monospace;
+}
+.wf-chart-axis-label {
+  text-align: center;
+  font-size: 10px;
+  color: #aaa;
+  margin-top: 2px;
 }
 .wf-chart-legend {
   display: flex;
   flex-wrap: wrap;
   gap: 10px 16px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 .wf-chart-legend span {
   display: flex;
   align-items: center;
   gap: 5px;
   font-size: 11px;
-  color: #888;
+  color: #666;
 }
 .wf-chart-legend span::before {
   content: "";
   width: 8px;
   height: 8px;
   border-radius: 2px;
-  background: #bbb;
+  background: var(--wf-c, #bbb);
 }
 
 /* ---- type/diet charts ---- */
@@ -407,7 +497,7 @@ main {
 }
 .wf-legend-list { flex: 1; display: flex; flex-direction: column; gap: 8px; }
 .wf-legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #666; }
-.wf-legend-dot { width: 9px; height: 9px; border-radius: 50%; background: #b7b7b7; flex-shrink: 0; }
+.wf-legend-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--wf-c, #b7b7b7); flex-shrink: 0; }
 .wf-pie {
   width: 96px;
   height: 96px;
@@ -504,6 +594,7 @@ main {
 .wf-news-card {
   border-radius: 3px;
   overflow: hidden;
+  background: #fff;
 }
 .wf-news-thumb { height: 90px; }
 .wf-news-body { padding: 12px; }
