@@ -135,22 +135,38 @@
       </div>
     </section>
 
-    <section id="excavation-panel" class="panel excavation-panel" aria-label="Excavation sites">
-      <h2 class="section-label">Excavation sites
-        <span id="excavation-stats" class="excavation-stats"></span>
+    <section id="detail-panel" class="panel detail-panel" aria-label="Selected dinosaur detail">
+      <h2 class="section-label">Dinosaur details
+        <button id="detail-clear" type="button" class="detail-clear">Clear selection</button>
       </h2>
-      <p class="excavation-intro">
-        Real fossil coordinates from the Paleobiology Database — one dot per dig
-        site, not the country-level guess the map above has to make.
+      <p id="detail-out-of-results" class="detail-stale" hidden>
+        This dinosaur is not in the current results.
       </p>
-      <div class="excavation-body">
-        <div class="excavation-map-col">
-          <div id="excavation-map" role="group" aria-label="World map of individual fossil excavation sites"></div>
-          <ul id="excavation-legend" class="chart-legend chart-legend--split excavation-legend"></ul>
+      <p id="detail-placeholder" class="empty-state">Select a dinosaur to see its details, taxonomy, and location.</p>
+      <div id="detail-content" class="detail-content" hidden>
+        <div class="detail-top">
+          <div class="detail-image-col">
+            <img id="detail-image" alt="" />
+            <dl id="detail-fields" class="fact-pills"></dl>
+          </div>
+          <div class="detail-text-col">
+            <div class="detail-name-row">
+              <h3 id="detail-name" tabindex="-1"></h3>
+              <button id="detail-bookmark" type="button" class="bookmark-star" aria-pressed="false" aria-label="Add to my list">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l3.09 6.26 6.91 1-5 4.87 1.18 6.87L12 17.9l-6.18 3.6L7 14.63l-5-4.87 6.91-1L12 2.5z"/></svg>
+              </button>
+            </div>
+            <p class="field-label">Description</p>
+            <p id="detail-description"></p>
+            <p class="field-label">When lived</p>
+            <p id="detail-when-lived"></p>
+            <p id="detail-dig-sites-label" class="field-label">Excavation sites</p>
+            <div id="detail-dig-sites" class="dig-sites"></div>
+          </div>
         </div>
-        <div class="excavation-side">
-          <p class="excavation-side-label">Most-excavated formations</p>
-          <ol id="excavation-formations" class="excavation-formations"></ol>
+        <div class="taxonomy-tree-wrap">
+          <p class="field-label">Taxonomy</p>
+          <div id="taxonomy-tree"></div>
         </div>
       </div>
     </section>
@@ -230,42 +246,6 @@
       </h2>
       <p class="news-intro">Latest dinosaur and paleontology news, via ScienceDaily and Phys.org.</p>
       <div id="news-list" class="news-list"></div>
-    </section>
-
-    <section id="detail-panel" class="panel detail-panel" aria-label="Selected dinosaur detail">
-      <h2 class="section-label">Dinosaur details
-        <button id="detail-clear" type="button" class="detail-clear">Clear selection</button>
-      </h2>
-      <p id="detail-out-of-results" class="detail-stale" hidden>
-        This dinosaur is not in the current results.
-      </p>
-      <p id="detail-placeholder" class="empty-state">Select a dinosaur to see its details, taxonomy, and location.</p>
-      <div id="detail-content" class="detail-content" hidden>
-        <div class="detail-top">
-          <div class="detail-image-col">
-            <img id="detail-image" alt="" />
-            <dl id="detail-fields" class="fact-pills"></dl>
-          </div>
-          <div class="detail-text-col">
-            <div class="detail-name-row">
-              <h3 id="detail-name" tabindex="-1"></h3>
-              <button id="detail-bookmark" type="button" class="bookmark-star" aria-pressed="false" aria-label="Add to my list">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l3.09 6.26 6.91 1-5 4.87 1.18 6.87L12 17.9l-6.18 3.6L7 14.63l-5-4.87 6.91-1L12 2.5z"/></svg>
-              </button>
-            </div>
-            <p class="field-label">Description</p>
-            <p id="detail-description"></p>
-            <p class="field-label">When lived</p>
-            <p id="detail-when-lived"></p>
-            <p id="detail-dig-sites-label" class="field-label">Excavation sites</p>
-            <div id="detail-dig-sites" class="dig-sites"></div>
-          </div>
-        </div>
-        <div class="taxonomy-tree-wrap">
-          <p class="field-label">Taxonomy</p>
-          <div id="taxonomy-tree"></div>
-        </div>
-      </div>
     </section>
   </main>
 

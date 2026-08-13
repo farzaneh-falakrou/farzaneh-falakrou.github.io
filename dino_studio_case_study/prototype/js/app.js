@@ -1198,9 +1198,11 @@
       <ul class="dig-site-list">${items}</ul>
       <button type="button" id="detail-dig-sites-jump" class="dig-sites-jump">↑ View on map</button>
     `;
+    // The choropleth already flies to this genus's own dots the moment it is
+    // selected (focusMapOnDinosaur), so this only has to carry the reader up
+    // to the map that is already showing them.
     document.getElementById('detail-dig-sites-jump').addEventListener('click', () => {
-      scrollToElement(document.getElementById('excavation-panel'));
-      if (typeof highlightGenusOnAtlas === 'function') highlightGenusOnAtlas(dinosaur.name);
+      scrollToElement(document.querySelector('.map-panel'));
     });
   }
 
@@ -2170,190 +2172,6 @@
     }
   }
 
-  // --- Excavation atlas ---------------------------------------------------
-  //
-  // The choropleth above and the per-dinosaur pill in the detail panel both
-  // show this same PBDB data one dinosaur at a time, which is why it read as
-  // a footnote. This plots every recorded site for all 75 genera on one map
-  // at once — the same underlying occurrences object, just never flattened
-  // and shown together before.
-  let excavationMap = null;
-  let excavationCountryLayer = null;
-  let excavationMarkerRefs = []; // [{marker, name, type, formation}]
-  let excavationActiveFormation = null;
-
-  // typeColorFor() returns a literal 'var(--chart-N)' string for the SVG
-  // charts, which resolve it themselves via CSS. Leaflet's SVG renderer sets
-  // colours as plain attributes rather than through the CSS cascade, so — same
-  // as the choropleth's own themeToken() calls above — it needs the actual
-  // computed value, not the var() reference itself.
-  function resolveThemeColor(value) {
-    const match = /^var\((--[\w-]+)\)$/.exec(value || '');
-    return match ? themeToken(match[1], value) : value;
-  }
-
-  function flattenExcavationSites() {
-    const sites = [];
-    allDinosaurs.forEach((d) => {
-      (occurrences[d.name] || []).forEach(([lng, lat, formation]) => {
-        sites.push({ name: d.name, type: d.typeOfDinosaur, lng, lat, formation: formation || null });
-      });
-    });
-    return sites;
-  }
-
-  function computeFormationStats(sites) {
-    const byFormation = new Map();
-    sites.forEach((site) => {
-      if (!site.formation) return;
-      if (!byFormation.has(site.formation)) byFormation.set(site.formation, { count: 0, genera: new Set() });
-      const entry = byFormation.get(site.formation);
-      entry.count += 1;
-      entry.genera.add(site.name);
-    });
-    return byFormation;
-  }
-
-  function renderExcavationStats(sites, formationStats) {
-    const el = document.getElementById('excavation-stats');
-    if (!el) return;
-    const genera = new Set(sites.map((s) => s.name)).size;
-    el.textContent = `${sites.length} sites · ${formationStats.size} formations · ${genera} genera`;
-  }
-
-  function renderExcavationLegend(sites) {
-    const el = document.getElementById('excavation-legend');
-    if (!el) return;
-    const types = [...new Set(sites.map((s) => s.type).filter((t) => t && t !== 'N/A'))].sort();
-    el.innerHTML = types
-      .map((type) => `
-        <li>
-          <span class="swatch" style="background:${typeColorFor(type)}"></span>
-          ${escapeHtml(capitalize(type))}
-        </li>
-      `)
-      .join('');
-  }
-
-  function highlightFormation(formationName) {
-    excavationActiveFormation = excavationActiveFormation === formationName ? null : formationName;
-    document.querySelectorAll('.formation-card').forEach((card) => {
-      card.classList.toggle('is-active', card.dataset.formation === excavationActiveFormation);
-    });
-    const matching = [];
-    excavationMarkerRefs.forEach(({ marker, formation }) => {
-      const el = marker.getElement ? marker.getElement() : null;
-      const isMatch = excavationActiveFormation && formation === excavationActiveFormation;
-      if (el) el.classList.toggle('dig-dot-highlight', isMatch);
-      if (isMatch) matching.push(marker.getLatLng());
-    });
-    if (matching.length > 0 && excavationMap) {
-      excavationMap.flyToBounds(L.latLngBounds(matching).pad(0.6), { maxZoom: 5, duration: 0.6 });
-    }
-  }
-
-  // Called from the detail panel's own "↑ View on map" link — flies the
-  // atlas to just this genus's dots and pulses them, the same highlight
-  // mechanism a formation card uses, so both entry points into the atlas
-  // behave identically once you're looking at it.
-  function highlightGenusOnAtlas(name) {
-    excavationActiveFormation = null;
-    document.querySelectorAll('.formation-card').forEach((card) => card.classList.remove('is-active'));
-    const matching = [];
-    excavationMarkerRefs.forEach(({ marker, name: markerName }) => {
-      const el = marker.getElement ? marker.getElement() : null;
-      const isMatch = markerName === name;
-      if (el) el.classList.toggle('dig-dot-highlight', isMatch);
-      if (isMatch) matching.push(marker.getLatLng());
-    });
-    if (matching.length > 0 && excavationMap) {
-      excavationMap.flyToBounds(L.latLngBounds(matching).pad(0.8), { maxZoom: 5, duration: 0.6 });
-    }
-  }
-
-  function renderFormationList(formationStats) {
-    const el = document.getElementById('excavation-formations');
-    if (!el) return;
-    const top = [...formationStats.entries()]
-      .sort((a, b) => b[1].count - a[1].count)
-      .slice(0, 14);
-    el.innerHTML = top
-      .map(([formation, { count, genera }]) => `
-        <li>
-          <button type="button" class="formation-card" data-formation="${escapeHtml(formation)}">
-            <span class="formation-card__top">
-              <span class="formation-card__name">${escapeHtml(formation)}</span>
-              <span class="formation-card__count">×${count}</span>
-            </span>
-            <p class="formation-card__genera">${escapeHtml([...genera].sort().join(', '))}</p>
-          </button>
-        </li>
-      `)
-      .join('');
-    el.querySelectorAll('.formation-card').forEach((card) => {
-      card.addEventListener('click', () => highlightFormation(card.dataset.formation));
-    });
-  }
-
-  function initExcavationAtlas() {
-    const mapEl = document.getElementById('excavation-map');
-    if (!mapEl) return;
-    const sites = flattenExcavationSites();
-    const formationStats = computeFormationStats(sites);
-    renderExcavationStats(sites, formationStats);
-    renderExcavationLegend(sites);
-    renderFormationList(formationStats);
-
-    if (sites.length === 0) {
-      mapEl.innerHTML = '<p class="dig-sites-empty" style="padding:1rem;">No excavation sites available.</p>';
-      return;
-    }
-
-    // No preferCanvas here (unlike the choropleth): a few hundred SVG circles
-    // is cheap, and only the SVG renderer gives each marker a real DOM node —
-    // which is what lets the formation-card hover/click reach onto the map
-    // and pulse the matching dots via a plain CSS class.
-    excavationMap = L.map('excavation-map', {
-      scrollWheelZoom: true,
-      zoomControl: true,
-      attributionControl: false,
-      worldCopyJump: false,
-      maxBounds: [[-90, -180], [90, 180]],
-      maxBoundsViscosity: 1,
-      zoomAnimation: false,
-      markerZoomAnimation: false,
-      fadeAnimation: false,
-    }).setView([15, 10], 2);
-
-    loadJson('data/world-countries.geo.json', 'DINO_WORLD').then((geo) => {
-      excavationCountryLayer = L.geoJSON(geo, {
-        style: () => ({
-          fillColor: themeToken('--surface-hover', '#e6e0cd'),
-          fillOpacity: 1,
-          color: themeToken('--map-border', 'rgba(22,40,29,0.18)'),
-          weight: 1,
-        }),
-      }).addTo(excavationMap);
-
-      excavationMarkerRefs = sites.map((site) => {
-        const marker = L.circleMarker([site.lat, site.lng], {
-          radius: 4,
-          weight: 1.5,
-          color: themeToken('--ink', '#f0e8c8'),
-          fillColor: resolveThemeColor(typeColorFor(site.type)),
-          fillOpacity: 0.9,
-        });
-        const place = site.formation ? `${site.formation} Formation` : 'Formation not recorded';
-        marker.bindTooltip(`${site.name} — ${place}`, { direction: 'top' });
-        marker.on('click', () => selectDinosaur(site.name));
-        marker.addTo(excavationMap);
-        return { marker, name: site.name, type: site.type, formation: site.formation };
-      });
-
-      requestAnimationFrame(() => excavationMap.invalidateSize());
-    });
-  }
-
   // Without an explicit minZoom, Leaflet lets the scroll-wheel zoom out well
   // past the point where the whole world already fits the frame — past that
   // point every notch just adds empty void margin around a map that can't
@@ -2370,20 +2188,33 @@
     // number crops the wrong amount on each side. Clamp to Mercator's
     // ±85.0511° (it's undefined past that; using the true -90 here is what
     // made earlier attempts degenerate), then let getBoundsZoom's "inside:
-    // true" (a *cover* fit, same idea as CSS object-fit:cover) find the
-    // smallest zoom that fills the frame with no void — the crop this
-    // leaves is real ocean/ice past the data's own edge, not a country.
+    // false" (a *contain* fit, same idea as CSS object-fit:contain) find the
+    // largest zoom at which the whole world still fits inside the frame.
+    // A cover fit was tried first and rejected: filling the frame edge to
+    // edge means the longer axis has to be cropped, and at this container's
+    // aspect ratio that ate the top and bottom of the map. Empty background
+    // above and below is the cheaper cost — nothing is hidden.
     const dataBounds = countryLayer.getBounds();
     const south = Math.max(dataBounds.getSouth(), -85.0511);
     const north = Math.min(dataBounds.getNorth(), 85.0511);
-    const fitZoom = leafletMap.getBoundsZoom([[south, -180], [north, 180]], true);
+    const fitBounds = L.latLngBounds([[south, -180], [north, 180]]);
+    const fitZoom = leafletMap.getBoundsZoom(fitBounds, false);
     leafletMap.setMinZoom(fitZoom);
-    // A cover fit expands outward from the bounds' own centre, not
-    // wherever the view currently happens to be pointed — so snapping the
-    // zoom up to fitZoom without also recentring would crop asymmetrically
-    // in some other direction than the one this was tuned for.
-    if (leafletMap.getZoom() < fitZoom) {
-      leafletMap.setView([(south + north) / 2, 10], fitZoom);
+    // Pan is clamped to the same box the fit was computed from, replacing the
+    // constructor's ±90° box. ±90 projects to the same Mercator edge as
+    // ±85.0511 but describes a *taller* region than the map can ever draw, so
+    // it allowed a sliver of vertical drift at the fully-zoomed-out level —
+    // which is exactly where there is no slack to absorb it and the far edge
+    // goes off-frame.
+    leafletMap.setMaxBounds(fitBounds);
+    // fitBounds(), not setView(centre): the centre has to be the middle in
+    // *projected* pixels, and latLngBounds.getCenter() is the middle in
+    // degrees. Mercator stretches latitude non-linearly, so with a box this
+    // tall those two are ~16px apart — enough, at a fit this exact, to hang
+    // the bottom of the map past the frame while leaving a matching gap at
+    // the top. fitBounds solves for the pixel centre itself.
+    if (leafletMap.getZoom() <= fitZoom) {
+      leafletMap.fitBounds(fitBounds, { animate: false });
     }
   }
 
@@ -2465,18 +2296,6 @@
         countryLayer.setStyle(styleForFeature);
         if (selectedDinosaur) focusMapOnDinosaur(selectedDinosaur);
       }
-      if (excavationCountryLayer) {
-        excavationCountryLayer.setStyle({
-          fillColor: themeToken('--surface-hover', '#e6e0cd'),
-          color: themeToken('--map-border', 'rgba(22,40,29,0.18)'),
-        });
-      }
-      excavationMarkerRefs.forEach(({ marker, type }) => {
-        marker.setStyle({
-          color: themeToken('--ink', '#f0e8c8'),
-          fillColor: resolveThemeColor(typeColorFor(type)),
-        });
-      });
       applyFilters();
     });
   }
@@ -2511,7 +2330,6 @@
 
       occurrencesPromise.then(() => {
         initMap();
-        initExcavationAtlas();
         initThemeToggle();
         initUrlState();
       });
