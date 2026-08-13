@@ -102,7 +102,7 @@ that it works offline. Regenerate with:
 The layer is strictly additive: if `occurrences.json` is missing or fails to
 load, the map shades countries exactly as it did before.
 
-Occurrence data is CC BY 4.0 and credited in the map panel. It is *not* part of
+Occurrence data is CC BY 4.0 and credited in the footer. It is *not* part of
 the museum dataset, which locates a dinosaur only as a list of modern country
 names — which is why the choropleth can shade whole countries and nothing
 finer, and why "North Africa" (a region with no polygon) is dropped from it.

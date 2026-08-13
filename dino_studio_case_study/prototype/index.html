@@ -25,9 +25,21 @@
   <a class="skip-link" href="#dino-list">Skip to results</a>
   <header class="site-header">
     <div class="wordmark">Dino Studio</div>
-    <nav class="header-nav">
-      <a href="../index.html">Case study</a>
-      <a href="https://github.com/farzaneh-falakrou">GitHub</a>
+    <!-- Below ~640px this collapses into a dropdown — four links plus the
+         theme toggle don't fit a phone-width header without wrapping or
+         crowding the wordmark, so .nav-toggle takes over below that width. -->
+    <button id="nav-toggle" type="button" class="nav-toggle" aria-expanded="false" aria-controls="header-nav">
+      <span class="nav-toggle__bars" aria-hidden="true"></span>
+      <span class="sr-only">Menu</span>
+    </button>
+    <!-- Jumps within this one long page, not links off it — those (Case
+         study, GitHub) moved to the footer, where a "leave the app" link
+         belongs, freeing this space for actually getting around the app. -->
+    <nav id="header-nav" class="header-nav" aria-label="Jump to section">
+      <a href="#explore">Explore</a>
+      <a href="#timeline-panel">Timeline</a>
+      <a href="#quiz-panel">Quiz</a>
+      <a href="#news-panel">News</a>
       <button id="theme-toggle" type="button" class="theme-toggle" aria-pressed="false">
         <span aria-hidden="true" class="theme-toggle__icon"></span>
         <span id="theme-toggle-label">Light</span>
@@ -68,17 +80,37 @@
       </div>
     </div>
 
-    <div class="hero-search">
-      <div class="search-field">
-        <input id="search-input" type="search" placeholder="Find a dinosaur, country, or diet"
-               autocomplete="off" role="combobox" aria-expanded="false"
-               aria-controls="search-suggestions" aria-autocomplete="list" />
-        <button id="search-clear" type="button" class="search-clear" aria-label="Clear search" hidden>×</button>
-        <ul id="search-suggestions" class="search-suggestions" role="listbox" hidden></ul>
+    <div class="hero-search-row">
+      <div class="hero-search">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="Find a dinosaur, country, or diet"
+                 autocomplete="off" role="combobox" aria-expanded="false"
+                 aria-controls="search-suggestions" aria-autocomplete="list" />
+          <button id="search-clear" type="button" class="search-clear" aria-label="Clear search" hidden>×</button>
+          <ul id="search-suggestions" class="search-suggestions" role="listbox" hidden></ul>
+        </div>
+        <button id="search-button" type="button" class="btn btn-accent btn--attached">Search</button>
       </div>
-      <button id="search-button" type="button" class="btn btn-accent btn--attached">Search</button>
+      <!-- Mobile-only: five controls plus two buttons stacked full-width ran
+           the hero on for a full screen's worth of scrolling before any actual
+           dinosaur was visible. Collapsed behind this icon by default below
+           ~640px, docked beside the search bar the way most search+filter
+           patterns pair them; desktop never sees it (CSS-hidden) and the
+           filter bar stays always open there. -->
+      <button id="filters-toggle" type="button" class="btn filter-clear filters-toggle"
+              aria-expanded="false" aria-controls="filter-bar" aria-label="Filters">
+        <svg class="filters-toggle__icon" viewBox="0 0 20 20" aria-hidden="true">
+          <line x1="3" y1="6" x2="17" y2="6" />
+          <circle cx="8" cy="6" r="2" />
+          <line x1="3" y1="10" x2="17" y2="10" />
+          <circle cx="13" cy="10" r="2" />
+          <line x1="3" y1="14" x2="17" y2="14" />
+          <circle cx="9" cy="14" r="2" />
+        </svg>
+        <span id="filters-toggle-count" class="filters-toggle__count" hidden>0</span>
+      </button>
     </div>
-    <div class="filter-bar" role="group" aria-label="Filters">
+    <div id="filter-bar" class="filter-bar" role="group" aria-label="Filters">
       <label class="filter-field">
         <span class="filter-field__label">Country</span>
         <select id="country-filter"><option value="">All</option></select>
@@ -109,7 +141,7 @@
   </section>
 
   <main>
-    <section class="overview-grid" aria-label="Dinosaur locations and results">
+    <section id="explore" class="overview-grid" aria-label="Dinosaur locations and results">
       <div class="panel map-panel">
         <h2 class="section-label">Dinosaur locations</h2>
         <div id="world-map" role="group" aria-label="Choropleth map of dinosaur discoveries by country"></div>
@@ -179,7 +211,7 @@
       </div>
     </section>
 
-    <section class="panel timeline-panel" aria-label="When these dinosaurs lived">
+    <section id="timeline-panel" class="panel timeline-panel" aria-label="When these dinosaurs lived">
       <h2 class="section-label">When they lived
         <span id="timeline-hint" class="timeline-hint">Drag across the chart to filter by time</span>
         <!-- Swaps in for the hint above once a range is brushed — undoing a
@@ -286,8 +318,24 @@
   </main>
 
   <footer class="site-footer">
-    <a href="../index.html">Case study</a>
-    <a href="https://github.com/farzaneh-falakrou">GitHub</a>
+    <div class="site-footer__links">
+      <a href="../index.html">Case study</a>
+      <a href="https://github.com/farzaneh-falakrou">GitHub</a>
+      <a href="images/specimens/CREDITS.md">Image credits</a>
+    </div>
+    <p class="site-footer__ownership">
+      Solo redesign and rebuild of a <a href="https://www.chingu.io/">Chingu</a>
+      <a href="https://github.com/chingu-voyages/v48-tier2-team-14">team project</a> — I was the sole
+      designer on the original team; every part of this version, design through build, is my own.
+    </p>
+    <p class="site-footer__note">
+      Dinosaur dataset built for a Chingu voyage, sourced from
+      the <a href="https://www.nhm.ac.uk/">Natural History Museum</a>. Fossil excavation sites from
+      the <a href="https://paleobiodb.org/">Paleobiology Database</a>, CC BY 4.0. Habitat engravings
+      from the <a href="https://wellcomecollection.org/">Wellcome Collection</a>, CC BY 4.0 — full
+      credits for every non-dataset image linked above.
+    </p>
+    <p class="site-footer__copyright">© 2026 Farzaneh Falakrou · Designed &amp; built in Berlin</p>
   </footer>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>

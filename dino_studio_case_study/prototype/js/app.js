@@ -290,6 +290,17 @@
     weightFilter.setAttribute('aria-valuetext', weightValue.textContent);
     lengthFilter.setAttribute('aria-valuetext', lengthValue.textContent);
     selectFilters.forEach((el) => el.classList.toggle('is-active', Boolean(el.value)));
+    // The mobile "Filters" button is the only visible trace of the filter bar
+    // while it's collapsed, so it has to carry a count — otherwise a filter
+    // set earlier and forgotten about is invisible until the panel is reopened.
+    const filtersToggleCount = document.getElementById('filters-toggle-count');
+    if (filtersToggleCount) {
+      const active = selectFilters.filter((el) => el.value).length
+        + (minWeightValue() > 0 ? 1 : 0)
+        + (lengthWindow ? 1 : 0);
+      filtersToggleCount.textContent = String(active);
+      filtersToggleCount.hidden = active === 0;
+    }
   }
 
   // Applies every filter, optionally skipping one dimension. Each cross-filtered
@@ -646,6 +657,31 @@
     applyFilters();
   });
   clearFiltersButton.addEventListener('click', clearAllFilters);
+
+  // Mobile-only dropdown for the header nav (see the max-width:640px block in
+  // style.css — .nav-toggle and the .header-nav.is-open swap don't exist above
+  // that width, so this is a no-op there). Closing on link click matters more
+  // here than on a typical dropdown: these are same-page anchor jumps, so
+  // without it the open menu would sit on top of the section it just jumped to.
+  const navToggle = document.getElementById('nav-toggle');
+  const headerNav = document.getElementById('header-nav');
+  const setNavOpen = (open) => {
+    headerNav.classList.toggle('is-open', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+  };
+  navToggle.addEventListener('click', () => setNavOpen(!headerNav.classList.contains('is-open')));
+  headerNav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setNavOpen(false)));
+
+  // Mobile-only collapse for the filter bar — same CSS-gated pattern as the
+  // nav dropdown above; .filters-toggle and the .filter-bar.is-open swap are
+  // both no-ops above 640px, where the bar is simply always visible.
+  const filtersToggle = document.getElementById('filters-toggle');
+  const filterBarEl = document.getElementById('filter-bar');
+  filtersToggle.addEventListener('click', () => {
+    const open = !filterBarEl.classList.contains('is-open');
+    filterBarEl.classList.toggle('is-open', open);
+    filtersToggle.setAttribute('aria-expanded', String(open));
+  });
   // Undoing a chart-local brush shouldn't require finding its chip in the
   // filter bar at the top of the page — each chart clears only its own
   // window and re-renders itself in place.
