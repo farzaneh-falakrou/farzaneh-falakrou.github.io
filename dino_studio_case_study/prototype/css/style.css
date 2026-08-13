@@ -1382,6 +1382,32 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 .news-toggle:hover { border-color: var(--accent); color: var(--accent); }
 .news-empty { color: var(--muted); font-size: var(--t-small); }
 
+/* One-time marker where the page shifts from reading the dataset to playing
+   with it / reading about it elsewhere — deliberately not a .panel and not a
+   .section-label, so it doesn't read as a seventh data panel among the six
+   above it. Flanking rules reuse the .section-label::after rule colour so
+   the vocabulary matches; the label itself sits in the gap other panels
+   leave empty, so the 24px --s5 rhythm around it is untouched. */
+.section-break {
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+  margin: 0 0 var(--s5);
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--t-micro);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+.section-break::before,
+.section-break::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
 .quiz-panel {
   margin-bottom: 1.5rem;
   position: relative;
@@ -1702,6 +1728,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
   color: inherit;
   font: inherit;
   text-align: left;
+  /* At the 2-column split, the longest label ("armoured dinosaur (5)") comes
+     within a fraction of a pixel of its column's width — enough that some
+     browsers round down and wrap it, while every shorter label sits with
+     visible room to spare. There's no real overflow to solve, so nowrap alone
+     (not truncation) is the fix. */
+  white-space: nowrap;
   cursor: pointer;
   transition: background var(--dur), border-color var(--dur);
 }
