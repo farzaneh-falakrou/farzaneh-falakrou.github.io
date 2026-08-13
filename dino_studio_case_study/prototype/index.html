@@ -76,13 +76,7 @@
         <button id="search-clear" type="button" class="search-clear" aria-label="Clear search" hidden>×</button>
         <ul id="search-suggestions" class="search-suggestions" role="listbox" hidden></ul>
       </div>
-      <button id="search-button" type="button" class="btn-accent">Search</button>
-    </div>
-    <div class="bookmarks-toggle-row">
-      <button id="bookmarks-toggle" type="button" class="bookmarks-toggle" aria-pressed="false">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l3.09 6.26 6.91 1-5 4.87 1.18 6.87L12 17.9l-6.18 3.6L7 14.63l-5-4.87 6.91-1L12 2.5z"/></svg>
-        <span id="bookmarks-toggle-label">My list</span>
-      </button>
+      <button id="search-button" type="button" class="btn btn-accent btn--attached">Search</button>
     </div>
     <div class="filter-bar" role="group" aria-label="Filters">
       <label class="filter-field">
@@ -105,8 +99,8 @@
         <span class="filter-field__label">Min length <output id="length-value">Any</output></span>
         <input id="length-filter" type="range" min="0" max="0" value="0" step="1" />
       </label>
-      <button id="clear-filters" type="button" class="filter-clear">Clear all</button>
-      <button id="copy-link" type="button" class="filter-clear filter-clear--link">Copy link to this view</button>
+      <button id="clear-filters" type="button" class="btn filter-clear">Clear all</button>
+      <button id="copy-link" type="button" class="btn filter-clear filter-clear--link">Copy link to this view</button>
     </div>
     <div class="result-bar">
       <p id="result-count" class="result-count" aria-live="polite"></p>
@@ -125,11 +119,25 @@
         </p>
       </div>
       <div class="panel list-panel">
-        <h2 class="section-label">Results</h2>
+        <div class="list-panel-head">
+          <h2 class="section-label">Results</h2>
+          <!-- A scope switcher over this one list, not a filter: "saved" is a
+               place you go, so it sits on the collection it scopes rather than
+               floating loose in the search area. -->
+          <div class="list-scope" role="tablist" aria-label="Which dinosaurs to show">
+            <button id="scope-all" type="button" class="list-scope__tab is-active"
+                    role="tab" aria-selected="true" aria-controls="dino-list">All</button>
+            <button id="scope-saved" type="button" class="list-scope__tab"
+                    role="tab" aria-selected="false" aria-controls="dino-list">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l3.09 6.26 6.91 1-5 4.87 1.18 6.87L12 17.9l-6.18 3.6L7 14.63l-5-4.87 6.91-1L12 2.5z"/></svg>
+              Saved <span id="scope-saved-count" class="list-scope__count">0</span>
+            </button>
+          </div>
+        </div>
         <div id="list-empty-state" class="list-empty" hidden>
-          <p class="empty-state">No dinosaurs match your filters.</p>
+          <p id="list-empty-message" class="empty-state">No dinosaurs match your filters.</p>
           <p id="did-you-mean" class="did-you-mean" hidden></p>
-          <button type="button" class="filter-clear" data-clear-all>Reset everything</button>
+          <button id="list-empty-reset" type="button" class="btn filter-clear" data-clear-all>Reset everything</button>
         </div>
         <ul id="dino-list" class="dino-list" role="listbox" aria-label="Dinosaurs"></ul>
       </div>
@@ -137,7 +145,7 @@
 
     <section id="detail-panel" class="panel detail-panel" aria-label="Selected dinosaur detail">
       <h2 class="section-label">Dinosaur details
-        <button id="detail-clear" type="button" class="detail-clear">Clear selection</button>
+        <button id="detail-clear" type="button" class="btn detail-clear">Clear selection</button>
       </h2>
       <p id="detail-out-of-results" class="detail-stale" hidden>
         This dinosaur is not in the current results.
@@ -236,13 +244,19 @@
       <div id="quiz-options" class="quiz-options" role="group" aria-label="Answer options"></div>
       <div class="quiz-footer">
         <p id="quiz-feedback" class="quiz-feedback" aria-live="polite"></p>
-        <button id="quiz-next" type="button" class="btn-accent" hidden>Next question →</button>
+        <button id="quiz-next" type="button" class="btn btn-accent" hidden>Next question →</button>
       </div>
     </section>
 
     <section id="news-panel" class="panel news-panel" aria-label="Dinosaur news">
       <h2 class="section-label">Dino news
-        <span id="news-updated" class="news-updated"></span>
+        <!-- The single expand/collapse control for the list below, unhidden
+             by renderNews only when there is more than one page of cards.
+             Kept in the header rather than at the end of the list so it's
+             still reachable after expanding — a button appended below 40
+             expanded cards would scroll out of reach. -->
+        <button type="button" id="news-toggle-top" class="btn news-toggle"
+                aria-controls="news-list" aria-expanded="false" hidden></button>
       </h2>
       <p class="news-intro">Latest dinosaur and paleontology news, via ScienceDaily and Phys.org.</p>
       <div id="news-list" class="news-list"></div>

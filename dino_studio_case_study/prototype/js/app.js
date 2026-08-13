@@ -71,8 +71,9 @@
   const weightValue = document.getElementById('weight-value');
   const lengthValue = document.getElementById('length-value');
   const clearFiltersButton = document.getElementById('clear-filters');
-  const bookmarksToggle = document.getElementById('bookmarks-toggle');
-  const bookmarksToggleLabel = document.getElementById('bookmarks-toggle-label');
+  const scopeAllTab = document.getElementById('scope-all');
+  const scopeSavedTab = document.getElementById('scope-saved');
+  const scopeSavedCount = document.getElementById('scope-saved-count');
   const detailBookmarkButton = document.getElementById('detail-bookmark');
   const quizQuestionEl = document.getElementById('quiz-question');
   const quizOptionsEl = document.getElementById('quiz-options');
@@ -115,10 +116,20 @@
   function isBookmarked(name) { return bookmarks.has(name); }
 
   function syncBookmarksToggle() {
-    if (!bookmarksToggle) return;
-    bookmarksToggle.classList.toggle('is-active', bookmarksOnly);
-    bookmarksToggle.setAttribute('aria-pressed', String(bookmarksOnly));
-    bookmarksToggleLabel.textContent = `My list (${bookmarks.size})`;
+    if (!scopeAllTab || !scopeSavedTab) return;
+    scopeAllTab.classList.toggle('is-active', !bookmarksOnly);
+    scopeAllTab.setAttribute('aria-selected', String(!bookmarksOnly));
+    scopeSavedTab.classList.toggle('is-active', bookmarksOnly);
+    scopeSavedTab.setAttribute('aria-selected', String(bookmarksOnly));
+    scopeSavedTab.classList.toggle('is-empty', bookmarks.size === 0 && !bookmarksOnly);
+    scopeSavedCount.textContent = String(bookmarks.size);
+  }
+
+  function setBookmarksOnly(next) {
+    if (bookmarksOnly === next) return;
+    bookmarksOnly = next;
+    syncBookmarksToggle();
+    applyFilters();
   }
 
   function toggleBookmark(name) {
@@ -172,8 +183,27 @@
     `;
   }
 
+  // The empty Results panel has two quite different causes, and the same
+  // sentence cannot serve both: filters that excluded everything (recover by
+  // resetting) versus a Saved view with nothing starred yet (recover by
+  // starring something — there is nothing to reset).
+  function syncEmptyStateCopy() {
+    const message = document.getElementById('list-empty-message');
+    const reset = document.getElementById('list-empty-reset');
+    if (!message || !reset) return;
+    const emptyBecauseNothingSaved = bookmarksOnly && bookmarks.size === 0;
+    message.textContent = emptyBecauseNothingSaved
+      ? 'Nothing saved yet. Tap the ☆ on any dinosaur to keep it here.'
+      : 'No dinosaurs match your filters.';
+    reset.hidden = emptyBecauseNothingSaved;
+  }
+
   function renderList(dinosaurs) {
     listEmptyState.hidden = dinosaurs.length > 0;
+    // "No dinosaurs match your filters" is the wrong sentence for an empty
+    // Saved view — nothing is filtered out, there is simply nothing in it yet,
+    // and the recovery is to star something rather than to reset anything.
+    if (dinosaurs.length === 0) syncEmptyStateCopy();
     listEl.innerHTML = dinosaurs.map(listItemHTML).join('');
     listEl.querySelectorAll('li').forEach((li) => {
       li.addEventListener('click', () => selectDinosaur(li.dataset.name));
@@ -371,7 +401,7 @@
       chips.push({ label: `Clade: ${cladeFilter}`, clear: () => { cladeFilter = null; } });
     }
     if (bookmarksOnly) {
-      chips.push({ label: 'My list', clear: () => { bookmarksOnly = false; syncBookmarksToggle(); } });
+      chips.push({ label: 'Saved only', clear: () => { bookmarksOnly = false; syncBookmarksToggle(); } });
     }
     if (timeWindow) {
       chips.push({
@@ -615,10 +645,18 @@
   clearFiltersButton.addEventListener('click', clearAllFilters);
   document.querySelector('[data-clear-all]').addEventListener('click', clearAllFilters);
   document.getElementById('detail-clear').addEventListener('click', clearSelection);
-  bookmarksToggle.addEventListener('click', () => {
-    bookmarksOnly = !bookmarksOnly;
-    syncBookmarksToggle();
-    applyFilters();
+  scopeAllTab.addEventListener('click', () => setBookmarksOnly(false));
+  scopeSavedTab.addEventListener('click', () => setBookmarksOnly(true));
+  // Left/right arrows move between tabs, which is what a tablist is expected
+  // to do once it announces itself as one.
+  [scopeAllTab, scopeSavedTab].forEach((tab) => {
+    tab.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      event.preventDefault();
+      const other = tab === scopeAllTab ? scopeSavedTab : scopeAllTab;
+      other.focus();
+      setBookmarksOnly(other === scopeSavedTab);
+    });
   });
   detailBookmarkButton.addEventListener('click', () => {
     if (selectedDinosaur) toggleBookmark(selectedDinosaur.name);
@@ -944,16 +982,11 @@
 
   function renderNews(items) {
     const listEl = document.getElementById('news-list');
-    const updatedEl = document.getElementById('news-updated');
     if (!listEl) return;
 
     if (!items || items.length === 0) {
       listEl.innerHTML = '<p class="news-empty">No news available right now — check back later.</p>';
       return;
-    }
-
-    if (updatedEl) {
-      updatedEl.textContent = `Latest: ${NEWS_DATE_FORMAT.format(new Date(items[0].date))}`;
     }
 
     const latestDay = items[0].date.slice(0, 10);
@@ -969,19 +1002,43 @@
       extra.map((item) => cardHtml(item, true)).join('');
 
     const panel = document.getElementById('news-panel');
-    const existingToggleRow = document.getElementById('news-toggle-row');
-    if (existingToggleRow) existingToggleRow.remove();
-    if (extra.length > 0 && panel) {
-      const row = document.createElement('div');
-      row.id = 'news-toggle-row';
-      row.className = 'news-toggle-row';
-      row.innerHTML = `<button type="button" id="news-toggle" class="news-toggle">View all ${items.length} articles</button>`;
-      panel.appendChild(row);
-      document.getElementById('news-toggle').addEventListener('click', () => {
-        listEl.querySelectorAll('.news-card[hidden]').forEach((card) => { card.hidden = false; });
-        row.remove();
+    // Cloned rather than reused: this button lives in the static markup and
+    // outlives a re-render, so binding to it directly would stack a second
+    // click handler on every call.
+    const staleToggle = document.getElementById('news-toggle-top');
+    if (!staleToggle) return;
+    const toggle = staleToggle.cloneNode(true);
+    staleToggle.replaceWith(toggle);
+    toggle.hidden = extra.length === 0;
+    if (extra.length === 0) return;
+
+    // One control, in the header: expanding used to delete this button
+    // entirely, so there was no way back to the short list once you'd
+    // expanded — a one-way door. It's a real toggle now. A second copy at
+    // the bottom of the list was tried and dropped — two buttons that do the
+    // same thing isn't a pattern that shows up in any of the sites this was
+    // benchmarked against, and the header copy alone already solves the
+    // original "stranded below the fold" problem, since it never scrolls
+    // out of reach the way an end-of-list button does once expanded.
+    let expanded = false;
+    const setExpanded = (next) => {
+      expanded = next;
+      listEl.querySelectorAll('.news-card').forEach((card, index) => {
+        card.hidden = !expanded && index >= NEWS_CARDS_VISIBLE;
       });
-    }
+      toggle.textContent = expanded ? 'Show fewer' : `View all ${items.length} articles`;
+      toggle.setAttribute('aria-expanded', String(expanded));
+      // Collapsing removes everything below the fold the reader is standing
+      // on, which would otherwise drop them further down the page with no
+      // idea what happened. Next frame, not this one: collapsing removes
+      // ~37 cards' worth of height, and a smooth scroll started before that
+      // reflow aims at the panel's pre-collapse position and lands hundreds
+      // of pixels short.
+      if (!expanded) requestAnimationFrame(() => scrollToElement(panel));
+    };
+
+    toggle.textContent = `View all ${items.length} articles`;
+    toggle.addEventListener('click', () => setExpanded(!expanded));
   }
 
   function initNews() {

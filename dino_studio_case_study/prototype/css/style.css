@@ -412,20 +412,43 @@ h1, h2, h3 { margin: 0 0 0.5rem; }
   padding: 0;
 }
 
-.btn-accent {
-  padding: 0.75rem 1.4rem;
-  border: none;
-  border-left: 1px solid var(--accent-rule);
-  background: var(--accent-soft);
-  color: var(--accent);
+/* Shared box for every CTA-style button on the page (Search, Next question,
+   Clear all, View all articles, Reset everything, Clear selection, the
+   All/Saved tabs) — one padding, one radius, one type scale, so a button
+   reads the same size and shape wherever it turns up, and only its colour
+   says "primary" or "secondary". Applied alongside each button's own
+   colour class rather than replacing it. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius);
   font-family: 'JetBrains Mono', monospace;
   font-size: var(--t-micro);
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
+  line-height: 1;
   cursor: pointer;
+  transition: border-color var(--dur), color var(--dur), background var(--dur);
+}
+.btn-accent {
+  border: 1px solid var(--accent-rule);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+/* The one button flush against another control (the search field) rather
+   than freestanding. Borderless: the search-field wrapper it's glued to
+   already draws the full outline around both of them together, so a border
+   here would double up on three of its four sides — only the divider
+   between input and button (the left edge) is this button's own to draw.
+   The deliberate exception to both the shared radius and the shared border,
+   for the one button that isn't actually freestanding. */
+.btn--attached {
+  border: none;
+  border-left: 1px solid var(--accent-rule);
   border-radius: 0 var(--radius) var(--radius) 0;
-  transition: background var(--dur), color var(--dur);
 }
 /* Was background:--accent-soft, i.e. its own resting value — the only change
    was text going from accent to ink, which *reduced* emphasis on hover. */
@@ -436,31 +459,64 @@ h1, h2, h3 { margin: 0 0 0.5rem; }
 
 /* Filter bar */
 /* --- Bookmarks ("My list") ------------------------------------------- */
-.bookmarks-toggle-row { display: flex; justify-content: center; margin: var(--s3) 0 0; }
-.bookmarks-toggle {
+/* All / Saved: a segmented switch sitting on the Results panel's own header,
+   so the control is adjacent to the thing it changes and its selected state
+   is read as "which view am I in", not "is this option on". */
+.list-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+  flex-wrap: wrap;
+}
+.list-panel-head .section-label { margin-bottom: 0; }
+.list-panel-head .section-label::after { display: none; }
+.list-scope {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-hover);
+  padding: 2px;
+}
+/* Same padding/type scale as .btn, kept as its own rule rather than sharing
+   the class: these two are one glued-together control, not a pair of
+   freestanding buttons, so only the inner tab gets its own small radius
+   (nested inside .list-scope's own square corners) instead of .btn's full
+   corner treatment. */
+.list-scope__tab {
   display: inline-flex;
   align-items: center;
-  gap: 0.45em;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--surface-hover);
-  padding: 0.4rem 0.9rem;
+  gap: 0.4em;
+  border: none;
+  border-radius: var(--radius);
+  background: none;
+  padding: 0.6rem 1.1rem;
   font-family: 'JetBrains Mono', monospace;
   font-size: var(--t-micro);
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--muted);
   cursor: pointer;
-  transition: border-color var(--dur), color var(--dur), background var(--dur);
+  transition: background var(--dur), color var(--dur);
 }
-.bookmarks-toggle svg { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1.6; }
-.bookmarks-toggle:hover { border-color: var(--accent); color: var(--accent); }
-.bookmarks-toggle.is-active {
-  border-color: var(--accent-rule);
-  background: var(--accent-soft);
+.list-scope__tab svg { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.list-scope__tab:hover { color: var(--accent); }
+.list-scope__tab.is-active {
+  background: var(--surface);
   color: var(--accent-ink);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
 }
-.bookmarks-toggle.is-active svg { fill: var(--accent); stroke: var(--accent); }
+#scope-saved.is-active svg { fill: var(--accent); stroke: var(--accent); }
+.list-scope__count {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+.list-scope__tab.is-active .list-scope__count { color: var(--accent); }
+/* Nothing saved yet: the tab stays visible so the feature is discoverable,
+   but dimmed rather than removed — switching to an empty view teaches less
+   than the star on each row does. */
+.list-scope__tab.is-empty { opacity: 0.55; }
 
 /* One star per list row, filled gold when saved. stopPropagation on click
    keeps it from also selecting the dinosaur underneath it. */
@@ -565,17 +621,9 @@ h1, h2, h3 { margin: 0 0 0.5rem; }
 }
 
 .filter-clear {
-  padding: 0.45rem 0.9rem;
-  border-radius: 2px;
   border: 1px solid var(--line);
   background: transparent;
   color: var(--muted);
-  cursor: pointer;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: var(--t-micro);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  transition: border-color var(--dur), color var(--dur);
 }
 .filter-clear:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -1151,7 +1199,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 .skip-link:focus { top: var(--s2); }
 
 /* The sticky header used to swallow the heading of whatever we scrolled to. */
-#detail-panel, .overview-grid, .result-bar { scroll-margin-top: 5rem; }
+#detail-panel, .overview-grid, .result-bar, #news-panel { scroll-margin-top: 5rem; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1168,30 +1216,20 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
   border: 1px solid var(--line);
   background: transparent;
   color: var(--muted);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: var(--t-micro);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: var(--s1) var(--s2);
-  min-height: 24px;
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: border-color var(--dur), color var(--dur);
 }
+.detail-clear:hover { border-color: var(--accent); color: var(--accent); }
 /* --- Dino news --------------------------------------------------------
    Real headlines pulled at build time from ScienceDaily and Phys.org's own
    RSS feeds (tools/fetch-news.py) — title, short summary, date and an
    outbound link, which is exactly what RSS syndication is for. Nothing here
    is generated or republished beyond that. */
 .news-panel { margin-bottom: 1.5rem; }
-.news-updated {
-  margin-left: auto;
-  flex-shrink: 0;
-  color: var(--muted);
-  text-transform: none;
-  letter-spacing: 0.02em;
-}
 .news-panel .section-label::after { display: none; }
+/* Three items now share this row (title, date, toggle). Without wrapping, a
+   narrow panel squeezes the title until "Dino news" breaks across two lines
+   while the controls stay whole; nowrap + wrap moves whichever item does not
+   fit down to its own line intact instead. */
+.news-panel .section-label { flex-wrap: wrap; row-gap: 0.5rem; white-space: nowrap; }
 .news-intro {
   margin: 0.3rem 0 var(--s4);
   color: var(--muted);
@@ -1310,21 +1348,14 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 .news-card__source { color: var(--news-source-color, var(--accent)); font-weight: 600; }
 .news-card__dot { opacity: 0.6; }
 
-.news-toggle-row { display: flex; justify-content: center; margin-top: var(--s4); }
 .news-toggle {
+  margin-left: auto;
+  flex-shrink: 0;
   border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--surface-hover);
-  padding: 0.5rem 1.2rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: var(--t-micro);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-  cursor: pointer;
-  transition: border-color var(--dur), color var(--dur);
+  background: transparent;
+  color: var(--muted);
 }
-.news-toggle:hover { border-color: var(--accent); color: var(--ink); }
+.news-toggle:hover { border-color: var(--accent); color: var(--accent); }
 .news-empty { color: var(--muted); font-size: var(--t-small); }
 
 .quiz-panel {
@@ -1543,7 +1574,6 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
   .quiz-options { grid-template-columns: 1fr; }
 }
 
-.detail-clear:hover { border-color: var(--accent); color: var(--accent); }
 /* The label already carries the meaning; ::after would put a rule between the
    heading and the button. */
 .detail-panel .section-label::after { display: none; }
