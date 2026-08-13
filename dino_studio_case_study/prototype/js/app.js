@@ -78,6 +78,9 @@
   const quizQuestionEl = document.getElementById('quiz-question');
   const quizOptionsEl = document.getElementById('quiz-options');
   const quizFeedbackEl = document.getElementById('quiz-feedback');
+  const quizAnswerDetailEl = document.getElementById('quiz-answer-detail');
+  const quizAnswerDetailLabelEl = document.getElementById('quiz-answer-detail-label');
+  const quizAnswerDetailListEl = document.getElementById('quiz-answer-detail-list');
   const quizScoreEl = document.getElementById('quiz-score');
   const quizScoreTextEl = document.getElementById('quiz-score-text');
   const quizStreakEl = document.getElementById('quiz-streak');
@@ -643,6 +646,17 @@
     applyFilters();
   });
   clearFiltersButton.addEventListener('click', clearAllFilters);
+  // Undoing a chart-local brush shouldn't require finding its chip in the
+  // filter bar at the top of the page — each chart clears only its own
+  // window and re-renders itself in place.
+  document.getElementById('timeline-reset').addEventListener('click', () => {
+    timeWindow = null;
+    applyFilters();
+  });
+  document.getElementById('size-reset').addEventListener('click', () => {
+    lengthWindow = null;
+    applyFilters();
+  });
   document.querySelector('[data-clear-all]').addEventListener('click', clearAllFilters);
   document.getElementById('detail-clear').addEventListener('click', clearSelection);
   scopeAllTab.addEventListener('click', () => setBookmarksOnly(false));
@@ -751,16 +765,23 @@
   }
 
   const QUIZ_FIELD_QUESTIONS = [
-    { field: 'diet', prompt: (value) => `Which of these dinosaurs was ${value}?` },
-    { field: 'typeOfDinosaur', prompt: (value) => `Which of these dinosaurs was a ${value}?` },
-    { field: 'foundIn', prompt: (value) => `Which of these dinosaurs was found in ${value}?` },
+    { field: 'diet', detailLabel: 'Diet', prompt: (value) => `Which of these dinosaurs was ${value}?` },
+    { field: 'typeOfDinosaur', detailLabel: 'Type', prompt: (value) => `Which of these dinosaurs was a ${value}?` },
+    { field: 'foundIn', detailLabel: 'Found in', prompt: (value) => `Which of these dinosaurs was found in ${value}?` },
     {
       field: '__period',
+      detailLabel: 'Period',
       prompt: (value) => `Which of these dinosaurs lived during the ${value}?`,
       get: periodOf,
     },
   ];
 
+  // Every question now carries a `detail` list — one entry per option, the
+  // value it actually had for the field being asked about — so the feedback
+  // after answering can explain *why*, for all four options, not just repeat
+  // which name was correct. All four are guaranteed to have a real value:
+  // distractors are drawn from the same field-not-N/A candidate pool the
+  // correct answer came from, never from the wider dataset.
   function buildFieldQuestion(spec) {
     const getValue = spec.get || ((d) => d[spec.field]);
     const candidates = allDinosaurs.filter((d) => {
@@ -774,10 +795,13 @@
       candidates.filter((d) => d.name !== correct.name && getValue(d) !== value),
     ).slice(0, 3);
     if (distractors.length < 3) return null;
+    const four = [correct, ...distractors];
     return {
       prompt: spec.prompt(value),
       correctName: correct.name,
-      options: shuffled([correct.name, ...distractors.map((d) => d.name)]),
+      options: shuffled(four.map((d) => d.name)),
+      detailLabel: spec.detailLabel,
+      detail: Object.fromEntries(four.map((d) => [d.name, capitalize(getValue(d))])),
     };
   }
 
@@ -790,6 +814,8 @@
       prompt: 'Which of these dinosaurs was the longest?',
       correctName: correct.name,
       options: shuffled(four.map((d) => d.name)),
+      detailLabel: 'Length',
+      detail: Object.fromEntries(four.map((d) => [d.name, `${d.length} m`])),
     };
   }
 
@@ -863,6 +889,8 @@
     quizFeedbackEl.textContent = '';
     quizFeedbackEl.className = 'quiz-feedback';
     quizNextButton.hidden = true;
+    quizAnswerDetailEl.hidden = true;
+    quizAnswerDetailListEl.innerHTML = '';
     if (!quizCurrent) {
       quizQuestionEl.textContent = 'Not enough data to build a question right now.';
       quizOptionsEl.innerHTML = '';
@@ -907,6 +935,23 @@
     }
     quizFeedbackEl.classList.add(isCorrect ? 'is-correct' : 'is-wrong');
     quizNextButton.hidden = false;
+
+    // "Correct!" / "It was X" answers *which* but not *why* — this fills that
+    // in for all four options at once (not just the one picked), so a wrong
+    // guess is a chance to learn the actual numbers/category rather than a
+    // dead end you click past.
+    if (quizCurrent.detail) {
+      quizAnswerDetailLabelEl.textContent = quizCurrent.detailLabel;
+      quizAnswerDetailListEl.innerHTML = quizCurrent.options
+        .map((name) => `
+          <li class="quiz-answer-detail__row ${name === quizCurrent.correctName ? 'is-correct' : ''}">
+            <span class="quiz-answer-detail__name">${escapeHtml(name)}</span>
+            <span class="quiz-answer-detail__value">${escapeHtml(quizCurrent.detail[name] ?? '—')}</span>
+          </li>
+        `)
+        .join('');
+      quizAnswerDetailEl.hidden = false;
+    }
   }
 
   function initQuiz() {
@@ -1316,10 +1361,16 @@
     omnivorous: 'var(--chart-omni)',
     unknown: 'var(--chart-unknown)',
   };
+  // Starts at --chart-3, not --chart-1: --chart-1/--chart-2 are the same
+  // variables as --chart-herb/--chart-carn (the Diet chart's two commonest
+  // colours), and the Type and Diet charts sit side by side — a type
+  // reusing either would look identical to Herbivorous or Carnivorous in
+  // the panel next to it, on an unrelated axis. --chart-type-8/9 extend the
+  // set to 9 so every type still gets its own colour without that clash.
   const TYPE_COLORS = [
-    'var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)',
-    'var(--chart-4)', 'var(--chart-5)', 'var(--chart-6)',
-    'var(--chart-7)', 'var(--chart-8)', 'var(--chart-9)',
+    'var(--chart-3)', 'var(--chart-4)', 'var(--chart-5)',
+    'var(--chart-6)', 'var(--chart-7)', 'var(--chart-8)',
+    'var(--chart-9)', 'var(--chart-type-8)', 'var(--chart-type-9)',
   ];
 
   // A type's colour must not shift as filters change, so the mapping is keyed off
@@ -1328,7 +1379,25 @@
   function typeColorFor(key) {
     if (!stableTypeKeys) stableTypeKeys = Object.keys(computeTypeCounts(allDinosaurs)).sort();
     const index = stableTypeKeys.indexOf(key);
-    return TYPE_COLORS[(index < 0 ? 0 : index) % TYPE_COLORS.length];
+    // An unrecognised/absent type must not fall through to index 0 — that would
+    // paint it the same colour as whichever type happens to sort first, i.e.
+    // silently mislabel it as a real category.
+    if (index < 0) return 'var(--chart-unknown)';
+    return TYPE_COLORS[index % TYPE_COLORS.length];
+  }
+
+  // The timeline and the size chart carry no legend of their own, so whatever
+  // their colour encodes has to be legible from a key next to the chart. Same
+  // swatch markup as the pie legends, but static: these two charts filter by
+  // drag (time / length), and a second clickable filter surface inside them
+  // would compete with that gesture.
+  function renderTypeKeyLegend(el) {
+    if (!el) return;
+    if (!stableTypeKeys) stableTypeKeys = Object.keys(computeTypeCounts(allDinosaurs)).sort();
+    el.innerHTML = stableTypeKeys
+      .map((key) => `
+        <li><span class="swatch" style="background:${typeColorFor(key)}"></span>${escapeHtml(key)}</li>
+      `).join('');
   }
 
   function describeArc(cx, cy, r, startAngle, endAngle) {
@@ -1564,6 +1633,9 @@
   function renderTimeline(visible) {
     const host = document.getElementById('timeline');
     if (!host || allDinosaurs.length === 0) return;
+    renderTypeKeyLegend(document.getElementById('timeline-legend'));
+    document.getElementById('timeline-hint').hidden = Boolean(timeWindow);
+    document.getElementById('timeline-reset').hidden = !timeWindow;
 
     const { oldest, youngest } = timeBounds();
     // Measured, never clamped upward: forcing a minimum wider than the
@@ -1613,7 +1685,7 @@
         const isVisible = visibleNames.has(dinosaur.name);
         const isSelected = selectedDinosaur && selectedDinosaur.name === dinosaur.name;
         const cls = `tl-bar${isVisible ? '' : ' tl-bar--out'}${isSelected ? ' tl-bar--sel' : ''}`;
-        const fill = DIET_COLORS[dinosaur.diet] || 'var(--chart-unknown)';
+        const fill = typeColorFor(dinosaur.typeOfDinosaur);
         const label = `${dinosaur.name} — ${escapeHtml(dinosaur.whenLived)}`;
         if (span.isPoint) {
           // A single date is an absence of range. Drawing it as a bar would
@@ -1734,6 +1806,9 @@
   function renderSizeChart(visible) {
     const host = document.getElementById('size-chart');
     if (!host || allDinosaurs.length === 0) return;
+    renderTypeKeyLegend(document.getElementById('size-legend'));
+    document.getElementById('size-hint').hidden = Boolean(lengthWindow);
+    document.getElementById('size-reset').hidden = !lengthWindow;
 
     const withLength = allDinosaurs.filter((d) => typeof d.length === 'number');
     const withoutLength = allDinosaurs.filter((d) => typeof d.length !== 'number');
@@ -1765,7 +1840,7 @@
         const cls = `sz-dot${isVisible ? '' : ' sz-dot--out'}${isSelected ? ' sz-dot--sel' : ''}`;
         dots += `<circle class="${cls}" data-name="${escapeHtml(dinosaur.name)}"
           cx="${x(dinosaur.length)}" cy="${cy}" r="${DOT_R}"
-          fill="${DIET_COLORS[dinosaur.diet] || 'var(--chart-unknown)'}"
+          fill="${typeColorFor(dinosaur.typeOfDinosaur)}"
           ><title>${escapeHtml(dinosaur.name)} — ${dinosaur.length} m</title></circle>`;
       });
     });

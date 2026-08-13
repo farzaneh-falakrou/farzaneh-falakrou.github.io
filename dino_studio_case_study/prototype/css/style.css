@@ -71,6 +71,11 @@
   --chart-1: #56a06b;  --chart-2: #d4a048;  --chart-3: #8f9fc4;
   --chart-4: #c07a5e;  --chart-5: #8acb9d;  --chart-6: #e0b264;
   --chart-7: #6b7f9e;  --chart-8: #a5654c;  --chart-9: rgba(240,232,200,0.62);
+  /* Two extra hues so the Type chart's 9-colour palette (below) never has to
+     reuse --chart-1/--chart-2 — those are also --chart-herb/--chart-carn,
+     and reusing them for a type would make that type's swatch identical to
+     Herbivorous or Carnivorous in the Diet chart sitting right next to it. */
+  --chart-type-8: #b98bd8;  --chart-type-9: #5fb6b6;
 }
 
 /* Light Heritage — same identity in daylight: parchment ground, deep forest
@@ -119,6 +124,7 @@
   --chart-1: #2f6340;  --chart-2: #8a5f14;  --chart-3: #4a5c86;
   --chart-4: #93503a;  --chart-5: #52976a;  --chart-6: #a5751f;
   --chart-7: #6b7f9e;  --chart-8: #b9724f;  --chart-9: rgba(22,40,29,0.55);
+  --chart-type-8: #6d5a9e;  --chart-type-9: #2f6b6b;
 }
 
 * { box-sizing: border-box; }
@@ -433,6 +439,12 @@ h1, h2, h3 { margin: 0 0 0.5rem; }
   cursor: pointer;
   transition: border-color var(--dur), color var(--dur), background var(--dur);
 }
+/* display:inline-flex above beats the UA stylesheet's [hidden]{display:none}
+   at equal specificity (author rules win regardless of source order) — every
+   .btn toggled via the `hidden` property (Next question, View all articles,
+   Show all dinosaurs) needs this to actually disappear. Same fix already
+   applied to .news-card[hidden] below. */
+.btn[hidden] { display: none; }
 .btn-accent {
   border: 1px solid var(--accent-rule);
   background: var(--accent-soft);
@@ -844,6 +856,18 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
   letter-spacing: 0.05em;
 }
 .chart-legend .swatch { width: 10px; height: 10px; border-radius: 0; display: inline-block; flex-shrink: 0; }
+
+/* Standalone colour key under a full-width chart (timeline, size), as opposed
+   to the pie legends, which are a column beside their chart. Wraps along one
+   row so it reads as a strip of swatches rather than a second list competing
+   with the chart above it. */
+.chart-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2) var(--s4);
+  margin-top: var(--s3);
+}
+.chart-key li { padding: 0; }
 
 /* Detail panel */
 .detail-top {
@@ -1547,6 +1571,63 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 }
 .quiz-feedback.is-correct { color: #4a8c5f; }
 .quiz-feedback.is-wrong { color: #c0564a; }
+/* The "why", shown once a question is answered: every option's actual value
+   for the field just asked about, not only the one the reader picked. Sits
+   below the footer rather than inside the feedback line itself — four rows
+   of data don't fit an inline sentence, and this way it reads as a small
+   reference table rather than more prose. */
+.quiz-answer-detail {
+  margin-top: var(--s3);
+  padding-top: var(--s3);
+  border-top: 1px solid var(--line);
+  animation: quizRise 0.3s ease both;
+}
+.quiz-answer-detail__label {
+  margin: 0 0 var(--s2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--t-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+.quiz-answer-detail__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.4rem var(--s3);
+}
+.quiz-answer-detail__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s2);
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-hover);
+  font-size: var(--t-small);
+}
+.quiz-answer-detail__name { color: var(--ink); }
+.quiz-answer-detail__value {
+  flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--t-micro);
+  color: var(--muted);
+  text-align: right;
+}
+/* The one row matching the correct answer, picked out the same green the
+   correct tile above already uses — the two are the same fact, so they get
+   the same colour. */
+.quiz-answer-detail__row.is-correct {
+  border-color: #4a8c5f;
+  background: rgba(74, 140, 95, 0.12);
+}
+.quiz-answer-detail__row.is-correct .quiz-answer-detail__value { color: #326b45; font-weight: 600; }
+@media (max-width: 640px) {
+  .quiz-answer-detail__list { grid-template-columns: 1fr; }
+}
 .quiz-next {
   animation: quizRise 0.3s ease both;
 }
@@ -1577,6 +1658,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 /* The label already carries the meaning; ::after would put a rule between the
    heading and the button. */
 .detail-panel .section-label::after { display: none; }
+/* Missing entirely before: every other panel in <main> sets its own
+   margin-bottom (overview-grid, timeline-panel, size-panel...), but this one
+   didn't, so it sat flush against "When they lived" with a 0px gap — their
+   borders touched, reading as one merged card with an internal seam rather
+   than two separate panels. */
+.detail-panel { margin-bottom: var(--s5); }
 
 .detail-stale {
   margin: 0 0 var(--s4);
@@ -1635,6 +1722,14 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
   letter-spacing: 0.02em;
 }
 .timeline-panel .section-label::after { display: none; }
+/* Sized down from the shared .btn scale to sit comfortably inline in a
+   section-label heading next to a serif title, rather than at the same
+   weight as a page-level CTA. */
+.timeline-reset {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 0.3rem 0.7rem;
+}
 #timeline { width: 100%; }
 .tl-svg { display: block; touch-action: none; cursor: crosshair; }
 

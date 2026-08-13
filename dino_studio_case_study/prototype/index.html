@@ -181,9 +181,14 @@
 
     <section class="panel timeline-panel" aria-label="When these dinosaurs lived">
       <h2 class="section-label">When they lived
-        <span class="timeline-hint">Drag across the chart to filter by time</span>
+        <span id="timeline-hint" class="timeline-hint">Drag across the chart to filter by time</span>
+        <!-- Swaps in for the hint above once a range is brushed — undoing a
+             chart-local selection shouldn't require scrolling back to the
+             filter bar at the top of the page to find its "×". -->
+        <button id="timeline-reset" type="button" class="btn filter-clear timeline-reset" hidden>Show all dinosaurs</button>
       </h2>
       <div id="timeline"></div>
+      <ul id="timeline-legend" class="chart-legend chart-key"></ul>
       <p class="timeline-note">
         Bars span each dinosaur's recorded date range; diamonds mark the 8 records
         given as a single date rather than a range. Epoch boundaries follow the
@@ -194,9 +199,11 @@
 
     <section class="panel size-panel" aria-label="How big these dinosaurs were">
       <h2 class="section-label">How big they were
-        <span class="timeline-hint">Drag across the chart to filter by length</span>
+        <span id="size-hint" class="timeline-hint">Drag across the chart to filter by length</span>
+        <button id="size-reset" type="button" class="btn filter-clear timeline-reset" hidden>Show all dinosaurs</button>
       </h2>
       <div id="size-chart"></div>
+      <ul id="size-legend" class="chart-legend chart-key"></ul>
       <p class="timeline-note">
         One dot per dinosaur at its recorded length, against an average adult human
         at 1.8 m. Length is recorded for 74 of the 75; the one without it is listed
@@ -245,6 +252,13 @@
       <div class="quiz-footer">
         <p id="quiz-feedback" class="quiz-feedback" aria-live="polite"></p>
         <button id="quiz-next" type="button" class="btn btn-accent" hidden>Next question →</button>
+      </div>
+      <!-- Filled in once a question is answered: the value each of the four
+           options actually had for the field being asked about, so "why" is
+           answered along with "which one" — not just for the one you picked. -->
+      <div id="quiz-answer-detail" class="quiz-answer-detail" hidden>
+        <p id="quiz-answer-detail-label" class="quiz-answer-detail__label"></p>
+        <ul id="quiz-answer-detail-list" class="quiz-answer-detail__list"></ul>
       </div>
     </section>
 
