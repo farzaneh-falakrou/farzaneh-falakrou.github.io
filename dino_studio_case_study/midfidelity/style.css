@@ -7,6 +7,8 @@
   --wf-c3: #7d8fa3;
   --wf-c4: #b0855a;
   --wf-c5: #7a9e8e;
+  /* Catch-all for types outside the 5-slot palette above (prosauropod, ornithopods, early dinosaur). */
+  --wf-other: #b7b7b7;
   /* Diet palette — deliberately distinct hues from the type palette above,
      so type and diet never read as the same encoding on adjacent charts. */
   --wf-d1: #6f9463;
@@ -358,6 +360,7 @@ main {
 .wf-d1 { --wf-c: var(--wf-d1); }
 .wf-d2 { --wf-c: var(--wf-d2); }
 .wf-d3 { --wf-c: var(--wf-d3); }
+.wf-other { --wf-c: var(--wf-other); }
 
 /* ---- type/diet charts ---- */
 .wf-charts-grid {

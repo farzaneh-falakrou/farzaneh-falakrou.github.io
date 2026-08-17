@@ -7,6 +7,8 @@
   --wf-c3: #7d8fa3;
   --wf-c4: #b0855a;
   --wf-c5: #7a9e8e;
+  /* Catch-all for types outside the 5-slot palette above (prosauropod, ornithopods, early dinosaur). */
+  --wf-other: #b7b7b7;
   /* Diet palette — deliberately distinct hues from the type palette above,
      so type and diet never read as the same encoding on adjacent charts. */
   --wf-d1: #6f9463;
@@ -430,9 +432,7 @@ main {
   overflow: hidden;
   background: #e2e2e2;
 }
-.wf-timeline-box { height: 220px; }
-
-/* Type color coding — shared between timeline bars, size dots, and their legends. */
+/* Type color coding — shared between size dots and their legends. */
 .wf-c1 { --wf-c: var(--wf-c1); }
 .wf-c2 { --wf-c: var(--wf-c2); }
 .wf-c3 { --wf-c: var(--wf-c3); }
@@ -441,42 +441,49 @@ main {
 .wf-d1 { --wf-c: var(--wf-d1); }
 .wf-d2 { --wf-c: var(--wf-d2); }
 .wf-d3 { --wf-c: var(--wf-d3); }
+.wf-other { --wf-c: var(--wf-other); }
 
-.wf-epoch-bands {
-  position: absolute;
-  inset: 0 0 auto 0;
-  top: 0;
-  height: 100%;
+/* Simplified "when they lived" chart — one row per period, sized by species count. */
+.wf-timeline-simple {
   display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-.wf-epoch-band {
-  flex: 1;
-  border-right: 1px solid #d2d2d2;
-  position: relative;
+.wf-timeline-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
-.wf-epoch-band:last-child { border-right: none; }
-.wf-epoch-band span {
-  position: absolute;
-  top: 6px;
-  left: 6px;
+.wf-timeline-era {
+  flex: 0 0 120px;
   font-family: var(--wf-font-mono);
   font-size: var(--wf-t-micro);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  color: #666;
+}
+.wf-timeline-track {
+  flex: 1;
+  height: 10px;
+  border-radius: 2px;
+  background: #e2e2e2;
+  overflow: hidden;
+}
+.wf-timeline-stack {
+  display: flex;
+  height: 100%;
+}
+.wf-tl-seg {
+  height: 100%;
+  background: var(--wf-c, #999);
+}
+.wf-timeline-count {
+  flex: 0 0 62px;
+  text-align: right;
+  font-family: var(--wf-font-mono);
+  font-size: var(--wf-t-micro);
   color: #999;
   white-space: nowrap;
 }
-.wf-chart-plot {
-  position: absolute;
-  inset: 24px 0 0 0;
-}
-.wf-chart-bar {
-  position: absolute;
-  height: 8px;
-  border-radius: 2px;
-  background: var(--wf-c, #a9a9a9);
-  opacity: 0.75;
-}
+
 .wf-size-box { padding-top: 26px; }
 .wf-chart-dot {
   position: absolute;
