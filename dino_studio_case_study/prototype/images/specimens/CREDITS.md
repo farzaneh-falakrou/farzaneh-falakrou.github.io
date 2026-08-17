@@ -54,17 +54,17 @@ before this prototype is treated as anything other than a design exercise.
 background already present, no matting needed) — same provenance caveat as
 the two above.
 
-**Alectrosaurus** (`alectrosaurus.png`), **Edmontonia** (`edmontonia.png`) and
+**Alectrosaurus** (`alectrosaurus.png`), **Edmontonia** (`edmontonia.png`),
 **Coloradisaurus** (`coloradisaurus.png` — not used by the showcase wheel, file
-kept in case it's wanted back) were also supplied by the site owner,
-described as AI-generated colourisations of the same genera's NHM dataset
-reconstructions. Supplied pre-cut with a correct alpha channel already present,
-so no matting was run — only a crop to the alpha bounding box (2% padding) and
-a resize to ~1100px on the long edge, to match the rest of the set. Artist and
-licence of the underlying source are unconfirmed and the derivation is the site
-owner's own statement, so no attribution line is shown on the page for these
-three; same provenance caveat as the three above applies before this prototype
-is treated as anything other than a design exercise.
+kept in case it's wanted back) and **Barapasaurus** (`barapasaurus.png`) were
+also supplied by the site owner, described as AI-generated colourisations of
+the same genera's NHM dataset reconstructions. Supplied pre-cut with a correct
+alpha channel already present, so no matting was run — only a crop to the alpha
+bounding box and a resize to ~1100px on the long edge, to match the rest of the
+set. Artist and licence of the underlying source are unconfirmed and the
+derivation is the site owner's own statement, so no attribution line is shown
+on the page for these four; same provenance caveat as the three above applies
+before this prototype is treated as anything other than a design exercise.
 
 ### Background removal
 

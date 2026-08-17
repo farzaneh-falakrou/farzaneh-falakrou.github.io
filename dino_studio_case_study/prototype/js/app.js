@@ -752,6 +752,10 @@
     // She's a head-down browser, so facesTrees pins her to the plate whose
     // treeline she's actually facing (she faces left; see initShowcase).
     { name: 'Edmontonia', file: 'edmontonia.png', scale: 0.9, drop: 20, shift: 10, facesTrees: 'left' },
+    // Long, low sauropod body with the crop trimmed tight to the feet (no
+    // slack below them like the rest of the set), so it needs the same
+    // downward nudge Edmontonia needed for the same reason.
+    { name: 'Barapasaurus', file: 'barapasaurus.png', scale: 0.85, drop: 18 },
   ];
   const SHOWCASE_HOLD_MS = 3000;
   const SHOWCASE_FLIP_MS = 900;
