@@ -17,6 +17,7 @@
       <span class="active">Explore</span>
       <span>Timeline</span>
       <span>News</span>
+      <span>Quiz</span>
     </nav>
     <div class="wf-hamburger wf-outline"></div>
   </header>
@@ -540,15 +541,18 @@
         <div class="wf-detail">
         <div>
           <div class="wf-detail-img" style="background:#e0e0e0;"></div>
+          <dl class="wf-fact-pills">
+            <div><dt>Type</dt><dd>Prosauropod</dd></div>
+            <div><dt>Length</dt><dd>8 m</dd></div>
+            <div><dt>Weight</dt><dd>—</dd></div>
+            <div><dt>Diet</dt><dd>Herbivorous</dd></div>
+            <div><dt>Type species</dt><dd>celestae</dd></div>
+            <div><dt>Found in</dt><dd>South Africa</dd></div>
+            <div><dt>Named by</dt><dd>Yates, Bonnan, Neveling, Chinsamy and Blackbeard 2010 (2009)</dd></div>
+          </dl>
         </div>
         <div>
           <h3 class="wf-detail-name">Aardonyx</h3>
-          <div class="wf-detail-meta">
-            <span>Herbivorous</span>
-            <span>Prosauropod</span>
-            <span>Early Jurassic</span>
-            <span>8 m long</span>
-          </div>
 
           <div class="wf-detail-block">
             <h4>Description</h4>
@@ -757,6 +761,26 @@
       </div>
     </section>
 
+    <!-- Quiz -->
+    <section class="wf-section">
+      <div class="wf-quiz wf-fill">
+        <div class="wf-quiz-top">
+          <h2 class="wf-h2" style="border: none; margin: 0; padding: 0;">Trivia quiz</h2>
+          <div class="wf-score-pill wf-outline">
+            <span id="wf-quiz-score">Score: 0 / 5</span>
+          </div>
+        </div>
+        <p class="wf-quiz-question" id="wf-quiz-question">Which of these dinosaurs was found in Mongolia?</p>
+        <div class="wf-quiz-options" id="wf-quiz-options">
+          <div class="wf-quiz-option wf-outline" data-correct="true"><span class="wf-quiz-option-mark"></span>Citipati</div>
+          <div class="wf-quiz-option wf-outline"><span class="wf-quiz-option-mark"></span>Camarasaurus</div>
+          <div class="wf-quiz-option wf-outline"><span class="wf-quiz-option-mark"></span>Deinonychus</div>
+          <div class="wf-quiz-option wf-outline"><span class="wf-quiz-option-mark"></span>Diplodocus</div>
+        </div>
+        <div class="wf-quiz-next" id="wf-quiz-next">Next question →</div>
+      </div>
+    </section>
+
   </main>
 
   <footer class="wf-footer">
@@ -823,6 +847,87 @@
         var y = ((e.clientY - rect.top) / rect.height) * 100;
         zoomTo(scale + (e.deltaY < 0 ? step : -step), x, y);
       }, { passive: false });
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var QUESTIONS = [
+        {
+          q: 'Which of these dinosaurs was found in Mongolia?',
+          options: ['Citipati', 'Camarasaurus', 'Deinonychus', 'Diplodocus'],
+          correct: 0
+        },
+        {
+          q: 'Which of these dinosaurs was carnivorous?',
+          options: ['Diplodocus', 'Ankylosaurus', 'Deinonychus', 'Brachiosaurus'],
+          correct: 2
+        },
+        {
+          q: 'Which of these dinosaurs was the longest?',
+          options: ['Allosaurus', 'Coelophysis', 'Argentinosaurus', 'Aardonyx'],
+          correct: 2
+        },
+        {
+          q: 'Which of these dinosaurs lived in the Late Triassic?',
+          options: ['Argentinosaurus', 'Camarasaurus', 'Citipati', 'Coelophysis'],
+          correct: 3
+        },
+        {
+          q: 'Which of these dinosaurs was an armoured dinosaur?',
+          options: ['Diplodocus', 'Ankylosaurus', 'Allosaurus', 'Aardonyx'],
+          correct: 1
+        }
+      ];
+
+      var questionEl = document.getElementById('wf-quiz-question');
+      var optionsEl = document.getElementById('wf-quiz-options');
+      var scoreEl = document.getElementById('wf-quiz-score');
+      var nextEl = document.getElementById('wf-quiz-next');
+      if (!questionEl || !optionsEl || !scoreEl || !nextEl) return;
+
+      var index = 0;
+      var correctCount = 0;
+      var answered = false;
+
+      function renderQuestion() {
+        var item = QUESTIONS[index];
+        questionEl.textContent = item.q;
+        answered = false;
+        optionsEl.innerHTML = item.options.map(function (name, i) {
+          return '<div class="wf-quiz-option wf-outline" data-index="' + i + '">' +
+            '<span class="wf-quiz-option-mark"></span>' + name + '</div>';
+        }).join('');
+      }
+
+      function renderScore() {
+        scoreEl.textContent = 'Score: ' + correctCount + ' / ' + QUESTIONS.length;
+      }
+
+      optionsEl.addEventListener('click', function (e) {
+        var opt = e.target.closest('.wf-quiz-option');
+        if (!opt || answered) return;
+        answered = true;
+        var chosen = Number(opt.getAttribute('data-index'));
+        var item = QUESTIONS[index];
+        var allOptions = optionsEl.querySelectorAll('.wf-quiz-option');
+        allOptions[item.correct].classList.add('wf-quiz-option--correct');
+        if (chosen !== item.correct) {
+          opt.classList.add('wf-quiz-option--wrong');
+        } else {
+          correctCount++;
+        }
+        renderScore();
+      });
+
+      nextEl.addEventListener('click', function () {
+        index = (index + 1) % QUESTIONS.length;
+        renderQuestion();
+        renderScore();
+      });
+
+      renderQuestion();
+      renderScore();
     })();
   </script>
 
