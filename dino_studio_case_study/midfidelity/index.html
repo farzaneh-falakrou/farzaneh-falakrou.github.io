@@ -11,13 +11,11 @@
   <header class="wf-header">
     <div class="wf-logo">Dino Studio</div>
     <nav class="wf-nav">
+      <span>News</span>
       <span class="active">Explore</span>
       <span>Timeline</span>
-      <span>Quiz</span>
-      <span>News</span>
     </nav>
     <div class="wf-hamburger wf-outline"></div>
-    <div class="wf-theme-btn wf-outline"></div>
   </header>
 
   <main>
@@ -105,13 +103,18 @@
       </div>
     </section>
 
-    <!-- Map + results -->
+    <!-- Map -->
     <section class="wf-section">
-      <div class="wf-two-col">
-        <div class="wf-box wf-fill">
+      <div class="wf-box wf-fill">
           <h2 class="wf-h2">Dinosaur locations</h2>
           <div class="wf-map">
-<svg class="wf-map-world" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">
+          <div class="wf-map-zoom">
+            <div class="wf-map-zoom-btn wf-outline" id="wf-zoom-in" aria-label="Zoom in">+</div>
+            <div class="wf-map-zoom-btn wf-outline" id="wf-zoom-out" aria-label="Zoom out">–</div>
+            <div class="wf-map-zoom-btn wf-outline" id="wf-zoom-reset" aria-label="Reset zoom">⟲</div>
+          </div>
+          <div class="wf-map-viewport" id="wf-map-viewport">
+<svg class="wf-map-world" id="wf-map-svg" viewBox="0 35 1000 430" preserveAspectRatio="xMidYMid meet">
   <g class="wf-map-countries">
 <path d="M994.8,298.6 L995.5,298.2 L996.4,299.0 L996.0,300.4 L994.3,300.8 L992.7,300.5 L992.5,299.2 L993.5,298.3 L994.8,298.6 Z" />
 <path d="M1000.0,294.6 L1000.0,296.0 L998.2,296.7 L996.5,297.3 L996.1,296.2 L997.5,295.7 L998.4,295.5 L1000.0,294.6 Z" />
@@ -402,76 +405,85 @@
 <path d="M585.6,240.3 L583.2,238.4 L582.5,237.2 L581.0,237.8 L579.7,237.6 L579.0,238.1 L577.7,237.8 L576.0,235.5 L575.6,234.6 L573.5,233.5 L572.8,231.8 L571.7,230.6 L569.8,229.2 L569.8,228.3 L568.2,227.1 L566.4,226.1 L567.2,225.8 L568.2,225.2 L568.9,222.7 L569.6,221.5 L571.6,221.1 L572.1,221.8 L573.5,223.5 L574.3,223.7 L575.3,223.2 L577.3,223.3 L577.7,223.9 L580.5,223.9 L580.6,223.3 L582.0,222.8 L582.3,222.0 L583.3,221.4 L585.7,223.0 L587.1,222.7 L588.5,220.7 L590.0,219.2 L589.8,217.6 L589.1,216.7 L590.8,216.6 L591.0,216.0 L592.2,216.2 L591.9,218.2 L592.2,220.2 L593.7,221.3 L594.0,222.3 L594.0,223.7 L594.4,225.9 L594.0,226.7 L592.5,226.8 L591.5,228.4 L593.2,228.6 L594.7,229.9 L595.1,231.0 L596.4,231.7 L598.0,234.7 L596.2,236.5 L594.5,238.2 L592.7,239.5 L590.8,239.5 L588.6,240.1 L586.8,239.5 L585.6,240.3 Z" />
   </g>
   <g class="wf-map-pins">
-<circle class="wf-map-pin-dot" cx="508.0" cy="167.5" r="4"><title>Algeria</title></circle>
-<circle class="wf-map-pin-dot" cx="492.0" cy="453.0" r="4"><title>Antarctica</title></circle>
-<circle class="wf-map-pin-dot" cx="319.0" cy="353.0" r="4"><title>Argentina</title></circle>
-<circle class="wf-map-pin-dot" cx="870.0" cy="316.0" r="4"><title>Australia</title></circle>
-<circle class="wf-map-pin-dot" cx="248.0" cy="93.5" r="4"><title>Canada</title></circle>
-<circle class="wf-map-pin-dot" cx="302.0" cy="355.5" r="4"><title>Chile</title></circle>
-<circle class="wf-map-pin-dot" cx="794.0" cy="146.5" r="4"><title>China</title></circle>
-<circle class="wf-map-pin-dot" cx="588.0" cy="172.0" r="4"><title>Egypt</title></circle>
-<circle class="wf-map-pin-dot" cx="509.0" cy="119.5" r="4"><title>France</title></circle>
-<circle class="wf-map-pin-dot" cx="530.0" cy="108.0" r="4"><title>Germany</title></circle>
-<circle class="wf-map-pin-dot" cx="732.0" cy="183.5" r="4"><title>India</title></circle>
-<circle class="wf-map-pin-dot" cx="681.0" cy="118.5" r="4"><title>Kazakhstan</title></circle>
-<circle class="wf-map-pin-dot" cx="791.0" cy="119.0" r="4"><title>Mongolia</title></circle>
-<circle class="wf-map-pin-dot" cx="474.0" cy="170.0" r="4"><title>Morocco</title></circle>
-<circle class="wf-map-pin-dot" cx="524.0" cy="207.0" r="4"><title>Niger</title></circle>
-<circle class="wf-map-pin-dot" cx="478.0" cy="139.5" r="4"><title>Portugal</title></circle>
-<circle class="wf-map-pin-dot" cx="569.0" cy="329.5" r="4"><title>South Africa</title></circle>
-<circle class="wf-map-pin-dot" cx="595.0" cy="268.0" r="4"><title>Tanzania</title></circle>
-<circle class="wf-map-pin-dot" cx="249.0" cy="143.5" r="4"><title>USA</title></circle>
-<circle class="wf-map-pin-dot" cx="491.0" cy="100.5" r="4"><title>United Kingdom</title></circle>
-<circle class="wf-map-pin-dot" cx="344.0" cy="341.0" r="4"><title>Uruguay</title></circle>
-<circle class="wf-map-pin-dot" cx="681.0" cy="135.5" r="4"><title>Uzbekistan</title></circle>
-<circle class="wf-map-pin-dot" cx="582.0" cy="302.5" r="4"><title>Zimbabwe</title></circle>
+<circle class="wf-map-pin-dot" cx="569.0" cy="329.5" r="3"><title>Aardonyx — South Africa</title></circle>
+<circle class="wf-map-pin-dot" cx="319.0" cy="353.0" r="3"><title>Abelisaurus — Argentina</title></circle>
+<circle class="wf-map-pin-dot" cx="249.0" cy="143.5" r="3"><title>Achelousaurus — USA</title></circle>
+<circle class="wf-map-pin-dot" cx="588.0" cy="172.0" r="3"><title>Aegyptosaurus — Egypt</title></circle>
+<circle class="wf-map-pin-dot" cx="524.0" cy="207.0" r="3"><title>Afrovenator — Niger</title></circle>
+<circle class="wf-map-pin-dot" cx="247.2" cy="145.1" r="3"><title>Alamosaurus — USA</title></circle>
+<circle class="wf-map-pin-dot" cx="248.0" cy="93.5" r="3"><title>Albertosaurus — Canada</title></circle>
+<circle class="wf-map-pin-dot" cx="794.0" cy="146.5" r="3"><title>Alectrosaurus — China</title></circle>
+<circle class="wf-map-pin-dot" cx="478.0" cy="139.5" r="3"><title>Allosaurus — Portugal</title></circle>
+<circle class="wf-map-pin-dot" cx="317.2" cy="354.6" r="3"><title>Alvarezsaurus — Argentina</title></circle>
+<circle class="wf-map-pin-dot" cx="319.3" cy="349.6" r="3"><title>Amargasaurus — Argentina</title></circle>
+<circle class="wf-map-pin-dot" cx="249.3" cy="140.1" r="3"><title>Ammosaurus — USA</title></circle>
+<circle class="wf-map-pin-dot" cx="321.5" cy="356.3" r="3"><title>Amygdalodon — Argentina</title></circle>
+<circle class="wf-map-pin-dot" cx="246.2" cy="95.1" r="3"><title>Anchiceratops — Canada</title></circle>
+<circle class="wf-map-pin-dot" cx="251.5" cy="146.8" r="3"><title>Anchisaurus — USA</title></circle>
+<circle class="wf-map-pin-dot" cx="248.3" cy="90.1" r="3"><title>Ankylosaurus — Canada</title></circle>
+<circle class="wf-map-pin-dot" cx="791.0" cy="119.0" r="3"><title>Anserimimus — Mongolia</title></circle>
+<circle class="wf-map-pin-dot" cx="314.3" cy="352.2" r="3"><title>Antarctosaurus — Argentina</title></circle>
+<circle class="wf-map-pin-dot" cx="244.3" cy="142.7" r="3"><title>Apatosaurus — USA</title></circle>
+<circle class="wf-map-pin-dot" cx="681.0" cy="118.5" r="3"><title>Aralosaurus — Kazakhstan</title></circle>
+<circle class="wf-map-pin-dot" cx="530.0" cy="108.0" r="3"><title>Archaeopteryx — Germany</title></circle>
+<circle class="wf-map-pin-dot" cx="792.2" cy="148.1" r="3"><title>Archaeornithomimus — China</title></circle>
+<circle class="wf-map-pin-dot" cx="323.5" cy="350.1" r="3"><title>Argentinosaurus — Argentina</title></circle>
+<circle class="wf-map-pin-dot" cx="250.5" cy="96.8" r="3"><title>Arrhinoceratops — Canada</title></circle>
+<circle class="wf-map-pin-dot" cx="870.0" cy="316.0" r="3"><title>Atlascopcosaurus — Australia</title></circle>
+<circle class="wf-map-pin-dot" cx="868.2" cy="317.6" r="3"><title>Austrosaurus — Australia</title></circle>
+<circle class="wf-map-pin-dot" cx="253.5" cy="140.6" r="3"><title>Avaceratops — USA</title></circle>
+<circle class="wf-map-pin-dot" cx="794.3" cy="143.1" r="3"><title>Avimimus — China</title></circle>
+<circle class="wf-map-pin-dot" cx="789.2" cy="120.6" r="3"><title>Bagaceratops — Mongolia</title></circle>
+<circle class="wf-map-pin-dot" cx="732.0" cy="183.5" r="3"><title>Barapasaurus — India</title></circle>
+<circle class="wf-map-pin-dot" cx="595.0" cy="268.0" r="3"><title>Barosaurus — Tanzania</title></circle>
+<circle class="wf-map-pin-dot" cx="494.0" cy="103.0" r="3"><title>Becklespinax — England</title></circle>
+<circle class="wf-map-pin-dot" cx="791.3" cy="115.6" r="3"><title>Borogovia — Mongolia</title></circle>
+<circle class="wf-map-pin-dot" cx="508.0" cy="167.5" r="3"><title>Brachiosaurus — Algeria</title></circle>
+<circle class="wf-map-pin-dot" cx="243.3" cy="92.7" r="3"><title>Brachylophosaurus — Canada</title></circle>
+<circle class="wf-map-pin-dot" cx="247.5" cy="149.2" r="3"><title>Camarasaurus — USA</title></circle>
+<circle class="wf-map-pin-dot" cx="492.2" cy="104.6" r="3"><title>Camptosaurus — England</title></circle>
+<circle class="wf-map-pin-dot" cx="506.2" cy="169.1" r="3"><title>Carcharodontosaurus — Algeria</title></circle>
+<circle class="wf-map-pin-dot" cx="317.5" cy="358.7" r="3"><title>Carnotaurus — Argentina</title></circle>
+<circle class="wf-map-pin-dot" cx="252.5" cy="90.6" r="3"><title>Centrosaurus — Canada</title></circle>
+<circle class="wf-map-pin-dot" cx="476.2" cy="141.1" r="3"><title>Ceratosaurus — Portugal</title></circle>
+<circle class="wf-map-pin-dot" cx="494.3" cy="99.6" r="3"><title>Cetiosauriscus — England</title></circle>
+<circle class="wf-map-pin-dot" cx="496.5" cy="106.3" r="3"><title>Cetiosaurus — England</title></circle>
+<circle class="wf-map-pin-dot" cx="246.5" cy="99.2" r="3"><title>Chasmosaurus — Canada</title></circle>
+<circle class="wf-map-pin-dot" cx="246.1" cy="137.9" r="3"><title>Chindesaurus — USA</title></circle>
+<circle class="wf-map-pin-dot" cx="796.5" cy="149.8" r="3"><title>Chinshakiangosaurus — China</title></circle>
+<circle class="wf-map-pin-dot" cx="793.5" cy="122.3" r="3"><title>Citipati — Mongolia</title></circle>
+<circle class="wf-map-pin-dot" cx="567.2" cy="331.1" r="3"><title>Coelophysis — South Africa</title></circle>
+<circle class="wf-map-pin-dot" cx="255.4" cy="145.8" r="3"><title>Coelurus — USA</title></circle>
+<circle class="wf-map-pin-dot" cx="316.1" cy="347.4" r="3"><title>Coloradisaurus — Argentina</title></circle>
+<circle class="wf-map-pin-dot" cx="786.3" cy="118.2" r="3"><title>Conchoraptor — Mongolia</title></circle>
+<circle class="wf-map-pin-dot" cx="789.3" cy="145.7" r="3"><title>Confuciusornis — China</title></circle>
+<circle class="wf-map-pin-dot" cx="245.1" cy="87.9" r="3"><title>Corythosaurus — Canada</title></circle>
+<circle class="wf-map-pin-dot" cx="492.0" cy="453.0" r="3"><title>Cryolophosaurus — Antarctica</title></circle>
+<circle class="wf-map-pin-dot" cx="489.3" cy="102.2" r="3"><title>Dacentrurus — England</title></circle>
+<circle class="wf-map-pin-dot" cx="254.4" cy="95.8" r="3"><title>Daspletosaurus — Canada</title></circle>
+<circle class="wf-map-pin-dot" cx="798.5" cy="143.6" r="3"><title>Datousaurus — China</title></circle>
+<circle class="wf-map-pin-dot" cx="795.5" cy="116.1" r="3"><title>Deinocheirus — Mongolia</title></circle>
+<circle class="wf-map-pin-dot" cx="242.3" cy="146.2" r="3"><title>Deinonychus — USA</title></circle>
+<circle class="wf-map-pin-dot" cx="252.2" cy="136.6" r="3"><title>Dilophosaurus — USA</title></circle>
+<circle class="wf-map-pin-dot" cx="251.4" cy="151.1" r="3"><title>Diplodocus — USA</title></circle>
+<circle class="wf-map-pin-dot" cx="325.4" cy="355.3" r="3"><title>Dreadnoughtus — Argentina</title></circle>
+<circle class="wf-map-pin-dot" cx="241.3" cy="96.2" r="3"><title>Dromaeosaurus — Canada</title></circle>
+<circle class="wf-map-pin-dot" cx="251.2" cy="86.6" r="3"><title>Dromiceiomimus — Canada</title></circle>
+<circle class="wf-map-pin-dot" cx="593.2" cy="269.6" r="3"><title>Dryosaurus — Tanzania</title></circle>
+<circle class="wf-map-pin-dot" cx="241.8" cy="139.3" r="3"><title>Dryptosaurus — USA</title></circle>
+<circle class="wf-map-pin-dot" cx="250.4" cy="101.1" r="3"><title>Edmontonia — Canada</title></circle>
+<circle class="wf-map-pin-dot" cx="595.3" cy="264.6" r="3"><title>Elaphrosaurus — Tanzania</title></circle>
+<circle class="wf-map-pin-dot" cx="528.2" cy="109.6" r="3"><title>Emausaurus — Germany</title></circle>
+<circle class="wf-map-pin-dot" cx="257.5" cy="141.6" r="3"><title>Eolambia — USA</title></circle>
+<circle class="wf-map-pin-dot" cx="312.3" cy="355.7" r="3"><title>Eoraptor — Argentina</title></circle>
+<circle class="wf-map-pin-dot" cx="792.5" cy="152.2" r="3"><title>Euhelopus — China</title></circle>
+<circle class="wf-map-pin-dot" cx="240.8" cy="89.3" r="3"><title>Euoplocephalus — Canada</title></circle>
+<circle class="wf-map-pin-dot" cx="498.5" cy="100.1" r="3"><title>Eustreptospondylus — England</title></circle>
+<circle class="wf-map-pin-dot" cx="789.5" cy="124.7" r="3"><title>Gallimimus — Mongolia</title></circle>
   </g>
 </svg>
           </div>
-        </div>
-        <div class="wf-box wf-fill">
-          <div class="wf-h2-row">
-            <h2 class="wf-h2">Results</h2>
-            <div class="wf-scope-tabs wf-outline">
-              <span class="active">All</span>
-              <span>Saved · 0</span>
-            </div>
           </div>
-          <div class="wf-list">
-            <div class="wf-list-item wf-outline">
-              <div class="wf-list-thumb" style="background:#e0e0e0;"></div>
-              <div class="wf-list-text">
-                <div class="wf-list-name">Albertosaurus</div>
-                <div class="wf-list-meta">Carnivorous · Large theropod · Late Cretaceous</div>
-              </div>
-              <div class="wf-list-star">☆</div>
-            </div>
-            <div class="wf-list-item wf-outline">
-              <div class="wf-list-thumb" style="background:#e0e0e0;"></div>
-              <div class="wf-list-text">
-                <div class="wf-list-name">Ankylosaurus</div>
-                <div class="wf-list-meta">Herbivorous · Armoured dinosaur · Late Cretaceous</div>
-              </div>
-              <div class="wf-list-star">☆</div>
-            </div>
-            <div class="wf-list-item wf-outline">
-              <div class="wf-list-thumb" style="background:#e0e0e0;"></div>
-              <div class="wf-list-text">
-                <div class="wf-list-name">Apatosaurus</div>
-                <div class="wf-list-meta">Herbivorous · Sauropod · Late Jurassic</div>
-              </div>
-              <div class="wf-list-star">☆</div>
-            </div>
-            <div class="wf-list-item wf-outline">
-              <div class="wf-list-thumb" style="background:#e0e0e0;"></div>
-              <div class="wf-list-text">
-                <div class="wf-list-name">Archaeopteryx</div>
-                <div class="wf-list-meta">Carnivorous · Small theropod · Late Jurassic</div>
-              </div>
-              <div class="wf-list-star">☆</div>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -484,27 +496,27 @@
           <div class="wf-detail-img" style="background:#e0e0e0;"></div>
         </div>
         <div>
-          <h3 class="wf-detail-name">Tyrannosaurus</h3>
+          <h3 class="wf-detail-name">Aardonyx</h3>
           <div class="wf-detail-meta">
-            <span>Carnivorous</span>
-            <span>Large theropod</span>
-            <span>Late Cretaceous</span>
-            <span>12 m long</span>
+            <span>Herbivorous</span>
+            <span>Prosauropod</span>
+            <span>Early Jurassic</span>
+            <span>8 m long</span>
           </div>
 
           <div class="wf-detail-block">
             <h4>Description</h4>
-            <p>One of the largest land carnivores of all time, Tyrannosaurus had a powerful bite and small, two-fingered forelimbs. Fossils show it hunted and scavenged across what is now North America.</p>
+            <p>Aardonyx is known from 2 immature individuals. Adults would have been much larger, probably over 10m. Aardonyx would have been largely bipedal but also capable of walking on all 4 legs — a transitional feature between basal sauropodomorphs and the larger sauropods that came later.</p>
           </div>
 
           <div class="wf-detail-block">
             <h4>When lived</h4>
-            <p>Late Cretaceous, 68–66 million years ago</p>
+            <p>Early Jurassic, 199–189 million years ago</p>
           </div>
 
           <div class="wf-detail-block">
             <h4>Excavation sites</h4>
-            <p>14 recorded sites, mostly in the Hell Creek and Lance Formations, USA.</p>
+            <p>Found in South Africa.</p>
           </div>
 
           <div class="wf-detail-block">
@@ -512,8 +524,9 @@
             <div class="wf-taxonomy-chips">
               <span class="wf-chip wf-outline">Dinosauria</span>
               <span class="wf-chip wf-outline">Saurischia</span>
-              <span class="wf-chip wf-outline">Theropoda</span>
-              <span class="wf-chip wf-outline">Tyrannosauridae</span>
+              <span class="wf-chip wf-outline">Sauropodomorpha</span>
+              <span class="wf-chip wf-outline">Prosauropoda</span>
+              <span class="wf-chip wf-outline">Anchisauria</span>
             </div>
           </div>
         </div>
@@ -610,11 +623,11 @@
           <h2 class="wf-h2">Dinosaur types</h2>
           <div class="wf-chart-panel">
             <div class="wf-legend-list">
-              <div class="wf-legend-item wf-c3"><span class="wf-legend-dot"></span>Sauropod (19)</div>
-              <div class="wf-legend-item wf-c4"><span class="wf-legend-dot"></span>Large theropod (19)</div>
-              <div class="wf-legend-item wf-c5"><span class="wf-legend-dot"></span>Small theropod (13)</div>
-              <div class="wf-legend-item wf-c2"><span class="wf-legend-dot"></span>Ceratopsian (7)</div>
-              <div class="wf-legend-item wf-c1"><span class="wf-legend-dot"></span>Armoured dinosaur (5)</div>
+              <div class="wf-legend-item wf-c3"><span class="wf-legend-dot"></span>Sauropod</div>
+              <div class="wf-legend-item wf-c4"><span class="wf-legend-dot"></span>Large theropod</div>
+              <div class="wf-legend-item wf-c5"><span class="wf-legend-dot"></span>Small theropod</div>
+              <div class="wf-legend-item wf-c2"><span class="wf-legend-dot"></span>Ceratopsian</div>
+              <div class="wf-legend-item wf-c1"><span class="wf-legend-dot"></span>Armoured dinosaur</div>
             </div>
             <div class="wf-pie" style="background: conic-gradient(var(--wf-c3) 0deg 108.6deg, var(--wf-c4) 108.6deg 217.1deg, var(--wf-c5) 217.1deg 291.4deg, var(--wf-c2) 291.4deg 331.4deg, var(--wf-c1) 331.4deg 360deg);"></div>
           </div>
@@ -623,33 +636,13 @@
           <h2 class="wf-h2">Dinosaur diets</h2>
           <div class="wf-chart-panel">
             <div class="wf-legend-list">
-              <div class="wf-legend-item wf-d1"><span class="wf-legend-dot"></span>Herbivorous (41)</div>
-              <div class="wf-legend-item wf-d2"><span class="wf-legend-dot"></span>Carnivorous (28)</div>
-              <div class="wf-legend-item wf-d3"><span class="wf-legend-dot"></span>Omnivorous (6)</div>
+              <div class="wf-legend-item wf-d1"><span class="wf-legend-dot"></span>Herbivorous</div>
+              <div class="wf-legend-item wf-d2"><span class="wf-legend-dot"></span>Carnivorous</div>
+              <div class="wf-legend-item wf-d3"><span class="wf-legend-dot"></span>Omnivorous</div>
             </div>
             <div class="wf-donut" style="background: conic-gradient(var(--wf-d1) 0deg 196.8deg, var(--wf-d2) 196.8deg 331.2deg, var(--wf-d3) 331.2deg 360deg);"></div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- Quiz -->
-    <section class="wf-section">
-      <div class="wf-quiz wf-fill">
-        <div class="wf-quiz-top">
-          <h2 class="wf-h2" style="border: none; margin: 0; padding: 0;">Trivia quiz</h2>
-          <div class="wf-score-pill wf-outline">
-            Score: 3 / 5 <span class="wf-ring"></span>
-          </div>
-        </div>
-        <p class="wf-quiz-question">Which of these dinosaurs was found in Mongolia?</p>
-        <div class="wf-quiz-options">
-          <div class="wf-quiz-option wf-outline"><span class="wf-quiz-option-mark"></span>Citipati</div>
-          <div class="wf-quiz-option wf-outline"><span class="wf-quiz-option-mark"></span>Camarasaurus</div>
-          <div class="wf-quiz-option wf-outline"><span class="wf-quiz-option-mark"></span>Iguanodon</div>
-          <div class="wf-quiz-option wf-outline"><span class="wf-quiz-option-mark"></span>Diplodocus</div>
-        </div>
-        <div class="wf-quiz-next">Next question →</div>
       </div>
     </section>
 
@@ -664,6 +657,63 @@
     <p class="wf-footer-text">Solo redesign and rebuild of a Chingu team project — sole designer on the original team; every part of this version, design through build, is my own.</p>
     <div class="wf-footer-copyright">© 2026 Farzaneh Falakrou · Designed &amp; built in Berlin</div>
   </footer>
+
+  <script>
+    (function () {
+      var viewport = document.getElementById('wf-map-viewport');
+      var svg = document.getElementById('wf-map-svg');
+      if (!viewport || !svg) return;
+
+      var scale = 1;
+      var minScale = 1;
+      var maxScale = 4;
+      var step = 0.5;
+      var originX = 50; // % within viewport
+      var originY = 50;
+
+      function apply() {
+        svg.style.transformOrigin = originX + '% ' + originY + '%';
+        svg.style.transform = 'scale(' + scale + ')';
+      }
+
+      function zoomTo(newScale, focusX, focusY) {
+        newScale = Math.min(maxScale, Math.max(minScale, newScale));
+        if (focusX !== undefined && focusY !== undefined) {
+          originX = focusX;
+          originY = focusY;
+        }
+        scale = newScale;
+        apply();
+      }
+
+      document.getElementById('wf-zoom-in').addEventListener('click', function () {
+        zoomTo(scale + step);
+      });
+      document.getElementById('wf-zoom-out').addEventListener('click', function () {
+        zoomTo(scale - step);
+      });
+      document.getElementById('wf-zoom-reset').addEventListener('click', function () {
+        originX = 50;
+        originY = 50;
+        zoomTo(1);
+      });
+
+      viewport.addEventListener('dblclick', function (e) {
+        var rect = viewport.getBoundingClientRect();
+        var x = ((e.clientX - rect.left) / rect.width) * 100;
+        var y = ((e.clientY - rect.top) / rect.height) * 100;
+        zoomTo(scale >= maxScale ? 1 : scale + step, x, y);
+      });
+
+      viewport.addEventListener('wheel', function (e) {
+        e.preventDefault();
+        var rect = viewport.getBoundingClientRect();
+        var x = ((e.clientX - rect.left) / rect.width) * 100;
+        var y = ((e.clientY - rect.top) / rect.height) * 100;
+        zoomTo(scale + (e.deltaY < 0 ? step : -step), x, y);
+      }, { passive: false });
+    })();
+  </script>
 
 </body>
 </html>
