@@ -933,7 +933,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 .empty-state { color: var(--muted); font-style: italic; }
 
 /* Charts */
-.chart-panel { display: flex; flex-direction: column; }
+.chart-panel { display: flex; flex-direction: column; container-type: inline-size; }
 .chart-panel .chart-row { flex: 1; }
 
 .charts-grid {
@@ -946,13 +946,19 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
 /* Reversed: the chart is the content and the legend is the key, but the pie sat
    at 110px in a ~540px panel — a stamp in a field of legend. */
 .chart-row { display: flex; align-items: center; gap: var(--s5); }
-.chart-row svg { width: 150px; height: 150px; flex-shrink: 0; }
+/* Shrinks with the panel instead of overflowing into the neighbouring chart:
+   flex-shrink alone isn't enough here because the two-column legend below has
+   its own min-content floor, so the pie has to give way first. */
+.chart-row svg { width: 150px; height: 150px; aspect-ratio: 1 / 1; flex-shrink: 1; min-width: 50px; }
 
 .chart-legend { list-style: none; padding: 0; margin: 0; flex: 1; }
 /* Nine types in one column outran the pie's height; two columns keep the row
-   balanced and let the chart set the panel's height. Only where there is room —
-   below ~700px the labels break mid-phrase. */
-@media (min-width: 700px) {
+   balanced and let the chart set the panel's height. Gated on the *panel's*
+   own width via container query, not the viewport: charts-grid halves the
+   panel at 861px viewport width, well before a viewport-width media query
+   would've turned this off, and the resulting two-column min-content floor
+   was pushing the pie out past the panel edge into the next chart. */
+@container (min-width: 360px) {
   .chart-legend--split { columns: 2; column-gap: var(--s4); }
 }
 .chart-legend li {
@@ -1385,7 +1391,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
      row width — keeping the pie beside them uses the space that stacking
      left empty under a narrow list. */
   .chart-row { align-items: flex-start; gap: var(--s3); }
-  .chart-row svg { width: 110px; height: 110px; flex-shrink: 0; }
+  .chart-row svg { width: 110px; height: 110px; aspect-ratio: 1 / 1; flex-shrink: 1; min-width: 50px; }
   .tx-rung { grid-template-columns: minmax(0, 1fr); }
   .tx-sibs { padding-left: 0.2rem; }
 }
