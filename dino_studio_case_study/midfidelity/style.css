@@ -257,52 +257,22 @@ main {
   border: 1px solid #ddd;
   background: #fff;
 }
-.wf-map-viewport {
+.wf-map-canvas {
   position: absolute;
   inset: 0;
-  overflow: hidden;
-}
-.wf-map-world {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  transform-origin: center center;
-  transition: transform 0.15s ease-out;
-}
-.wf-map-zoom {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.wf-map-zoom-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 3px;
   background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  font-weight: 700;
+}
+.wf-map-canvas .leaflet-container {
+  background: #fff;
+}
+.wf-map-canvas .leaflet-control-zoom a {
+  border-radius: 3px;
   color: #444;
-  cursor: pointer;
-  user-select: none;
 }
-.wf-map-zoom-btn:hover { background: #f2f2f2; }
-.wf-map-countries path {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 0.6;
-}
-.wf-map-pin-dot {
-  fill: #b04a2f;
-  stroke: #fff;
-  stroke-width: 1;
+.wf-map-canvas .leaflet-tooltip {
+  border-radius: 3px;
+  border: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
 }
 
 /* ---- detail panel ---- */
