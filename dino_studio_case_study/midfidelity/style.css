@@ -348,25 +348,8 @@ main {
   color: #555;
 }
 .wf-detail-block p { margin: 0; font-size: 13px; color: #777; }
-.wf-taxonomy-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-.wf-chip {
-  font-size: 11px;
-  padding: 4px 10px;
-  border-radius: 12px;
-  color: #666;
-}
 
-/* ---- timeline / size charts ---- */
-.wf-chart-box {
-  height: 190px;
-  border-radius: 3px;
-  position: relative;
-  overflow: hidden;
-  background: #e2e2e2;
-}
-.wf-timeline-box { height: 220px; }
-
-/* Type color coding — shared between timeline bars, size dots, and their legends. */
+/* Type color coding — shared between the type/diet chart legends and pie. */
 .wf-c1 { --wf-c: var(--wf-c1); }
 .wf-c2 { --wf-c: var(--wf-c2); }
 .wf-c3 { --wf-c: var(--wf-c3); }
@@ -375,100 +358,6 @@ main {
 .wf-d1 { --wf-c: var(--wf-d1); }
 .wf-d2 { --wf-c: var(--wf-d2); }
 .wf-d3 { --wf-c: var(--wf-d3); }
-
-.wf-epoch-bands {
-  position: absolute;
-  inset: 0 0 auto 0;
-  top: 0;
-  height: 100%;
-  display: flex;
-}
-.wf-epoch-band {
-  flex: 1;
-  border-right: 1px solid #d2d2d2;
-  position: relative;
-}
-.wf-epoch-band:last-child { border-right: none; }
-.wf-epoch-band span {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #999;
-  white-space: nowrap;
-}
-.wf-chart-plot {
-  position: absolute;
-  inset: 24px 0 0 0;
-}
-.wf-chart-bar {
-  position: absolute;
-  height: 8px;
-  border-radius: 2px;
-  background: var(--wf-c, #a9a9a9);
-  opacity: 0.75;
-}
-.wf-size-box { padding-top: 26px; }
-.wf-chart-dot {
-  position: absolute;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--wf-c, #999);
-  opacity: 0.85;
-}
-.wf-human-ref {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 0;
-  border-left: 1px dashed #999;
-}
-.wf-human-ref span {
-  position: absolute;
-  top: 4px;
-  left: 6px;
-  font-size: 9px;
-  color: #888;
-  white-space: nowrap;
-}
-.wf-chart-axis {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 6px;
-  padding: 0 2px;
-  font-size: 10px;
-  color: #999;
-  font-family: 'JetBrains Mono', monospace;
-}
-.wf-chart-axis-label {
-  text-align: center;
-  font-size: 10px;
-  color: #aaa;
-  margin-top: 2px;
-}
-.wf-chart-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 16px;
-  margin-top: 12px;
-}
-.wf-chart-legend span {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  color: #666;
-}
-.wf-chart-legend span::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 2px;
-  background: var(--wf-c, #bbb);
-}
 
 /* ---- type/diet charts ---- */
 .wf-charts-grid {

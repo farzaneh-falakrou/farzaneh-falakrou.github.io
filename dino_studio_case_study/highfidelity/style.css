@@ -421,14 +421,6 @@ main {
   color: #555;
 }
 .wf-detail-block p { margin: 0; font-size: var(--wf-t-small); color: #777; }
-.wf-taxonomy-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-.wf-chip {
-  font-family: var(--wf-font-mono);
-  font-size: var(--wf-t-micro);
-  padding: 4px 10px;
-  border-radius: 12px;
-  color: #666;
-}
 
 /* ---- timeline / size charts ---- */
 .wf-chart-box {
