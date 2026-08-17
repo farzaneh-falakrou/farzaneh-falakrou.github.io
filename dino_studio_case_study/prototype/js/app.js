@@ -755,7 +755,7 @@
     // Long, low sauropod body with the crop trimmed tight to the feet (no
     // slack below them like the rest of the set), so it needs the same
     // downward nudge Edmontonia needed for the same reason.
-    { name: 'Barapasaurus', file: 'barapasaurus.png', scale: 1.05, drop: 18 },
+    { name: 'Barapasaurus', file: 'barapasaurus.png', scale: 1.05, drop: 6 },
   ];
   const SHOWCASE_HOLD_MS = 3000;
   const SHOWCASE_FLIP_MS = 900;
