@@ -402,7 +402,7 @@ main {
   margin: 0 0 6px;
   color: #555;
 }
-.wf-detail-block p { margin: 0; font-size: var(--wf-t-small); color: #777; }
+.wf-detail-block p { margin: 0; font-size: var(--wf-t-small); color: #555; }
 
 /* ---- timeline / size charts ---- */
 .wf-chart-box {
