@@ -62,3 +62,6 @@ letter/
 docs/
 
 __pycache__/
+
+# internal notes for AI assistants — not for the public repo
+CLAUDE.md
