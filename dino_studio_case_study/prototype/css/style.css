@@ -1168,20 +1168,16 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
   border: 1px solid var(--path-line);
   border-radius: var(--radius);
   padding: 0.3rem 0.55rem;
-  cursor: pointer;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
 }
-.tx-clade:hover { background: var(--path-line); color: var(--bg); }
-.tx-clade:hover .tx-count { color: var(--bg); opacity: 0.75; }
 .tx-clade--self {
   font-family: 'Instrument Serif', Georgia, serif;
   font-style: italic;
   font-size: var(--t-body);
   letter-spacing: 0;
-  cursor: default;
   background: none;
   border-color: transparent;
   padding-left: 0;
@@ -1197,13 +1193,11 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
   border: 1px solid var(--sib-line);
   border-radius: var(--radius);
   padding: 0.22rem 0.45rem;
-  cursor: pointer;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
 }
-.tx-sib:hover { border-color: var(--accent); color: var(--ink); }
 .tx-sib--dino { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: var(--t-small); border-color: var(--dino-stroke); background: var(--dino-fill); }
 .tx-count { font-family: 'JetBrains Mono', monospace; font-size: var(--t-micro); color: var(--muted); font-variant-numeric: tabular-nums; }
 
@@ -1926,7 +1920,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
   align-items: center;
   justify-content: center;
 }
-.tx-sib, .tx-more, .tx-clade { min-height: 28px; }
+.tx-more { min-height: 28px; }
 .chart-legend li { min-height: 24px; }
 
 /* Legend entries are the accessible control for cross-filtering; the pie is a

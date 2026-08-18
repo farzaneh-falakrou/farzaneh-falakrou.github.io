@@ -534,14 +534,14 @@
         <h2>Simplify until it's <em>legible</em>.</h2>
 
         <h3>1. Taxonomy visualization</h3>
-        <p>The taxonomy data was more complex than expected — rendered in full, it produced a very deep evolutionary tree that would have overwhelmed rather than informed the user. Instead of showing the whole tree for every dinosaur, I simplified the visualization to highlight only the branches relevant to the dinosaur currently selected.</p>
+        <p>The taxonomy data was more complex than expected — rendered in full, it produced a very deep evolutionary tree that would have overwhelmed rather than informed the user. My first fix was an interactive diagram that pruned the tree down to just the selected dinosaur's branch, but even pruned, a tree layout spent most of its space on connecting lines rather than information. I replaced it with a straight breadcrumb of the selected dinosaur's lineage, paired with a ladder of clickable rungs — one per rank, each showing its sibling clades and how many dinosaurs fall under them, with the unselected ones collapsed behind a single "+N more" toggle instead of spread out across a canvas. Clicking any rung filters the whole app to that clade.</p>
 
         <figure class="b-figure">
           <div class="b-figure-frame">
             <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-            <iframe src="visuals/dino-taxonomy.html" title="Interactive dinosaur taxonomy tree — switch between the full tree and the pruned view for a selected dinosaur" loading="lazy" style="width:100%;height:660px;border:0;display:block;background:#f4f7f6;"></iframe>
+            <iframe src="visuals/dino-taxonomy.html" title="Interactive dinosaur taxonomy visualization — switch between the original sprawling full tree and the simplified breadcrumb-and-ladder view for a selected dinosaur" loading="lazy" style="width:100%;height:660px;border:0;display:block;background:#f4f7f6;"></iframe>
           </div>
-          <figcaption>The taxonomy tree, interactive — flick between the full tree (171 nodes) and the pruned view for a selected dinosaur.</figcaption>
+          <figcaption>Full tree (171 nodes) vs. the simplified breadcrumb-and-ladder view, same as the shipped prototype — toggle to compare.</figcaption>
         </figure>
 
         <h3>2. Map visualization</h3>

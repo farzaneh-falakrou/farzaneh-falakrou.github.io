@@ -1,72 +1,104 @@
-<title>Taxonomy tree — pruning (top-down)</title>
+<title>Taxonomy — full tree vs. the shipped ladder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+  /* Same tokens as the prototype's dark theme (its default) — this demo
+     doesn't need a light variant since it's always embedded on its own. */
   :root{
-    --bg:#f4f7f6; --surface:#ffffff; --ink:#16211f; --muted:#8a9793; --line:#d8e2df;
-    --accent:#0e9e93; --accent-ink:#0a6f68;
-    --pathfill:#e2f4f0; --pathline:#0e9e93;
-    --sibfill:#f1f5f4; --sibline:#cfdbd7; --sibink:#8a9793;
-    --dino:#c9871f; --dino-ink:#8a5e12; --dinofill:#faf1df;
+    --bg:#0e1f16; --surface:rgba(255,255,255,0.04); --ink:#f0e8c8; --muted:rgba(240,232,200,0.72);
+    --line:rgba(255,255,255,0.14); --accent:#d4a048; --radius:2px;
+    --path-fill:rgba(212,160,72,0.16); --path-line:#d4a048;
+    --sib-fill:rgba(255,255,255,0.075); --sib-line:rgba(255,255,255,0.16); --sib-ink:rgba(240,232,200,0.72);
+    --dino-stroke:rgba(86,160,107,0.55); --dino-fill:rgba(86,160,107,0.10); --dino-ink:#a9d9b6;
   }
-  @media (prefers-color-scheme: dark){
-    :root{ --bg:#0e1514; --surface:#14201e; --ink:#eaf2f0; --muted:#8194900; --line:#2b3733;
-      --accent:#2dd4c4; --accent-ink:#7fecdf;
-      --pathfill:#123c37; --pathline:#2dd4c4;
-      --sibfill:#1a2523; --sibline:#33423e; --sibink:#8697920;
-      --dino:#e0a94a; --dino-ink:#e8bd6a; --dinofill:#2c2513; }
-  }
-  :root[data-theme="light"]{ --bg:#f4f7f6; --surface:#ffffff; --ink:#16211f; --muted:#8a9793; --line:#d8e2df;
-    --accent:#0e9e93; --accent-ink:#0a6f68; --pathfill:#e2f4f0; --pathline:#0e9e93;
-    --sibfill:#f1f5f4; --sibline:#cfdbd7; --sibink:#8a9793; --dino:#c9871f; --dino-ink:#8a5e12; --dinofill:#faf1df; }
-  :root[data-theme="dark"]{ --bg:#0e1514; --surface:#14201e; --ink:#eaf2f0; --muted:#819490; --line:#2b3733;
-    --accent:#2dd4c4; --accent-ink:#7fecdf; --pathfill:#123c37; --pathline:#2dd4c4;
-    --sibfill:#1a2523; --sibline:#33423e; --sibink:#869792; --dino:#e0a94a; --dino-ink:#e8bd6a; --dinofill:#2c2513; }
-
   *{box-sizing:border-box;}
   body{margin:0;background:var(--bg);color:var(--ink);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;line-height:1.5;padding:18px 20px 40px;}
+    font-family:'Inter',system-ui,sans-serif;line-height:1.5;padding:20px 22px 40px;}
   .wrap{max-width:900px;margin:0 auto;}
-  .bar{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:0 0 12px;}
-  .field{display:flex;align-items:center;gap:8px;}
-  .field label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
-  select{font:inherit;font-size:14px;padding:7px 30px 7px 11px;border:1px solid var(--line);border-radius:8px;
-    background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%238a9793' stroke-width='2'%3E%3Cpath d='M2 4l4 4 4-4'/%3E%3C/svg%3E") no-repeat right 10px center;
+  .bar{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:0 0 14px;}
+  .field{display:flex;align-items:center;gap:9px;}
+  .field label{font-family:'JetBrains Mono',monospace;font-size:0.6875rem;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
+  select{font:inherit;font-size:14px;padding:7px 30px 7px 11px;border:1px solid var(--line);border-radius:var(--radius);
+    background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23f0e8c8' stroke-width='2'%3E%3Cpath d='M2 4l4 4 4-4'/%3E%3C/svg%3E") no-repeat right 10px center;
     color:var(--ink);appearance:none;cursor:pointer;max-width:220px;}
-  .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface);}
-  .seg button{font:inherit;font-size:13px;font-weight:600;padding:7px 15px;border:none;background:none;color:var(--muted);cursor:pointer;}
-  .seg button[aria-pressed="true"]{background:var(--accent);color:#fff;}
-  .count{margin-left:auto;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;}
-  .count b{color:var(--ink);font-weight:700;}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--surface);}
+  .seg button{font-family:'JetBrains Mono',monospace;font-size:0.6875rem;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;
+    padding:8px 14px;border:none;background:none;color:var(--muted);cursor:pointer;}
+  .seg button[aria-pressed="true"]{background:var(--accent);color:var(--bg);}
+  .count{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:0.6875rem;color:var(--muted);font-variant-numeric:tabular-nums;}
+  .count b{color:var(--ink);}
 
-  .legend{display:flex;flex-wrap:wrap;gap:6px 18px;padding:2px 2px 10px;font-size:12px;color:var(--muted);}
+  .legend{display:flex;flex-wrap:wrap;gap:6px 18px;padding:2px 2px 12px;font-size:0.75rem;color:var(--muted);}
   .legend span{display:inline-flex;align-items:center;gap:7px;}
   .legend .q{opacity:.6;font-style:italic;}
-  .sw{width:20px;height:13px;border-radius:4px;flex:none;border:1.5px solid var(--sibline);background:var(--sibfill);}
-  .sw.path{border-color:var(--pathline);background:var(--pathfill);}
-  .sw.sel{border-color:var(--pathline);border-width:2.5px;background:var(--pathfill);}
-  .sw.dino{border-color:var(--dino);background:var(--dinofill);}
+  .sw{width:18px;height:12px;border-radius:var(--radius);flex:none;border:1.5px solid var(--sib-line);background:var(--sib-fill);}
+  .sw.path{border-color:var(--path-line);background:var(--path-fill);}
+  .sw.sel{border-color:var(--path-line);border-width:2.5px;background:var(--path-fill);}
+  .sw.dino{border-color:var(--dino-stroke);background:var(--dino-fill);}
   .lgl{width:22px;height:0;border-top:2px solid var(--accent);position:relative;}
   .lgl::after{content:"";position:absolute;right:-1px;top:-3px;border-left:5px solid var(--accent);border-top:3px solid transparent;border-bottom:3px solid transparent;}
 
-  .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;overflow:auto;max-height:500px;}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;overflow:auto;max-height:520px;}
   .panel svg{display:block;margin:0 auto;}
-  .bx{font-size:12px;fill:var(--ink);}
-  .bx.path{fill:var(--accent-ink);font-weight:600;}
-  .bx.sel{fill:var(--accent-ink);font-weight:700;font-style:italic;}
+  /* Full mode is wider than the panel, so it needs a way to move around
+     besides the scrollbars — click-drag pans it, like a map. */
+  .panel.pannable{cursor:grab;}
+  .panel.pannable:active{cursor:grabbing;}
+  .bx{font-size:12px;fill:var(--ink);font-family:'Inter',sans-serif;}
+  .bx.path{fill:var(--accent);font-weight:600;}
+  .bx.sel{fill:var(--accent);font-weight:700;font-style:italic;}
   .bx.dino{fill:var(--dino-ink);font-style:italic;}
-  .bx.sib{fill:var(--sibink);}
+  .bx.sib{fill:var(--sib-ink);}
   svg.full .bx{font-size:9.5px;}
 
-  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px;}
-  .foot{margin-top:12px;font-size:12.5px;color:var(--muted);line-height:1.55;}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:var(--radius);}
+  .foot{margin-top:14px;font-size:0.8125rem;color:var(--muted);line-height:1.6;}
   .foot b{color:var(--ink);font-weight:600;}
+
+  /* Ladder mode — same markup and classes as .taxonomy-tree-wrap in the
+     shipped prototype (js/app.js renderTaxonomyTree + style.css .tx-*). */
+  .tx-crumb{display:flex;flex-wrap:wrap;align-items:baseline;font-family:'JetBrains Mono',monospace;
+    font-size:0.6875rem;line-height:1.9;color:var(--sib-ink);margin:0 0 1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--line);}
+  .tx-crumb i{color:var(--sib-line);margin:0 0.4rem;font-style:normal;}
+  .tx-crumb__self{color:var(--accent);font-weight:500;}
+  .tx-ladder{list-style:none;margin:0;padding:0;position:relative;}
+  .tx-ladder::before{content:"";position:absolute;left:5px;top:0.6rem;bottom:0.6rem;width:1px;background:var(--path-line);opacity:.45;}
+  .tx-rung{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:0.4rem 0.9rem;
+    align-items:start;padding:0.28rem 0 0.28rem 1.4rem;position:relative;}
+  .tx-rung::before{content:"";position:absolute;left:1px;top:0.75rem;width:9px;height:9px;
+    border-radius:50%;background:var(--bg);border:1px solid var(--path-line);}
+  .tx-rung--self::before{background:var(--accent);border-color:var(--accent);}
+  .tx-clade{font-family:'Inter',sans-serif;font-size:0.8125rem;font-weight:500;color:var(--accent);
+    background:var(--path-fill);border:1px solid var(--path-line);border-radius:var(--radius);padding:0.3rem 0.55rem;
+    white-space:nowrap;display:inline-flex;align-items:center;gap:0.45rem;}
+  .tx-clade--self{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:0.9375rem;
+    letter-spacing:0;background:none;border-color:transparent;padding-left:0;}
+  .tx-sibs{display:flex;flex-wrap:wrap;gap:0.3rem;}
+  .tx-sib{font-family:'Inter',sans-serif;font-size:0.8125rem;color:var(--sib-ink);background:var(--sib-fill);
+    border:1px solid var(--sib-line);border-radius:var(--radius);padding:0.22rem 0.45rem;
+    white-space:nowrap;display:inline-flex;align-items:center;gap:0.35rem;}
+  .tx-sib--dino{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:0.8125rem;
+    border-color:var(--dino-stroke);background:var(--dino-fill);}
+  .tx-count{font-family:'JetBrains Mono',monospace;font-size:0.6875rem;color:var(--muted);font-variant-numeric:tabular-nums;}
+  .tx-more{font-family:'JetBrains Mono',monospace;font-size:0.6875rem;color:var(--accent);background:none;
+    border:1px dashed var(--sib-line);border-radius:var(--radius);padding:0.22rem 0.45rem;cursor:pointer;white-space:nowrap;}
+  .tx-fold{position:relative;padding:0.15rem 0 0.15rem 1.4rem;}
+  .tx-fold__toggle{font-family:'JetBrains Mono',monospace;font-size:0.6875rem;text-transform:uppercase;
+    letter-spacing:0.08em;color:var(--muted);background:none;border:none;border-left:1px dashed var(--sib-line);
+    padding:0.35rem 0 0.35rem 0.6rem;margin-left:-0.6rem;cursor:pointer;}
+  .tx-fold__toggle::before{content:"▸ ";}
+  .tx-fold__toggle[aria-expanded="true"]::before{content:"▾ ";}
+  .tx-fold__toggle:hover{color:var(--accent);}
+  .tx-fold__body{list-style:none;margin:0;padding:0;}
 </style>
 
 <div class="wrap">
   <div class="bar">
     <div class="field"><label for="dino">Dinosaur</label><select id="dino"></select></div>
     <div class="seg" role="group" aria-label="View">
-      <button id="mFull" aria-pressed="false">Full tree</button>
-      <button id="mPrune" aria-pressed="true">Pruned</button>
+      <button id="mFull" aria-pressed="false">Full tree (before)</button>
+      <button id="mPrune" aria-pressed="true">Ladder (shipped)</button>
     </div>
     <span class="count" id="count"></span>
   </div>
@@ -96,7 +128,8 @@ function chain(name){ const set=new Set(); let leafId=null;
   return {set,leafId}; }
 function sortedKids(n){ return [...n.kids.values()].sort((a,b)=> a.genus!==b.genus?(a.genus?1:-1):a.name.localeCompare(b.name)); }
 
-let mode="prune", focus=DINOS[0].n;
+let mode="prune", focus=DINOS[0].n, zoom=1;
+const ZOOM_MIN=0.3, ZOOM_MAX=3;
 const SVGNS="http://www.w3.org/2000/svg";
 function svel(tag,a){ const e=document.createElementNS(SVGNS,tag); for(const k in a) e.setAttribute(k,a[k]); return e; }
 const panel=document.getElementById("panel"), elCount=document.getElementById("count"), elFoot=document.getElementById("foot");
@@ -117,7 +150,90 @@ function buildView(onpath,leafId){
 function cls(v){ return v.sel?"sel": v.on?"path": v.genus?"dino":"sib"; }
 function boxW(v,fs){ return Math.max(56, v.name.length*(fs*0.6)+22); }
 
+// --- Ladder mode (the shipped solution) -------------------------------
+// Same lineage walk as the pruned tree (chain()), but laid out as a single
+// vertical rung per rank instead of a branching diagram — width no longer
+// scales with how many siblings a rank has, since they wrap instead of
+// spreading sideways.
+function escapeHtml(v){ return String(v).replace(/[&<>"']/g, (c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function lineageRungs(name){
+  const {set}=chain(name);
+  const path=[...set].reverse().map((id)=>byId[id]);
+  return path.map((n,i)=>{
+    const parent = i===0 ? null : path[i-1];
+    const siblings = parent
+      ? [...parent.kids.values()].filter((c)=>c!==n)
+          .map((c)=>({name:c.name, count:c.species, isDino:c.genus}))
+          .sort((a,b)=> b.count-a.count || a.name.localeCompare(b.name))
+      : [];
+    return { name:n.name, count:n.species, siblings, isSelf: i===path.length-1 };
+  });
+}
+
+const MIN_FOLD_RUN=3, SIBLINGS_SHOWN=5;
+function foldPassThroughRuns(rungs){
+  const rows=[]; let run=[];
+  const flush=()=>{ if(!run.length) return;
+    if(run.length>=MIN_FOLD_RUN) rows.push({fold:run});
+    else rows.push(...run.map((r)=>({rung:r})));
+    run=[]; };
+  rungs.forEach((rung,i)=>{
+    const foldable = rung.siblings.length===0 && i!==0 && !rung.isSelf;
+    if(foldable) run.push(rung); else { flush(); rows.push({rung}); }
+  });
+  flush();
+  return rows;
+}
+
+function rungHtml(rung){
+  const rcls = rung.isSelf ? "tx-rung tx-rung--self" : "tx-rung";
+  const name = escapeHtml(rung.name);
+  const clade = rung.isSelf
+    ? `<span class="tx-clade tx-clade--self">${name}</span>`
+    : `<span class="tx-clade">${name}<span class="tx-count">${rung.count}</span></span>`;
+  let sibs="";
+  if(rung.siblings.length){
+    const shown=rung.siblings.slice(0,SIBLINGS_SHOWN);
+    const rest=rung.siblings.length-shown.length;
+    sibs=shown.map((s)=>`<span class="tx-sib${s.isDino?' tx-sib--dino':''}">${escapeHtml(s.name)}<span class="tx-count">${s.count}</span></span>`).join("");
+    if(rest>0){
+      sibs+=`<button type="button" class="tx-more" data-expand>+${rest} more</button>`;
+      sibs+=rung.siblings.slice(SIBLINGS_SHOWN).map((s)=>`<span class="tx-sib tx-sib--hidden${s.isDino?' tx-sib--dino':''}" hidden>${escapeHtml(s.name)}<span class="tx-count">${s.count}</span></span>`).join("");
+    }
+  }
+  return `<li class="${rcls}"><div class="tx-rung__main">${clade}</div><div class="tx-sibs">${sibs}</div></li>`;
+}
+
+function renderLadder(){
+  const rungs=lineageRungs(focus);
+  const crumb=rungs.map((r)=>`<span class="${r.isSelf?'tx-crumb__self':''}">${escapeHtml(r.name)}</span>`).join('<i aria-hidden="true">›</i>');
+  const rows=foldPassThroughRuns(rungs).map((row)=>{
+    if(row.fold) return `<li class="tx-fold"><button type="button" class="tx-fold__toggle" aria-expanded="false" data-fold>${row.fold.length} intermediate clades</button><ol class="tx-fold__body" hidden>${row.fold.map(rungHtml).join("")}</ol></li>`;
+    return rungHtml(row.rung);
+  }).join("");
+  panel.innerHTML = `<p class="tx-crumb">${crumb}</p><ol class="tx-ladder">${rows}</ol>`;
+  panel.querySelectorAll("[data-fold]").forEach((btn)=>{
+    btn.addEventListener("click", ()=>{
+      const open=btn.getAttribute("aria-expanded")==="true";
+      btn.setAttribute("aria-expanded", String(!open));
+      btn.parentElement.querySelector(".tx-fold__body").hidden = open;
+    });
+  });
+  panel.querySelectorAll("[data-expand]").forEach((btn)=>{
+    btn.addEventListener("click", ()=>{
+      btn.parentElement.querySelectorAll(".tx-sib--hidden").forEach((el)=>{ el.hidden=false; });
+      btn.remove();
+    });
+  });
+  const rungCount=rungs.length, leafRung=rungs[rungs.length-1];
+  elCount.innerHTML=`<b>${rungCount}</b> ranks in the lineage`;
+  elFoot.innerHTML=`<b>Ladder</b> — the shipped solution. One rung per rank, siblings wrap instead of spreading sideways, and ranks with no branching (no siblings) collapse behind a "+N more"-style toggle. Clicking any clade would filter the app to it.`;
+}
+
 function render(){
+  panel.classList.toggle("pannable", mode==="full");
+  if(mode!=="full"){ renderLadder(); return; }
   const {set:onpath,leafId}=chain(focus);
   const view=buildView(onpath,leafId);
   const full = mode==="full";
@@ -142,20 +258,20 @@ function render(){
   const off = mx - minX;
   const W=(maxX-minX)+mx*2, H=my*2+maxDepth*yGap+BH;
   const X=v=>v.cx+off, Y=v=>my+v.depth*yGap+BH/2;
-  const svg=svel("svg",{viewBox:`0 0 ${W} ${H}`,width:W,height:H});
+  const svg=svel("svg",{viewBox:`0 0 ${W} ${H}`,width:W*zoom,height:H*zoom});
   if(full) svg.setAttribute("class","full");
   const defs=svel("defs",{});
   defs.innerHTML=`<marker id="ar" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>`;
   svg.appendChild(defs);
   (function edges(v){ const py=Y(v)+BH/2; for(const c of v.children){ const cy=Y(c)-BH/2; const onEdge=c.on;
     svg.appendChild(svel("line",{x1:X(v),y1:py,x2:X(c),y2:cy,
-      stroke: onEdge?"var(--accent)":"var(--sibline)","stroke-width": onEdge?2:1.2,
+      stroke: onEdge?"var(--accent)":"var(--sib-line)","stroke-width": onEdge?2:1.2,
       "marker-end": onEdge?"url(#ar)":""}));
     edges(c); } })(view);
   (function boxes(v){ const cx=X(v), cy=Y(v), c=cls(v);
-    const stroke = c==="path"||c==="sel"?"var(--pathline)": c==="dino"?"var(--dino)":"var(--sibline)";
-    const fill = c==="path"||c==="sel"?"var(--pathfill)": c==="dino"?"var(--dinofill)":"var(--sibfill)";
-    svg.appendChild(svel("rect",{x:cx-v.w/2,y:cy-BH/2,width:v.w,height:BH,rx:6,
+    const stroke = c==="path"||c==="sel"?"var(--path-line)": c==="dino"?"var(--dino-stroke)":"var(--sib-line)";
+    const fill = c==="path"||c==="sel"?"var(--path-fill)": c==="dino"?"var(--dino-fill)":"var(--sib-fill)";
+    svg.appendChild(svel("rect",{x:cx-v.w/2,y:cy-BH/2,width:v.w,height:BH,rx:2,
       fill, stroke, "stroke-width": c==="sel"?2.4:1.5}));
     const t=svel("text",{x:cx,y:cy+fs*0.35,"text-anchor":"middle"}); t.setAttribute("class","bx "+c); t.textContent=v.name;
     svg.appendChild(t);
@@ -178,5 +294,43 @@ sel.value=focus; sel.onchange=()=>{ focus=sel.value; render(); };
 const bFull=document.getElementById("mFull"), bPrune=document.getElementById("mPrune");
 function setMode(m){ mode=m; bFull.setAttribute("aria-pressed",m==="full"); bPrune.setAttribute("aria-pressed",m==="prune"); render(); }
 bFull.onclick=()=>setMode("full"); bPrune.onclick=()=>setMode("prune");
+
+// Click-drag panning for full mode, where the tree is wider than the panel.
+// Only engages when the panel actually overflows, so it stays out of the
+// way of normal text selection in ladder mode.
+let panning=false, panStartX=0, panStartY=0, panScrollX=0, panScrollY=0;
+panel.addEventListener("mousedown",(e)=>{
+  if(!panel.classList.contains("pannable")) return;
+  panning=true; panStartX=e.clientX; panStartY=e.clientY;
+  panScrollX=panel.scrollLeft; panScrollY=panel.scrollTop;
+  e.preventDefault();
+});
+window.addEventListener("mousemove",(e)=>{
+  if(!panning) return;
+  panel.scrollLeft = panScrollX - (e.clientX-panStartX);
+  panel.scrollTop = panScrollY - (e.clientY-panStartY);
+});
+window.addEventListener("mouseup",()=>{ panning=false; });
+
+// Wheel/trackpad zoom, centred on the pointer — scale the SVG's rendered
+// size (viewBox stays fixed) and re-render, then correct scroll position so
+// the point under the cursor doesn't drift.
+panel.addEventListener("wheel",(e)=>{
+  if(mode!=="full") return;
+  e.preventDefault();
+  const rect=panel.getBoundingClientRect();
+  const offsetX=e.clientX-rect.left, offsetY=e.clientY-rect.top;
+  const contentX=panel.scrollLeft+offsetX, contentY=panel.scrollTop+offsetY;
+  const oldW=panel.scrollWidth||1, oldH=panel.scrollHeight||1;
+  const factor=e.deltaY<0?1.12:1/1.12;
+  const newZoom=Math.min(ZOOM_MAX,Math.max(ZOOM_MIN,zoom*factor));
+  if(newZoom===zoom) return;
+  const ratioX=contentX/oldW, ratioY=contentY/oldH;
+  zoom=newZoom;
+  render();
+  panel.scrollLeft = ratioX*panel.scrollWidth - offsetX;
+  panel.scrollTop = ratioY*panel.scrollHeight - offsetY;
+},{passive:false});
+
 render();
 </script>

@@ -2,7 +2,7 @@
   let allDinosaurs = [];
   let selectedDinosaur = null;
   let mapCountryFilter = null; // geo name (properties.name) clicked on the choropleth, or null
-  let cladeFilter = null; // clade name clicked in the taxonomy ladder, or null
+  let cladeFilter = null; // clade name restored from a shared link's ?clade= param, or null
   let bookmarks = new Set(); // dinosaur names starred into "My list", persisted in localStorage
   let bookmarksOnly = false; // "My list" view toggle
   let weightSteps = []; // sorted distinct known weights; the slider indexes into this
@@ -2064,22 +2064,25 @@
   function rungHtml(rung) {
     const cls = rung.isSelf ? 'tx-rung tx-rung--self' : 'tx-rung';
     const name = escapeHtml(rung.name);
+    // Plain spans, not buttons — clicking a clade to filter the whole app
+    // from inside the ladder made the ladder itself feel like a control
+    // surface, when it's meant to be read, not operated.
     const clade = rung.isSelf
       ? `<span class="tx-clade tx-clade--self">${name}</span>`
-      : `<button type="button" class="tx-clade" data-clade="${name}">${name}
-           <span class="tx-count">${rung.count}</span></button>`;
+      : `<span class="tx-clade">${name}
+           <span class="tx-count">${rung.count}</span></span>`;
 
     let sibs = '';
     if (rung.siblings.length) {
       const shown = rung.siblings.slice(0, SIBLINGS_SHOWN);
       const rest = rung.siblings.length - shown.length;
       sibs = shown
-        .map((s) => `<button type="button" class="tx-sib${s.isDino ? ' tx-sib--dino' : ''}" data-clade="${escapeHtml(s.name)}">${escapeHtml(s.name)}<span class="tx-count">${s.count}</span></button>`)
+        .map((s) => `<span class="tx-sib${s.isDino ? ' tx-sib--dino' : ''}">${escapeHtml(s.name)}<span class="tx-count">${s.count}</span></span>`)
         .join('');
       if (rest > 0) {
         sibs += `<button type="button" class="tx-more" data-expand>+${rest} more</button>`;
         sibs += rung.siblings.slice(SIBLINGS_SHOWN)
-          .map((s) => `<button type="button" class="tx-sib tx-sib--hidden${s.isDino ? ' tx-sib--dino' : ''}" data-clade="${escapeHtml(s.name)}" hidden>${escapeHtml(s.name)}<span class="tx-count">${s.count}</span></button>`)
+          .map((s) => `<span class="tx-sib tx-sib--hidden${s.isDino ? ' tx-sib--dino' : ''}" hidden>${escapeHtml(s.name)}<span class="tx-count">${s.count}</span></span>`)
           .join('');
       }
     }
@@ -2131,17 +2134,6 @@
       button.addEventListener('click', () => {
         button.parentElement.querySelectorAll('.tx-sib--hidden').forEach((el) => { el.hidden = false; });
         button.remove();
-      });
-    });
-    // Clicking any clade filters the whole app to that group — the old tree's
-    // sibling boxes were inert, which made most of the diagram cost with no payoff.
-    container.querySelectorAll('[data-clade]').forEach((button) => {
-      button.addEventListener('click', () => {
-        cladeFilter = cladeFilter === button.dataset.clade ? null : button.dataset.clade;
-        applyFilters();
-        // .result-bar, not .overview-grid: the latter pushed the count and the
-        // filter chips — the only explanation of what just changed — off-screen.
-        scrollToElement(document.querySelector('.result-bar'));
       });
     });
   }
