@@ -217,8 +217,12 @@
     @media (max-width: 640px) { #db .b-figure-row { flex-direction: column; } }
 
     /* Annotated figures — image + editable text callouts connected by leader lines.
-       The browser-chrome frame wraps only the image; notes live outside it as plain text. */
-    #db .b-annotated { margin: 36px 0 32px; }
+       The browser-chrome frame wraps only the image; notes live outside it as plain text.
+       Bleeds right past the article's 720px reading column (never left, so it
+       never touches the sticky TOC) so the screenshot gets more room without
+       shrinking the fixed-width notes column beside it. */
+    #db .b-annotated { margin: 36px 0 32px; max-width: 880px; margin-right: -160px; }
+    @media (max-width: 1200px) { #db .b-annotated { margin-right: 0; max-width: none; } }
     #db .b-annotated-row { display: flex; align-items: stretch; gap: 24px; }
     #db .b-annotated-img { flex: 1 1 auto; min-width: 0; position: relative; }
     #db .b-annotated-img .b-figure-frame { margin: 0; }
@@ -523,23 +527,6 @@
           <figcaption>Wireframe with second-round usability findings.</figcaption>
         </figure>
 
-        <p>The detail view appears once a user selects a dinosaur from the list or search.</p>
-
-        <figure class="b-figure b-annotated">
-          <div class="b-annotated-row">
-            <div class="b-annotated-img">
-              <div class="b-figure-frame">
-                <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-                <img src="visuals/dino-usability-03.png" alt="Dinosaur detail page wireframe showing the taxonomy tree and detail panel layout">
-              </div>
-              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.5)">1</span>
-            </div>
-            <div class="b-annotated-notes">
-              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.5)"><span class="b-note-line"></span><span class="b-note-text">The taxonomy chart is crowded and confusing.</span></div>
-            </div>
-          </div>
-          <figcaption>Detail view with second-round usability findings.</figcaption>
-        </figure>
       </section>
 
       <section>
