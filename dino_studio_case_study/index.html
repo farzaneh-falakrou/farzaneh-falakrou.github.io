@@ -216,41 +216,68 @@
     #db .b-figure-row .b-figure { flex: 1; margin: 0; min-width: 0; }
     @media (max-width: 640px) { #db .b-figure-row { flex-direction: column; } }
 
-    /* Annotated figures — image + editable text callouts connected by leader lines.
-       The browser-chrome frame wraps only the image; notes live outside it as plain text.
-       Bleeds right past the article's 720px reading column (never left, so it
-       never touches the sticky TOC) so the screenshot gets more room without
-       shrinking the fixed-width notes column beside it. */
-    #db .b-annotated { margin: 36px 0 32px; max-width: 880px; margin-right: -160px; }
-    @media (max-width: 1200px) { #db .b-annotated { margin-right: 0; max-width: none; } }
-    #db .b-annotated-row { display: flex; align-items: stretch; gap: 24px; }
-    #db .b-annotated-img { flex: 1 1 auto; min-width: 0; position: relative; }
-    #db .b-annotated-img .b-figure-frame { margin: 0; }
-    #db .b-annotated-notes { position: relative; flex: 0 0 auto; width: 210px; }
-    #db .b-note { position: absolute; left: 0; right: 0; transform: translateY(-50%); display: flex; align-items: center; gap: 8px; }
-    #db .b-note-line { flex: 0 0 16px; height: 0; border-top: 1px solid var(--line-2); position: relative; }
-    #db .b-note-line::before { content: ''; position: absolute; left: -2px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--accent); }
-    #db .b-note-text { font-family: var(--font-serif); font-style: italic; font-size: 13px; line-height: 1.4; color: var(--muted); }
-    #db .b-annotated figcaption { font-size: 13px; font-style: italic; font-family: var(--font-serif); color: var(--muted); margin-top: 16px; padding: 0 6px; }
+    /* Annotated figures — image at full width, findings surfaced as
+       click-to-open popovers anchored to numbered pins on the image itself,
+       instead of a side list. Same 720px column as any other figure: no
+       breakout needed once the notes aren't competing for horizontal space. */
+    #db .b-annotated { margin: 36px 0 32px; }
+    #db .b-annotated .b-figure-frame { position: relative; }
+    #db .b-annotated figcaption { font-size: 13px; font-style: italic; font-family: var(--font-serif); color: var(--muted); margin-top: 10px; padding: 0 6px; }
+
     #db .b-pin {
-      display: none; position: absolute; top: 0; right: 10px; transform: translateY(-50%);
-      width: 22px; height: 22px; border-radius: 50%;
-      background: var(--accent); color: #fff;
-      font-family: var(--font-sans); font-size: 12px; font-weight: 600;
-      align-items: center; justify-content: center;
-      box-shadow: 0 0 0 3px rgba(255,255,255,0.85);
-      z-index: 2;
+      position: absolute; right: 10px; transform: translateY(-50%);
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--accent); color: #fff; border: none;
+      font-family: var(--font-sans); font-size: 15px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.85), 0 6px 14px rgba(26,22,18,0.22);
+      cursor: pointer; z-index: 2; padding: 0;
+      transition: transform 0.15s ease, background 0.15s ease;
     }
+    #db .b-pin:hover, #db .b-pin:focus-visible { transform: translateY(-50%) scale(1.15); }
+    #db .b-pin[aria-expanded="true"] { background: var(--ink); }
+    /* A slow pulsing ring says "hover/tap me" without needing a label — it
+       stops for good the first time any pin on the page has been opened, so
+       it reads as an invitation, not a permanent distraction. */
+    #db .b-pin::before {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      background: var(--accent); opacity: 0.55;
+      animation: b-pin-pulse 2.2s ease-out infinite;
+    }
+    #db .b-pin.is-seen::before { animation: none; display: none; }
+    #db .b-pin[aria-expanded="true"]::before { animation: none; display: none; }
+    @keyframes b-pin-pulse {
+      0% { transform: scale(1); opacity: 0.55; }
+      100% { transform: scale(1.9); opacity: 0; }
+    }
+
+    #db .b-popover {
+      position: absolute; z-index: 3; max-width: 260px;
+      background: var(--ink); color: var(--bg);
+      border-radius: 8px; padding: 12px 14px;
+      font-family: var(--font-serif); font-style: italic; font-size: 13px; line-height: 1.45;
+      box-shadow: 0 12px 28px rgba(26,22,18,0.28);
+      opacity: 0; transform: translateY(4px); pointer-events: none;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    #db .b-popover.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    #db .b-popover::after {
+      content: ''; position: absolute; width: 10px; height: 10px;
+      background: var(--ink); transform: rotate(45deg);
+    }
+    #db .b-popover[data-side="left"]::after { right: -5px; top: 50%; margin-top: -5px; }
+    #db .b-popover[data-side="right"]::after { left: -5px; top: 50%; margin-top: -5px; }
+
+    /* Small screens: no room to float a popover beside a pin without it
+       running off-screen, so it becomes a sheet anchored to the viewport
+       bottom instead — same trigger, same content, different geometry. */
     @media (max-width: 640px) {
-      #db .b-annotated-row { flex-direction: column; }
-      #db .b-annotated-notes { width: 100%; min-height: 0; counter-reset: note; }
-      #db .b-note { position: static; transform: none; padding: 6px 0; }
-      #db .b-note-line { display: none; }
-      #db .b-note-text::before {
-        counter-increment: note; content: counter(note) '. ';
-        color: var(--accent); font-weight: 600; font-style: normal;
+      #db .b-popover {
+        position: fixed; left: 12px; right: 12px; bottom: 12px; top: auto; max-width: none;
+        transform: translateY(12px);
       }
-      #db .b-pin { display: flex; }
+      #db .b-popover.is-open { transform: translateY(0); }
+      #db .b-popover::after { display: none; }
     }
 
     /* Video — responsive 16:9 embed in place of a static image */
@@ -480,25 +507,16 @@
         <h3>First round of usability testing</h3>
 
         <figure class="b-figure b-annotated">
-          <div class="b-annotated-row">
-            <div class="b-annotated-img">
-              <div class="b-figure-frame">
-                <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-                <img src="visuals/dino-usability-01.png" alt="First-round usability testing wireframe of the search and dinosaur detail flows">
-              </div>
-              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.11)">1</span>
-              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.4)">2</span>
-              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.69)">3</span>
-              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.92)">4</span>
-            </div>
-            <div class="b-annotated-notes">
-              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.11)"><span class="b-note-line"></span><span class="b-note-text">Placing recent news at the very top of a discovery page distracts from the core utility (searching and exploring dinosaurs).</span></div>
-              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.4)"><span class="b-note-line"></span><span class="b-note-text">Overlapping pins in high-density regions make individual selection difficult.</span></div>
-              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.69)"><span class="b-note-line"></span><span class="b-note-text">The detail section is missing key information like species, diet, and weight.</span></div>
-              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.92)"><span class="b-note-line"></span><span class="b-note-text">The charts rely purely on visual slices and lack exact numbers or percentages.</span></div>
-            </div>
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="visuals/dino-usability-01.png" alt="First-round usability testing wireframe of the search and dinosaur detail flows">
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.11)" data-note="Placing recent news at the very top of a discovery page distracts from the core utility (searching and exploring dinosaurs).">1</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.4)" data-note="Overlapping pins in high-density regions make individual selection difficult.">2</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.69)" data-note="The detail section is missing key information like species, diet, and weight.">3</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.92)" data-note="The charts rely purely on visual slices and lack exact numbers or percentages.">4</button>
+            <div class="b-popover" role="tooltip"></div>
           </div>
-          <figcaption>Wireframe with first-round usability findings.</figcaption>
+          <figcaption>Wireframe with first-round usability findings — tap a pin for detail.</figcaption>
         </figure>
 
         <h3>Second round of usability testing</h3>
@@ -506,25 +524,16 @@
         <p>In response, I gave the navigation menu its own visual weight, labelled the search button clearly, and rebalanced the detail page so information sat evenly across both columns. The second round confirmed that the initial issues had been resolved, but it also revealed a few new usability problems. These final issues were addressed and incorporated into the high-fidelity design.</p>
 
         <figure class="b-figure b-annotated">
-          <div class="b-annotated-row">
-            <div class="b-annotated-img">
-              <div class="b-figure-frame">
-                <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-                <img src="visuals/dino-usability-02.png" alt="Second-round usability testing wireframe of the homepage, map, and search flows">
-              </div>
-              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.02)">1</span>
-              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.76)">2</span>
-              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.88)">3</span>
-              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.94)">4</span>
-            </div>
-            <div class="b-annotated-notes">
-              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.02)"><span class="b-note-line"></span><span class="b-note-text">There's no way to access favourited dinosaurs once they're saved.</span></div>
-              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.76)"><span class="b-note-line"></span><span class="b-note-text">It's difficult to choose an individual dinosaur from the map.</span></div>
-              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.88)"><span class="b-note-line"></span><span class="b-note-text">The map lacks a zoom feature to explore it interactively.</span></div>
-              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.94)"><span class="b-note-line"></span><span class="b-note-text">It's unclear what the "Show Charts" button does.</span></div>
-            </div>
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="visuals/dino-usability-02.png" alt="Second-round usability testing wireframe of the homepage, map, and search flows">
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.02)" data-note="There's no way to access favourited dinosaurs once they're saved.">1</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.76)" data-note="It's difficult to choose an individual dinosaur from the map.">2</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.88)" data-note="The map lacks a zoom feature to explore it interactively.">3</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.94)" data-note="It's unclear what the &quot;Show Charts&quot; button does.">4</button>
+            <div class="b-popover" role="tooltip"></div>
           </div>
-          <figcaption>Wireframe with second-round usability findings.</figcaption>
+          <figcaption>Wireframe with second-round usability findings — tap a pin for detail.</figcaption>
         </figure>
 
       </section>
@@ -563,29 +572,18 @@
         <p>The annotations below show how each usability finding was addressed and resolved in the final design.</p>
 
         <figure class="b-figure b-annotated">
-          <div class="b-annotated-row">
-            <div class="b-annotated-img">
-              <div class="b-figure-frame">
-                <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-                <img src="visuals/dino-result.png" alt="Full shipped page — news feed, search and map, charts, and the dinosaur detail view in one continuous scroll">
-              </div>
-              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.02)">1</span>
-              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.49)">2</span>
-              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.59)">3</span>
-              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.76)">4</span>
-              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.89)">5</span>
-              <span class="b-pin" style="top: calc(41px + (100% - 53px) * 0.93)">6</span>
-            </div>
-            <div class="b-annotated-notes">
-              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.02)"><span class="b-note-line"></span><span class="b-note-text">Introduced a "Favourite" button in the nav, so users can access their saved dinosaurs.</span></div>
-              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.49)"><span class="b-note-line"></span><span class="b-note-text">Adapted the map into a choropleth, showing dinosaur density per country and syncing with the filters and list.</span></div>
-              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.59)"><span class="b-note-line"></span><span class="b-note-text">Added a scrollable dinosaur list for quickly picking one without hunting on the map.</span></div>
-              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.76)"><span class="b-note-line"></span><span class="b-note-text">Detail view appears once a dinosaur is selected from the list or search.</span></div>
-              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.89)"><span class="b-note-line"></span><span class="b-note-text">Taxonomy is shown as a tree chart for the selected dinosaur.</span></div>
-              <div class="b-note" style="top: calc(41px + (100% - 53px) * 0.93)"><span class="b-note-line"></span><span class="b-note-text">Placing recent news at the very top of a discovery page distracts from the core utility (searching and exploring dinosaurs).</span></div>
-            </div>
+          <div class="b-figure-frame">
+            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+            <img src="visuals/dino-result.png" alt="Full shipped page — news feed, search and map, charts, and the dinosaur detail view in one continuous scroll">
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.02)" data-note="Introduced a &quot;Favourite&quot; button in the nav, so users can access their saved dinosaurs.">1</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.49)" data-note="Adapted the map into a choropleth, showing dinosaur density per country and syncing with the filters and list.">2</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.59)" data-note="Added a scrollable dinosaur list for quickly picking one without hunting on the map.">3</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.76)" data-note="Detail view appears once a dinosaur is selected from the list or search.">4</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.89)" data-note="Taxonomy is shown as a tree chart for the selected dinosaur.">5</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.93)" data-note="Placing recent news at the very top of a discovery page distracts from the core utility (searching and exploring dinosaurs).">6</button>
+            <div class="b-popover" role="tooltip"></div>
           </div>
-          <figcaption>The shipped page, top to bottom.</figcaption>
+          <figcaption>The shipped page, top to bottom — tap a pin for detail.</figcaption>
         </figure>
       </section>
 
@@ -656,6 +654,96 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     update();
+  })();
+
+  // Annotated-figure popovers: a pin opens a shared popover per figure,
+  // filled with that pin's finding and positioned beside it (flipping side
+  // to stay on-screen). Below 640px the popover becomes a fixed bottom
+  // sheet instead (see CSS) — same open/close logic either way.
+  (function () {
+    // Real hover devices get open-on-hover in addition to click; touch
+    // devices only get click (there's no hover to speak of, and a "hover"
+    // that fires on tap would just make the first tap always open it).
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    let hoverCloseTimer = null;
+
+    document.querySelectorAll('.b-annotated').forEach((figure) => {
+      const frame = figure.querySelector('.b-figure-frame');
+      const popover = figure.querySelector('.b-popover');
+      const pins = [...figure.querySelectorAll('.b-pin')];
+      if (!frame || !popover || !pins.length) return;
+
+      let openPin = null;
+
+      function close() {
+        if (!openPin) return;
+        openPin.setAttribute('aria-expanded', 'false');
+        popover.classList.remove('is-open');
+        openPin = null;
+      }
+
+      function openFor(pin) {
+        clearTimeout(hoverCloseTimer);
+        if (openPin && openPin !== pin) close();
+        popover.textContent = pin.dataset.note;
+        popover.classList.add('is-open');
+        pin.setAttribute('aria-expanded', 'true');
+        openPin = pin;
+        pin.classList.add('is-seen');
+
+        if (window.innerWidth <= 640) return; // fixed bottom sheet, no anchoring needed
+
+        const frameRect = frame.getBoundingClientRect();
+        const pinTop = pin.offsetTop, pinHeight = pin.offsetHeight;
+        // Pins sit on the right edge, so the popover opens to the left by
+        // default; flip right only if the frame is too narrow for that.
+        const side = frameRect.width > 320 ? 'left' : 'right';
+        popover.dataset.side = side;
+        popover.style.top = Math.max(0, pinTop - popover.offsetHeight / 2 + pinHeight / 2) + 'px';
+        if (side === 'left') {
+          popover.style.right = (frame.clientWidth - pin.offsetLeft + 14) + 'px';
+          popover.style.left = 'auto';
+        } else {
+          popover.style.left = (pin.offsetLeft + pin.offsetWidth + 14) + 'px';
+          popover.style.right = 'auto';
+        }
+        // Clamp so the popover itself never runs past the frame's top/bottom.
+        requestAnimationFrame(() => {
+          const maxTop = frame.clientHeight - popover.offsetHeight - 4;
+          const top = parseFloat(popover.style.top);
+          if (top > maxTop) popover.style.top = Math.max(4, maxTop) + 'px';
+        });
+      }
+
+      // A short delay on hover-out (rather than closing instantly) means
+      // moving the pointer from the pin to the popover itself — to read a
+      // longer note, say — doesn't slam it shut mid-transit.
+      function scheduleClose() {
+        clearTimeout(hoverCloseTimer);
+        hoverCloseTimer = setTimeout(close, 220);
+      }
+
+      pins.forEach((pin) => {
+        pin.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (openPin === pin) { close(); return; }
+          openFor(pin);
+        });
+        if (canHover) {
+          pin.addEventListener('mouseenter', () => openFor(pin));
+          pin.addEventListener('mouseleave', scheduleClose);
+        }
+      });
+      if (canHover) {
+        popover.addEventListener('mouseenter', () => clearTimeout(hoverCloseTimer));
+        popover.addEventListener('mouseleave', scheduleClose);
+      }
+      document.addEventListener('click', (e) => {
+        if (openPin && !popover.contains(e.target)) close();
+      });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+      window.addEventListener('resize', close);
+    });
   })();
 
   // Dock hide on scroll-down (shared with homepage)
