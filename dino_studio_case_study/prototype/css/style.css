@@ -957,8 +957,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
    own width via container query, not the viewport: charts-grid halves the
    panel at 861px viewport width, well before a viewport-width media query
    would've turned this off, and the resulting two-column min-content floor
-   was pushing the pie out past the panel edge into the next chart. */
-@container (min-width: 360px) {
+   was pushing the pie out past the panel edge into the next chart.
+   The threshold itself has to clear the two-column legend's own min-content
+   width (2 * the longest label, ~163px, plus the column gap — about 342px)
+   with enough left over for the pie's chart-row gap and a non-zero pie —
+   360px didn't, so the split used to fire before there was room for it and
+   the pie got crushed to its 50px floor and still overflowed. */
+@container (min-width: 460px) {
   .chart-legend--split { columns: 2; column-gap: var(--s4); }
 }
 .chart-legend li {
