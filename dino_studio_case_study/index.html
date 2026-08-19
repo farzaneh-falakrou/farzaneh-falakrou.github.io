@@ -532,12 +532,11 @@
           <div class="b-figure-frame">
             <div class="b-figure-chrome"><span></span><span></span><span></span></div>
             <img src="visuals/dino-usability-02.png" alt="Second-round usability testing wireframe of the homepage, map, and search flows">
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.163); left: 93%; right: auto; margin-left: -20px;" data-note="Lack of a bookmark  to save specific dinosaurs for quick access.">1</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.135); left: 70%; right: auto; margin-left: -20px;" data-note="&quot;RESULTS&quot; is a pretty generic label. It doesn't say results of what (the current filters/search).">2</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.163); left: 33.6%; right: auto; margin-left: -20px;" data-note="It's difficult to choose an individual dinosaur from the map.">3</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.468)" data-note="It looks more like a count chart than a timeline.">4</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.775); left: 20%; right: auto; margin-left: -20px;" data-note="Some dinosaur types are grouped together under &quot;Other,&quot; which hides the differences between those individual dinosaur types.">5</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.71)" data-note="It's unclear what the &quot;Show Charts&quot; button does.">6</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.2775); left: 93%; right: auto; margin-left: -20px;" data-note="Lack of a bookmark  to save specific dinosaurs for quick access.">1</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.245); left: 70%; right: auto; margin-left: -20px;" data-note="&quot;RESULTS&quot; is a pretty generic label. It doesn't say results of what (the current filters/search).">2</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.31); left: 33.6%; right: auto; margin-left: -20px;" data-note="It's difficult to choose an individual dinosaur from the map.">3</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.73)" data-note="It looks more like a count chart than a timeline.">4</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.97); left: 20%; right: auto; margin-left: -20px;" data-note="Some dinosaur types are grouped together under &quot;Other,&quot; which hides the differences between those individual dinosaur types.">5</button>
             <div class="b-popover" role="tooltip"></div>
           </div>
           <figcaption>Wireframe with second-round usability findings — tap a pin for detail.</figcaption>
@@ -561,7 +560,7 @@
         </figure>
 
         <h3>2. Map visualization</h3>
-        <p>The dataset only recorded country-level location data. A literal pin per dinosaur would have piled multiple dinosaurs on top of each other in the same country, making individual dinosaurs impossible to select. I used a choropleth map instead — highlighting the density of dinosaurs per country — paired with a scrolling carousel listing the dinosaurs themselves, a simple way to pick one without needing a precise pin to click.</p>
+        <p>The dataset only recorded country-level location data. A literal pin per dinosaur would have piled multiple dinosaurs on top of each other in the same country, making individual dinosaurs impossible to select. I used a choropleth map instead — highlighting the density of dinosaurs per country.</p>
 
         <figure class="b-figure">
           <div class="b-figure-frame">
@@ -581,13 +580,11 @@
         <figure class="b-figure b-annotated">
           <div class="b-figure-frame">
             <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-            <img src="visuals/dino-result.png" alt="Full shipped page — news feed, search and map, charts, and the dinosaur detail view in one continuous scroll">
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.216); left: 78.1%; right: auto; margin-left: -20px;" data-note="Introduced a &quot;Favourite&quot; button in the nav, so users can access their saved dinosaurs.">1</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.206); left: 33.6%; right: auto; margin-left: -20px;" data-note="Adapted the map into a choropleth, showing dinosaur density per country and syncing with the filters and list.">2</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.24); left: 81.4%; right: auto; margin-left: -20px;" data-note="Added a scrollable dinosaur list for quickly picking one without hunting on the map.">3</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.311)" data-note="Detail view appears once a dinosaur is selected from the list or search.">4</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.413)" data-note="Taxonomy is shown as a tree chart for the selected dinosaur.">5</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.872)" data-note="Placing recent news at the very top of a discovery page distracts from the core utility (searching and exploring dinosaurs).">6</button>
+            <img src="visuals/dino-result.png" alt="Full shipped page — search and map, dinosaur detail, and charts in one continuous scroll">
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.4596); left: 91.3%; right: auto; margin-left: -20px;" data-note="Introduced a &quot;Favourite&quot; button in the nav, so users can access their saved dinosaurs.">1</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.3623); left: 34.6%; right: auto; margin-left: -20px;" data-note="Adapted the map into a choropleth, showing dinosaur density per country and syncing with the filters and list.">2</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.4929)" data-note="Detail view appears once a dinosaur is selected from the list or search.">3</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.6187)" data-note="Taxonomy is shown as a tree chart for the selected dinosaur.">4</button>
             <div class="b-popover" role="tooltip"></div>
           </div>
           <figcaption>The shipped page, top to bottom — tap a pin for detail.</figcaption>
