@@ -224,6 +224,24 @@
     #db .b-annotated .b-figure-frame { position: relative; }
     #db .b-annotated figcaption { font-size: 13px; font-style: italic; font-family: var(--font-serif); color: var(--muted); margin-top: 10px; padding: 0 6px; }
 
+    /* Dark/light pair of the same screenshot, swiped or scrolled between
+       rather than shown as two separate figures — they're the same view,
+       not two different findings. */
+    #db .b-theme-carousel { margin: 36px 0 32px; }
+    #db .b-theme-track {
+      display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    #db .b-theme-track::-webkit-scrollbar { display: none; }
+    #db .b-theme-slide { flex: 0 0 100%; min-width: 0; margin: 0; scroll-snap-align: start; }
+    #db .b-theme-dots { display: flex; justify-content: center; gap: 8px; margin-top: 14px; }
+    #db .b-theme-dot {
+      width: 8px; height: 8px; padding: 0; border: none; border-radius: 50%;
+      background: var(--line-2); cursor: pointer;
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+    #db .b-theme-dot.is-active { background: var(--accent); transform: scale(1.25); }
+
     /* Centered via negative margins rather than a translate() transform, so
        a pin's inline top/left (its actual target position) and its hover
        transform (a plain scale) never fight over the same property. Default
@@ -577,18 +595,38 @@
         <p>After refining the design through two rounds of usability testing, I designed it as a single-page, all-in-one learning tool for dinosaur enthusiasts of any age — search, map, taxonomy, and detail views, plus a news feed, all reachable by scrolling rather than navigating between pages. Interactive modules cover dinosaur history, evolution, habitat, and taxonomy without asking the user to leave the page.</p>
         <p>The annotations below show how each usability finding was addressed and resolved in the final design.</p>
 
-        <figure class="b-figure b-annotated">
-          <div class="b-figure-frame">
-            <div class="b-figure-chrome"><span></span><span></span><span></span></div>
-            <img src="visuals/dino-result.png" alt="Full shipped page — search and map, dinosaur detail, and charts in one continuous scroll">
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.4596); left: 91.3%; right: auto; margin-left: -20px;" data-note="Introduced a &quot;Favourite&quot; button in the nav, so users can access their saved dinosaurs.">1</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.3623); left: 34.6%; right: auto; margin-left: -20px;" data-note="Adapted the map into a choropleth, showing dinosaur density per country and syncing with the filters and list.">2</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.4929)" data-note="Detail view appears once a dinosaur is selected from the list or search.">3</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.6187)" data-note="Taxonomy is shown as a tree chart for the selected dinosaur.">4</button>
-            <div class="b-popover" role="tooltip"></div>
+        <div class="b-theme-carousel">
+          <div class="b-theme-track">
+            <figure class="b-figure b-annotated b-theme-slide">
+              <div class="b-figure-frame">
+                <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+                <img src="visuals/dino-result.png" alt="Full shipped page in dark mode — search and map, dinosaur detail, and charts in one continuous scroll">
+                <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.1384); left: 93.75%; right: auto; margin-left: -20px;" data-note="Added a spinning wheel of featured dinosaurs, giving the homepage a playful, inviting first impression instead of opening straight into search.">1</button>
+                <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.4929)" data-note="Introduced a &quot;Favourite&quot; button in the nav, so users can access their saved dinosaurs.">2</button>
+                <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.3623); left: 34.6%; right: auto; margin-left: -20px;" data-note="Adapted the map into a choropleth, showing dinosaur density per country and syncing with the filters and list.">3</button>
+                <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.6187)" data-note="Taxonomy is shown as a tree chart for the selected dinosaur.">4</button>
+                <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.8465)" data-note="Added a size-comparison chart against an average human, making it easier to picture and compare how big each dinosaur actually was.">5</button>                <div class="b-popover" role="tooltip"></div>
+              </div>
+              <figcaption>The shipped page, top to bottom, in dark mode — tap a pin for detail.</figcaption>
+            </figure>
+            <figure class="b-figure b-annotated b-theme-slide">
+              <div class="b-figure-frame">
+                <div class="b-figure-chrome"><span></span><span></span><span></span></div>
+                <img src="visuals/dino-result-light.png" alt="Full shipped page in light mode — search and map, dinosaur detail, and charts in one continuous scroll">
+                <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.1384); left: 93.75%; right: auto; margin-left: -20px;" data-note="Added a spinning wheel of featured dinosaurs, giving the homepage a playful, inviting first impression instead of opening straight into search.">1</button>
+                <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.4929)" data-note="Introduced a &quot;Favourite&quot; button in the nav, so users can access their saved dinosaurs.">2</button>
+                <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.3623); left: 34.6%; right: auto; margin-left: -20px;" data-note="Adapted the map into a choropleth, showing dinosaur density per country and syncing with the filters and list.">3</button>
+                <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.6187)" data-note="Taxonomy is shown as a tree chart for the selected dinosaur.">4</button>
+                <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.8465)" data-note="Added a size-comparison chart against an average human, making it easier to picture and compare how big each dinosaur actually was.">5</button>                <div class="b-popover" role="tooltip"></div>
+              </div>
+              <figcaption>The shipped page, top to bottom, in light mode — tap a pin for detail.</figcaption>
+            </figure>
           </div>
-          <figcaption>The shipped page, top to bottom — tap a pin for detail.</figcaption>
-        </figure>
+          <div class="b-theme-dots" role="tablist" aria-label="Switch between dark and light mode">
+            <button type="button" class="b-theme-dot is-active" data-index="0" aria-label="Show dark mode" aria-selected="true" role="tab"></button>
+            <button type="button" class="b-theme-dot" data-index="1" aria-label="Show light mode" aria-selected="false" role="tab"></button>
+          </div>
+        </div>
       </section>
 
       <section>
@@ -747,6 +785,35 @@
       });
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
       window.addEventListener('resize', close);
+    });
+  })();
+
+  // Dark/light screenshot carousel — dots jump the track, scrolling or
+  // swiping updates which dot is active.
+  (function() {
+    document.querySelectorAll('.b-theme-carousel').forEach((carousel) => {
+      const track = carousel.querySelector('.b-theme-track');
+      const dots = [...carousel.querySelectorAll('.b-theme-dot')];
+      if (!track || !dots.length) return;
+
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+          track.scrollTo({ left: track.clientWidth * i, behavior: 'smooth' });
+        });
+      });
+
+      let scrollTimer = null;
+      track.addEventListener('scroll', () => {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(() => {
+          const index = Math.round(track.scrollLeft / track.clientWidth);
+          dots.forEach((dot, i) => {
+            const isActive = i === index;
+            dot.classList.toggle('is-active', isActive);
+            dot.setAttribute('aria-selected', String(isActive));
+          });
+        }, 80);
+      });
     });
   })();
 
