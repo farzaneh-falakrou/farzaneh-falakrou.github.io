@@ -74,16 +74,21 @@ main {
   font-weight: 700;
 }
 .wf-hamburger {
-  display: none;
+  display: flex;
   width: 34px;
   height: 34px;
   border-radius: 4px;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  gap: 4px;
 }
-.wf-hamburger span,
-.wf-hamburger::before,
-.wf-hamburger::after { display: none; }
+.wf-hamburger span {
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: #444;
+}
 
 /* ---- section scaffolding ---- */
 .wf-section {
