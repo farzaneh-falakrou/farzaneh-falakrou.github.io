@@ -508,7 +508,7 @@
 
       <section>
         <div class="b-section-mark" id="db-testing"><span class="num">06</span><span class="label">Usability testing</span></div>
-        <p>I conducted two rounds of usability testing with five potential users. During the first round, participants completed key tasks while sharing their thoughts and challenges. The primary issue identified was that the page lacked engaging, fun, or gamified experiences. I subsequently refined the design based on this feedback and conducted a second round of testing.</p>
+        <p>I conducted two rounds of usability testing with five potential users. During usability testing, participants completed key tasks while sharing their thoughts and challenges.</p>
 
         <h3>First round of usability testing</h3>
 
@@ -516,10 +516,9 @@
           <div class="b-figure-frame">
             <div class="b-figure-chrome"><span></span><span></span><span></span></div>
             <img src="visuals/dino-usability-01.png" alt="First-round usability testing wireframe of the search and dinosaur detail flows">
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.11)" data-note="Placing recent news at the very top of a discovery page distracts from the core utility (searching and exploring dinosaurs).">1</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.4)" data-note="Overlapping pins in high-density regions make individual selection difficult.">2</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.69)" data-note="The detail section is missing key information like species, diet, and weight.">3</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.92)" data-note="The charts rely purely on visual slices and lack exact numbers or percentages.">4</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.4)" data-note="Overlapping pins in high-density regions make individual selection difficult.">1</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.69)" data-note="The detail section is missing key information like species, diet, and weight.">2</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.92)" data-note="The charts rely purely on visual slices and lack exact numbers or percentages.">3</button>
             <div class="b-popover" role="tooltip"></div>
           </div>
           <figcaption>Wireframe with first-round usability findings — tap a pin for detail.</figcaption>
@@ -527,16 +526,18 @@
 
         <h3>Second round of usability testing</h3>
 
-        <p>In response, I gave the navigation menu its own visual weight, labelled the search button clearly, and rebalanced the detail page so information sat evenly across both columns. The second round confirmed that the initial issues had been resolved, but it also revealed a few new usability problems. These final issues were addressed and incorporated into the high-fidelity design.</p>
+        <p>In response, I added a scrollable dinosaur list beside the map, since overlapping pins had made it hard to select a single dinosaur, and rebalanced the detail page with the missing fields, like species, diet, and weight. This round surfaced a few new issues, including a participant noting, "I know the numbers but I can't picture how big these things actually were." Across both rounds, the most consistent theme was that the page felt informative but not engaging, fun, or gamified enough.</p>
 
         <figure class="b-figure b-annotated">
           <div class="b-figure-frame">
             <div class="b-figure-chrome"><span></span><span></span><span></span></div>
             <img src="visuals/dino-usability-02.png" alt="Second-round usability testing wireframe of the homepage, map, and search flows">
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.163); left: 81.4%; right: auto; margin-left: -20px;" data-note="There's no way to access favourited dinosaurs once they're saved.">1</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.163); left: 33.6%; right: auto; margin-left: -20px;" data-note="It's difficult to choose an individual dinosaur from the map.">2</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.2); left: 33.6%; right: auto; margin-left: -20px;" data-note="The map lacks a zoom feature to explore it interactively.">3</button>
-            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.71)" data-note="It's unclear what the &quot;Show Charts&quot; button does.">4</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.163); left: 93%; right: auto; margin-left: -20px;" data-note="Lack of a bookmark  to save specific dinosaurs for quick access.">1</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.135); left: 70%; right: auto; margin-left: -20px;" data-note="&quot;RESULTS&quot; is a pretty generic label. It doesn't say results of what (the current filters/search).">2</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.163); left: 33.6%; right: auto; margin-left: -20px;" data-note="It's difficult to choose an individual dinosaur from the map.">3</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.468)" data-note="It looks more like a count chart than a timeline.">4</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.775); left: 20%; right: auto; margin-left: -20px;" data-note="Some dinosaur types are grouped together under &quot;Other,&quot; which hides the differences between those individual dinosaur types.">5</button>
+            <button type="button" class="b-pin" aria-expanded="false" style="top: calc(41px + (100% - 53px) * 0.71)" data-note="It's unclear what the &quot;Show Charts&quot; button does.">6</button>
             <div class="b-popover" role="tooltip"></div>
           </div>
           <figcaption>Wireframe with second-round usability findings — tap a pin for detail.</figcaption>
