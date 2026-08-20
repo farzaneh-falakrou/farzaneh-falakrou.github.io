@@ -303,16 +303,17 @@
     #db .b-popover[data-side="left"]::after { right: -5px; top: 50%; margin-top: -5px; }
     #db .b-popover[data-side="right"]::after { left: -5px; top: 50%; margin-top: -5px; }
 
-    /* Small screens: no room to float a popover beside a pin without it
-       running off-screen, so it becomes a sheet anchored to the viewport
-       bottom instead — same trigger, same content, different geometry. */
+    /* Small screens: not enough side room to float the popover left/right
+       of a pin, so it opens directly above or below it instead — still
+       anchored to the pin, just stacked rather than side-by-side. */
     @media (max-width: 640px) {
-      #db .b-popover {
-        position: fixed; left: 12px; right: 12px; bottom: 12px; top: auto; max-width: none;
-        transform: translateY(12px);
+      #db .b-popover { max-width: 220px; }
+      #db .b-popover[data-side="left"]::after, #db .b-popover[data-side="right"]::after { display: none; }
+      #db .b-popover[data-side="top"]::after, #db .b-popover[data-side="bottom"]::after {
+        left: 50%; margin-left: -5px;
       }
-      #db .b-popover.is-open { transform: translateY(0); }
-      #db .b-popover::after { display: none; }
+      #db .b-popover[data-side="top"]::after { bottom: -5px; }
+      #db .b-popover[data-side="bottom"]::after { top: -5px; }
     }
 
     /* Video — responsive 16:9 embed in place of a static image */
@@ -758,20 +759,43 @@
         openPin = pin;
         pin.classList.add('is-seen');
 
-        if (window.innerWidth <= 640) return; // fixed bottom sheet, no anchoring needed
-
         const pinTop = pin.offsetTop, pinHeight = pin.offsetHeight;
-        const pinCenterX = pin.offsetLeft + pin.offsetWidth / 2;
+        const pinLeft = pin.offsetLeft, pinWidth = pin.offsetWidth;
+        const pinCenterX = pinLeft + pinWidth / 2;
+
+        if (window.innerWidth <= 640) {
+          // Not enough side room on a narrow frame, so the popover stacks
+          // above or below the pin instead of floating to its left/right —
+          // still anchored right next to the number, not detached to a sheet.
+          popover.style.left = 'auto';
+          popover.style.right = 'auto';
+          requestAnimationFrame(() => {
+            const popW = popover.offsetWidth, popH = popover.offsetHeight;
+            let left = pinCenterX - popW / 2;
+            left = Math.max(4, Math.min(left, frame.clientWidth - popW - 4));
+            popover.style.left = left + 'px';
+
+            const spaceBelow = frame.clientHeight - (pinTop + pinHeight);
+            const openBelow = spaceBelow >= popH + 14 || pinTop < popH + 14;
+            const side = openBelow ? 'bottom' : 'top';
+            popover.dataset.side = side;
+            popover.style.top = openBelow
+              ? (pinTop + pinHeight + 14) + 'px'
+              : Math.max(4, pinTop - popH - 14) + 'px';
+          });
+          return;
+        }
+
         // Pins can sit anywhere now (not just the right edge), so open away
         // from whichever half of the frame the pin is actually in.
         const side = pinCenterX > frame.clientWidth / 2 ? 'left' : 'right';
         popover.dataset.side = side;
         popover.style.top = Math.max(0, pinTop - popover.offsetHeight / 2 + pinHeight / 2) + 'px';
         if (side === 'left') {
-          popover.style.right = (frame.clientWidth - pin.offsetLeft + 14) + 'px';
+          popover.style.right = (frame.clientWidth - pinLeft + 14) + 'px';
           popover.style.left = 'auto';
         } else {
-          popover.style.left = (pin.offsetLeft + pin.offsetWidth + 14) + 'px';
+          popover.style.left = (pinLeft + pinWidth + 14) + 'px';
           popover.style.right = 'auto';
         }
         // Clamp so the popover itself never runs past the frame's top/bottom.
