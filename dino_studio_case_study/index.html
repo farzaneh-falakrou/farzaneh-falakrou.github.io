@@ -310,7 +310,7 @@
       #db .b-popover { max-width: 220px; }
       #db .b-popover[data-side="left"]::after, #db .b-popover[data-side="right"]::after { display: none; }
       #db .b-popover[data-side="top"]::after, #db .b-popover[data-side="bottom"]::after {
-        left: 50%; margin-left: -5px;
+        left: var(--arrow-x, 50%); margin-left: -5px;
       }
       #db .b-popover[data-side="top"]::after { bottom: -5px; }
       #db .b-popover[data-side="bottom"]::after { top: -5px; }
@@ -774,6 +774,10 @@
             let left = pinCenterX - popW / 2;
             left = Math.max(4, Math.min(left, frame.clientWidth - popW - 4));
             popover.style.left = left + 'px';
+            // Arrow points at the pin's actual x-position, not the popover's
+            // own center, since clamping can shift the box without moving the pin.
+            const arrowX = Math.max(10, Math.min(pinCenterX - left, popW - 10));
+            popover.style.setProperty('--arrow-x', arrowX + 'px');
 
             const spaceBelow = frame.clientHeight - (pinTop + pinHeight);
             const openBelow = spaceBelow >= popH + 14 || pinTop < popH + 14;
