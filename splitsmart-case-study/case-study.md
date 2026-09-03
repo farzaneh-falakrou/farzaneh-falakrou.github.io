@@ -80,7 +80,7 @@ The decision was to surface how much budget each group has remaining, not just h
 |---|---|
 | Average time to identify balance | ~4 seconds |
 | Average taps to settle a balance | 1–2 taps |
-| Task completion rate | 100% |
+| Task completion rate | 88% |
 | Participants needing assistance | 0 of 5 |
 | Understood budget status immediately | 4 of 5 |
 | Expected to settle everyone at once | 3 of 5 |
