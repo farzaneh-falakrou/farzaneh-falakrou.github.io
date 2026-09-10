@@ -66,9 +66,9 @@ Rather than showing group totals, the Budget screen translates shared expenses i
 
 Balances are grouped by person across every group, not group by group, and ordered by what needs action. What you owe and what you're owed sit side by side with the fewest transfers to clear them; already-settled people drop to an *all clear* list at the bottom.
 
-### Groups page — remaining, not spent
+### Groups page — your share first
 
-The decision was to surface how much budget each group has remaining, not just how much it has spent. Remaining is actionable. Spent is history.
+Each group card leads with what you spent in it, with what you owe and are owed right beside it. An earlier version gave every group its own budget. I cut that layer so the Budget screen stays the one place where your budget lives.
 
 ---
 
