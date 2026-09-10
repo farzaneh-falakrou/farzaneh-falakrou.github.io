@@ -85,7 +85,7 @@ The decision was to surface how much budget each group has remaining, not just h
 | Understood budget status immediately | 4 of 5 |
 | Expected to settle everyone at once | 3 of 5 |
 
-All five participants completed primary tasks with no major navigation issues. Balance, settlement, and budget status were understood quickly across the board.
+Participants completed 88% of tasks across the core user flows, with no major navigation issues. Balance, settlement, and budget status were understood quickly across the board.
 
 **Key finding:** Three of five participants expected to clear everything in one pass — settling all the people they owed at once — rather than opening each balance and paying it one by one. They thought in terms of *who* they owe and wanted a single action to settle up, not a debt-at-a-time flow. This directly drove the redesign of the Settle up screen.
 
