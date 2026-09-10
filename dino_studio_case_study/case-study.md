@@ -8,7 +8,7 @@
 
 ## THE PROBLEM
 
-The brief was to turn a National History Museum dataset — hundreds of dinosaurs, their diet, habitat, taxonomy, and discovery history — into a single-page application people would actually want to explore: an immersive, user-friendly way to discover dinosaurs, their habitats, behaviors, and historical significance. The hard part wasn't the content, it was the volume: presenting that much information in a way that stayed informative *and* entertaining, stayed responsive across devices, and didn't fall over under its own data.
+The brief was to turn a Natural History Museum dataset — hundreds of dinosaurs, their diet, habitat, taxonomy, and discovery history — into a single-page application people would actually want to explore: an immersive, user-friendly way to discover dinosaurs, their habitats, behaviors, and historical significance. The hard part wasn't the content, it was the volume: presenting that much information in a way that stayed informative *and* entertaining, stayed responsive across devices, and didn't fall over under its own data.
 
 ---
 
