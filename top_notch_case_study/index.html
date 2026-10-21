@@ -446,10 +446,16 @@
     }
     /* Top-notch additions */
     #hb .b-cover-image { border-radius: 20px; }
-    #hb .b-hero-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
-    #hb .b-hero-links a { padding: 12px 24px; border-radius: 100px; border: 1px solid var(--ink); font-size: 14px; transition: all 0.15s; }
-    #hb .b-hero-links a:first-child { background: var(--ink); color: var(--bg); }
-    #hb .b-hero-links a:hover { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+    #hb .b-hero-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      margin-top: 36px; padding: 14px 26px;
+      border: 1px solid var(--accent); border-radius: 999px;
+      font-size: 15px; letter-spacing: 0.02em;
+      color: var(--accent); text-decoration: none;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    #hb .b-hero-cta:hover, #hb .b-hero-cta:focus-visible { background: var(--accent); color: var(--bg); }
+    #hb .b-hero-cta span { font-size: 18px; line-height: 1; }
     #hb .b-gaps--3 { grid-template-columns: repeat(3, 1fr); }
     #hb .b-story-avatar--photo { overflow: hidden; width: 52px; height: 52px; }
     #hb .b-story-avatar--photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -481,9 +487,7 @@
     <div class="b-hero-eyebrow">Case study · Top-notch Beauty · 2023</div>
     <h1>Beauty advice online is loud and biased. Top-notch Beauty makes it <em>personal</em>.</h1>
     <p class="b-hero-sub">Top-notch Beauty is a mobile app that connects people with makeup artists and dermatologists for advice that fits their own skin and hair, and lets them try products on virtually before they buy.</p>
-    <div class="b-hero-links">
-      <a href="https://www.figma.com/proto/krWk8sT3O0hZ3qdBeXOzNb/Top-notch-prototype?node-id=1-3918&amp;mode=design&amp;t=RGq22Dn2vtNwe9Wn-1" target="_blank" rel="noopener">View the prototype ↗</a>
-    </div>
+    <a class="b-hero-cta" href="https://www.figma.com/proto/krWk8sT3O0hZ3qdBeXOzNb/Top-notch-prototype?node-id=1-3918&amp;mode=design&amp;t=RGq22Dn2vtNwe9Wn-1" target="_blank" rel="noopener">View the prototype <span>↗</span></a>
   </section>
 
   <div class="b-cover">
