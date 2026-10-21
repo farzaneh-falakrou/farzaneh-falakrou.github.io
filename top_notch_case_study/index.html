@@ -451,7 +451,9 @@
     #hb .b-hero-links a:first-child { background: var(--ink); color: var(--bg); }
     #hb .b-hero-links a:hover { background: var(--accent); border-color: var(--accent); color: var(--ink); }
     #hb .b-gaps--3 { grid-template-columns: repeat(3, 1fr); }
-    #hb .b-story-card .num { font-size: 24px; }
+    #hb .b-story-avatar--photo { overflow: hidden; width: 52px; height: 52px; }
+    #hb .b-story-avatar--photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    #hb .b-story-card p.b-persona-name { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
     #hb .b-quote { font-family: var(--font-serif); font-style: italic; font-size: 28px; line-height: 1.3; color: var(--ink); border-left: 2px solid var(--accent); padding-left: 24px; margin: 36px 0; }
     #hb .b-inline-link { color: var(--accent); }
     @media (max-width: 700px) {
@@ -578,8 +580,8 @@
         <h2>Two people, two <em>different</em> needs.</h2>
         <p>The interview results pointed to two distinct personas:</p>
         <div class="b-stories">
-          <div class="b-story-card"><div class="num">Jessica</div><p><strong>Sustainable skincare advocate.</strong> Values dermatologist-recommended, science-based products and wants to understand the ingredients in what she uses.</p></div>
-          <div class="b-story-card"><div class="num">Amalia</div><p><strong>Budget-conscious makeup seeker.</strong> Wants to experiment with new makeup styles, needs guidance on application, and wants to see how products look on her face before buying.</p></div>
+          <div class="b-story-card"><div class="b-story-avatar b-story-avatar--photo"><img src="visuals/jessica-avatar.jpg" alt=""></div><div class="num">01</div><p class="b-persona-name"><strong>Jessica</strong> · Sustainable skincare advocate</p><p>Values dermatologist-recommended, <strong>science-based products</strong> and wants to understand the ingredients in what she uses.</p></div>
+          <div class="b-story-card"><div class="b-story-avatar b-story-avatar--photo"><img src="visuals/amalia-avatar.jpg" alt=""></div><div class="num">02</div><p class="b-persona-name"><strong>Amalia</strong> · Budget-conscious makeup seeker</p><p>Wants to experiment with new makeup styles, needs <strong>guidance on application</strong>, and wants to <strong>see products on her face</strong> before buying.</p></div>
         </div>
         <figure class="b-figure b-figure-wide">
           <img src="visuals/amalia_02.png" data-zoom alt="Persona sheet for Amalia, budget-conscious makeup seeker">
