@@ -462,6 +462,7 @@
     #hb .b-story-card p.b-persona-name { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
     #hb .b-quote { font-family: var(--font-serif); font-style: italic; font-size: 28px; line-height: 1.3; color: var(--ink); border-left: 2px solid var(--accent); padding-left: 24px; margin: 36px 0; }
     #hb .b-inline-link { color: var(--accent); }
+    #hb .b-flow-title { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin: 48px 0 10px; }
     @media (max-width: 700px) {
       #hb .b-gaps--3 { grid-template-columns: 1fr; }
       #hb .b-quote { font-size: 22px; }
@@ -699,10 +700,130 @@
           <figcaption>Colours, type, icons and components.</figcaption>
         </figure>
         <h3>Final mockups</h3>
-        <figure class="b-figure b-figure-wide">
-          <img src="visuals/final_mockup.png" data-zoom alt="Final high-fidelity mockups of the Top-notch Beauty app">
-          <figcaption>The final screens. <a class="b-inline-link" href="https://www.figma.com/proto/krWk8sT3O0hZ3qdBeXOzNb/Top-notch-prototype?node-id=1-3918&amp;mode=design&amp;t=RGq22Dn2vtNwe9Wn-1" target="_blank" rel="noopener">Try the prototype ↗</a></figcaption>
-        </figure>
+        <p>The final screens, grouped by flow. Swipe or use the arrows to move through each one. <a class="b-inline-link" href="https://www.figma.com/proto/krWk8sT3O0hZ3qdBeXOzNb/Top-notch-prototype?node-id=1-3918&amp;mode=design&amp;t=RGq22Dn2vtNwe9Wn-1" target="_blank" rel="noopener">Try the prototype ↗</a></p>
+        <h4 class="b-flow-title">Onboarding &amp; sign-in</h4>
+        <p>Three onboarding screens introduce the app's core features, finding an expert, video calls and virtual try-on, before the user signs in.</p>
+        <div class="phone-slider" data-phone-slider>
+          <div class="phone-coverflow-wrap">
+            <div class="swiper phone-coverflow">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/onboard-experts.jpg" alt="Onboarding screen: find an expert" data-caption="Onboarding: find beauty experts."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/onboard-video.jpg" alt="Onboarding screen: video call" data-caption="Onboarding: get advice through a video call."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/onboard-tryon.jpg" alt="Onboarding screen: try on makeup" data-caption="Onboarding: try makeup on virtually."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/login.jpg" alt="Login screen with email, password and social sign-in" data-caption="Sign in."></div>
+              </div>
+            </div>
+            <div class="phone-mock phone-mock--hero phone-bezel-overlay" aria-hidden="true">
+              <div class="device device-iphone-x">
+                <div class="device-frame"><div class="device-screen"></div></div>
+                <div class="device-stripe"></div>
+                <div class="device-header"></div>
+                <div class="device-sensors"></div>
+                <div class="device-btns"></div>
+                <div class="device-power"></div>
+              </div>
+            </div>
+          </div>
+          <div class="phone-slider-controls">
+            <button type="button" class="phone-slider-nav" data-slider-prev aria-label="Previous screen"><span>‹</span></button>
+            <div class="swiper-pagination"></div>
+            <button type="button" class="phone-slider-nav" data-slider-next aria-label="Next screen"><span>›</span></button>
+          </div>
+          <p class="phone-slider-caption" data-slider-caption>Onboarding: find beauty experts.</p>
+        </div>
+        <h4 class="b-flow-title">Find &amp; book an expert</h4>
+        <p>From the home screen, users browse experts by category, open a profile, pick a time and pay for the session.</p>
+        <div class="phone-slider" data-phone-slider>
+          <div class="phone-coverflow-wrap">
+            <div class="swiper phone-coverflow">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/home.jpg" alt="Home screen with upcoming consultations and expert categories" data-caption="Home: upcoming consultations and expert categories."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/find-expert.jpg" alt="Find an expert screen with filters and expert list" data-caption="Find an expert, filtered by type."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/expert-profile.jpg" alt="Expert profile for makeup artist Francesca Moretti" data-caption="The expert's profile, skills and reviews."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/select-date.jpg" alt="Select a date and time screen with duration and available slots" data-caption="Pick a duration, date and slot."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/checkout.jpg" alt="Checkout screen with summary and payment method" data-caption="Checkout."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/payment-success.jpg" alt="Payment successful confirmation" data-caption="Payment confirmed."></div>
+              </div>
+            </div>
+            <div class="phone-mock phone-mock--hero phone-bezel-overlay" aria-hidden="true">
+              <div class="device device-iphone-x">
+                <div class="device-frame"><div class="device-screen"></div></div>
+                <div class="device-stripe"></div>
+                <div class="device-header"></div>
+                <div class="device-sensors"></div>
+                <div class="device-btns"></div>
+                <div class="device-power"></div>
+              </div>
+            </div>
+          </div>
+          <div class="phone-slider-controls">
+            <button type="button" class="phone-slider-nav" data-slider-prev aria-label="Previous screen"><span>‹</span></button>
+            <div class="swiper-pagination"></div>
+            <button type="button" class="phone-slider-nav" data-slider-next aria-label="Next screen"><span>›</span></button>
+          </div>
+          <p class="phone-slider-caption" data-slider-caption>Home: upcoming consultations and expert categories.</p>
+        </div>
+        <h4 class="b-flow-title">Consultations</h4>
+        <p>Booked sessions are collected in one place, and users can chat with their expert before or after a call.</p>
+        <div class="phone-slider" data-phone-slider>
+          <div class="phone-coverflow-wrap">
+            <div class="swiper phone-coverflow">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/consultations.jpg" alt="Expert consultation list with upcoming sessions" data-caption="Upcoming consultations."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/chat.jpg" alt="Chat with makeup artist Francesca" data-caption="Chat with the expert."></div>
+              </div>
+            </div>
+            <div class="phone-mock phone-mock--hero phone-bezel-overlay" aria-hidden="true">
+              <div class="device device-iphone-x">
+                <div class="device-frame"><div class="device-screen"></div></div>
+                <div class="device-stripe"></div>
+                <div class="device-header"></div>
+                <div class="device-sensors"></div>
+                <div class="device-btns"></div>
+                <div class="device-power"></div>
+              </div>
+            </div>
+          </div>
+          <div class="phone-slider-controls">
+            <button type="button" class="phone-slider-nav" data-slider-prev aria-label="Previous screen"><span>‹</span></button>
+            <div class="swiper-pagination"></div>
+            <button type="button" class="phone-slider-nav" data-slider-next aria-label="Next screen"><span>›</span></button>
+          </div>
+          <p class="phone-slider-caption" data-slider-caption>Upcoming consultations.</p>
+        </div>
+        <h4 class="b-flow-title">Virtual try-on &amp; buy</h4>
+        <p>Users take a selfie or pick a photo, try products on, compare before and after, and buy what suits them.</p>
+        <div class="phone-slider" data-phone-slider>
+          <div class="phone-coverflow-wrap">
+            <div class="swiper phone-coverflow">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/tryon-start.jpg" alt="Virtual try-on start screen: selfie, upload or model" data-caption="Start a try-on: selfie, photo or model."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/select-image.jpg" alt="Select an image from recent photos or gallery" data-caption="Choose a photo."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/tryon.jpg" alt="Try-on screen with lipstick options" data-caption="Try on a lipstick."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/tryon-applied.jpg" alt="Try-on screen with lipstick applied" data-caption="The shade applied."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/tryon-compare.jpg" alt="Before and after comparison of the try-on" data-caption="Compare before and after."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/search.jpg" alt="Product search with recent and recommended items" data-caption="Search for products."></div>
+                <div class="swiper-slide"><img class="phone-slide-img" src="visuals/screens/buy-product.jpg" alt="Product page for Rouge Drama Matte lipstick" data-caption="Buy the product."></div>
+              </div>
+            </div>
+            <div class="phone-mock phone-mock--hero phone-bezel-overlay" aria-hidden="true">
+              <div class="device device-iphone-x">
+                <div class="device-frame"><div class="device-screen"></div></div>
+                <div class="device-stripe"></div>
+                <div class="device-header"></div>
+                <div class="device-sensors"></div>
+                <div class="device-btns"></div>
+                <div class="device-power"></div>
+              </div>
+            </div>
+          </div>
+          <div class="phone-slider-controls">
+            <button type="button" class="phone-slider-nav" data-slider-prev aria-label="Previous screen"><span>‹</span></button>
+            <div class="swiper-pagination"></div>
+            <button type="button" class="phone-slider-nav" data-slider-next aria-label="Next screen"><span>›</span></button>
+          </div>
+          <p class="phone-slider-caption" data-slider-caption>Start a try-on: selfie, photo or model.</p>
+        </div>
       </section>
 
       <section>
@@ -749,7 +870,36 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
+  // Coverflow phone gallery: only the centered screen sits inside the phone
+  // bezel (a fixed overlay with a transparent screen hole); the rest peek at
+  // the sides via Swiper's coverflow effect, iPod-gallery style.
+  (function () {
+    document.querySelectorAll('[data-phone-slider]').forEach(function (root) {
+      const caption = root.querySelector('[data-slider-caption]');
+      const swiper = new Swiper(root.querySelector('.phone-coverflow'), {
+        effect: 'coverflow',
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        speed: 450,
+        coverflowEffect: { rotate: 32, stretch: 0, depth: 180, modifier: 1, slideShadows: false },
+        pagination: { el: root.querySelector('.swiper-pagination'), clickable: true },
+        navigation: {
+          nextEl: root.querySelector('[data-slider-next]'),
+          prevEl: root.querySelector('[data-slider-prev]'),
+        },
+        on: {
+          slideChangeTransitionStart: function (sw) {
+            const img = sw.slides[sw.activeIndex].querySelector('img');
+            if (img && caption) caption.textContent = img.dataset.caption;
+          },
+        },
+      });
+    });
+  })();
+
   // Scrollspy: highlight the TOC item for the last section whose marker has passed the offset line.
   // (Distance-based rather than IntersectionObserver so short sections between tall ones never get skipped.)
   (function () {
