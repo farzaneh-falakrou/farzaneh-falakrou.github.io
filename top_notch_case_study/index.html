@@ -467,6 +467,19 @@
       #hb .b-gaps--3 { grid-template-columns: 1fr; }
       #hb .b-quote { font-size: 22px; }
     }
+
+    /* Horizontal peek slider for persona / journey sheets */
+    #hb .b-peek { position: relative; margin: 32px 0; }
+    #hb .b-peek-track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    #hb .b-peek-track::-webkit-scrollbar { display: none; }
+    #hb .b-peek-track figure { flex: 0 0 86%; margin: 0; scroll-snap-align: start; }
+    #hb .b-peek-track figure:last-child { margin-right: 14%; scroll-snap-align: end; }
+    #hb .b-peek-track img { width: 100%; display: block; border-radius: 12px; }
+    #hb .b-peek-controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 16px; }
+    #hb .b-peek-dots { display: flex; gap: 8px; }
+    #hb .b-peek-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--line); }
+    #hb .b-peek-dots span.on { background: var(--accent); }
+    #hb .b-peek .phone-slider-nav:disabled { opacity: .35; pointer-events: none; }
   </style>
 </head>
 <body>
@@ -587,24 +600,34 @@
           <div class="b-story-card"><div class="b-story-avatar b-story-avatar--photo"><img src="visuals/jessica-avatar.jpg" alt=""></div><div class="num">01</div><p class="b-persona-name"><strong>Jessica</strong> · Sustainable skincare advocate</p><p>Values dermatologist-recommended, <strong>science-based products</strong> and wants to understand the ingredients in what she uses.</p></div>
           <div class="b-story-card"><div class="b-story-avatar b-story-avatar--photo"><img src="visuals/amalia-avatar.jpg" alt=""></div><div class="num">02</div><p class="b-persona-name"><strong>Amalia</strong> · Budget-conscious makeup seeker</p><p>Wants to experiment with new makeup styles, needs <strong>guidance on application</strong>, and wants to <strong>see products on her face</strong> before buying.</p></div>
         </div>
-        <figure class="b-figure b-figure-wide">
-          <img src="visuals/jessica_02.png" data-zoom alt="Persona sheet for Jessica, sustainable skincare advocate">
-          <figcaption>Persona: Jessica.</figcaption>
-        </figure>
-        <figure class="b-figure b-figure-wide">
-          <img src="visuals/amalia_02.png" data-zoom alt="Persona sheet for Amalia, budget-conscious makeup seeker">
-          <figcaption>Persona: Amalia.</figcaption>
-        </figure>
+        <div class="b-peek">
+          <div class="b-peek-track">
+            <figure class="b-figure">
+              <img src="visuals/jessica_02.png" data-zoom alt="Persona sheet for Jessica, sustainable skincare advocate">
+              <figcaption>Persona: Jessica.</figcaption>
+            </figure>
+            <figure class="b-figure">
+              <img src="visuals/amalia_02.png" data-zoom alt="Persona sheet for Amalia, budget-conscious makeup seeker">
+              <figcaption>Persona: Amalia.</figcaption>
+            </figure>
+          </div>
+          <div class="b-peek-controls"><button class="phone-slider-nav b-peek-prev" aria-label="Previous">←</button><div class="b-peek-dots"></div><button class="phone-slider-nav b-peek-next" aria-label="Next">→</button></div>
+        </div>
         <h3>User journeys</h3>
         <p>I mapped a user journey for each persona to understand the users' perspective and behaviour: what shapes their decisions, how they feel at each step, and where they struggle, get frustrated or drop off. Pinpointing those moments showed me what to improve and what to keep.</p>
-        <figure class="b-figure b-figure-wide">
-          <img src="visuals/jessica_03.png" data-zoom alt="User journey map for Jessica showing steps, thoughts, emotions and opportunities">
-          <figcaption>Jessica's journey, with the pain points marked.</figcaption>
-        </figure>
-        <figure class="b-figure b-figure-wide">
-          <img src="visuals/amalia_03.png" data-zoom alt="User journey map for Amalia showing steps, thoughts, emotions and opportunities">
-          <figcaption>Amalia's journey, with the pain points marked.</figcaption>
-        </figure>
+        <div class="b-peek">
+          <div class="b-peek-track">
+            <figure class="b-figure">
+              <img src="visuals/jessica_03.png" data-zoom alt="User journey map for Jessica showing steps, thoughts, emotions and opportunities">
+              <figcaption>Jessica's journey, with the pain points marked.</figcaption>
+            </figure>
+            <figure class="b-figure">
+              <img src="visuals/amalia_03.png" data-zoom alt="User journey map for Amalia showing steps, thoughts, emotions and opportunities">
+              <figcaption>Amalia's journey, with the pain points marked.</figcaption>
+            </figure>
+          </div>
+          <div class="b-peek-controls"><button class="phone-slider-nav b-peek-prev" aria-label="Previous">←</button><div class="b-peek-dots"></div><button class="phone-slider-nav b-peek-next" aria-label="Next">→</button></div>
+        </div>
       </section>
 
       <section>
@@ -1022,5 +1045,17 @@
   })();
 </script>
 
+<script>
+document.querySelectorAll('#hb .b-peek').forEach(function (p) {
+  var t = p.querySelector('.b-peek-track'), f = t.querySelectorAll('figure'),
+      d = p.querySelector('.b-peek-dots'), prev = p.querySelector('.b-peek-prev'), next = p.querySelector('.b-peek-next');
+  f.forEach(function () { d.appendChild(document.createElement('span')); });
+  function idx() { return Math.round(t.scrollLeft / (f[1].offsetLeft - f[0].offsetLeft)); }
+  function upd() { var i = Math.min(idx(), f.length - 1); d.querySelectorAll('span').forEach(function (s, k) { s.classList.toggle('on', k === i); }); prev.disabled = i === 0; next.disabled = i === f.length - 1; }
+  function go(i) { t.scrollTo({ left: f[Math.max(0, Math.min(i, f.length - 1))].offsetLeft - f[0].offsetLeft, behavior: 'smooth' }); }
+  prev.onclick = function () { go(idx() - 1); }; next.onclick = function () { go(idx() + 1); };
+  t.addEventListener('scroll', upd, { passive: true }); upd();
+});
+</script>
 </body>
 </html>
