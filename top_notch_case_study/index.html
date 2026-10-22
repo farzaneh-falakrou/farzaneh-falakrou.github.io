@@ -197,9 +197,9 @@
     #hb .phone-slider-nav.swiper-button-disabled { opacity: 0.35; cursor: default; pointer-events: none; }
     #hb .phone-slider-controls { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 4px; }
     #hb .phone-slider-caption { font-size: 13px; font-style: italic; font-family: var(--font-serif); color: var(--muted); text-align: center; min-height: 18px; }
-    #hb .phone-slider .swiper-pagination { position: static; margin-top: 14px; display: flex; justify-content: center; gap: 6px; }
-    #hb .phone-slider .swiper-pagination-bullet { width: 6px; height: 6px; background: var(--line); opacity: 1; margin: 0; }
-    #hb .phone-slider .swiper-pagination-bullet-active { background: var(--accent); }
+    #hb .phone-slider .swiper-pagination, #hb .sheet-slider .swiper-pagination { position: static; margin-top: 14px; display: flex; justify-content: center; gap: 6px; }
+    #hb .phone-slider .swiper-pagination-bullet, #hb .sheet-slider .swiper-pagination-bullet { width: 6px; height: 6px; background: var(--line); opacity: 1; margin: 0; }
+    #hb .phone-slider .swiper-pagination-bullet-active, #hb .sheet-slider .swiper-pagination-bullet-active { background: var(--accent); }
 
     /* Metadata strip — 4 fields (Role, Team, Timeline, Type) */
     #hb .b-meta {
@@ -468,18 +468,10 @@
       #hb .b-quote { font-size: 22px; }
     }
 
-    /* Horizontal peek slider for persona / journey sheets */
-    #hb .b-peek { position: relative; margin: 32px 0; }
-    #hb .b-peek-track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-    #hb .b-peek-track::-webkit-scrollbar { display: none; }
-    #hb .b-peek-track figure { flex: 0 0 86%; margin: 0; scroll-snap-align: start; }
-    #hb .b-peek-track figure:last-child { margin-right: 14%; scroll-snap-align: end; }
-    #hb .b-peek-track img { width: 100%; display: block; border-radius: 12px; }
-    #hb .b-peek-controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 16px; }
-    #hb .b-peek-dots { display: flex; gap: 8px; }
-    #hb .b-peek-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--line); }
-    #hb .b-peek-dots span.on { background: var(--accent); }
-    #hb .b-peek .phone-slider-nav:disabled { opacity: .35; pointer-events: none; }
+    /* Persona / journey sheets: one full-width sheet per slide, same controls as the phone sliders */
+    #hb .sheet-slider { margin: 32px 0; }
+    #hb .sheet-slider .swiper { overflow: hidden; }
+    #hb .sheet-slider .swiper-slide img { width: 100%; display: block; }
   </style>
 </head>
 <body>
@@ -600,33 +592,35 @@
           <div class="b-story-card"><div class="b-story-avatar b-story-avatar--photo"><img src="visuals/jessica-avatar.jpg" alt=""></div><div class="num">01</div><p class="b-persona-name"><strong>Jessica</strong> · Sustainable skincare advocate</p><p>Values dermatologist-recommended, <strong>science-based products</strong> and wants to understand the ingredients in what she uses.</p></div>
           <div class="b-story-card"><div class="b-story-avatar b-story-avatar--photo"><img src="visuals/amalia-avatar.jpg" alt=""></div><div class="num">02</div><p class="b-persona-name"><strong>Amalia</strong> · Budget-conscious makeup seeker</p><p>Wants to experiment with new makeup styles, needs <strong>guidance on application</strong>, and wants to <strong>see products on her face</strong> before buying.</p></div>
         </div>
-        <div class="b-peek">
-          <div class="b-peek-track">
-            <figure class="b-figure">
-              <img src="visuals/jessica_02.png" data-zoom alt="Persona sheet for Jessica, sustainable skincare advocate">
-              <figcaption>Persona: Jessica.</figcaption>
-            </figure>
-            <figure class="b-figure">
-              <img src="visuals/amalia_02.png" data-zoom alt="Persona sheet for Amalia, budget-conscious makeup seeker">
-              <figcaption>Persona: Amalia.</figcaption>
-            </figure>
+        <div class="sheet-slider" data-sheet-slider>
+          <div class="swiper">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide" data-caption="Persona: Jessica."><img src="visuals/jessica_02.png?v=2" data-zoom alt="Persona sheet for Jessica, sustainable skincare advocate"></div>
+              <div class="swiper-slide" data-caption="Persona: Amalia."><img src="visuals/amalia_02.png?v=2" data-zoom alt="Persona sheet for Amalia, budget-conscious makeup seeker"></div>
+            </div>
           </div>
-          <div class="b-peek-controls"><button class="phone-slider-nav b-peek-prev" aria-label="Previous">←</button><div class="b-peek-dots"></div><button class="phone-slider-nav b-peek-next" aria-label="Next">→</button></div>
+          <div class="phone-slider-controls">
+            <button type="button" class="phone-slider-nav" data-slider-prev aria-label="Previous"><span>‹</span></button>
+            <div class="swiper-pagination"></div>
+            <button type="button" class="phone-slider-nav" data-slider-next aria-label="Next"><span>›</span></button>
+          </div>
+          <p class="phone-slider-caption" data-slider-caption>Persona: Jessica.</p>
         </div>
         <h3>User journeys</h3>
         <p>I mapped a user journey for each persona to understand the users' perspective and behaviour: what shapes their decisions, how they feel at each step, and where they struggle, get frustrated or drop off. Pinpointing those moments showed me what to improve and what to keep.</p>
-        <div class="b-peek">
-          <div class="b-peek-track">
-            <figure class="b-figure">
-              <img src="visuals/jessica_03.png" data-zoom alt="User journey map for Jessica showing steps, thoughts, emotions and opportunities">
-              <figcaption>Jessica's journey, with the pain points marked.</figcaption>
-            </figure>
-            <figure class="b-figure">
-              <img src="visuals/amalia_03.png" data-zoom alt="User journey map for Amalia showing steps, thoughts, emotions and opportunities">
-              <figcaption>Amalia's journey, with the pain points marked.</figcaption>
-            </figure>
+        <div class="sheet-slider" data-sheet-slider>
+          <div class="swiper">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide" data-caption="Jessica's journey, with the pain points marked."><img src="visuals/jessica_03.png?v=2" data-zoom alt="User journey map for Jessica showing steps, thoughts, emotions and opportunities"></div>
+              <div class="swiper-slide" data-caption="Amalia's journey, with the pain points marked."><img src="visuals/amalia_03.png?v=2" data-zoom alt="User journey map for Amalia showing steps, thoughts, emotions and opportunities"></div>
+            </div>
           </div>
-          <div class="b-peek-controls"><button class="phone-slider-nav b-peek-prev" aria-label="Previous">←</button><div class="b-peek-dots"></div><button class="phone-slider-nav b-peek-next" aria-label="Next">→</button></div>
+          <div class="phone-slider-controls">
+            <button type="button" class="phone-slider-nav" data-slider-prev aria-label="Previous"><span>‹</span></button>
+            <div class="swiper-pagination"></div>
+            <button type="button" class="phone-slider-nav" data-slider-next aria-label="Next"><span>›</span></button>
+          </div>
+          <p class="phone-slider-caption" data-slider-caption>Jessica's journey, with the pain points marked.</p>
         </div>
       </section>
 
@@ -880,6 +874,15 @@
   // bezel (a fixed overlay with a transparent screen hole); the rest peek at
   // the sides via Swiper's coverflow effect, iPod-gallery style.
   (function () {
+    document.querySelectorAll('[data-sheet-slider]').forEach(function (root) {
+      const cap = root.querySelector('[data-slider-caption]');
+      new Swiper(root.querySelector('.swiper'), {
+        slidesPerView: 1, spaceBetween: 24, speed: 450, grabCursor: true,
+        pagination: { el: root.querySelector('.swiper-pagination'), clickable: true },
+        navigation: { nextEl: root.querySelector('[data-slider-next]'), prevEl: root.querySelector('[data-slider-prev]') },
+        on: { slideChange: function (sw) { cap.textContent = sw.slides[sw.activeIndex].dataset.caption; } }
+      });
+    });
     document.querySelectorAll('[data-phone-slider]').forEach(function (root) {
       const caption = root.querySelector('[data-slider-caption]');
       const swiper = new Swiper(root.querySelector('.phone-coverflow'), {
@@ -1045,17 +1048,5 @@
   })();
 </script>
 
-<script>
-document.querySelectorAll('#hb .b-peek').forEach(function (p) {
-  var t = p.querySelector('.b-peek-track'), f = t.querySelectorAll('figure'),
-      d = p.querySelector('.b-peek-dots'), prev = p.querySelector('.b-peek-prev'), next = p.querySelector('.b-peek-next');
-  f.forEach(function () { d.appendChild(document.createElement('span')); });
-  function idx() { return Math.round(t.scrollLeft / (f[1].offsetLeft - f[0].offsetLeft)); }
-  function upd() { var i = Math.min(idx(), f.length - 1); d.querySelectorAll('span').forEach(function (s, k) { s.classList.toggle('on', k === i); }); prev.disabled = i === 0; next.disabled = i === f.length - 1; }
-  function go(i) { t.scrollTo({ left: f[Math.max(0, Math.min(i, f.length - 1))].offsetLeft - f[0].offsetLeft, behavior: 'smooth' }); }
-  prev.onclick = function () { go(idx() - 1); }; next.onclick = function () { go(idx() + 1); };
-  t.addEventListener('scroll', upd, { passive: true }); upd();
-});
-</script>
 </body>
 </html>
