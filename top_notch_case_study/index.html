@@ -627,19 +627,29 @@
 
       <section>
         <div class="b-section-mark" id="hb-flows"><span class="num">07</span><span class="label">User flows</span></div>
-        <p>With Jessica and Amalia in mind, I mapped how each of them would use the app, step by step.</p>
-        <h3>Jessica: talk to a dermatologist</h3>
-        <p><strong>Objective:</strong> Jessica wants advice on organic products from a dermatologist, so the products she adds to her routine won't harm her skin. <strong>Success:</strong> she can talk to a dermatologist and get personal advice.</p>
-        <figure class="b-figure b-figure-wide">
-          <img src="visuals/userflow_jessica_01.svg" data-zoom alt="User flow for Jessica: create an account, log in, search for an expert, pay for the session, connect with the expert">
-          <figcaption>Create an account → log in → find an expert → pay → connect.</figcaption>
-        </figure>
-        <h3>Amalia: try makeup on virtually</h3>
-        <p><strong>Objective:</strong> Amalia wants to try makeup before buying it, to make sure the colours match her skin. <strong>Success:</strong> she can try products virtually and save the ones she likes.</p>
-        <figure class="b-figure b-figure-wide">
-          <img src="visuals/userflow_amalia_01.svg" data-zoom alt="User flow for Amalia: open Virtual Makeup, turn on camera or upload a picture, choose category, adjust colour, save or share the look">
-          <figcaption>Open try-on → camera or photo → category → colour → save or share.</figcaption>
-        </figure>
+        <p>With Amalia and Jessica in mind, I mapped how each of them would use the app, step by step.</p>
+        <div class="sheet-slider" data-sheet-slider data-auto-height>
+          <div class="swiper">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide" data-caption="Open try-on → camera or photo → category → colour → save or share.">
+                <h3>Amalia: try makeup on virtually</h3>
+                <p><strong>Objective:</strong> Amalia wants to try makeup before buying it, to make sure the colours match her skin. <strong>Success:</strong> she can try products virtually and save the ones she likes.</p>
+                <img src="visuals/userflow_amalia_01.svg" data-zoom alt="User flow for Amalia: open Virtual Makeup, turn on camera or upload a picture, choose category, adjust colour, save or share the look">
+              </div>
+              <div class="swiper-slide" data-caption="Create an account → log in → find an expert → pay → connect.">
+                <h3>Jessica: talk to a dermatologist</h3>
+                <p><strong>Objective:</strong> Jessica wants advice on organic products from a dermatologist, so the products she adds to her routine won't harm her skin. <strong>Success:</strong> she can talk to a dermatologist and get personal advice.</p>
+                <img src="visuals/userflow_jessica_01.svg" data-zoom alt="User flow for Jessica: create an account, log in, search for an expert, pay for the session, connect with the expert">
+              </div>
+            </div>
+          </div>
+          <div class="phone-slider-controls">
+            <button type="button" class="phone-slider-nav" data-slider-prev aria-label="Previous"><span>‹</span></button>
+            <div class="swiper-pagination"></div>
+            <button type="button" class="phone-slider-nav" data-slider-next aria-label="Next"><span>›</span></button>
+          </div>
+          <p class="phone-slider-caption" data-slider-caption>Open try-on → camera or photo → category → colour → save or share.</p>
+        </div>
       </section>
 
       <section>
@@ -878,7 +888,7 @@
     document.querySelectorAll('[data-sheet-slider]').forEach(function (root) {
       const cap = root.querySelector('[data-slider-caption]');
       new Swiper(root.querySelector('.swiper'), {
-        slidesPerView: 1, spaceBetween: 24, speed: 450, grabCursor: true,
+        slidesPerView: 1, spaceBetween: 24, speed: 450, grabCursor: true, autoHeight: root.hasAttribute('data-auto-height'),
         pagination: { el: root.querySelector('.swiper-pagination'), clickable: true },
         navigation: { nextEl: root.querySelector('[data-slider-next]'), prevEl: root.querySelector('[data-slider-prev]') },
         on: { slideChange: function (sw) { cap.textContent = sw.slides[sw.activeIndex].dataset.caption; } }
