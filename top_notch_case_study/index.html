@@ -169,6 +169,7 @@
       border-radius: 20px; display: block;
       box-shadow: 0 16px 30px rgba(26,22,18,0.2);
     }
+    #hb .phone-slide-sharp { position: absolute; z-index: 2; pointer-events: none; box-shadow: none; visibility: hidden; }
     #hb .phone-bezel-overlay {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
       z-index: 3; pointer-events: none;
@@ -919,9 +920,35 @@
           slideChangeTransitionStart: function (sw) {
             const img = sw.slides[sw.activeIndex].querySelector('img');
             if (img && caption) caption.textContent = img.dataset.caption;
+            sharp.style.visibility = 'hidden';
+            clearTimeout(sharpTimer);
+            sharpTimer = setTimeout(placeSharp, 500);
           },
+          touchStart: function () { sharp.style.visibility = 'hidden'; },
+          touchEnd: function () { clearTimeout(sharpTimer); sharpTimer = setTimeout(placeSharp, 500); },
         },
       });
+      // Chrome resamples images inside the 3D coverflow layer, which blurs small UI text.
+      // While the slider is at rest, lay a plain 2D copy of the centred screen on top,
+      // snapped to whole device pixels, just under the bezel overlay.
+      const wrap = root.querySelector('.phone-coverflow-wrap');
+      let sharpTimer;
+      const sharp = document.createElement('img');
+      sharp.className = 'phone-slide-img phone-slide-sharp';
+      sharp.alt = '';
+      wrap.appendChild(sharp);
+      function placeSharp() {
+        const img = swiper.slides[swiper.activeIndex].querySelector('img');
+        if (!img) return;
+        const r = img.getBoundingClientRect(), w = wrap.getBoundingClientRect(), d = window.devicePixelRatio || 1;
+        const snap = v => Math.round(v * d) / d;
+        sharp.src = img.src;
+        sharp.style.left = snap(r.left) - w.left + 'px';
+        sharp.style.top = snap(r.top) - w.top + 'px';
+        sharp.style.visibility = 'visible';
+      }
+      placeSharp();
+      window.addEventListener('resize', placeSharp);
     });
   })();
 
