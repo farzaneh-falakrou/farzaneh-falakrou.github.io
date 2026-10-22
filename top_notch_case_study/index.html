@@ -469,7 +469,7 @@
     }
 
     /* Persona / journey sheets: one full-width sheet per slide, same controls as the phone sliders */
-    #hb .sheet-slider { margin: 32px 0; }
+    #hb .sheet-slider { margin: 36px 0 32px; }
     #hb .sheet-slider .swiper { overflow: hidden; margin-bottom: 44px; }
     #hb .sheet-slider .swiper-slide img { width: 100%; display: block; }
   </style>
@@ -628,19 +628,13 @@
       <section>
         <div class="b-section-mark" id="hb-flows"><span class="num">07</span><span class="label">User flows</span></div>
         <p>With Amalia and Jessica in mind, I mapped how each of them would use the app, step by step.</p>
+        <h3 data-slider-title>Amalia: try makeup on virtually</h3>
+        <p data-slider-text><strong>Objective:</strong> Amalia wants to try makeup before buying it, to make sure the colours match her skin. <strong>Success:</strong> she can try products virtually and save the ones she likes.</p>
         <div class="sheet-slider" data-sheet-slider data-auto-height>
           <div class="swiper">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" data-caption="Open try-on → camera or photo → category → colour → save or share.">
-                <h3>Amalia: try makeup on virtually</h3>
-                <p><strong>Objective:</strong> Amalia wants to try makeup before buying it, to make sure the colours match her skin. <strong>Success:</strong> she can try products virtually and save the ones she likes.</p>
-                <img src="visuals/userflow_amalia_01.svg" data-zoom alt="User flow for Amalia: open Virtual Makeup, turn on camera or upload a picture, choose category, adjust colour, save or share the look">
-              </div>
-              <div class="swiper-slide" data-caption="Create an account → log in → find an expert → pay → connect.">
-                <h3>Jessica: talk to a dermatologist</h3>
-                <p><strong>Objective:</strong> Jessica wants advice on organic products from a dermatologist, so the products she adds to her routine won't harm her skin. <strong>Success:</strong> she can talk to a dermatologist and get personal advice.</p>
-                <img src="visuals/userflow_jessica_01.svg" data-zoom alt="User flow for Jessica: create an account, log in, search for an expert, pay for the session, connect with the expert">
-              </div>
+              <div class="swiper-slide" data-caption="Open try-on → camera or photo → category → colour → save or share." data-title="Amalia: try makeup on virtually" data-text="&lt;strong&gt;Objective:&lt;/strong&gt; Amalia wants to try makeup before buying it, to make sure the colours match her skin. &lt;strong&gt;Success:&lt;/strong&gt; she can try products virtually and save the ones she likes."><img src="visuals/userflow_amalia_01.svg" data-zoom alt="User flow for Amalia: open Virtual Makeup, turn on camera or upload a picture, choose category, adjust colour, save or share the look"></div>
+              <div class="swiper-slide" data-caption="Create an account → log in → find an expert → pay → connect." data-title="Jessica: talk to a dermatologist" data-text="&lt;strong&gt;Objective:&lt;/strong&gt; Jessica wants advice on organic products from a dermatologist, so the products she adds to her routine won&#x27;t harm her skin. &lt;strong&gt;Success:&lt;/strong&gt; she can talk to a dermatologist and get personal advice."><img src="visuals/userflow_jessica_01.svg" data-zoom alt="User flow for Jessica: create an account, log in, search for an expert, pay for the session, connect with the expert"></div>
             </div>
           </div>
           <div class="phone-slider-controls">
@@ -891,7 +885,15 @@
         slidesPerView: 1, spaceBetween: 24, speed: 450, grabCursor: true, autoHeight: root.hasAttribute('data-auto-height'),
         pagination: { el: root.querySelector('.swiper-pagination'), clickable: true },
         navigation: { nextEl: root.querySelector('[data-slider-next]'), prevEl: root.querySelector('[data-slider-prev]') },
-        on: { slideChange: function (sw) { cap.textContent = sw.slides[sw.activeIndex].dataset.caption; } }
+        on: { slideChange: function (sw) {
+          const d = sw.slides[sw.activeIndex].dataset;
+          cap.textContent = d.caption;
+          if (d.title) {
+            const sec = root.closest('section');
+            sec.querySelector('[data-slider-title]').textContent = d.title;
+            sec.querySelector('[data-slider-text]').innerHTML = d.text;
+          }
+        } }
       });
     });
     document.querySelectorAll('[data-phone-slider]').forEach(function (root) {
